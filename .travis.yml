@@ -10,6 +10,9 @@ android:
     # The system image, to run an emulator during the tests
     - sys-img-armeabi-v7a-android-22
 before_script:
+  # Check that the code is well formatted. Otherwise, we can exit early
+  - ./gradlew spotlessCheck
+
   # Emulator Management: Create, Start and Wait
   - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
@@ -19,6 +22,7 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
+  # Launch the android tests and build the test report
   - ./gradlew build connectedCheck jacocoTestReport
 after_script:
   # Report test coverage to Code Climate
