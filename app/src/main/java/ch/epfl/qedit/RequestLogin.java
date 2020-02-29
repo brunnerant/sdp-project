@@ -1,16 +1,16 @@
 package ch.epfl.qedit;
 
 public class RequestLogin extends Request {
-    private User user;
+    private String id;
     private String password;
 
-    public RequestLogin(User user, String password) {
-        this.user = user;
+    public RequestLogin(String id, String password) {
+        this.id = id;
         this.password = password;
     }
 
-    public User getUser() {
-        return user;
+    public String getId() {
+        return id;
     }
 
     public String getPassword() {
