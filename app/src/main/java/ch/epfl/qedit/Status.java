@@ -22,6 +22,4 @@ public class Status {
         ok = false;
         this.message = message;
     }
-
-
 }
