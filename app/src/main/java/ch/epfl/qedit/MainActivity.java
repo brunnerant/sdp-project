@@ -1,8 +1,7 @@
-package ch.epfl.qedit.frontend;
+package ch.epfl.qedit;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import ch.epfl.qedit.R;
 
 public class MainActivity extends AppCompatActivity {
 
