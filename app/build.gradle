@@ -71,6 +71,7 @@ spotless {
         trimTrailingWhitespace()
         indentWithSpaces()
         endWithNewline()
+        paddedCell()
     }
 
     java {
@@ -81,6 +82,7 @@ spotless {
         trimTrailingWhitespace()
         indentWithSpaces()
         endWithNewline()
+        paddedCell()
     }
 }
 
