@@ -11,7 +11,10 @@ public class Question {
     /** The answer format for this question */
     private final AnswerFormat format;
 
-    private Question(int index, String title, String text, AnswerFormat format) {
+    public Question(int index, String title, String text, AnswerFormat format) {
+        if (index < 0 || title == null || text == null || format == null)
+            throw new IllegalArgumentException();
+
         this.index = index;
         this.title = title;
         this.text = text;
