@@ -16,6 +16,7 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
 before_script:
   # Check that the code is well formatted. Otherwise, we can exit early
   - ./gradlew spotlessCheck
