@@ -1,4 +1,4 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.frontendBackendInterface;
 
 public enum Role {
     ADMIN,

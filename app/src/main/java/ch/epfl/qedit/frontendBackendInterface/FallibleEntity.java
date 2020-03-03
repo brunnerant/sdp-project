@@ -1,7 +1,11 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.frontendBackendInterface;
 
-public abstract class Request {
+public abstract class FallibleEntity {
     private Status status;
+
+    public FallibleEntity() {
+        status = new Status();
+    }
 
     public Status getStatus() {
         return status;
