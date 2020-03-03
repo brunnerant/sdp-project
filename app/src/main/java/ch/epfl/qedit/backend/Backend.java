@@ -1,22 +1,12 @@
 package ch.epfl.qedit.backend;
 
-import ch.epfl.qedit.Request;
-import ch.epfl.qedit.Response;
-import ch.epfl.qedit.Status;
+import ch.epfl.qedit.frontendBackendInterface.FallibleEntity;
+import ch.epfl.qedit.frontendBackendInterface.Request;
+import ch.epfl.qedit.frontendBackendInterface.Response;
 
-public abstract class Backend {
-    private Status status;
-
+public abstract class Backend extends FallibleEntity {
     public Backend() {
-        status = new Status();
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
+        super();
     }
 
     public abstract Response sendRequest(Request request);
