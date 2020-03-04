@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">qedit</string>
+    <string name="title_activity_login">Connexion</string>
+    <string name="prompt_email">Nom d\'utilisateur</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_sign_in">Connexion</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Nom d\'utilisateur non valide</string>
+    <string name="invalid_password">Le mot de passe doit être >5 caractères</string>
+    <string name="login_failed">"Échec de connexion"</string>
 </resources>
