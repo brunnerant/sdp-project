@@ -1,9 +1,7 @@
 package ch.epfl.qedit.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
+import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.AnswerFormat;
 import ch.epfl.qedit.model.Question;
@@ -11,7 +9,12 @@ import ch.epfl.qedit.view.question.QuestionFragment;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private Question question = new Question(0, "Question test", "Is this question working?", new AnswerFormat.NumberField(0, 1, 5));
+    private Question question =
+            new Question(
+                    0,
+                    "Question test",
+                    "Is this question working?",
+                    new AnswerFormat.NumberField(0, 1, 5));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +27,8 @@ public class QuizActivity extends AppCompatActivity {
             QuestionFragment frag = QuestionFragment.newInstance();
             frag.setArguments(bundle);
 
-            getSupportFragmentManager().beginTransaction()
+            getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.container, frag)
                     .commitNow();
         }
