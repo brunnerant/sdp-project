@@ -11,10 +11,6 @@ import ch.epfl.qedit.R;
 
 public class AnswerFragment extends Fragment {
 
-    public static AnswerFragment newInstance() {
-        return new AnswerFragment();
-    }
-
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
