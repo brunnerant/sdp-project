@@ -2,7 +2,6 @@ package ch.epfl.qedit;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.*;
@@ -10,8 +9,6 @@ import static org.hamcrest.CoreMatchers.*;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.view.QuizActivity;
-import ch.epfl.qedit.view.question.AnswerFragment;
-import ch.epfl.qedit.view.question.AnswerViewModel;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,15 +28,5 @@ public class QuizActivityTest {
     @Test
     public void testDisplayTheRightText() {
         onView(withId(R.id.question_display)).check(matches(withText("Is this question working?")));
-    }
-
-    @Test
-    public void testAnswerFragmentConstructor() {
-        assertThat(AnswerFragment.newInstance(), is(notNullValue()));
-    }
-
-    @Test
-    public void testAnswerViewModelConstructor() {
-        assertThat(new AnswerViewModel(), is(notNullValue()));
     }
 }
