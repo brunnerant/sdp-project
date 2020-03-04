@@ -21,18 +21,6 @@ public class ServerTest {
         Server server = Server.getInstance();
         server.initServer();
 
-        server.setIsCreateSuccessful(true);
-        server.setIsSignInSuccessful(true);
-
-        assertTrue(server.getIsSignInSuccessful());
-        assertTrue(server.getIsCreateSuccessful());
-    }
-
-    @Test
-    public void test3() {
-        Server server = Server.getInstance();
-        server.initServer();
-
         assertFalse(server.createUser("", ""));
 
         assertTrue(!server.signIn("", ""));

@@ -8,8 +8,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Server {
-    private boolean isSignInSuccessful = false;
-    private boolean isCreateSuccessful = false;
     private FirebaseAuth firebaseAuth = null;
     private static Server server = null;
     private boolean isOut = false;
@@ -58,54 +56,33 @@ public class Server {
     public boolean signIn(String email, String password) {
 
         try {
-            firebaseAuth
+            return firebaseAuth
                     .signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(
                             new OnCompleteListener<AuthResult>() {
                                 @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    isSignInSuccessful = task.isSuccessful();
-                                }
-                            });
+                                public void onComplete(@NonNull Task<AuthResult> task) {}
+                            })
+                    .isSuccessful();
         } catch (Exception e) {
-            isSignInSuccessful = false;
+            return false;
         }
-
-        return isSignInSuccessful;
     }
 
     // TODO change with user
     public boolean createUser(String email, String password) {
         try {
-            firebaseAuth
+            return firebaseAuth
                     .createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(
                             new OnCompleteListener<AuthResult>() {
                                 @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    isCreateSuccessful = task.isSuccessful();
-                                }
-                            });
+                                public void onComplete(@NonNull Task<AuthResult> task) {}
+                            })
+                    .isSuccessful();
         } catch (Exception e) {
-            isCreateSuccessful = false;
+            return false;
         }
-        return isCreateSuccessful;
-    }
-
-    public void setIsSignInSuccessful(boolean set) {
-        isSignInSuccessful = set;
-    }
-
-    public void setIsCreateSuccessful(boolean set) {
-        isCreateSuccessful = set;
-    }
-
-    public boolean getIsSignInSuccessful() {
-        return isSignInSuccessful;
-    }
-
-    public boolean getIsCreateSuccessful() {
-        return isCreateSuccessful;
     }
 
     // TODO: replace void return with User
