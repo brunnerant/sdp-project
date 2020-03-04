@@ -26,9 +26,6 @@ public class QuizActivity extends AppCompatActivity {
         QuestionFragment frag = QuestionFragment.newInstance();
         frag.setArguments(bundle);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, frag)
-                .commitNow();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, frag).commitNow();
     }
 }
