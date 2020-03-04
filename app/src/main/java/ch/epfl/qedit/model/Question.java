@@ -1,7 +1,9 @@
 package ch.epfl.qedit.model;
 
+import java.io.Serializable;
+
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
-public class Question {
+public class Question implements Serializable {
     /** For now, a question consists of a number, a title, and a text */
     private final int index;
 
