@@ -1,4 +1,4 @@
-package ch.epfl.qedit.model;
+package ch.epfl.qedit.backend;
 
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -56,14 +56,16 @@ public class Server {
     public boolean signIn(String email, String password) {
 
         try {
-            return firebaseAuth
-                    .signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(
-                            new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {}
-                            })
-                    .isSuccessful();
+            isOut =
+                    firebaseAuth
+                            .signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(
+                                    new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {}
+                                    })
+                            .isSuccessful();
+            return isOut;
         } catch (Exception e) {
             return false;
         }

@@ -1,4 +1,4 @@
-package ch.epfl.qedit.model;
+package ch.epfl.qedit.backend;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
