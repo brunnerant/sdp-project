@@ -65,6 +65,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 }
 
 spotless {
+    lineEndings 'UNIX'
+
     format 'misc', {
         target '**/*.gradle', '**/*.md', '**/.gitignore'
 
