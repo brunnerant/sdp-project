@@ -15,26 +15,29 @@ import ch.epfl.qedit.frontendBackendInterface.User;
 import org.junit.Test;
 
 public class InterfaceTest {
+    final String okMessage = "The status is OK";
+
     @Test
-    public void backendAndStatusTest() {
+    public void backendTest() {
         Firebase firebase = new Firebase();
-        Status status = new Status();
 
-        assertEquals(status.isOk(), firebase.getStatus().isOk());
-        assertEquals(status.getMessage(), firebase.getStatus().getMessage());
+        assertTrue(firebase.getStatus().isOk());
+        assertEquals(okMessage, firebase.getStatus().getMessage());
+        assertNull(firebase.sendRequest(new RequestLogin("id", "pwd")));
+    }
 
-        String errorMessage = "This is a test error";
-
-        status.error(errorMessage);
-        firebase.setStatus(status);
-
-        assertEquals(status.isOk(), firebase.getStatus().isOk());
-        assertEquals(status.getMessage(), firebase.getStatus().getMessage());
-
-        status.ok();
+    @Test
+    public void statusTest() {
+        Status status = Status.ok();
 
         assertTrue(status.isOk());
-        assertEquals(Status.okMessage, status.getMessage());
+        assertEquals(okMessage, status.getMessage());
+
+        String errorMessage = "This is a test error";
+        status = Status.error(errorMessage);
+
+        assertFalse(status.isOk());
+        assertEquals(errorMessage, status.getMessage());
     }
 
     @Test
@@ -49,10 +52,7 @@ public class InterfaceTest {
         assertEquals("Test", reqLog.getId());
         assertEquals("pwd", reqLog.getPassword());
 
-        reqLog.setStatus(new Status("Test error"));
-
-        assertFalse(reqLog.getStatus().isOk());
-        assertEquals("Test error", reqLog.getStatus().getMessage());
+        assertTrue(reqLog.getStatus().isOk());
     }
 
     @Test
