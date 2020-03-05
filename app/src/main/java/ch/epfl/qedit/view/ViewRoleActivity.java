@@ -17,7 +17,7 @@ public class ViewRoleActivity extends AppCompatActivity {
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
         String username = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
-        String message = "Bienvenue " + username + "!";
+        String message = "Bienvenue " + username + " !";
 
         // Capture the layout's TextView and set the string as its text
         TextView textViewWelcome = findViewById(R.id.greeting);

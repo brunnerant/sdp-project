@@ -1,6 +1,9 @@
 package ch.epfl.qedit.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.AnswerFormat;
@@ -20,7 +23,7 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_activity);
-        // Passe the first question as argument to the new QuestionFragment
+        // Pass the first question as argument to the new QuestionFragment
         Bundle bundle = new Bundle();
         bundle.putSerializable("q0", question);
         QuestionFragment frag = QuestionFragment.newInstance();

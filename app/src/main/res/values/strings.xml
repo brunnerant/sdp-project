@@ -11,4 +11,6 @@
     <string name="login_failed">"Échec de connexion"</string>
     <string name="greeting">"Hello!"</string>
     <string name="role">"Display role"</string>
+    <string name="buttonOpenQuiz">"Quiz test"</string>
+    <string name="buttonLogin">"Connexion"</string>
 </resources>
