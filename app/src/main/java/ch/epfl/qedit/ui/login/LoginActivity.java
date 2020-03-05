@@ -38,6 +38,17 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
+        getLoginFormState(usernameEditText, passwordEditText, loginButton);
+        getLoginResult(loadingProgressBar);
+        TextWatcher afterTextChangedListener = textWatcher(usernameEditText, passwordEditText);
+
+        usernameEditText.addTextChangedListener(afterTextChangedListener);
+        passwordEditText.addTextChangedListener(afterTextChangedListener);
+
+        manageListeners(usernameEditText, passwordEditText, loginButton, loadingProgressBar);
+    }
+
+    private void getLoginFormState(final EditText usernameEditText, final EditText passwordEditText, final Button loginButton) {
         loginViewModel
                 .getLoginFormState()
                 .observe(
@@ -59,7 +70,9 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                         });
+    }
 
+    private void getLoginResult(final ProgressBar loadingProgressBar) {
         loginViewModel
                 .getLoginResult()
                 .observe(
@@ -92,7 +105,9 @@ public class LoginActivity extends AppCompatActivity {
                                 // finish();
                             }
                         });
+    }
 
+    private TextWatcher textWatcher(final EditText usernameEditText, final EditText passwordEditText) {
         TextWatcher afterTextChangedListener =
                 new TextWatcher() {
                     @Override
@@ -112,8 +127,11 @@ public class LoginActivity extends AppCompatActivity {
                                 passwordEditText.getText().toString());
                     }
                 };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.addTextChangedListener(afterTextChangedListener);
+
+        return afterTextChangedListener;
+    }
+
+    private void manageListeners(final EditText usernameEditText, final EditText passwordEditText, final Button loginButton, final ProgressBar loadingProgressBar) {
         passwordEditText.setOnEditorActionListener(
                 new TextView.OnEditorActionListener() {
 
