@@ -107,8 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText editTextUsername = findViewById(R.id.username);
         String username = editTextUsername.getText().toString();
 
-        Intent intent =
-                new Intent(LoginActivity.this, ViewRoleActivity.class);
+        Intent intent = new Intent(LoginActivity.this, ViewRoleActivity.class);
         intent.putExtra(EXTRA_MESSAGE, username);
 
         return intent;

@@ -1,6 +1,9 @@
 package ch.epfl.qedit;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -18,4 +21,19 @@ public class MainActivityTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
+    @Test
+    public void testPressButtonQuizTest() {
+        onView(withId(R.id.buttonOpenQuiz)).perform(click());
+        onView(withId(R.id.question_title)).check(matches(withText("1) Question test")));
+    }
+
+    @Test
+    public void testPressButtonLogin() {
+        onView(withId(R.id.buttonLogin)).perform(click());
+        onView(withId(R.id.username)).perform(typeText("George"));
+        onView(withId(R.id.password)).perform(typeText("abcdefgh")).perform(closeSoftKeyboard());
+        onView(withId(R.id.login)).perform(click());
+        onView(withId(R.id.greeting)).check(matches(withText("Bienvenue George !")));
+        onView(withId(R.id.role)).check(matches(withText("Vous êtes un participant.")));
+    }
 }
