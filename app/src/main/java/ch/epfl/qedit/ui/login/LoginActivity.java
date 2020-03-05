@@ -3,6 +3,8 @@ package  ch.epfl.qedit.ui.login;
 import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -18,12 +20,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.ui.login.LoginViewModel;
-import ch.epfl.qedit.ui.login.LoginViewModelFactory;
+import ch.epfl.qedit.view.ViewRoleActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String EXTRA_MESSAGE = "ch.epfl.qedit.view.MESSAGE";
     private LoginViewModel loginViewModel;
 
     @Override
@@ -66,11 +70,19 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
+
+                    EditText editTextUsername = findViewById(R.id.username);
+                    String username = editTextUsername.getText().toString();
+
+                    Intent intent = new Intent(LoginActivity.this, ViewRoleActivity.class);
+                    intent.putExtra(EXTRA_MESSAGE, username);
+
+                    startActivity(intent);
                 }
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy login activity once successful
-                finish();
+                //finish();
             }
         });
 
@@ -116,12 +128,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Connexion réussie", Toast.LENGTH_LONG).show();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Connexion échouée", Toast.LENGTH_SHORT).show();
     }
 }
