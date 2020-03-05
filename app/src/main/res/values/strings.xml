@@ -9,4 +9,6 @@
     <string name="invalid_username">Nom d\'utilisateur non valide</string>
     <string name="invalid_password">Le mot de passe doit être >5 caractères</string>
     <string name="login_failed">"Échec de connexion"</string>
+    <string name="greeting">"Hello!"</string>
+    <string name="role">"Display role"</string>
 </resources>
