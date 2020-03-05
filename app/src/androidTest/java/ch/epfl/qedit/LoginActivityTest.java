@@ -23,23 +23,22 @@ public class LoginActivityTest {
     public final ActivityTestRule<LoginActivity> loginActivityRule =
             new ActivityTestRule<>(LoginActivity.class);
 
-    @Test
-    public void testCanLoginAsAdmin() {
-        onView(withId(R.id.username)).perform(typeText("admin"));
-        onView(withId(R.id.password)).perform(typeText("abcdef"))
+    private void testLoginGeneral(String username, String password, String role) {
+        onView(withId(R.id.username)).perform(typeText(username));
+        onView(withId(R.id.password)).perform(typeText(password))
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.login)).perform(click());
-        onView(withId(R.id.greeting)).check(matches(withText("Bienvenue admin!")));
-        onView(withId(R.id.role)).check(matches(withText("Vous êtes un administrateur.")));
+        onView(withId(R.id.greeting)).check(matches(withText("Bienvenue " + username + "!")));
+        onView(withId(R.id.role)).check(matches(withText("Vous êtes un " + role + ".")));
+    }
+
+    @Test
+    public void testCanLoginAsAdmin() {
+        testLoginGeneral("admin", "abcdef", "administrateur");
     }
 
     @Test
     public void testCanLoginAsParticipant() {
-        onView(withId(R.id.username)).perform(typeText("Bernard"));
-        onView(withId(R.id.password)).perform(typeText("abcdefg"))
-                .perform(closeSoftKeyboard());
-        onView(withId(R.id.login)).perform(click());
-        onView(withId(R.id.greeting)).check(matches(withText("Bienvenue Bernard!")));
-        onView(withId(R.id.role)).check(matches(withText("Vous êtes un participant.")));
+        testLoginGeneral("Bernard", "abcdefg", "participant");
     }
 }
