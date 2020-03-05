@@ -9,20 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login">
+
+        <activity android:name=".view.MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".view.QuizActivity">
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.ViewRoleActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW_ROLE" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" >
@@ -32,24 +33,14 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".view.MainActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
+        <activity android:name=".view.ViewRoleActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_ROLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.ViewRoleActivity"
-            android:parentActivityName=".ui.login.LoginActivity">
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.login.LoginActivity" />
-        </activity>
-
-        <activity android:name=".view.QuizActivity"></activity>
-        <activity android:name=".view.MainActivity"></activity>
     </application>
 
 </manifest>
