@@ -48,7 +48,10 @@ public class LoginActivity extends AppCompatActivity {
         manageListeners(usernameEditText, passwordEditText, loginButton, loadingProgressBar);
     }
 
-    private void getLoginFormState(final EditText usernameEditText, final EditText passwordEditText, final Button loginButton) {
+    private void getLoginFormState(
+            final EditText usernameEditText,
+            final EditText passwordEditText,
+            final Button loginButton) {
         loginViewModel
                 .getLoginFormState()
                 .observe(
@@ -107,7 +110,8 @@ public class LoginActivity extends AppCompatActivity {
                         });
     }
 
-    private TextWatcher textWatcher(final EditText usernameEditText, final EditText passwordEditText) {
+    private TextWatcher textWatcher(
+            final EditText usernameEditText, final EditText passwordEditText) {
         TextWatcher afterTextChangedListener =
                 new TextWatcher() {
                     @Override
@@ -131,7 +135,11 @@ public class LoginActivity extends AppCompatActivity {
         return afterTextChangedListener;
     }
 
-    private void manageListeners(final EditText usernameEditText, final EditText passwordEditText, final Button loginButton, final ProgressBar loadingProgressBar) {
+    private void manageListeners(
+            final EditText usernameEditText,
+            final EditText passwordEditText,
+            final Button loginButton,
+            final ProgressBar loadingProgressBar) {
         passwordEditText.setOnEditorActionListener(
                 new TextView.OnEditorActionListener() {
 

@@ -1,9 +1,6 @@
 package ch.epfl.qedit.view;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.AnswerFormat;
