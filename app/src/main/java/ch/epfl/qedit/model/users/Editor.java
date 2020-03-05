@@ -1,7 +1,9 @@
 package ch.epfl.qedit.model.users;
 
+import java.util.List;
+
+import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.QuizCategorie;
 
 public class Editor extends User {
 
@@ -10,8 +12,8 @@ public class Editor extends User {
     }
 
     //should return a new empty quiz
-    public Quiz createQuiz(int nbOfQuestions, QuizCategorie categorie){
-        return new Quiz(nbOfQuestions,categorie);
+    public Quiz createQuiz(List<Question> questions){
+        return new Quiz(questions);
     }
     //allows the editor to edit a quiz
     public Quiz editQuiz(Quiz quiz){

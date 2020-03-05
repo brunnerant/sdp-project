@@ -1,12 +1,14 @@
 package ch.epfl.qedit.model;
 
-public class Quiz {
-    private QuizCategorie categorie;
-    private int nbOfQuestions ;
+import java.util.List;
 
-    public Quiz(int nbOfQuestions, QuizCategorie categorie){
-        this.categorie=categorie;
-        this.nbOfQuestions=nbOfQuestions;
+public class Quiz {
+
+    private List<Question> questions ;
+
+    public Quiz( List<Question> questions){
+
+        this.questions=questions;
     }
 
     public void edit() {
@@ -14,12 +16,9 @@ public class Quiz {
     }
 
     public int getNbOfQuestions() {
-        return nbOfQuestions;
+        return questions.size();
     }
 
-    public QuizCategorie getCategorie() {
-        return categorie;
-    }
 
 
 }
