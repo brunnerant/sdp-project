@@ -93,14 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (loginResult.getSuccess() != null) {
                                     updateUiWithUser(loginResult.getSuccess());
 
-                                    EditText editTextUsername = findViewById(R.id.username);
-                                    String username = editTextUsername.getText().toString();
-
-                                    Intent intent =
-                                            new Intent(LoginActivity.this, ViewRoleActivity.class);
-                                    intent.putExtra(EXTRA_MESSAGE, username);
-
-                                    startActivity(intent);
+                                    startActivity(createNewIntent());
                                 }
                                 setResult(Activity.RESULT_OK);
 
@@ -108,6 +101,17 @@ public class LoginActivity extends AppCompatActivity {
                                 // finish();
                             }
                         });
+    }
+
+    private Intent createNewIntent() {
+        EditText editTextUsername = findViewById(R.id.username);
+        String username = editTextUsername.getText().toString();
+
+        Intent intent =
+                new Intent(LoginActivity.this, ViewRoleActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, username);
+
+        return intent;
     }
 
     private TextWatcher textWatcher(
