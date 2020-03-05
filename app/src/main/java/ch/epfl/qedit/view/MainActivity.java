@@ -2,7 +2,6 @@ package ch.epfl.qedit.view;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-
 import ch.epfl.qedit.R;
 
 public class MainActivity extends AppCompatActivity {

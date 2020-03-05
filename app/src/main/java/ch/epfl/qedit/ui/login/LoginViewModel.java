@@ -1,14 +1,13 @@
 package ch.epfl.qedit.ui.login;
 
+import android.util.Patterns;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import android.util.Patterns;
-
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.data.LoginRepository;
 import ch.epfl.qedit.data.Result;
 import ch.epfl.qedit.data.model.LoggedInUser;
-import ch.epfl.qedit.R;
 
 public class LoginViewModel extends ViewModel {
 

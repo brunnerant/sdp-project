@@ -1,11 +1,9 @@
 package ch.epfl.qedit.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-
+import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.ui.login.LoginActivity;
 
@@ -26,7 +24,7 @@ public class ViewRoleActivity extends AppCompatActivity {
         textViewWelcome.setText(message);
 
         TextView textViewRole = findViewById(R.id.role);
-        if(username.equals("admin")) {
+        if (username.equals("admin")) {
             textViewRole.setText("Vous êtes un administrateur.");
         } else {
             textViewRole.setText("Vous êtes un participant.");

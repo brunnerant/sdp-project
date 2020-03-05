@@ -3,8 +3,8 @@ package ch.epfl.qedit.data;
 import ch.epfl.qedit.data.model.LoggedInUser;
 
 /**
- * Class that requests authentication and user information from the remote data source and
- * maintains an in-memory cache of login status and user credentials information.
+ * Class that requests authentication and user information from the remote data source and maintains
+ * an in-memory cache of login status and user credentials information.
  */
 public class LoginRepository {
 
@@ -22,7 +22,7 @@ public class LoginRepository {
     }
 
     public static LoginRepository getInstance(LoginDataSource dataSource) {
-        if(instance == null){
+        if (instance == null) {
             instance = new LoginRepository(dataSource);
         }
         return instance;
