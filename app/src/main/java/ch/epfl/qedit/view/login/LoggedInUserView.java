@@ -1,4 +1,4 @@
-package ch.epfl.qedit.ui.login;
+package ch.epfl.qedit.view.login;
 
 /** Class exposing authenticated user details to the UI. */
 class LoggedInUserView {

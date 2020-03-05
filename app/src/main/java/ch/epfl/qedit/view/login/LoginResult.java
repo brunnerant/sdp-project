@@ -1,4 +1,4 @@
-package ch.epfl.qedit.ui.login;
+package ch.epfl.qedit.view.login;
 
 import androidx.annotation.Nullable;
 

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.ui.login.LoginActivity;
+import ch.epfl.qedit.view.login.LoginActivity;
 
 public class ViewRoleActivity extends AppCompatActivity {
 
