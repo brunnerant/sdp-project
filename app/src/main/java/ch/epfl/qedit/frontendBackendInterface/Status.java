@@ -1,19 +1,20 @@
 package ch.epfl.qedit.frontendBackendInterface;
 
 public class Status {
-    private boolean ok;
-    private String message;
+    private final boolean ok;
+    private final String message;
 
-    public static final String okMessage = "The status is OK";
-
-    public Status() {
-        ok = true;
-        message = okMessage;
+    private Status(Boolean ok, String message) {
+        this.ok = ok;
+        this.message = message;
     }
 
-    public Status(String errorMessage) {
-        ok = false;
-        message = errorMessage;
+    public static Status ok() {
+        return new Status(true, "The status is OK");
+    }
+
+    public static Status error(String message) {
+        return new Status(false, message);
     }
 
     public boolean isOk() {
@@ -22,15 +23,5 @@ public class Status {
 
     public String getMessage() {
         return message;
-    }
-
-    public void error(String message) {
-        ok = false;
-        this.message = message;
-    }
-
-    public void ok() {
-        ok = true;
-        message = okMessage;
     }
 }
