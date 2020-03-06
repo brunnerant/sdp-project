@@ -5,12 +5,14 @@ public abstract class User {
     private final String firstName;
     private final String lastName;
     private final String language;
-    public User(String firstName, String lastName, int userId,String language){
-        this.firstName=firstName;
-        this.lastName=lastName;
-        this.userId=userId;
-        this.language=language;
+
+    public User(String firstName, String lastName, int userId, String language) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userId = userId;
+        this.language = language;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -26,6 +28,4 @@ public abstract class User {
     public String getLanguage() {
         return language;
     }
-
 }
-

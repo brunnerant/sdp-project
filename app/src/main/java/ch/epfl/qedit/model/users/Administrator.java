@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Administrator extends User {
-    //list of participants for whom admin is responsible
+    // list of participants for whom admin is responsible
     List<Participant> participants;
 
     public Administrator(String firstName, String lastName, int userId, String language) {
@@ -13,8 +13,8 @@ public class Administrator extends User {
         participants = new ArrayList<Participant>();
     }
 
-    //launch the timer for a participant
-    public void setQuizStartTime(Participant participant){
+    // launch the timer for a participant
+    public void setQuizStartTime(Participant participant) {
         participant.setStartTime(new Date());
     }
 }
