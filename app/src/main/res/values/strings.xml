@@ -9,6 +9,4 @@
     <string name="role">"Display role"</string>
     <string name="buttonOpenQuiz">"Quiz test"</string>
     <string name="buttonLogin">"Connexion"</string>
-    <string name="youAreAdmin">"Vous êtes un administrateur."</string>
-    <string name="youAreParticipant">"Vous êtes un participant."</string>
 </resources>
