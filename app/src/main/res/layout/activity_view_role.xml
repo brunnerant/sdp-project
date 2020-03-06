@@ -4,27 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    tools:context=".view.ViewRoleActivity">
 
-    <Button
-        android:id="@+id/buttonOpenQuiz"
+    <TextView
+        android:id="@+id/greeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="goToQuizActivity"
-        android:text="@string/buttonOpenQuiz"
+        android:text="@string/greeting"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/buttonLogin"
+    <TextView
+        android:id="@+id/role"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="goToLoginActivity"
-        android:text="@string/buttonLogin"
+        android:text="@string/role"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonOpenQuiz" />
-
+        app:layout_constraintTop_toBottomOf="@id/greeting" />
 </androidx.constraintlayout.widget.ConstraintLayout>
