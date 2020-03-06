@@ -23,10 +23,10 @@ public class ViewRoleActivity extends AppCompatActivity {
         textViewWelcome.setText(message);
 
         TextView textViewRole = findViewById(R.id.role);
-        if (username.equals("admin")) {
-            textViewRole.setText("Vous êtes un administrateur.");
+        if (username != null && username.equals("admin")) {
+            textViewRole.setText("@string/youAreAdmin");
         } else {
-            textViewRole.setText("Vous êtes un participant.");
+            textViewRole.setText("@string/youAreParticipant");
         }
     }
 }

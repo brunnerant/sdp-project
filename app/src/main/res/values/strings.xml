@@ -5,12 +5,10 @@
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Connexion</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Nom d\'utilisateur non valide</string>
-    <string name="invalid_password">Le mot de passe doit être >5 caractères</string>
-    <string name="login_failed">"Échec de connexion"</string>
     <string name="greeting">"Hello!"</string>
     <string name="role">"Display role"</string>
     <string name="buttonOpenQuiz">"Quiz test"</string>
     <string name="buttonLogin">"Connexion"</string>
+    <string name="youAreAdmin">"Vous êtes un administrateur."</string>
+    <string name="youAreParticipant">"Vous êtes un participant."</string>
 </resources>

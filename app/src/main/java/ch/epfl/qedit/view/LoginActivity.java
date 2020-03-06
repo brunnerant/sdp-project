@@ -17,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
+    @SuppressWarnings("unused")
     public void loginButton(View view) {
         EditText editTextUsername = findViewById(R.id.username);
         String username = editTextUsername.getText().toString();
