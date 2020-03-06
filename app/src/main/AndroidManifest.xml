@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".view.login.LoginActivity"
+            android:name=".view.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".view.MainActivity">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
