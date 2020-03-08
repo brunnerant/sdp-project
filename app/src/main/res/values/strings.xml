@@ -2,11 +2,13 @@
     <string name="app_name">qedit</string>
     <string name="title_activity_login">Connexion</string>
     <string name="prompt_email">Nom d\'utilisateur</string>
-    <string name="prompt_password">Mot de passe</string>
-    <string name="action_sign_in">Connexion</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="greeting">"Hello!"</string>
-    <string name="role">"Display role"</string>
-    <string name="buttonOpenQuiz">"Quiz test"</string>
-    <string name="buttonLogin">"Connexion"</string>
+    <string name="password_hint">Mot de passe</string>
+    <string name="login_button_text">Connexion</string>
+    <string name="login_action_label">Connexion</string>
+    <string name="next_field_action_label">Suivant</string>
+    <string name="buttonOpenQuiz">Quiz test</string>
+    <string name="buttonLogin">Connexion</string>
+    <string name="wrong_username_message">Nom d\'utilisateur inconnu</string>
+    <string name="wrong_password_message">Mot de passe incorrect</string>
+    <string name="connection_error_message">Erreur de connexion</string>
 </resources>

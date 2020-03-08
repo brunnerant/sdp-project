@@ -30,8 +30,10 @@ public class MainActivityTest {
     @Test
     public void testPressButtonLogin() {
         onView(withId(R.id.buttonLogin)).perform(click());
-        onView(withId(R.id.username)).perform(typeText("George"));
-        onView(withId(R.id.password)).perform(typeText("abcdefgh")).perform(closeSoftKeyboard());
+        onView(withId(R.id.login_username_text)).perform(typeText("George"));
+        onView(withId(R.id.login_password_text))
+                .perform(typeText("abcdefgh"))
+                .perform(closeSoftKeyboard());
         onView(withId(R.id.login)).perform(click());
         onView(withId(R.id.greeting)).check(matches(withText("Bienvenue George !")));
         onView(withId(R.id.role)).check(matches(withText("Vous êtes un participant.")));

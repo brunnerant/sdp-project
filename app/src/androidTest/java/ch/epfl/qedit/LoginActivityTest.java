@@ -22,8 +22,10 @@ public class LoginActivityTest {
             new ActivityTestRule<>(LoginActivity.class);
 
     private void testLoginGeneral(String username, String password, String role) {
-        onView(withId(R.id.username)).perform(typeText(username));
-        onView(withId(R.id.password)).perform(typeText(password)).perform(closeSoftKeyboard());
+        onView(withId(R.id.login_username_text)).perform(typeText(username));
+        onView(withId(R.id.login_password_text))
+                .perform(typeText(password))
+                .perform(closeSoftKeyboard());
         onView(withId(R.id.login)).perform(click());
         onView(withId(R.id.greeting)).check(matches(withText("Bienvenue " + username + " !")));
         onView(withId(R.id.role)).check(matches(withText("Vous êtes un " + role + ".")));
