@@ -13,7 +13,7 @@ public class Participant extends User {
 
     // allows participant to select a quiz or be assigned one
     public boolean getQuiz(Quiz quiz) {
-        if (this.quiz != null) {
+        if (quiz != null) {
             this.quiz = quiz;
             return true;
         }
