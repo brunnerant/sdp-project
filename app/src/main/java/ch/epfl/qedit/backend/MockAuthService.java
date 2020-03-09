@@ -6,16 +6,6 @@ import java.util.HashMap;
 
 public class MockAuthService implements AuthenticationService {
 
-    private final HashMap<String, String> userPasswords =
-            new HashMap<String, String>() {
-                {
-                    put("nicolas", "pwd");
-                    put("nathan", "wanaga");
-                    put("anthony", "jus");
-                    put("antoine", "oui");
-                }
-            };
-
     private final HashMap<String, LoginResponse> userResponses =
             new HashMap<String, LoginResponse>() {
                 {
@@ -35,7 +25,7 @@ public class MockAuthService implements AuthenticationService {
 
     @Override
     public void sendRequest(
-            final LoginRequest request, final Callback<LoginResponse> responseCallback) {
+            final String token, final Callback<LoginResponse> responseCallback) {
         new Thread(
                         new Runnable() {
                             @Override
@@ -47,16 +37,11 @@ public class MockAuthService implements AuthenticationService {
                                 }
 
                                 LoginResponse response;
-                                if (!userPasswords.containsKey(request.getUsername()))
+                                if (!userResponses.containsKey(token))
                                     response =
                                             LoginResponse.error(
-                                                    LoginResponse.Error.UserDoesNotExist);
-                                else if (!userPasswords
-                                        .get(request.getUsername())
-                                        .equals(request.getPassword()))
-                                    response =
-                                            LoginResponse.error(LoginResponse.Error.WrongPassword);
-                                else response = userResponses.get(request.getUsername());
+                                                    LoginResponse.Error.WrongToken);
+                                else response = userResponses.get(token);
 
                                 responseCallback.onReceive(response);
                             }

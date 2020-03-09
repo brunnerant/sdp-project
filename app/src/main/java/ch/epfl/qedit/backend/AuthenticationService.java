@@ -8,30 +8,10 @@ import ch.epfl.qedit.util.Callback;
  * handles asynchronous responses by using a callback.
  */
 public interface AuthenticationService {
-    /** This class represents a request made to the authentication server */
-    class LoginRequest {
-        private final String username;
-        private final String password;
-
-        public LoginRequest(String username, String password) {
-            this.username = username;
-            this.password = password;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-    }
-
     /** Represents a response made by the authentication service */
     class LoginResponse {
         public enum Error {
-            UserDoesNotExist,
-            WrongPassword,
+            WrongToken,
             ConnectionError
         }
 
@@ -68,8 +48,10 @@ public interface AuthenticationService {
      * Sends a request to the authentication service, and receives the response asynchronously
      * through the callback.
      *
-     * @param request the request to send to the authentication service
+     * @param token the token to send to the authentication service
      * @param responseCallback the callback to handle the response once it arrives
      */
-    void sendRequest(LoginRequest request, Callback<LoginResponse> responseCallback);
+    void sendRequest(String token, Callback<LoginResponse> responseCallback);
+
+
 }

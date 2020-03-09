@@ -21,8 +21,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String USER = "ch.epfl.qedit.view.USER";
 
-    private EditText usernameText;
-    private EditText passwordText;
+    private EditText tokenText;
     private ProgressBar progressBar;
 
     private AuthenticationService authService;
@@ -33,8 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        usernameText = findViewById(R.id.login_username_text);
-        passwordText = findViewById(R.id.login_password_text);
+        tokenText = findViewById(R.id.login_token);
         progressBar = findViewById(R.id.login_progress_bar);
 
         authService = new MockAuthService();
@@ -55,12 +53,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void handleLogin(View view) {
-        String username = usernameText.getText().toString();
-        String password = passwordText.getText().toString();
+        String token = tokenText.getText().toString();
         progressBar.setVisibility(View.VISIBLE);
 
         authService.sendRequest(
-                new AuthenticationService.LoginRequest(username, password),
+                token,
                 new Callback<AuthenticationService.LoginResponse>() {
                     @Override
                     public void onReceive(AuthenticationService.LoginResponse response) {
@@ -93,11 +90,8 @@ public class LoginActivity extends AppCompatActivity {
             case ConnectionError:
                 stringId = R.string.connection_error_message;
                 break;
-            case UserDoesNotExist:
-                stringId = R.string.wrong_username_message;
-                break;
-            case WrongPassword:
-                stringId = R.string.wrong_password_message;
+            case WrongToken:
+                stringId = R.string.wrong_token_message;
                 break;
         }
 
@@ -108,4 +102,6 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT);
         toast.show();
     }
+
+
 }
