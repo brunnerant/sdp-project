@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(AuthenticationService.LoginResponse response) {
                         final AuthenticationService.LoginResponse _response = response;
-                        handler.postDelayed(
+                        handler.post(
                                 new Runnable() {
                                     @Override
                                     public void run() {
@@ -74,8 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                             onLoginSuccessful(_response.getUser());
                                         else onLoginFailed(_response.getError());
                                     }
-                                },
-                                2000);
+                                });
                     }
                 });
     }
