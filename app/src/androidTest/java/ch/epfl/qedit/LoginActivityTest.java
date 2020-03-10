@@ -1,5 +1,24 @@
 package ch.epfl.qedit;
 
+import android.os.Looper;
+
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import ch.epfl.qedit.backend.AuthenticationFactory;
+import ch.epfl.qedit.backend.MockAuthService;
+import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.LoginActivity;
+import ch.epfl.qedit.view.ViewRoleActivity;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -16,23 +35,28 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
-
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.LoginActivity;
-import ch.epfl.qedit.view.ViewRoleActivity;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4ClassRunner.class)
 public class LoginActivityTest {
+
+    private IdlingResource idlingResource;
+
     @Rule
-    public final IntentsTestRule<LoginActivity> intentsTestRule =
-            new IntentsTestRule<>(LoginActivity.class);
+    public final IntentsTestRule<LoginActivity> testRule = new IntentsTestRule<>(LoginActivity.class, false, false);
+
+    @Before
+    public void init() {
+        MockAuthService authService = new MockAuthService();
+        idlingResource = authService.getIdlingResource();
+        AuthenticationFactory.setInstance(authService);
+        testRule.launchActivity(null);
+        IdlingRegistry.getInstance().register(idlingResource);
+    }
+
+    @After
+    public void cleanup() {
+        IdlingRegistry.getInstance().unregister(idlingResource);
+        testRule.finishActivity();
+    }
 
     private void performLogin(String token) {
         onView(withId(R.id.login_token)).perform((typeText(token))).perform(closeSoftKeyboard());
@@ -49,7 +73,7 @@ public class LoginActivityTest {
 
     private void testLoginFailed(String token, int toastStringId) {
         performLogin(token);
-        LoginActivity activity = intentsTestRule.getActivity();
+        LoginActivity activity = testRule.getActivity();
         onView(withText(toastStringId)).
                 inRoot(withDecorView(not(is(activity.getWindow().getDecorView())))).
                 check(matches(isDisplayed()));

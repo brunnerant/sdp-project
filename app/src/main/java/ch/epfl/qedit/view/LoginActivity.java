@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.AuthenticationFactory;
 import ch.epfl.qedit.backend.AuthenticationService;
 import ch.epfl.qedit.backend.MockAuthService;
 import ch.epfl.qedit.model.User;
@@ -35,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         tokenText = findViewById(R.id.login_token);
         progressBar = findViewById(R.id.login_progress_bar);
 
-        authService = new MockAuthService();
+        authService = AuthenticationFactory.getInstance();
         handler =
                 new Handler(Looper.getMainLooper()) {
                     @Override

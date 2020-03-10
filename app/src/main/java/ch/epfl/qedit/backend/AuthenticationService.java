@@ -53,5 +53,4 @@ public interface AuthenticationService {
      */
     void sendRequest(String token, Callback<LoginResponse> responseCallback);
 
-
 }

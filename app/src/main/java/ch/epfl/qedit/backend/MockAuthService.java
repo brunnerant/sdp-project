@@ -1,10 +1,19 @@
 package ch.epfl.qedit.backend;
 
+import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.idling.CountingIdlingResource;
+
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import java.util.HashMap;
 
 public class MockAuthService implements AuthenticationService {
+
+    CountingIdlingResource idlingResource;
+
+    public MockAuthService() {
+        idlingResource = new CountingIdlingResource("MockAuthService");
+    }
 
     private final HashMap<String, LoginResponse> userResponses =
             new HashMap<String, LoginResponse>() {
@@ -26,6 +35,7 @@ public class MockAuthService implements AuthenticationService {
     @Override
     public void sendRequest(
             final String token, final Callback<LoginResponse> responseCallback) {
+        idlingResource.increment();
         new Thread(
                         new Runnable() {
                             @Override
@@ -43,9 +53,14 @@ public class MockAuthService implements AuthenticationService {
                                                     LoginResponse.Error.WrongToken);
                                 else response = userResponses.get(token);
 
+                                idlingResource.decrement();
                                 responseCallback.onReceive(response);
                             }
                         })
                 .start();
+    }
+
+    public IdlingResource getIdlingResource() {
+        return idlingResource;
     }
 }
