@@ -30,13 +30,13 @@ public class FirebaseAuthService implements AuthenticationService {
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
-                                        User.Role role =
-                                                getRole(document.get("role", String.class));
                                         User user =
                                                 new User(
                                                         document.get("first_name", String.class),
                                                         document.get("last_name", String.class),
-                                                        role);
+                                                        getRole(
+                                                                document.get(
+                                                                        "role", String.class)));
                                         responseCallback.onReceive(LoginResponse.ok(user));
                                     } else {
                                         responseCallback.onReceive(
@@ -51,17 +51,6 @@ public class FirebaseAuthService implements AuthenticationService {
                                 }
                             }
                         });
-        /**
-         * db.collection("users").document(token).get().addOnFailureListener( new
-         * OnFailureListener() { @Override public void onFailure(@NonNull Exception e) {
-         * e.printStackTrace();
-         * responseCallback.onReceive(LoginResponse.error(LoginResponse.Error.ConnectionError)); } }
-         * ).addOnSuccessListener( new OnSuccessListener<DocumentSnapshot>() { @Override public void
-         * onSuccess(DocumentSnapshot documentSnapshot) { User.Role role =
-         * getRole(documentSnapshot.get("role", String.class)); User user = new User(
-         * documentSnapshot.get("first_name", String.class), documentSnapshot.get("last_name",
-         * String.class), role); responseCallback.onReceive(LoginResponse.ok(user)); } } );*
-         */
     }
 
     private User.Role getRole(String role) {
