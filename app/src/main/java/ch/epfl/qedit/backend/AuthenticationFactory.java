@@ -1,18 +1,15 @@
 package ch.epfl.qedit.backend;
 
 /**
- * This factory class is used to create dependency injection for testing, or for
- * switching the authentication service if several are available.
+ * This factory class is used to create dependency injection for testing, or for switching the
+ * authentication service if several are available.
  */
 public final class AuthenticationFactory {
-    /**
-     * The singleton instance of the auth service
-     */
+    /** The singleton instance of the auth service */
     private static AuthenticationService authService = null;
 
     public static AuthenticationService getInstance() {
-        if (authService == null)
-            authService = new MockAuthService();
+        if (authService == null) authService = new MockAuthService();
 
         return authService;
     }

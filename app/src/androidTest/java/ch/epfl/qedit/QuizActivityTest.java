@@ -7,7 +7,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
-
 import ch.epfl.qedit.view.QuizActivity;
 import org.junit.Rule;
 import org.junit.Test;

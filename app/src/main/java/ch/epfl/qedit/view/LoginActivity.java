@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.AuthenticationFactory;
 import ch.epfl.qedit.backend.AuthenticationService;
-import ch.epfl.qedit.backend.MockAuthService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 
@@ -103,6 +102,4 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT);
         toast.show();
     }
-
-
 }

@@ -52,5 +52,4 @@ public interface AuthenticationService {
      * @param responseCallback the callback to handle the response once it arrives
      */
     void sendRequest(String token, Callback<LoginResponse> responseCallback);
-
 }
