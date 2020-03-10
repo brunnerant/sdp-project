@@ -17,6 +17,13 @@ public class FirebaseAuthService implements AuthenticationService {
         db = FirebaseFirestore.getInstance();
     }
 
+    private User getUserFromDocument(DocumentSnapshot document){
+        return new User(
+                document.get("first_name", String.class),
+                document.get("last_name", String.class),
+                getRole(document.get("role", String.class)));
+    }
+
     @Override
     public void sendRequest(String token, final Callback<LoginResponse> responseCallback) {
 
@@ -30,21 +37,16 @@ public class FirebaseAuthService implements AuthenticationService {
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
-                                        User user =
-                                                new User(
-                                                        document.get("first_name", String.class),
-                                                        document.get("last_name", String.class),
-                                                        getRole(
-                                                                document.get(
-                                                                        "role", String.class)));
-                                        responseCallback.onReceive(LoginResponse.ok(user));
+                                        responseCallback.onReceive(
+                                                LoginResponse.ok(
+                                                        getUserFromDocument(document)));
                                     } else {
                                         responseCallback.onReceive(
                                                 LoginResponse.error(
                                                         LoginResponse.Error.WrongToken));
                                     }
                                 } else {
-                                    task.getException().printStackTrace();
+                                    //task.getException().printStackTrace();
                                     responseCallback.onReceive(
                                             LoginResponse.error(
                                                     LoginResponse.Error.ConnectionError));
