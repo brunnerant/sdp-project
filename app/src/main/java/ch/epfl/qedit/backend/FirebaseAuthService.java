@@ -10,18 +10,27 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FirebaseAuthService implements AuthenticationService {
 
-    // Access a Cloud Firestore instance
     private FirebaseFirestore db;
 
     public FirebaseAuthService() {
+        // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
     }
 
-    private User getUserFromDocument(DocumentSnapshot document){
+    private User getUserFromDocument(DocumentSnapshot document) {
+
+        String docRole = document.get("role", String.class);
+        User.Role role = User.Role.Participant;
+
+        if (docRole.equals(null)) role = User.Role.Participant;
+        if (docRole.equals("admin")) role = User.Role.Administrator;
+        if (docRole.equals("participant")) role = User.Role.Participant;
+        if (docRole.equals("editor")) role = User.Role.Editor;
+
         return new User(
                 document.get("first_name", String.class),
                 document.get("last_name", String.class),
-                getRole(document.get("role", String.class)));
+                role);
     }
 
     @Override
@@ -38,28 +47,19 @@ public class FirebaseAuthService implements AuthenticationService {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
                                         responseCallback.onReceive(
-                                                LoginResponse.ok(
-                                                        getUserFromDocument(document)));
+                                                LoginResponse.ok(getUserFromDocument(document)));
                                     } else {
                                         responseCallback.onReceive(
                                                 LoginResponse.error(
                                                         LoginResponse.Error.WrongToken));
                                     }
                                 } else {
-                                    //task.getException().printStackTrace();
+                                    // task.getException().printStackTrace();
                                     responseCallback.onReceive(
                                             LoginResponse.error(
                                                     LoginResponse.Error.ConnectionError));
                                 }
                             }
                         });
-    }
-
-    private User.Role getRole(String role) {
-        if (role.equals(null)) return null;
-        if (role.equals("admin")) return User.Role.Administrator;
-        if (role.equals("participant")) return User.Role.Participant;
-        if (role.equals("editor")) return User.Role.Editor;
-        else return null;
     }
 }
