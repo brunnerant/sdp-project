@@ -20,7 +20,7 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_activity);
-        // Passe the first question as argument to the new QuestionFragment
+        // Pass the first question as argument to the new QuestionFragment
         Bundle bundle = new Bundle();
         bundle.putSerializable("q0", question);
         QuestionFragment frag = QuestionFragment.newInstance();

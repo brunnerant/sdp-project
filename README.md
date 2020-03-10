@@ -1,6 +1,6 @@
 
 # QEDit - An android app to create and answer math quizzes
-Developped by Anthony Iozzia, Alexis Cohen, Cosme Jordan, Nicolas Bähler, Nathan Greslin and Antoine Brunner in
+Developed by Anthony Iozzia, Alexis Cohen, Cosme Jordan, Nicolas Bähler, Nathan Greslin and Antoine Brunner in
 the context of a project at EPFL.
 
 [![Build Status](https://travis-ci.org/brunnerant/sdp-project.svg?branch=master)](https://travis-ci.org/brunnerant/sdp-project)
