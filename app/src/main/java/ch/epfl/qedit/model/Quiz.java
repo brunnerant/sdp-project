@@ -1,19 +1,20 @@
 package ch.epfl.qedit.model;
 
+import com.google.common.collect.ImmutableList;
+import java.io.Serializable;
 import java.util.List;
 
-public class Quiz {
+public class Quiz implements Serializable {
 
-    private List<Question> questions;
+    private ImmutableList<Question> questions;
 
     public Quiz(List<Question> questions) {
 
-        this.questions = questions;
+        this.questions = ImmutableList.copyOf(questions);
     }
 
-    public Question getQuestion(int index) {
-        if (index < 0 || index >= getNbOfQuestions()) return null;
-        return questions.get(index);
+    public ImmutableList<Question> getQuestions() {
+        return questions;
     }
 
     public int getNbOfQuestions() {
