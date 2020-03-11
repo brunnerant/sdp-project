@@ -5,16 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.AnswerFormat;
 import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.view.question.QuestionFragment;
+import java.util.Arrays;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private final Question question =
-            new Question(
-                    0,
-                    "Question test",
-                    "Is this question working?",
-                    new AnswerFormat.NumberField(0, 1, 5));
+    private final Quiz quiz =
+            new Quiz(
+                    Arrays.asList(
+                            new Question(
+                                    0,
+                                    "Question test 0",
+                                    "Is this question 0 working?",
+                                    new AnswerFormat.NumberField(0, 1, 5)),
+                            new Question(
+                                    1,
+                                    "Question test 1",
+                                    "Is this question 1 working?",
+                                    new AnswerFormat.NumberField(0, 1, 5))));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +32,13 @@ public class QuizActivity extends AppCompatActivity {
 
         // Pass the first question as argument to the new QuestionFragment
         Bundle bundle = new Bundle();
-        bundle.putSerializable("q0", question);
-        QuestionFragment frag = QuestionFragment.newInstance();
+        bundle.putSerializable("question", quiz.getQuestions().get(0)); // TODO Check index
+        QuestionFragment frag = new QuestionFragment();
         frag.setArguments(bundle);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.question_fragment_container, frag).commitNow();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.question_fragment_container, frag)
+                .commitNow();
     }
 }
