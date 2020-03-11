@@ -11,7 +11,10 @@ public class Quiz {
         this.questions = questions;
     }
 
-    public void edit() {}
+    public Question getQuestion(int index) {
+        if (index < 0 || index >= getNbOfQuestions()) return null;
+        return questions.get(index);
+    }
 
     public int getNbOfQuestions() {
         return questions.size();
