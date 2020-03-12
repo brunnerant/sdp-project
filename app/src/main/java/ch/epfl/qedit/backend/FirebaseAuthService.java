@@ -1,5 +1,7 @@
 package ch.epfl.qedit.backend;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
@@ -35,7 +37,6 @@ public class FirebaseAuthService implements AuthenticationService {
 
     @Override
     public void sendRequest(String token, final Callback<LoginResponse> responseCallback) {
-
         db.collection("users")
                 .document(token)
                 .get()
@@ -43,22 +44,19 @@ public class FirebaseAuthService implements AuthenticationService {
                         new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                LoginResponse response;
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        responseCallback.onReceive(
-                                                LoginResponse.ok(getUserFromDocument(document)));
-                                    } else {
-                                        responseCallback.onReceive(
-                                                LoginResponse.error(
-                                                        LoginResponse.Error.WrongToken));
-                                    }
+                                    if (document.exists())
+                                        response = LoginResponse.ok(getUserFromDocument(document));
+                                    else
+                                        response = LoginResponse.error(LoginResponse.Error.WrongToken);
                                 } else {
-                                    // task.getException().printStackTrace();
-                                    responseCallback.onReceive(
-                                            LoginResponse.error(
-                                                    LoginResponse.Error.ConnectionError));
+                                    response = LoginResponse.error(LoginResponse.Error.ConnectionError);
+                                    task.getException().printStackTrace();
                                 }
+
+                                responseCallback.onReceive(response);
                             }
                         });
     }

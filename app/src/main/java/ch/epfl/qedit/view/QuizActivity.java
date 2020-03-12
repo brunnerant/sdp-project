@@ -23,7 +23,7 @@ public class QuizActivity extends AppCompatActivity {
         // Pass the first question as argument to the new QuestionFragment
         Bundle bundle = new Bundle();
         bundle.putSerializable("q0", question);
-        QuestionFragment frag = QuestionFragment.newInstance();
+        QuestionFragment frag = new QuestionFragment();
         frag.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, frag).commitNow();

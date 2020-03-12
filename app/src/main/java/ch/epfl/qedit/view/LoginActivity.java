@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         tokenText = findViewById(R.id.login_token);
         progressBar = findViewById(R.id.login_progress_bar);
 
-        authService = AuthenticationFactory.getInstance(AuthenticationFactory.AuthServiceType.MOCK);
+        authService = AuthenticationFactory.getInstance();
 
         handler =
                 new Handler(Looper.getMainLooper()) {

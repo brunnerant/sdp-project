@@ -15,10 +15,6 @@ public class QuestionFragment extends Fragment {
 
     private Question question;
 
-    public static QuestionFragment newInstance() {
-        return new QuestionFragment();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -5,18 +5,12 @@ package ch.epfl.qedit.backend;
  * authentication service if several are available.
  */
 public final class AuthenticationFactory {
-
-    public enum AuthServiceType {
-        MOCK,
-        FIRESTORE
-    };
-
     /** The singleton instance of the auth service */
     private static AuthenticationService authService = null;
 
-    public static AuthenticationService getInstance(AuthServiceType type) {
-        if (type == AuthServiceType.MOCK) authService = new MockAuthService();
-        else if (type == AuthServiceType.FIRESTORE) authService = new FirebaseAuthService();
+    public static AuthenticationService getInstance() {
+        if (authService == null)
+            authService = new FirebaseAuthService();
 
         return authService;
     }
