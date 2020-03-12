@@ -69,5 +69,4 @@ public class QuizOverviewFragment extends Fragment {
                     }
                 });
     }
-
 }
