@@ -41,27 +41,25 @@ public class SingleFieldFragment extends Fragment {
                 break;
             case MORE_ONE_QUESTION:
                 view = inflater.inflate(R.layout.single_field_fragment, container, false);
-                editTexts[0] = (EditText) view.findViewById(R.id.answer_zone2);
-                editTexts[0].setRawInputType(
-                        InputType.TYPE_CLASS_NUMBER
-                                | InputType.TYPE_NUMBER_FLAG_DECIMAL
-                                | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                editTexts[1] = (EditText) view.findViewById(R.id.answer_zone3);
-                editTexts[1].setRawInputType(
-                        InputType.TYPE_CLASS_NUMBER
-                                | InputType.TYPE_NUMBER_FLAG_DECIMAL
-                                | InputType.TYPE_NUMBER_FLAG_SIGNED);
-                editTexts[2] = (EditText) view.findViewById(R.id.answer_zone4);
-                editTexts[2].setRawInputType(
-                        InputType.TYPE_CLASS_NUMBER
-                                | InputType.TYPE_NUMBER_FLAG_DECIMAL
-                                | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                editTexts[0] = createEditText(view, R.id.answer_zone2);
+                editTexts[1] = createEditText(view, R.id.answer_zone3);
+                editTexts[2] = createEditText(view, R.id.answer_zone4);
                 break;
             case OTHER:
                 throw new IllegalArgumentException();
         }
 
         return view;
+    }
+
+    private EditText createEditText(View view, int id) {
+        EditText editText = (EditText) view.findViewById(id);
+        editText.setRawInputType(
+                InputType.TYPE_CLASS_NUMBER
+                        | InputType.TYPE_NUMBER_FLAG_DECIMAL
+                        | InputType.TYPE_NUMBER_FLAG_SIGNED);
+
+        return editText;
     }
 
     @Override
