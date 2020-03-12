@@ -21,13 +21,13 @@ public class QuizActivityTest {
 
     @Test
     public void testDisplayTheRightTitle() {
-        onView(withId(R.id.question_title)).check(matches(withText("1) Question 0 test")));
+        onView(withId(R.id.question_title)).check(matches(withText("1) The matches problem")));
     }
 
     @Test
     public void testDisplayTheRightText() {
         onView(withId(R.id.question_display))
-                .check(matches(withText("Is this question 0 working?")));
+                .check(matches(withText("How many matches can fit in a shoe of size 43?")));
     }
 
     @Test

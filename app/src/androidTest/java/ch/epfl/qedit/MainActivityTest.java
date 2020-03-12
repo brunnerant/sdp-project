@@ -24,7 +24,7 @@ public class MainActivityTest {
     @Test
     public void testPressButtonQuizTest() {
         onView(withId(R.id.buttonOpenQuiz)).perform(click());
-        onView(withId(R.id.question_title)).check(matches(withText("1) Question 0 test")));
+        onView(withId(R.id.question_title)).check(matches(withText("1) The matches problem")));
     }
 
     @Test
