@@ -14,6 +14,7 @@ import ch.epfl.qedit.model.Question;
 public class QuestionFragment extends Fragment {
 
     private Question question;
+    private AnswerFragment
 
     public static QuestionFragment newInstance() {
         return new QuestionFragment();
