@@ -1,7 +1,6 @@
 package ch.epfl.qedit.model;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /** Represents a user of the QEDit app. */
 public class User implements Serializable {
@@ -45,10 +44,5 @@ public class User implements Serializable {
         return firstName.equals(user.firstName)
                 && lastName.equals(user.lastName)
                 && role == user.role;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName, role);
     }
 }

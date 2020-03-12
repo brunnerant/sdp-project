@@ -38,11 +38,7 @@ public class MockAuthService implements AuthenticationService {
                         new Runnable() {
                             @Override
                             public void run() {
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+                                Thread.sleep(2000);
 
                                 LoginResponse response;
                                 if (!userResponses.containsKey(token))
