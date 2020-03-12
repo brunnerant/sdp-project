@@ -1,7 +1,5 @@
 package ch.epfl.qedit.backend;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
@@ -50,9 +48,12 @@ public class FirebaseAuthService implements AuthenticationService {
                                     if (document.exists())
                                         response = LoginResponse.ok(getUserFromDocument(document));
                                     else
-                                        response = LoginResponse.error(LoginResponse.Error.WrongToken);
+                                        response =
+                                                LoginResponse.error(LoginResponse.Error.WrongToken);
                                 } else {
-                                    response = LoginResponse.error(LoginResponse.Error.ConnectionError);
+                                    response =
+                                            LoginResponse.error(
+                                                    LoginResponse.Error.ConnectionError);
                                     task.getException().printStackTrace();
                                 }
 

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.AuthenticationFactory;
 import ch.epfl.qedit.backend.AuthenticationService;
+import ch.epfl.qedit.backend.MockAuthService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 
@@ -35,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
         tokenText = findViewById(R.id.login_token);
         progressBar = findViewById(R.id.login_progress_bar);
 
+        /** For demonstration purpose */
+        AuthenticationFactory.setInstance(new MockAuthService());
         authService = AuthenticationFactory.getInstance();
 
         handler =
