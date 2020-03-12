@@ -16,12 +16,12 @@ public class QuizActivity extends AppCompatActivity {
                     Arrays.asList(
                             new Question(
                                     0,
-                                    "Question test 0",
+                                    "Question 0 test",
                                     "Is this question 0 working?",
                                     new AnswerFormat.NumberField(0, 1, 5)),
                             new Question(
                                     1,
-                                    "Question test 1",
+                                    "Question 1 test",
                                     "Is this question 1 working?",
                                     new AnswerFormat.NumberField(0, 1, 5))));
 
