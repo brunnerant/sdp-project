@@ -42,6 +42,12 @@ public class QuizOverviewFragment extends Fragment {
         listView.setAdapter(listViewAdapter);
 
         // Reaction when we click on an item
+        clickAction(listView);
+
+        return view;
+    }
+
+    private void clickAction(ListView listView) {
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     // parent: our listView
@@ -62,7 +68,6 @@ public class QuizOverviewFragment extends Fragment {
                                 .commit();
                     }
                 });
-
-        return view;
     }
+
 }
