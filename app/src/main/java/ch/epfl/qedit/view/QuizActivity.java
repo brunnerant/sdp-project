@@ -27,11 +27,11 @@ public class QuizActivity extends AppCompatActivity {
         QuestionFragment frag = QuestionFragment.newInstance();
         frag.setArguments(bundle);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, frag).commitNow();
+        getSupportFragmentManager().beginTransaction().replace(R.id.questionFrame, frag).commitNow();
 
 
         //------
         QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.container, quizOverviewFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.quizOverviewFrame, quizOverviewFragment).commit();
     }
 }
