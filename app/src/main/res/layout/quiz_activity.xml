@@ -9,7 +9,7 @@
     <FrameLayout
         android:id="@+id/questionFrame"
         android:name="ch.epfl.qedit.view.question.QuestionFragment"
-        android:layout_width="531dp"
+        android:layout_width="764dp"
         android:layout_height="match_parent"
         android:layout_gravity="right">
 
