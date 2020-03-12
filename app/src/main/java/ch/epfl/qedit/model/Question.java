@@ -6,7 +6,8 @@ import java.io.Serializable;
 public class Question implements Serializable {
     /** For now, a question consists of a number, a title, and a text */
     private final int index;
-    private final int numberOfAnswers;
+
+    private int numberOfAnswers;
 
     private final String title;
     private final String text;
@@ -14,7 +15,7 @@ public class Question implements Serializable {
     /** The answer format for this question */
     private final AnswerFormat format;
 
-    public Question(int index, String title, String text, AnswerFormat format, int numberOfAnswers) {
+    public Question(int index, String title, String text, AnswerFormat format) {
         if (index < 0 || title == null || text == null || format == null)
             throw new IllegalArgumentException();
 
@@ -22,7 +23,14 @@ public class Question implements Serializable {
         this.title = title;
         this.text = text;
         this.format = format;
+    }
+
+    public void setNumberOfAnswers(int numberOfAnswers) {
         this.numberOfAnswers = numberOfAnswers;
+    }
+
+    public int getNumberOfAnswers(int numberOfAnswers) {
+        return numberOfAnswers;
     }
 
     public int getIndex() {

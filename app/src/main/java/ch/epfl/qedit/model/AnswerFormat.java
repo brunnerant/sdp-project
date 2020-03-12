@@ -3,7 +3,9 @@ package ch.epfl.qedit.model;
 /** This class represents all the answer formats that are available in the app. */
 public abstract class AnswerFormat {
     public enum QuestionsTypes {
-        SIMPLE, MORE_ONE_QUESTION, OTHER
+        SIMPLE,
+        MORE_ONE_QUESTION,
+        OTHER
     }
     /** This method is used to implement the visitor pattern */
     public abstract void accept(Visitor visitor);
@@ -40,8 +42,8 @@ public abstract class AnswerFormat {
         }
 
         public boolean isAnswer(float answer) {
-            for(int i = 0; i < acceptedAnswers.length; ++i) {
-                if(acceptedAnswers[i] == answer) {
+            for (int i = 0; i < acceptedAnswers.length; ++i) {
+                if (acceptedAnswers[i] == answer) {
                     return true;
                 }
             }
