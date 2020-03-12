@@ -3,11 +3,13 @@ package ch.epfl.qedit.view;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.AnswerFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.view.question.QuestionFragment;
+import ch.epfl.qedit.view.question.QuizOverviewFragment;
 import java.util.Arrays;
 
 public class QuizActivity extends AppCompatActivity {
@@ -24,6 +26,11 @@ public class QuizActivity extends AppCompatActivity {
                                     1,
                                     "Question 1 test",
                                     "Is this question 1 working?",
+                                    new AnswerFormat.NumberField(0, 1, 5)),
+                            new Question(
+                                    2,
+                                    "Question 2 test",
+                                    "Is this question 2 working?",
                                     new AnswerFormat.NumberField(0, 1, 5))));
 
     @Override
@@ -31,18 +38,25 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_activity);
 
-        // Pass the first question as argument to the new QuestionFragment
+        // Check if the quiz is non empty
         if (quiz.getNbOfQuestions() > 0) {
+            // Start the QuizOverviewFragment
             Bundle bundle = new Bundle();
-            bundle.putSerializable("question", quiz.getQuestions().get(0));
-            QuestionFragment frag = new QuestionFragment();
-            frag.setArguments(bundle);
+            bundle.putSerializable("quiz", quiz);
+            QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
+            quizOverviewFragment.setArguments(bundle);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.quiz_overview_frame, quizOverviewFragment);
 
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.question_fragment_container, frag)
-                    .commitNow();
+            // Start QuestionFragment with the first question
+            bundle = new Bundle();
+            bundle.putSerializable("question", quiz.getQuestions().get(0));
+            QuestionFragment questionFragment = new QuestionFragment();
+            questionFragment.setArguments(bundle);
+            ft.add(R.id.question_frame, questionFragment);
+            ft.commit();
         } else {
+            // Inform the user that the Quiz is empty
             Toast toast =
                     Toast.makeText(
                             getApplicationContext(),

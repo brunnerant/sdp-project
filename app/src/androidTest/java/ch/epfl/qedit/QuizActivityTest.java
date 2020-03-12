@@ -29,4 +29,9 @@ public class QuizActivityTest {
         onView(withId(R.id.question_display))
                 .check(matches(withText("Is this question 0 working?")));
     }
+
+    @Test
+    public void testEmptyQuizToast() {
+        // TODO
+    }
 }

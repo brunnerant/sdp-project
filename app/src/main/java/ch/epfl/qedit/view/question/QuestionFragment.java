@@ -17,6 +17,7 @@ import java.util.Objects;
 public class QuestionFragment extends Fragment {
     private Question question;
     private AnswerFormat answerFormat;
+    private int layout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,9 +45,10 @@ public class QuestionFragment extends Fragment {
         final TextView questionDisplay = view.findViewById(R.id.question_display);
         questionDisplay.setText(question.getText());
 
-        // Start a new AnswerFragment with the correct AnswerFormat
+        // Start a new AnswerFragment with the correct AnswerFormat and layout
         Bundle bundle = new Bundle();
         bundle.putSerializable("format", answerFormat);
+        bundle.putSerializable("layout", layout);
         AnswerFragment answerFragment = new AnswerFragment();
         answerFragment.setArguments(bundle);
 
@@ -54,7 +56,7 @@ public class QuestionFragment extends Fragment {
                 Objects.requireNonNull(getActivity())
                         .getSupportFragmentManager()
                         .beginTransaction();
-        fragmentTransaction.replace(R.id.answer_fragment_container, answerFragment).commit();
+        fragmentTransaction.add(R.id.answer_fragment_container, answerFragment).commit();
 
         return view;
     }
@@ -69,6 +71,7 @@ public class QuestionFragment extends Fragment {
         @Override
         public void visitNumberField(AnswerFormat.NumberField field) {
             answerFormat = field;
+            layout = R.layout.answer_fragment;
         }
     }
 }

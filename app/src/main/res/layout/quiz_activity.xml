@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/question_fragment_container"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-</androidx.fragment.app.FragmentContainerView>
+
+    <FrameLayout
+        android:id="@+id/question_frame"
+        android:layout_width="764dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end">
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/quiz_overview_frame"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+    </FrameLayout>
+</merge>

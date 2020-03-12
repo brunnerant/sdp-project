@@ -24,7 +24,7 @@ public class QuizTest {
     public void QuizConstructorTest() {
         Quiz quiz = new Quiz(initQuestionList());
         assertNotNull(quiz);
-        assertEquals(quiz.getNbOfQuestions(), 3);
+        assertEquals(3, quiz.getNbOfQuestions());
     }
 
     @Test
@@ -45,6 +45,6 @@ public class QuizTest {
     public void getQuestionReturnIsCorrectTest() {
         Quiz quiz = new Quiz(initQuestionList());
         List<Question> questions = quiz.getQuestions();
-        assertEquals(questions.get(1).getTitle(), "q2");
+        assertEquals("q2", questions.get(1).getTitle());
     }
 }
