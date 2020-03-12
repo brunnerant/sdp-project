@@ -40,20 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         AuthenticationFactory.setInstance(new MockAuthService());
         authService = AuthenticationFactory.getInstance();
 
-        handler =
-                new Handler(Looper.getMainLooper()) {
-                    @Override
-                    public void handleMessage(@NonNull Message msg) {
-                        progressBar.setVisibility(View.GONE);
-                        AuthenticationService.LoginResponse response =
-                                (AuthenticationService.LoginResponse) msg.obj;
-
-                        if (response.successful()) onLoginSuccessful(response.getUser());
-                        else onLoginFailed(response.getError());
-
-                        super.handleMessage(msg);
-                    }
-                };
+        handler = new Handler();
     }
 
     public void handleLogin(View view) {

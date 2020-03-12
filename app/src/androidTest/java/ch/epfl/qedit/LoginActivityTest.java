@@ -44,9 +44,9 @@ public class LoginActivityTest {
     public void init() {
         MockAuthService authService = new MockAuthService();
         idlingResource = authService.getIdlingResource();
+        IdlingRegistry.getInstance().register(idlingResource);
         AuthenticationFactory.setInstance(authService);
         testRule.launchActivity(null);
-        IdlingRegistry.getInstance().register(idlingResource);
     }
 
     @After
