@@ -1,7 +1,6 @@
 package ch.epfl.qedit.view;
 
 import android.os.Bundle;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import ch.epfl.qedit.R;
@@ -55,14 +54,14 @@ public class QuizActivity extends AppCompatActivity {
             questionFragment.setArguments(bundle);
             ft.add(R.id.question_frame, questionFragment);
             ft.commit();
-        } else {
-            // Inform the user that the Quiz is empty
-            Toast toast =
-                    Toast.makeText(
-                            getApplicationContext(),
-                            getResources().getString(R.string.empty_quiz_error_message),
-                            Toast.LENGTH_SHORT);
-            toast.show();
-        }
+        } /*else { TODO
+              // Inform the user that the Quiz is empty
+              Toast toast =
+                      Toast.makeText(
+                              getApplicationContext(),
+                              getResources().getString(R.string.empty_quiz_error_message),
+                              Toast.LENGTH_SHORT);
+              toast.show();
+          }*/
     }
 }
