@@ -9,8 +9,9 @@
     <FrameLayout
         android:id="@+id/questionFrame"
         android:name="ch.epfl.qedit.view.question.QuestionFragment"
-        android:layout_width="272dp"
-        android:layout_height="133dp">
+        android:layout_width="531dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right">
 
 
     </FrameLayout>
@@ -18,8 +19,9 @@
     <FrameLayout
         android:id="@+id/quizOverviewFrame"
         android:name="ch.epfl.qedit.view.question.QuizOverviewFragment"
-        android:layout_width="187dp"
-        android:layout_height="219dp">
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left">
 
     </FrameLayout>
 
