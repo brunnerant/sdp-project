@@ -11,7 +11,7 @@
         android:name="ch.epfl.qedit.view.question.QuestionFragment"
         android:layout_width="764dp"
         android:layout_height="match_parent"
-        android:layout_gravity="right">
+        android:layout_gravity="end">
 
 
     </FrameLayout>
@@ -21,7 +21,7 @@
         android:name="ch.epfl.qedit.view.question.QuizOverviewFragment"
         android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left">
+        android:layout_gravity="start">
 
     </FrameLayout>
 

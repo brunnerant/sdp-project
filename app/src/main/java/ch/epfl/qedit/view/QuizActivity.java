@@ -24,13 +24,12 @@ public class QuizActivity extends AppCompatActivity {
         // Pass the first question as argument to the new QuestionFragment
         Bundle bundle = new Bundle();
         bundle.putSerializable("q0", question);
-        QuestionFragment frag = QuestionFragment.newInstance();
-        frag.setArguments(bundle);
+        QuestionFragment questionFragment = QuestionFragment.newInstance();
+        questionFragment.setArguments(bundle);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.questionFrame, frag).commitNow();
+        getSupportFragmentManager().beginTransaction().replace(R.id.questionFrame, questionFragment).commitNow();
 
-
-        //------
+        // Quiz overview
         QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.quizOverviewFrame, quizOverviewFragment).commit();
     }
