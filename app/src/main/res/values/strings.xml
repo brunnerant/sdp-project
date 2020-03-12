@@ -9,4 +9,5 @@
     <string name="role">"Display role"</string>
     <string name="buttonOpenQuiz">"Quiz test"</string>
     <string name="buttonLogin">"Connexion"</string>
+    <string name="empty_quiz_error_message">"This quiz is empty"</string>
 </resources>

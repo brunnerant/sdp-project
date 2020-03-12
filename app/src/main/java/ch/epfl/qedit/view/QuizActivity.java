@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view;
 
 import android.os.Bundle;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.AnswerFormat;
@@ -11,7 +12,7 @@ import java.util.Arrays;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private final Quiz quiz =
+    private Quiz quiz =
             new Quiz(
                     Arrays.asList(
                             new Question(
@@ -31,14 +32,23 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.quiz_activity);
 
         // Pass the first question as argument to the new QuestionFragment
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("question", quiz.getQuestions().get(0)); // TODO Check index
-        QuestionFragment frag = new QuestionFragment();
-        frag.setArguments(bundle);
+        if (quiz.getNbOfQuestions() > 0) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("question", quiz.getQuestions().get(0));
+            QuestionFragment frag = new QuestionFragment();
+            frag.setArguments(bundle);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.question_fragment_container, frag)
-                .commitNow();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.question_fragment_container, frag)
+                    .commitNow();
+        } else {
+            Toast toast =
+                    Toast.makeText(
+                            getApplicationContext(),
+                            getResources().getString(R.string.empty_quiz_error_message),
+                            Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 }
