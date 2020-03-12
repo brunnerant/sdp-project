@@ -24,7 +24,7 @@ public class QuizOverviewFragment extends Fragment {
 
         quiz = (Quiz) Objects.requireNonNull(getArguments()).getSerializable("quiz");
 
-        // Create the menu
+        // Create the overview
         int nbOfQuestions = Objects.requireNonNull(quiz).getNbOfQuestions();
         String[] overviewItems = new String[nbOfQuestions];
 
@@ -41,7 +41,7 @@ public class QuizOverviewFragment extends Fragment {
 
         listView.setAdapter(listViewAdapter);
 
-        // Reaction when we click
+        // Reaction when we click on an item
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     // parent: our listView
@@ -50,7 +50,6 @@ public class QuizOverviewFragment extends Fragment {
                     @Override
                     public void onItemClick(
                             AdapterView<?> parent, View view, int position, long id) {
-                        // Start QuestionFragment
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("question", quiz.getQuestions().get(position));
                         QuestionFragment frag = new QuestionFragment();

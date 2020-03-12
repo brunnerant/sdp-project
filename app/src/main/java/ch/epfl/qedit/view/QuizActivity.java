@@ -19,18 +19,18 @@ public class QuizActivity extends AppCompatActivity {
                     Arrays.asList(
                             new Question(
                                     0,
-                                    "Question 0 test",
-                                    "Is this question 0 working?",
+                                    "The matches problem",
+                                    "How many matches can fit in a shoe of size 43?",
                                     new AnswerFormat.NumberField(0, 1, 5)),
                             new Question(
                                     1,
-                                    "Question 1 test",
-                                    "Is this question 1 working?",
+                                    "Pigeons",
+                                    "How many pigeons are there on Earth? (Hint: do not count yourself)",
                                     new AnswerFormat.NumberField(0, 1, 5)),
                             new Question(
                                     2,
-                                    "Question 2 test",
-                                    "Is this question 2 working?",
+                                    "Kitchen",
+                                    "Oyster",
                                     new AnswerFormat.NumberField(0, 1, 5))));
 
     @Override
