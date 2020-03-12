@@ -6,6 +6,7 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.AnswerFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.view.question.QuestionFragment;
+import ch.epfl.qedit.view.question.QuizOverviewFragment;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -27,5 +28,10 @@ public class QuizActivity extends AppCompatActivity {
         frag.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, frag).commitNow();
+
+
+        //------
+        QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, quizOverviewFragment).commit();
     }
 }
