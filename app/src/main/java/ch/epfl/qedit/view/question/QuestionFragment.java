@@ -13,7 +13,9 @@ import ch.epfl.qedit.model.Question;
 
 public class QuestionFragment extends Fragment {
 
-    private Question question;
+    private Question question0;
+    private Question question1;
+    private Question question2;
 
     public static QuestionFragment newInstance() {
         return new QuestionFragment();
@@ -22,7 +24,9 @@ public class QuestionFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        question = (Question) getArguments().getSerializable("q0");
+        question0 = (Question) getArguments().getSerializable("q0");
+        question1 = (Question) getArguments().getSerializable("q1");
+        question2 = (Question) getArguments().getSerializable("q2");
     }
 
     @Nullable
@@ -35,10 +39,10 @@ public class QuestionFragment extends Fragment {
         View view = inflater.inflate(R.layout.question_fragment, container, false);
 
         final TextView questionTitle = (TextView) view.findViewById(R.id.question_title);
-        questionTitle.setText((question.getIndex() + 1) + ") " + question.getTitle());
+        questionTitle.setText((question0.getIndex() + 1) + ") " + question0.getTitle());
 
         final TextView questionDisplay = (TextView) view.findViewById(R.id.question_display);
-        questionDisplay.setText(question.getText());
+        questionDisplay.setText(question0.getText());
 
         return view;
     }

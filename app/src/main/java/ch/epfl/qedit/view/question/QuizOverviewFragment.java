@@ -21,10 +21,10 @@ import ch.epfl.qedit.R;
  */
 public class QuizOverviewFragment extends Fragment {
 
+
     public QuizOverviewFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,9 +33,9 @@ public class QuizOverviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.quiz_overview_fragment, container, false);
 
         // Create the menu
-        String[] menuItems = {"A1",
-        "A2",
-        "A3"};
+        String[] menuItems = {"question 0",
+        "question 1",
+        "question 2"};
 
         ListView listView = (ListView) view.findViewById(R.id.questionList);
 
@@ -46,7 +46,6 @@ public class QuizOverviewFragment extends Fragment {
         );
 
         listView.setAdapter(listViewAdapter);
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         // Reaction when we click
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,11 +56,8 @@ public class QuizOverviewFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(), "question " + position, Toast.LENGTH_SHORT).show();
 
-                QuestionFragment qFrag = QuestionFragment.newInstance();
-                ft.replace(R.id.questionFrame, qFrag);
             }
         });
-        ft.commit();
 
         return view;
     }
