@@ -19,6 +19,10 @@ public class QuestionFragment extends Fragment {
     private AnswerFormat answerFormat;
     private int layout;
 
+    public QuestionFragment() {
+        // Required empty public constructor
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
