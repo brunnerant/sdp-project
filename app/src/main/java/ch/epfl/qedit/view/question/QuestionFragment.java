@@ -15,10 +15,6 @@ public class QuestionFragment extends Fragment {
 
     private Question question;
 
-    public static QuestionFragment newInstance() {
-        return new QuestionFragment();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +30,10 @@ public class QuestionFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.question_fragment, container, false);
 
-        final TextView questionTitle = (TextView) view.findViewById(R.id.question_title);
+        final TextView questionTitle = view.findViewById(R.id.question_title);
         questionTitle.setText((question.getIndex() + 1) + ") " + question.getTitle());
 
-        final TextView questionDisplay = (TextView) view.findViewById(R.id.question_display);
+        final TextView questionDisplay = view.findViewById(R.id.question_display);
         questionDisplay.setText(question.getText());
 
         return view;
