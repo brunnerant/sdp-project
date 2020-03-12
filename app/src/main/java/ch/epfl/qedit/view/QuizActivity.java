@@ -30,7 +30,39 @@ public class QuizActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.questionFrame, questionFragment).commitNow();
 
         // Quiz overview
+
+/*
+        Question qu0 = new Question(
+                        0,
+                        "Question 0",
+                        "Bla",
+                        new AnswerFormat.NumberField(0, 1, 5));
+
+        Question qu1 = new Question(
+                1,
+                "Question 1",
+                "Bla bla",
+                new AnswerFormat.NumberField(0, 1, 5));
+
+        Question qu2 = new Question(
+                2,
+                "Question 2",
+                "Bla bla bla",
+                new AnswerFormat.NumberField(0, 1, 5));
+
+
+        Bundle bundle1 = new Bundle();
+        bundle.putSerializable("qu0", qu0);
+        bundle.putSerializable("qu1", qu1);
+        bundle.putSerializable("qu2", qu2);
         QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
+        quizOverviewFragment.setArguments(bundle1);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.quizOverviewFrame, quizOverviewFragment).commitNow();
+
+*/
+
+
         getSupportFragmentManager().beginTransaction().add(R.id.quizOverviewFrame, quizOverviewFragment).commit();
     }
 }

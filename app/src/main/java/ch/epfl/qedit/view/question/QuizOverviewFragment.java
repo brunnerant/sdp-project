@@ -3,6 +3,7 @@ package ch.epfl.qedit.view.question;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,7 @@ public class QuizOverviewFragment extends Fragment {
         );
 
         listView.setAdapter(listViewAdapter);
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
 
         // Reaction when we click
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -54,8 +56,12 @@ public class QuizOverviewFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(), "question " + position, Toast.LENGTH_SHORT).show();
+
+                QuestionFragment qFrag = QuestionFragment.newInstance();
+                ft.replace(R.id.questionFrame, qFrag);
             }
         });
+        ft.commit();
 
         return view;
     }
