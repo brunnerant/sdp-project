@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private Quiz quiz =
+    private final Quiz quiz =
             new Quiz(
                     Arrays.asList(
                             new Question(

@@ -51,7 +51,9 @@ public class QuestionFragment extends Fragment {
         answerFragment.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction =
-                getActivity().getSupportFragmentManager().beginTransaction();
+                Objects.requireNonNull(getActivity())
+                        .getSupportFragmentManager()
+                        .beginTransaction();
         fragmentTransaction.replace(R.id.answer_fragment_container, answerFragment).commit();
 
         return view;

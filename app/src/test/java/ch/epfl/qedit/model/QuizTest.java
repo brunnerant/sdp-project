@@ -35,7 +35,7 @@ public class QuizTest {
                 UnsupportedOperationException.class,
                 new ThrowingRunnable() {
                     @Override
-                    public void run() throws Throwable {
+                    public void run() {
                         questions.add(null);
                     }
                 });

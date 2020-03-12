@@ -9,5 +9,6 @@
     <string name="role">"Display role"</string>
     <string name="buttonOpenQuiz">"Quiz test"</string>
     <string name="buttonLogin">"Connexion"</string>
-    <string name="empty_quiz_error_message">"This quiz is empty"</string>
+    <string name="empty_quiz_error_message">"Ce quiz est vide"</string>
+    <string name="give_answer_here_hint">Mettez ici votre réponse</string>
 </resources>
