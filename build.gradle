@@ -3,8 +3,8 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.1'
         classpath 'org.jacoco:org.jacoco.core:0.8.4'

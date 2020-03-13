@@ -2,38 +2,34 @@ package ch.epfl.qedit;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.view.LoginActivity;
 import ch.epfl.qedit.view.MainActivity;
+import ch.epfl.qedit.view.QuizActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4ClassRunner.class)
 public class MainActivityTest {
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public final IntentsTestRule<MainActivity> mActivityRule =
+            new IntentsTestRule<>(MainActivity.class);
 
     @Test
-    public void testPressButtonQuizTest() {
-        onView(withId(R.id.buttonOpenQuiz)).perform(click());
-        onView(withId(R.id.question_title)).check(matches(withText("1) The matches problem")));
+    public void testCanGoToLoginActivity() {
+        onView(withId(R.id.login_button)).perform(click());
+        intended(hasComponent(LoginActivity.class.getName()));
     }
 
     @Test
-    public void testPressButtonLogin() {
-        onView(withId(R.id.buttonLogin)).perform(click());
-        onView(withId(R.id.username)).perform(typeText("George"));
-        onView(withId(R.id.password)).perform(typeText("abcdefgh")).perform(closeSoftKeyboard());
-        onView(withId(R.id.login)).perform(click());
-        onView(withId(R.id.greeting)).check(matches(withText("Bienvenue George !")));
-        onView(withId(R.id.role)).check(matches(withText("Vous êtes un participant.")));
+    public void testCanGoToQuizActivity() {
+        onView(withId(R.id.quiz_button)).perform(click());
+        intended(hasComponent(QuizActivity.class.getName()));
     }
 }

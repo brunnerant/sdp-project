@@ -43,8 +43,10 @@ public class QuestionFragment extends Fragment {
         View view = inflater.inflate(R.layout.question_fragment, container, false);
 
         final TextView questionTitle = view.findViewById(R.id.question_title);
+
         String questionTitleStr = (question.getIndex() + 1) + ") " + question.getTitle();
         questionTitle.setText(questionTitleStr);
+        questionTitle.setText((question.getIndex() + 1) + ") " + question.getTitle());
 
         final TextView questionDisplay = view.findViewById(R.id.question_display);
         questionDisplay.setText(question.getText());
