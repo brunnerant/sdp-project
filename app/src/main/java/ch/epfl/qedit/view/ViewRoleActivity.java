@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.User;
 
 public class ViewRoleActivity extends AppCompatActivity {
 
@@ -15,18 +16,27 @@ public class ViewRoleActivity extends AppCompatActivity {
 
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
-        String username = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
-        String message = "Bienvenue " + username + " !";
+        User user = (User) intent.getExtras().getSerializable(LoginActivity.USER);
+        String message = "Bienvenue " + user.getFullName() + " !";
 
         // Capture the layout's TextView and set the string as its text
         TextView textViewWelcome = findViewById(R.id.greeting);
         textViewWelcome.setText(message);
 
         TextView textViewRole = findViewById(R.id.role);
-        if (username != null && username.equals("admin")) {
-            textViewRole.setText("Vous êtes un administrateur.");
-        } else {
-            textViewRole.setText("Vous êtes un participant.");
+        String roleText = "";
+        switch (user.getRole()) {
+            case Participant:
+                roleText = "Vous êtes un participant.";
+                break;
+            case Administrator:
+                roleText = "Vous êtes un administrateur.";
+                break;
+            case Editor:
+                roleText = "Vous êtes un éditeur.";
+                break;
         }
+
+        textViewRole.setText(roleText);
     }
 }
