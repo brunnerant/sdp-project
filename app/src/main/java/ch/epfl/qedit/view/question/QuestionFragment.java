@@ -46,7 +46,6 @@ public class QuestionFragment extends Fragment {
 
         String questionTitleStr = (question.getIndex() + 1) + ") " + question.getTitle();
         questionTitle.setText(questionTitleStr);
-        questionTitle.setText((question.getIndex() + 1) + ") " + question.getTitle());
 
         final TextView questionDisplay = view.findViewById(R.id.question_display);
         questionDisplay.setText(question.getText());
