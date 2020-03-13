@@ -10,7 +10,7 @@
     <string name="buttonOpenQuiz">"Quiz test"</string>
     <string name="buttonLogin">"Connexion"</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="strTableButton">Submit</string>
+
 </resources>
