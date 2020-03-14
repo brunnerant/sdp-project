@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Objects;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
     @Override
@@ -19,7 +17,10 @@ public class HomeActivity extends AppCompatActivity {
 
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
-        User user = (User) Objects.requireNonNull(intent.getExtras()).getSerializable(LoginActivity.USER);
+        User user =
+                (User)
+                        Objects.requireNonNull(intent.getExtras())
+                                .getSerializable(LoginActivity.USER);
         String message = "Bienvenue " + Objects.requireNonNull(user).getFullName() + " !";
 
         // Capture the layout's TextView and set the string as its text
