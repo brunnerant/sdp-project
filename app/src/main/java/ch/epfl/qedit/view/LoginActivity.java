@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccessful(User user) {
-        Intent intent = new Intent(LoginActivity.this, ViewRoleActivity.class);
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         intent.putExtras(bundle);

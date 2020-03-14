@@ -23,8 +23,8 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.backend.AuthenticationFactory;
 import ch.epfl.qedit.backend.MockAuthService;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.HomeActivity;
 import ch.epfl.qedit.view.LoginActivity;
-import ch.epfl.qedit.view.ViewRoleActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -64,7 +64,7 @@ public class LoginActivityTest {
         performLogin(token);
         intended(
                 allOf(
-                        hasComponent(ViewRoleActivity.class.getName()),
+                        hasComponent(HomeActivity.class.getName()),
                         hasExtra(LoginActivity.USER, user)));
     }
 
