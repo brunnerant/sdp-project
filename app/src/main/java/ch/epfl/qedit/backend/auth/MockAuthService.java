@@ -6,35 +6,37 @@ import androidx.test.espresso.idling.CountingIdlingResource;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.Response;
+
 import java.util.HashMap;
 
 public class MockAuthService implements AuthenticationService {
 
-    CountingIdlingResource idlingResource;
+    private CountingIdlingResource idlingResource;
 
     public MockAuthService() {
         idlingResource = new CountingIdlingResource("MockAuthService");
     }
 
-    private final HashMap<String, LoginResponse> userResponses =
-            new HashMap<String, LoginResponse>() {
+    private final HashMap<String, Response<User>> userResponses =
+            new HashMap<String, Response<User>>() {
                 {
-                    put("nicolas", LoginResponse.error(LoginResponse.Error.ConnectionError));
+                    put("nicolas", Response.<User>error(CONNECTION_ERROR));
                     put(
                             "nathan",
-                            LoginResponse.ok(new User("nathan", "greslin", User.Role.Participant)));
+                            Response.ok(new User("nathan", "greslin", User.Role.Participant)));
                     put(
                             "anthony",
-                            LoginResponse.ok(new User("anthony", "iozzia", User.Role.Editor)));
+                            Response.ok(new User("anthony", "iozzia", User.Role.Editor)));
                     put(
                             "antoine",
-                            LoginResponse.ok(
+                            Response.ok(
                                     new User("antoine", "brunner", User.Role.Administrator)));
                 }
             };
 
     @Override
-    public void sendRequest(final String token, final Callback<LoginResponse> responseCallback) {
+    public void sendRequest(final String token, final Callback<Response<User>> responseCallback) {
         idlingResource.increment();
         new Thread(
                         new Runnable() {
@@ -46,9 +48,9 @@ public class MockAuthService implements AuthenticationService {
                                     e.printStackTrace();
                                 }
 
-                                LoginResponse response;
+                                Response<User> response;
                                 if (!userResponses.containsKey(token))
-                                    response = LoginResponse.error(LoginResponse.Error.WrongToken);
+                                    response = Response.error(WRONG_TOKEN);
                                 else response = userResponses.get(token);
 
                                 idlingResource.decrement();

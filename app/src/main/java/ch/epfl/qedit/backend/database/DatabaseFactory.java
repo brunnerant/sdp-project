@@ -1,7 +1,5 @@
 package ch.epfl.qedit.backend.database;
 
-import ch.epfl.qedit.backend.auth.AuthenticationService;
-
 /**
  * This factory class is used to create dependency injection for testing, or for switching the
  * authentication service if several are available.
@@ -11,7 +9,7 @@ public final class DatabaseFactory {
     private static DatabaseService dbService = null;
 
     public static DatabaseService getInstance() {
-        if (dbService == null) dbService = new MockDatabaseService();
+        if (dbService == null) dbService = new MockDBService();
 
         return dbService;
     }

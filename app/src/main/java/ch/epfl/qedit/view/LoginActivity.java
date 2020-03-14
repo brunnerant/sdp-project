@@ -9,8 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.AuthenticationFactory;
-import ch.epfl.qedit.backend.AuthenticationService;
+import ch.epfl.qedit.backend.auth.AuthenticationFactory;
+import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 

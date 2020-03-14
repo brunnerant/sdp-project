@@ -16,6 +16,9 @@ public class Bundle {
     }
 
     public Object get(String attribute) {
+        if (!attributes.containsKey(attribute))
+            throw new IllegalArgumentException();
+
         return attributes.get(attribute);
     }
 

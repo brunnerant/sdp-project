@@ -17,17 +17,14 @@ public class QuizActivity extends AppCompatActivity {
             new Quiz(
                     Arrays.asList(
                             new Question(
-                                    0,
                                     "The matches problem",
                                     "How many matches can fit in a shoe of size 43?",
                                     new AnswerFormat.NumberField(0, 1, 5)),
                             new Question(
-                                    1,
                                     "Pigeons",
                                     "How many pigeons are there on Earth? (Hint: do not count yourself)",
                                     new AnswerFormat.NumberField(0, 1, 5)),
                             new Question(
-                                    2,
                                     "Kitchen",
                                     "Oyster",
                                     new AnswerFormat.NumberField(0, 1, 5))));
@@ -38,7 +35,7 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.quiz_activity);
 
         // Check if the quiz is non empty
-        if (quiz.getNbOfQuestions() > 0) {
+        if (quiz.getQuestions().size() > 0) {
             // Start the QuizOverviewFragment
             Bundle bundle = new Bundle();
             bundle.putSerializable("quiz", quiz);
