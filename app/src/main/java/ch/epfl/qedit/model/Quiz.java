@@ -11,7 +11,7 @@ public class Quiz implements Serializable {
      * We cannot modify this list of question in the Quiz class, this list will be edited in a Quiz
      * builder
      */
-    private ImmutableList<Question> questions;
+    private final ImmutableList<Question> questions;
 
     public Quiz(List<Question> questions) {
 
