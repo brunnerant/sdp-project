@@ -16,6 +16,12 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuestionFragment extends Fragment {
+    /** The view model from which data is observed */
+    private QuizViewModel model;
+
+    private TextView questionTitle;
+    private TextView questionDisplay;
+
     @Nullable
     @Override
     public View onCreateView(
@@ -24,11 +30,9 @@ public class QuestionFragment extends Fragment {
             @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.question_fragment, container, false);
-
-        final TextView questionTitle = view.findViewById(R.id.question_title);
-        final TextView questionDisplay = view.findViewById(R.id.question_display);
-        final QuizViewModel model =
-                new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        questionTitle = view.findViewById(R.id.question_title);
+        questionDisplay = view.findViewById(R.id.question_display);
+        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         model.getFocusedQuestion()
                 .observe(
@@ -37,27 +41,28 @@ public class QuestionFragment extends Fragment {
                             @Override
                             public void onChanged(Integer index) {
                                 Quiz quiz = model.getQuiz().getValue();
-
                                 if (index == null || quiz == null) return;
-
-                                Question question = quiz.getQuestions().get(index);
-
-                                String questionTitleStr = (index + 1) + ") " + question.getTitle();
-                                questionTitle.setText(questionTitleStr);
-                                questionDisplay.setText(question.getText());
-
-                                DummyAnswerFragment answerFragment = new DummyAnswerFragment();
-
-                                requireActivity()
-                                        .getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .add(
-                                                R.id.answer_fragment_container,
-                                                new DummyAnswerFragment())
-                                        .commit();
+                                else onQuestionChanged(quiz, index);
                             }
                         });
 
         return view;
+    }
+
+    /** Handles the transition from one question to another */
+    private void onQuestionChanged(Quiz quiz, int index) {
+        Question question = quiz.getQuestions().get(index);
+
+        // We have to change the question title and text
+        String questionTitleStr = (index + 1) + ") " + question.getTitle();
+        questionTitle.setText(questionTitleStr);
+        questionDisplay.setText(question.getText());
+
+        // And dynamically instatiate the answer form
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.answer_fragment_container, new DummyAnswerFragment())
+                .commit();
     }
 }

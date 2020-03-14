@@ -18,13 +18,17 @@ import java.util.List;
 
 /** A simple {@link Fragment} subclass. */
 public class QuizOverviewFragment extends Fragment {
+    /** The view model from which data is observed */
+    private QuizViewModel model;
+
+    private ListView listView;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.quiz_overview_fragment, container, false);
-        final ListView listView = view.findViewById(R.id.question_list);
+        listView = view.findViewById(R.id.question_list);
 
         // Listen to the quiz live data
         final QuizViewModel model =
@@ -36,22 +40,7 @@ public class QuizOverviewFragment extends Fragment {
                             @Override
                             public void onChanged(Quiz quiz) {
                                 if (quiz == null) return;
-
-                                // Create the overview
-                                List<Question> questions = quiz.getQuestions();
-                                String[] overviewItems = new String[questions.size()];
-
-                                for (int i = 0; i < questions.size(); ++i) {
-                                    overviewItems[i] = "Question " + (i + 1);
-                                }
-
-                                ArrayAdapter<String> listViewAdapter =
-                                        new ArrayAdapter<>(
-                                                requireActivity(),
-                                                android.R.layout.simple_list_item_1,
-                                                overviewItems);
-
-                                listView.setAdapter(listViewAdapter);
+                                else onDataArrived(quiz);
                             }
                         });
 
@@ -60,12 +49,27 @@ public class QuizOverviewFragment extends Fragment {
                     @Override
                     public void onItemClick(
                             AdapterView<?> parent, View view, int position, long id) {
-                        // We change the question that is focused when the corresponding
-                        // list item is clicked
+                        // We change the question that is focused when the corresponding list item
+                        // is selected
                         model.getFocusedQuestion().postValue(position);
                     }
                 });
 
         return view;
+    }
+
+    /** Handles the arrival of the quiz from the database */
+    private void onDataArrived(Quiz quiz) {
+        List<Question> questions = quiz.getQuestions();
+        String[] overviewItems = new String[questions.size()];
+
+        // For each question of the quiz, we create an item in the list view
+        for (int i = 0; i < questions.size(); ++i) overviewItems[i] = "Question " + (i + 1);
+
+        ArrayAdapter<String> listViewAdapter =
+                new ArrayAdapter<>(
+                        requireActivity(), android.R.layout.simple_list_item_1, overviewItems);
+
+        listView.setAdapter(listViewAdapter);
     }
 }

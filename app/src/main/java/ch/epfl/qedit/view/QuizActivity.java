@@ -13,15 +13,16 @@ import ch.epfl.qedit.view.question.QuizOverviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuizActivity extends AppCompatActivity {
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_activity);
+        progressBar = findViewById(R.id.quiz_progress_bar);
 
         QuizViewModel model = new ViewModelProvider(this).get(QuizViewModel.class);
         model.loadQuiz();
-
-        final ProgressBar progressBar = findViewById(R.id.quiz_progress_bar);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -35,16 +36,18 @@ public class QuizActivity extends AppCompatActivity {
                         new Observer<QuizViewModel.Status>() {
                             @Override
                             public void onChanged(QuizViewModel.Status status) {
-                                if (status == QuizViewModel.Status.Loading)
-                                    progressBar.setVisibility(View.VISIBLE);
-                                else progressBar.setVisibility(View.GONE);
-
-                                if (status == QuizViewModel.Status.CouldntLoad)
-                                    Toast.makeText(
-                                            getApplicationContext(),
-                                            R.string.connection_error_message,
-                                            Toast.LENGTH_SHORT);
+                                onStatusChanged(status);
                             }
                         });
+    }
+
+    /** This handles the loading status of the quiz */
+    private void onStatusChanged(QuizViewModel.Status status) {
+        if (status == QuizViewModel.Status.Loading) progressBar.setVisibility(View.VISIBLE);
+        else progressBar.setVisibility(View.GONE);
+
+        if (status == QuizViewModel.Status.CouldntLoad)
+            Toast.makeText(
+                    getApplicationContext(), R.string.connection_error_message, Toast.LENGTH_SHORT);
     }
 }
