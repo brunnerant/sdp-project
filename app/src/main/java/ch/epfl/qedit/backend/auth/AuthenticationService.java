@@ -1,4 +1,4 @@
-package ch.epfl.qedit.backend;
+package ch.epfl.qedit.backend.auth;
 
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
@@ -32,7 +32,7 @@ public interface AuthenticationService {
         }
 
         public boolean successful() {
-            return user != null;
+            return error == null;
         }
 
         public User getUser() {

@@ -1,14 +1,13 @@
 package ch.epfl.qedit.model;
 
-import java.io.Serializable;
+import ch.epfl.qedit.util.Bundlable;
+import ch.epfl.qedit.util.Bundle;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
-public class Question implements Serializable {
+public class Question implements Bundlable {
     /** For now, a question consists of a number, a title, and a text */
-    private final int index;
-
-    private final String title;
-    private final String text;
+    private String title;
+    private String text;
 
     /** The answer format for this question */
     private final AnswerFormat format;
@@ -17,14 +16,9 @@ public class Question implements Serializable {
         if (index < 0 || title == null || text == null || format == null)
             throw new IllegalArgumentException();
 
-        this.index = index;
         this.title = title;
         this.text = text;
         this.format = format;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public String getTitle() {
@@ -37,5 +31,25 @@ public class Question implements Serializable {
 
     public AnswerFormat getFormat() {
         return format;
+    }
+
+    @Override
+    public Bundle toBundle() {
+        return new Bundle()
+            .update("title", title)
+            .update("text", text);
+    }
+
+    @Override
+    public void fromBundle(Bundle bundle) throws IllegalArgumentException {
+        String title = (String) bundle.get("title");
+        String text = (String) bundle.get("text");
+
+        if (title == null || text == null) {
+            throw new IllegalArgumentException();
+        }
+
+        this.title = title;
+        this.text = text;
     }
 }

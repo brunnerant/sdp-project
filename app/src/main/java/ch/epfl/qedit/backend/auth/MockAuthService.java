@@ -1,7 +1,9 @@
-package ch.epfl.qedit.backend;
+package ch.epfl.qedit.backend.auth;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
+
+import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package ch.epfl.qedit.backend;
+package ch.epfl.qedit.backend.auth;
 
 /**
  * This factory class is used to create dependency injection for testing, or for switching the

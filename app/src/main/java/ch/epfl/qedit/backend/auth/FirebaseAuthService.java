@@ -1,6 +1,8 @@
-package ch.epfl.qedit.backend;
+package ch.epfl.qedit.backend.auth;
 
 import androidx.annotation.NonNull;
+
+import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import com.google.android.gms.tasks.OnCompleteListener;
