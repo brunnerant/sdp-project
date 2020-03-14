@@ -2,6 +2,7 @@ package ch.epfl.qedit.util;
 
 /**
  * Represents a response that a certain service can send after a request.
+ *
  * @param <T> the type of the data when the response is successful
  */
 public class Response<T> {

@@ -8,69 +8,64 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import java.util.Objects;
+import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.List;
 
 /** A simple {@link Fragment} subclass. */
 public class QuizOverviewFragment extends Fragment {
-    private Quiz quiz;
-
-    public QuizOverviewFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.quiz_overview_fragment, container, false);
+        final View view = inflater.inflate(R.layout.quiz_overview_fragment, container, false);
+        final ListView listView = view.findViewById(R.id.question_list);
 
-        quiz = (Quiz) Objects.requireNonNull(getArguments()).getSerializable("quiz");
+        // Listen to the quiz live data
+        final QuizViewModel model =
+                new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        model.getQuiz()
+                .observe(
+                        getViewLifecycleOwner(),
+                        new Observer<Quiz>() {
+                            @Override
+                            public void onChanged(Quiz quiz) {
+                                if (quiz == null) return;
 
-        // Create the overview
-        int nbOfQuestions = Objects.requireNonNull(quiz).getNbOfQuestions();
-        String[] overviewItems = new String[nbOfQuestions];
+                                // Create the overview
+                                List<Question> questions = quiz.getQuestions();
+                                String[] overviewItems = new String[questions.size()];
 
-        for (int i = 0; i < nbOfQuestions; ++i) {
-            overviewItems[i] = "Question " + (i + 1);
-        }
+                                for (int i = 0; i < questions.size(); ++i) {
+                                    overviewItems[i] = "Question " + (i + 1);
+                                }
 
-        ListView listView = view.findViewById(R.id.questionList);
-        ArrayAdapter<String> listViewAdapter =
-                new ArrayAdapter<>(
-                        Objects.requireNonNull(getActivity()),
-                        android.R.layout.simple_list_item_1,
-                        overviewItems);
+                                ArrayAdapter<String> listViewAdapter =
+                                        new ArrayAdapter<>(
+                                                requireActivity(),
+                                                android.R.layout.simple_list_item_1,
+                                                overviewItems);
 
-        listView.setAdapter(listViewAdapter);
+                                listView.setAdapter(listViewAdapter);
+                            }
+                        });
 
-        // Reaction when we click on an item
-        clickAction(listView);
-
-        return view;
-    }
-
-    private void clickAction(ListView listView) {
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
-                    // parent: our listView
-                    // view: item within the list that we clicked on
-                    // position: index of the item that was clicked on
                     @Override
                     public void onItemClick(
                             AdapterView<?> parent, View view, int position, long id) {
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("question", quiz.getQuestions().get(position));
-                        QuestionFragment frag = new QuestionFragment();
-                        frag.setArguments(bundle);
-
-                        Objects.requireNonNull(getActivity())
-                                .getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.question_frame, frag)
-                                .commit();
+                        // We change the question that is focused when the corresponding
+                        // list item is clicked
+                        model.getFocusedQuestion().postValue(position);
                     }
                 });
+
+        return view;
     }
 }

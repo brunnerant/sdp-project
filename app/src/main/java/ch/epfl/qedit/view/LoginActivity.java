@@ -13,6 +13,7 @@ import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -42,18 +43,17 @@ public class LoginActivity extends AppCompatActivity {
 
         authService.sendRequest(
                 token,
-                new Callback<AuthenticationService.LoginResponse>() {
+                new Callback<Response<User>>() {
                     @Override
-                    public void onReceive(AuthenticationService.LoginResponse response) {
-                        final AuthenticationService.LoginResponse _response = response;
+                    public void onReceive(final Response<User> response) {
                         handler.post(
                                 new Runnable() {
                                     @Override
                                     public void run() {
                                         progressBar.setVisibility(View.GONE);
-                                        if (_response.successful())
-                                            onLoginSuccessful(_response.getUser());
-                                        else onLoginFailed(_response.getError());
+                                        if (response.successful())
+                                            onLoginSuccessful(response.getData());
+                                        else onLoginFailed(response.getError());
                                     }
                                 });
                     }
@@ -68,13 +68,13 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onLoginFailed(AuthenticationService.LoginResponse.Error error) {
+    public void onLoginFailed(int error) {
         int stringId = 0;
         switch (error) {
-            case ConnectionError:
+            case AuthenticationService.CONNECTION_ERROR:
                 stringId = R.string.connection_error_message;
                 break;
-            case WrongToken:
+            case AuthenticationService.WRONG_TOKEN:
                 stringId = R.string.wrong_token_message;
                 break;
         }

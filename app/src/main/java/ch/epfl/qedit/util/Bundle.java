@@ -1,6 +1,5 @@
 package ch.epfl.qedit.util;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +7,7 @@ public class Bundle {
     private final Map<String, Object> attributes;
 
     public Bundle() {
-        this.attributes = Collections.emptyMap();
+        this.attributes = new HashMap<>();
     }
 
     public Bundle(Map<String, Object> attributes) {
@@ -16,8 +15,7 @@ public class Bundle {
     }
 
     public Object get(String attribute) {
-        if (!attributes.containsKey(attribute))
-            throw new IllegalArgumentException();
+        if (!attributes.containsKey(attribute)) throw new IllegalArgumentException();
 
         return attributes.get(attribute);
     }
