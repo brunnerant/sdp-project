@@ -10,17 +10,17 @@ import android.os.Bundle;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.HomeActivity;
 import ch.epfl.qedit.view.LoginActivity;
-import ch.epfl.qedit.view.ViewRoleActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class ViewRoleActivityTest {
+public class HomeActivityTest {
     @Rule
-    public final IntentsTestRule<ViewRoleActivity> testRule =
-            new IntentsTestRule<>(ViewRoleActivity.class, false, false);
+    public final IntentsTestRule<HomeActivity> testRule =
+            new IntentsTestRule<>(HomeActivity.class, false, false);
 
     public void launchActivity(User user) {
         Intent intent = new Intent();
