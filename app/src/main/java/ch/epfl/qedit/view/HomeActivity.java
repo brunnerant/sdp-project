@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private String getRoleText(User.Role role) {
-        String roleText = "Vous êtes ";
+        String roleText = "Vous êtes un ";
         switch (role) {
             case Participant:
                 roleText += "participant.";
