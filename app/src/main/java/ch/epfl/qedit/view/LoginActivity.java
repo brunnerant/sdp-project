@@ -77,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
             case AuthenticationService.WRONG_TOKEN:
                 stringId = R.string.wrong_token_message;
                 break;
+            default:
+                break;
         }
 
         Toast toast =
