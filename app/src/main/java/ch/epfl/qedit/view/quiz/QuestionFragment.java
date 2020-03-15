@@ -31,7 +31,6 @@ public class QuestionFragment extends Fragment {
         questionDisplay = view.findViewById(R.id.question_display);
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
-
         model.getFocusedQuestion()
                 .observe(
                         getViewLifecycleOwner(),
@@ -41,7 +40,6 @@ public class QuestionFragment extends Fragment {
                                 onQuestionChanged(model.getQuiz().getValue(), index);
                             }
                         });
-
         model.getStatus()
                 .observe(
                         getViewLifecycleOwner(),
