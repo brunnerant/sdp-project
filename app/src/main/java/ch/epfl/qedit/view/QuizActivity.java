@@ -27,7 +27,7 @@ public class QuizActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.quiz_overview_container, new QuizOverviewFragment())
-                .add(R.id.question_details_container, new QuestionFragment())
+                .replace(R.id.question_details_container, new QuestionFragment())
                 .commit();
 
         model.getStatus()
