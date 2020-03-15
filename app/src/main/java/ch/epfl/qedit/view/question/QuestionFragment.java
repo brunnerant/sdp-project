@@ -73,7 +73,7 @@ public class QuestionFragment extends Fragment {
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.answer_fragment_container, new DummyAnswerFragment())
+                .replace(R.id.answer_fragment_container, new DummyAnswerFragment())
                 .commit();
     }
 }
