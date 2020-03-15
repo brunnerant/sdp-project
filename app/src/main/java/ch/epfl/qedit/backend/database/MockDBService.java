@@ -1,10 +1,11 @@
 package ch.epfl.qedit.backend.database;
 
+import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import ch.epfl.qedit.model.AnswerFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.util.Bundle;
+import ch.epfl.qedit.util.BundledData;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.Map;
 public class MockDBService implements DatabaseService {
 
     private CountingIdlingResource idlingResource;
-    private final Map<String, Bundle> database;
+    private final Map<String, BundledData> database;
 
     public MockDBService() {
         idlingResource = new CountingIdlingResource("MockDBService");
@@ -43,7 +44,7 @@ public class MockDBService implements DatabaseService {
     public void getBundle(
             final String collection,
             final String document,
-            final Callback<Response<Bundle>> responseCallback) {
+            final Callback<Response<BundledData>> responseCallback) {
         idlingResource.increment();
         new Thread(
                         new Runnable() {
@@ -55,7 +56,7 @@ public class MockDBService implements DatabaseService {
                                     e.printStackTrace();
                                 }
 
-                                Response<Bundle> response;
+                                Response<BundledData> response;
                                 String key = collection + "/" + document;
                                 if (!database.containsKey(key))
                                     response = Response.error(WRONG_DOCUMENT);
@@ -66,5 +67,9 @@ public class MockDBService implements DatabaseService {
                             }
                         })
                 .start();
+    }
+
+    public IdlingResource getIdlingResource() {
+        return idlingResource;
     }
 }

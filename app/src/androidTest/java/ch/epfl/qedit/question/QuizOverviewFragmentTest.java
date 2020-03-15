@@ -1,4 +1,4 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.question;
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;

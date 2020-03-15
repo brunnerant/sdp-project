@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.util.Bundle;
+import ch.epfl.qedit.util.BundledData;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
 
@@ -23,14 +23,14 @@ public class QuizViewModel extends ViewModel {
 
     public void loadQuiz() {
         if (status.getValue() == Status.NotLoaded) {
-            status.setValue(Status.Loading);
+            status.postValue(Status.Loading);
             DatabaseFactory.getInstance()
                     .getBundle(
                             "quizzes",
                             "quiz1",
-                            new Callback<Response<Bundle>>() {
+                            new Callback<Response<BundledData>>() {
                                 @Override
-                                public void onReceive(Response<Bundle> response) {
+                                public void onReceive(Response<BundledData> response) {
                                     if (response.successful()) {
                                         quiz.postValue(Quiz.fromBundle(response.getData()));
                                         status.postValue(Status.Loaded);

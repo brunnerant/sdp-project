@@ -16,9 +16,6 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuestionFragment extends Fragment {
-    /** The view model from which data is observed */
-    private QuizViewModel model;
-
     private TextView questionTitle;
     private TextView questionDisplay;
 
@@ -32,7 +29,7 @@ public class QuestionFragment extends Fragment {
         View view = inflater.inflate(R.layout.question_fragment, container, false);
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
-        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        final QuizViewModel model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         model.getFocusedQuestion()
                 .observe(
@@ -40,21 +37,29 @@ public class QuestionFragment extends Fragment {
                         new Observer<Integer>() {
                             @Override
                             public void onChanged(Integer index) {
-                                Quiz quiz = model.getQuiz().getValue();
-                                if (index == null || quiz == null) return;
-                                else onQuestionChanged(quiz, index);
+                                onQuestionChanged(model.getQuiz().getValue(), index);
                             }
                         });
+
+        model.getStatus().observe(getViewLifecycleOwner(), new Observer<QuizViewModel.Status>() {
+            @Override
+            public void onChanged(QuizViewModel.Status status) {
+                onQuestionChanged(model.getQuiz().getValue(), model.getFocusedQuestion().getValue());
+            }
+        });
 
         return view;
     }
 
     /** Handles the transition from one question to another */
-    private void onQuestionChanged(Quiz quiz, int index) {
+    private void onQuestionChanged(Quiz quiz, Integer index) {
+        if (index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size())
+            return;
+
         Question question = quiz.getQuestions().get(index);
 
         // We have to change the question title and text
-        String questionTitleStr = (index + 1) + ") " + question.getTitle();
+        String questionTitleStr = "Question " + (index + 1) + ": " + question.getTitle();
         questionTitle.setText(questionTitleStr);
         questionDisplay.setText(question.getText());
 

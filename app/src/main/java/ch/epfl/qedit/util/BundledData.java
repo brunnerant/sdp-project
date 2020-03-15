@@ -3,14 +3,14 @@ package ch.epfl.qedit.util;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Bundle {
+public class BundledData {
     private final Map<String, Object> attributes;
 
-    public Bundle() {
+    public BundledData() {
         this.attributes = new HashMap<>();
     }
 
-    public Bundle(Map<String, Object> attributes) {
+    public BundledData(Map<String, Object> attributes) {
         this.attributes = new HashMap<>(attributes);
     }
 
@@ -20,12 +20,12 @@ public class Bundle {
         return attributes.get(attribute);
     }
 
-    public Bundle update(String attribute, Object value) {
+    public BundledData update(String attribute, Object value) {
         attributes.put(attribute, value);
         return this;
     }
 
-    public Bundle update(String attribute, Bundle bundle) {
+    public BundledData update(String attribute, BundledData bundle) {
         attributes.put(attribute, bundle.attributes);
         return this;
     }

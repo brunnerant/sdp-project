@@ -9,5 +9,5 @@ public interface Bundlable {
      *
      * @return the converted object
      */
-    Bundle toBundle();
+    BundledData toBundle();
 }

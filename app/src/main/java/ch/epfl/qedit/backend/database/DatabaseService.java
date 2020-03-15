@@ -1,6 +1,6 @@
 package ch.epfl.qedit.backend.database;
 
-import ch.epfl.qedit.util.Bundle;
+import ch.epfl.qedit.util.BundledData;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
 
@@ -21,5 +21,5 @@ public interface DatabaseService {
      * @param document the document to retrieve in the collection
      * @param responseCallback the callback that will be triggered when the data arrives
      */
-    void getBundle(String collection, String document, Callback<Response<Bundle>> responseCallback);
+    void getBundle(String collection, String document, Callback<Response<BundledData>> responseCallback);
 }

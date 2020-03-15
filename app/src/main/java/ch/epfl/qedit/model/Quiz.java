@@ -1,7 +1,7 @@
 package ch.epfl.qedit.model;
 
 import ch.epfl.qedit.util.Bundlable;
-import ch.epfl.qedit.util.Bundle;
+import ch.epfl.qedit.util.BundledData;
 import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.List;
@@ -23,11 +23,11 @@ public class Quiz implements Bundlable, Serializable {
     }
 
     @Override
-    public Bundle toBundle() {
-        return new Bundle().update("questions", questions);
+    public BundledData toBundle() {
+        return new BundledData().update("questions", questions);
     }
 
-    public static Quiz fromBundle(Bundle bundle) throws IllegalArgumentException {
+    public static Quiz fromBundle(BundledData bundle) throws IllegalArgumentException {
         List<Question> questions = (List<Question>) bundle.get("questions");
         return new Quiz(questions);
     }

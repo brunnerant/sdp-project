@@ -1,7 +1,7 @@
 package ch.epfl.qedit.model;
 
 import ch.epfl.qedit.util.Bundlable;
-import ch.epfl.qedit.util.Bundle;
+import ch.epfl.qedit.util.BundledData;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -34,11 +34,11 @@ public class Question implements Bundlable, Serializable {
     }
 
     @Override
-    public Bundle toBundle() {
-        return new Bundle().update("title", title).update("text", text);
+    public BundledData toBundle() {
+        return new BundledData().update("title", title).update("text", text);
     }
 
-    public static Question fromBundle(Bundle bundle) throws IllegalArgumentException {
+    public static Question fromBundle(BundledData bundle) throws IllegalArgumentException {
         String title = (String) bundle.get("title");
         String text = (String) bundle.get("text");
         return new Question(title, text, new AnswerFormat.NumberField(0, 100, 0));

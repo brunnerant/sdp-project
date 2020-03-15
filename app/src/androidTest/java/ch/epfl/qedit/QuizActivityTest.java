@@ -29,9 +29,4 @@ public class QuizActivityTest {
         onView(withId(R.id.question_display))
                 .check(matches(withText("How many matches can fit in a shoe of size 43?")));
     }
-
-    @Test
-    public void testEmptyQuizToast() {
-        // TODO
-    }
 }
