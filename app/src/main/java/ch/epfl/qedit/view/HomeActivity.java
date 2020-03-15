@@ -28,22 +28,27 @@ public class HomeActivity extends AppCompatActivity {
         textViewWelcome.setText(message);
 
         TextView textViewRole = findViewById(R.id.role);
-        String roleText = "";
-        switch (user.getRole()) {
+
+        textViewRole.setText(getRoleText(user.getRole()));
+    }
+
+    private String getRoleText(User.Role role) {
+        String roleText = "Vous êtes ";
+        switch (role) {
             case Participant:
-                roleText = "Vous êtes un participant.";
+                roleText += "participant.";
                 break;
             case Administrator:
-                roleText = "Vous êtes un administrateur.";
+                roleText += "administrateur.";
                 break;
             case Editor:
-                roleText = "Vous êtes un éditeur.";
+                roleText += "éditeur.";
                 break;
             default:
                 break;
         }
 
-        textViewRole.setText(roleText);
+        return roleText;
     }
 
     public void goToQuizActivity(View view) {
