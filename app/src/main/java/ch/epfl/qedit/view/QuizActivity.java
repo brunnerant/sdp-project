@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.view.question.QuestionFragment;
-import ch.epfl.qedit.view.question.QuizOverviewFragment;
+import ch.epfl.qedit.view.quiz.QuestionFragment;
+import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuizActivity extends AppCompatActivity {

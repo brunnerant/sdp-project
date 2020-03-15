@@ -11,6 +11,7 @@ public class User implements Serializable {
         Administrator
     }
 
+    /** Table that contains quiz key of all the quizzes this user can attempt to */
     public ArrayList<String> quizzes;
 
     private final String firstName;
@@ -21,7 +22,7 @@ public class User implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
-        this.quizzes = new ArrayList<String>();
+        this.quizzes = new ArrayList<>();
     }
 
     public String getFirstName() {
