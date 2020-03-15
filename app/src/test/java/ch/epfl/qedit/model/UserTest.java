@@ -38,4 +38,13 @@ public class UserTest {
         assertTrue(user.addQuiz("q0", "First again Quiz"));
         assertFalse(user.addQuiz("q1", "Second Quiz"));
     }
+
+    @Test
+    public void removeQuizzesTest() {
+        User user = new User("John", "Doe", User.Role.Administrator);
+        user.addQuiz("q0", "First Quiz");
+        user.addQuiz("q1", "Second Quiz");
+        user.removeQuiz("q1");
+        assertFalse(user.getQuizzesKey().contains("q1"));
+    }
 }
