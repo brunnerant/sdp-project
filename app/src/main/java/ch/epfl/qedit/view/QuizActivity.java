@@ -26,7 +26,7 @@ public class QuizActivity extends AppCompatActivity {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.quiz_overview_container, new QuizOverviewFragment())
+                .replace(R.id.quiz_overview_container, new QuizOverviewFragment())
                 .add(R.id.question_details_container, new QuestionFragment())
                 .commit();
 
