@@ -30,19 +30,23 @@ public class User implements Serializable {
         this.quizzes = new HashMap<>();
     }
 
-    public void addQuiz(String key, String title) {
-        quizzes.put(key, title);
+    /**
+     * add a quiz to the user's quizzes list and return true if this quiz is replacing an other,
+     * i.e. if the key already is in the quizzes map
+     */
+    public Boolean addQuiz(String key, String title) {
+        return quizzes.put(key, title) != null;
     }
 
     public void removeQuiz(String key) {
         quizzes.remove(key);
     }
 
-    public ImmutableList<String> getQuizzesTitle() {
+    public ImmutableList<String> getQuizzesKey() {
         return ImmutableList.copyOf(quizzes.keySet());
     }
 
-    public ImmutableList<String> getQuizzesKey() {
+    public ImmutableList<String> getQuizzesTitle() {
         return ImmutableList.copyOf(quizzes.values());
     }
 
