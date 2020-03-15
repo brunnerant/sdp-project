@@ -53,7 +53,6 @@ public class QuestionFragment extends Fragment {
                                         model.getFocusedQuestion().getValue());
                             }
                         });
-
         return view;
     }
 

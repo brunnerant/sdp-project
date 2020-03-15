@@ -1,7 +1,8 @@
 package ch.epfl.qedit.model;
 
+import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /** Represents a user of the QEDit app. */
 public class User implements Serializable {
@@ -11,8 +12,12 @@ public class User implements Serializable {
         Administrator
     }
 
-    /** Table that contains quiz key of all the quizzes this user can attempt to */
-    public ArrayList<String> quizzes;
+    /**
+     * Table that contains quiz key of all the quizzes this user can attempt to we also store
+     * directly the title of the quiz so that we don't have to query it from the database every time
+     * we go back to the HomeActivity
+     */
+    private HashMap<String, String> quizzes;
 
     private final String firstName;
     private final String lastName;
@@ -22,7 +27,23 @@ public class User implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
-        this.quizzes = new ArrayList<>();
+        this.quizzes = new HashMap<>();
+    }
+
+    public void addQuiz(String key, String title) {
+        quizzes.put(key, title);
+    }
+
+    public void removeQuiz(String key) {
+        quizzes.remove(key);
+    }
+
+    public ImmutableList<String> getQuizzesTitle() {
+        return ImmutableList.copyOf(quizzes.keySet());
+    }
+
+    public ImmutableList<String> getQuizzesKey() {
+        return ImmutableList.copyOf(quizzes.values());
     }
 
     public String getFirstName() {
