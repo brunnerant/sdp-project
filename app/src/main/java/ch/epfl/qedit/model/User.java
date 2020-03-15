@@ -1,6 +1,7 @@
 package ch.epfl.qedit.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /** Represents a user of the QEDit app. */
 public class User implements Serializable {
@@ -10,6 +11,8 @@ public class User implements Serializable {
         Administrator
     }
 
+    public ArrayList<String> quizzes;
+
     private final String firstName;
     private final String lastName;
     private final Role role;
@@ -18,6 +21,7 @@ public class User implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        this.quizzes = new ArrayList<String>();
     }
 
     public String getFirstName() {
