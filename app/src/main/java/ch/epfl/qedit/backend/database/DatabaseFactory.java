@@ -1,8 +1,8 @@
 package ch.epfl.qedit.backend.database;
 
 /**
- * This factory class is used to manage the singleton instance of a database service. It can
- * be used by android tests to inject mock dependencies.
+ * This factory class is used to manage the singleton instance of a database service. It can be used
+ * by android tests to inject mock dependencies.
  */
 public final class DatabaseFactory {
     /** The singleton instance of the auth service */

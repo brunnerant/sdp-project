@@ -1,8 +1,29 @@
 package ch.epfl.qedit.question;
 
+import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.not;
+
+import android.view.View;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import androidx.test.rule.ActivityTestRule;
-import ch.epfl.qedit.view.QuizActivity;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.MockDBService;
+import ch.epfl.qedit.view.question.QuizOverviewFragment;
+import ch.epfl.qedit.viewmodel.QuizViewModel;
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,66 +31,40 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class QuizOverviewFragmentTest {
 
+    private IdlingResource idlingResource;
+    private QuizViewModel model;
+
     @Rule
-    public final ActivityTestRule<QuizActivity> mActivityRule =
-            new ActivityTestRule<>(QuizActivity.class);
+    public final FragmentTestRule<?, QuizOverviewFragment> testRule =
+            FragmentTestRule.create(QuizOverviewFragment.class);
+
+    @Before
+    public void init() {
+        MockDBService dbService = new MockDBService();
+        idlingResource = dbService.getIdlingResource();
+        IdlingRegistry.getInstance().register(idlingResource);
+        DatabaseFactory.setInstance(dbService);
+        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+    }
+
+    @After
+    public void cleanup() {
+        IdlingRegistry.getInstance().unregister(idlingResource);
+    }
 
     @Test
-    public void testOverviewButtons() {
-        /*
-                View view = inflater.inflate(R.layout.quiz_overview_fragment, container, false);
-                ListView listView = view.findViewById(R.id.questionList);
+    public void testOverviewIsLoading() {
+        onView(withId(R.id.question_list))
+                .check(matches(isDisplayed()))
+                .check(matches(not(hasDescendant(any(View.class)))));
+    }
 
-                listView.performItemClick(
-                        listView.getAdapter().getView(0, null, null), 0, 0);
-        */
-        /*
-                final
-                runTestOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        listView.performItemClick(listView, 0, listView.getItemIdAtPosition(0));
-                    }
-                });
-        */
-        // onView(withId(R.id.quiz_overview_frame)).perform(click());
-
-        /*
-                onView(withId(R.id.quiz_overview_frame)).perform(click());
-                onView(withId(R.id.question_title)).check(matches(withText("1) The matches problem")));
-        */
-
-        /*
-        listView = (ListView) activity.findViewById(android.R.id.list);
-        child0 = listView.getChildAt(0); // returns null!
-        child0.performClick(); // throws a NullPointerException!
-        */
-        /*
-        listView = (ListView) activity.findViewById(android.R.id.quiz_overview_frame);
-        long itemId = listView.getAdapter().getItemId(0);
-
-        listView.performItemClick(child0, 0, itemId); // throws a NullPointerException!
-
-        */
-        /*
-
-        final ListView list = (ListView) mActivity.findViewById(R.id.listId);
-        assertNotNull("The list was not loaded", list);
-        getInstrumentation().runOnMainSync(new Runnable() {
-            @Override
-            public void run() {
-
-                list.performItemClick(list.getAdapter().getView(position, null, null),
-                        position, list.getAdapter().getItemId(position));
-            }
-
-        });
-
-        getInstrumentation().waitForIdleSync();
-
-        mFragment frag = mActivity.getFragment();
-        assertNotNull("Fragment was not loaded", frag);
-        */
-
+    @Test
+    public void testQuizIsProperlyLoaded() {
+        model.loadQuiz();
+        onData(anything())
+                .inAdapterView(withId(R.id.question_list))
+                .atPosition(0)
+                .check(matches(withText("Question 1")));
     }
 }

@@ -1,8 +1,8 @@
 package ch.epfl.qedit.backend.auth;
 
 /**
- * This factory class allows the frontend classes to retrieve the singleton authentication
- * service without caring about its implementation.
+ * This factory class allows the frontend classes to retrieve the singleton authentication service
+ * without caring about its implementation.
  */
 public final class AuthenticationFactory {
     /** The singleton instance of the auth service */

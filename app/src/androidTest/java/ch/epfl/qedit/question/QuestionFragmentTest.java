@@ -1,30 +1,27 @@
 package ch.epfl.qedit.question;
 
-import androidx.lifecycle.ViewModelProvider;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
-import com.android21buttons.fragmenttestrule.FragmentTestRule;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.database.DatabaseFactory;
-import ch.epfl.qedit.backend.database.MockDBService;
-import ch.epfl.qedit.view.question.QuestionFragment;
-import ch.epfl.qedit.viewmodel.QuizViewModel;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import androidx.lifecycle.ViewModelProvider;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.MockDBService;
+import ch.epfl.qedit.view.question.QuestionFragment;
+import ch.epfl.qedit.viewmodel.QuizViewModel;
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class QuestionFragmentTest {
@@ -33,7 +30,8 @@ public class QuestionFragmentTest {
     private QuizViewModel model;
 
     @Rule
-    public final FragmentTestRule<?, QuestionFragment> testRule = FragmentTestRule.create(QuestionFragment.class);
+    public final FragmentTestRule<?, QuestionFragment> testRule =
+            FragmentTestRule.create(QuestionFragment.class);
 
     @Before
     public void init() {
@@ -60,8 +58,10 @@ public class QuestionFragmentTest {
     public void testFragmentDisplaysQuestionCorrectly() {
         model.loadQuiz();
         model.getFocusedQuestion().postValue(0);
-        onView(withId(R.id.question_title)).check(matches(withText("Question 1: The matches problem")));
-        onView(withId(R.id.question_display)).check(matches(withText("How many matches can fit in a shoe of size 43?")));
+        onView(withId(R.id.question_title))
+                .check(matches(withText("Question 1: The matches problem")));
+        onView(withId(R.id.question_display))
+                .check(matches(withText("How many matches can fit in a shoe of size 43?")));
         onView(withId(R.id.answer_fragment)).check(matches(isDisplayed()));
     }
 }

@@ -21,5 +21,6 @@ public interface DatabaseService {
      * @param document the document to retrieve in the collection
      * @param responseCallback the callback that will be triggered when the data arrives
      */
-    void getBundle(String collection, String document, Callback<Response<BundledData>> responseCallback);
+    void getBundle(
+            String collection, String document, Callback<Response<BundledData>> responseCallback);
 }
