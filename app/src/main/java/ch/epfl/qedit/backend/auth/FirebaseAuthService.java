@@ -1,8 +1,9 @@
-package ch.epfl.qedit.backend;
+package ch.epfl.qedit.backend.auth;
 
 import androidx.annotation.NonNull;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.Response;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,7 +35,7 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
-    public void sendRequest(String token, final Callback<LoginResponse> responseCallback) {
+    public void sendRequest(String token, final Callback<Response<User>> responseCallback) {
         db.collection("users")
                 .document(token)
                 .get()
@@ -42,18 +43,14 @@ public class FirebaseAuthService implements AuthenticationService {
                         new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                LoginResponse response;
+                                Response<User> response;
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists())
-                                        response = LoginResponse.ok(getUserFromDocument(document));
-                                    else
-                                        response =
-                                                LoginResponse.error(LoginResponse.Error.WrongToken);
+                                        response = Response.ok(getUserFromDocument(document));
+                                    else response = Response.error(WRONG_TOKEN);
                                 } else {
-                                    response =
-                                            LoginResponse.error(
-                                                    LoginResponse.Error.ConnectionError);
+                                    response = Response.error(CONNECTION_ERROR);
                                     task.getException().printStackTrace();
                                 }
 

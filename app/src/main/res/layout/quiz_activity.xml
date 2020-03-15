@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
-        android:id="@+id/quiz_overview_frame"
-        android:layout_width="200dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/quiz_overview_container"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start">
-    </FrameLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/question_details_container"
+        app:layout_constraintHorizontal_weight="30"/>
 
-    <FrameLayout
-        android:id="@+id/question_frame"
-        android:layout_width="764dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/question_details_container"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_gravity="end">
-    </FrameLayout>
+        app:layout_constraintStart_toEndOf="@+id/quiz_overview_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="70"/>
 
-</merge>
+    <ProgressBar
+        android:id="@+id/quiz_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

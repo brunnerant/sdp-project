@@ -6,7 +6,7 @@
     tools:context=".view.question.QuizOverviewFragment">
 
     <ListView
-        android:id="@+id/questionList"
+        android:id="@+id/question_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
