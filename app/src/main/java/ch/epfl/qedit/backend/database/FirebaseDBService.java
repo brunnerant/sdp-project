@@ -21,11 +21,6 @@ public class FirebaseDBService implements DatabaseService {
         db = FirebaseFirestore.getInstance();
     }
 
-    // TODO this function will extract Quiz from a document coming from firestore
-    private BundledData getQuizFromDocument(DocumentSnapshot document) {
-        return new Quiz(new ArrayList<Question>()).toBundle();
-    }
-
     @Override
     public void getBundle(
             final String collection,
@@ -43,7 +38,7 @@ public class FirebaseDBService implements DatabaseService {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists())
                                         if (collection.equals("quizzes"))
-                                            response = Response.ok(getQuizFromDocument(document));
+                                            response = Response.ok(new BundledData(document.getData()));
                                         else response = Response.error(WRONG_COLLECTION);
                                     else response = Response.error(WRONG_DOCUMENT);
                                 } else response = Response.error(CONNECTION_ERROR);
