@@ -1,16 +1,16 @@
 package ch.epfl.qedit.model;
 
+import ch.epfl.qedit.util.Bundlable;
+import ch.epfl.qedit.util.BundledData;
 import java.io.Serializable;
 import java.util.Objects;
-
-import ch.epfl.qedit.util.Bundlable;
-import ch.epfl.qedit.util.Bundle;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
 public class Question implements Bundlable, Serializable {
     /** For now, a question consists of a number, a title, and a text */
-    private String title;
-    private String text;
+    private final String title;
+
+    private final String text;
 
     private int index;
     /** The answer format for this question */
@@ -20,7 +20,6 @@ public class Question implements Bundlable, Serializable {
         this.title = Objects.requireNonNull(title);
         this.text = Objects.requireNonNull(text);
         this.format = Objects.requireNonNull(format);
-
     }
 
     public String getTitle() {
@@ -36,16 +35,13 @@ public class Question implements Bundlable, Serializable {
     }
 
     @Override
-    public Bundle toBundle() {
-        return new Bundle()
-            .update("title", title)
-            .update("text", text);
+    public BundledData toBundle() {
+        return new BundledData().update("title", title).update("text", text);
     }
 
-    @Override
-    public void fromBundle(Bundle bundle) throws IllegalArgumentException {
-        this.title = (String) bundle.get("title");
-        this.text = (String) bundle.get("text");
+    public static Question fromBundle(BundledData bundle) throws IllegalArgumentException {
+        String title = (String) bundle.get("title");
+        String text = (String) bundle.get("text");
+        return new Question(title, text, new AnswerFormat.NumberField(0, 100, 0));
     }
-
 }

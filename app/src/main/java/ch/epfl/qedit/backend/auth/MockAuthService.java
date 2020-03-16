@@ -2,12 +2,9 @@ package ch.epfl.qedit.backend.auth;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-
-import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
-
 import java.util.HashMap;
 
 public class MockAuthService implements AuthenticationService {
@@ -25,13 +22,10 @@ public class MockAuthService implements AuthenticationService {
                     put(
                             "nathan",
                             Response.ok(new User("nathan", "greslin", User.Role.Participant)));
-                    put(
-                            "anthony",
-                            Response.ok(new User("anthony", "iozzia", User.Role.Editor)));
+                    put("anthony", Response.ok(new User("anthony", "iozzia", User.Role.Editor)));
                     put(
                             "antoine",
-                            Response.ok(
-                                    new User("antoine", "brunner", User.Role.Administrator)));
+                            Response.ok(new User("antoine", "brunner", User.Role.Administrator)));
                 }
             };
 

@@ -1,11 +1,10 @@
 package ch.epfl.qedit.model;
 
+import ch.epfl.qedit.util.Bundlable;
+import ch.epfl.qedit.util.BundledData;
 import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.List;
-
-import ch.epfl.qedit.util.Bundlable;
-import ch.epfl.qedit.util.Bundle;
 
 /** Represents a quiz. For now, it is simply a immutable list of question. */
 public class Quiz implements Bundlable, Serializable {
@@ -13,7 +12,7 @@ public class Quiz implements Bundlable, Serializable {
      * We cannot modify this list of question in the Quiz class, this list will be edited in a Quiz
      * builder
      */
-    private ImmutableList<Question> questions;
+    private final ImmutableList<Question> questions;
 
     public Quiz(List<Question> questions) {
         this.questions = ImmutableList.copyOf(questions);
@@ -24,13 +23,12 @@ public class Quiz implements Bundlable, Serializable {
     }
 
     @Override
-    public Bundle toBundle() {
-        return new Bundle()
-            .update("questions", questions);
+    public BundledData toBundle() {
+        return new BundledData().update("questions", questions);
     }
 
-    @Override
-    public void fromBundle(Bundle bundle) throws IllegalArgumentException {
-        this.questions = ImmutableList.copyOf((Iterable<? extends Question>) bundle.get("questions"));
+    public static Quiz fromBundle(BundledData bundle) throws IllegalArgumentException {
+        List<Question> questions = (List<Question>) bundle.get("questions");
+        return new Quiz(questions);
     }
 }

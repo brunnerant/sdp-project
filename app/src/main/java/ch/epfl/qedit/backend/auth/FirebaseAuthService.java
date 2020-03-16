@@ -1,11 +1,9 @@
 package ch.epfl.qedit.backend.auth;
 
 import androidx.annotation.NonNull;
-
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -50,8 +48,7 @@ public class FirebaseAuthService implements AuthenticationService {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists())
                                         response = Response.ok(getUserFromDocument(document));
-                                    else
-                                        response = Response.error(WRONG_TOKEN);
+                                    else response = Response.error(WRONG_TOKEN);
                                 } else {
                                     response = Response.error(CONNECTION_ERROR);
                                     task.getException().printStackTrace();

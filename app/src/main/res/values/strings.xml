@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">QEDit</string>
-    <string name="login_title">Connexion</string>
     <string name="title_activity_login">Connexion</string>
 <<<<<<< HEAD
     <string name="prompt_email">Nom d\'utilisateur</string>
@@ -19,12 +18,10 @@
     <string name="token_hint">Token de connexion</string>
     <string name="login_button_text">Connexion</string>
     <string name="login_action_label">Connexion</string>
-    <string name="next_field_action_label">Suivant</string>
-    <string name="buttonOpenQuiz">Quiz test</string>
-    <string name="buttonLogin">Connexion</string>
+    <string name="open_quiz_button">Quiz test</string>
+    <string name="login_button">Connexion</string>
     <string name="wrong_token_message">Token invalide</string>
     <string name="connection_error_message">Erreur de connexion</string>
-     <string name="empty_quiz_error_message">Ce quiz est vide</string>
     <string name="give_answer_here_hint">Entrez ici votre réponse</string>
 >>>>>>> da5006c1c374b666a7e083139dafc374c98d37ea
 </resources>

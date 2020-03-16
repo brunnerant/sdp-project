@@ -35,6 +35,8 @@ public class ViewRoleActivity extends AppCompatActivity {
             case Editor:
                 roleText = "Vous êtes un éditeur.";
                 break;
+            default:
+                break;
         }
 
         textViewRole.setText(roleText);

@@ -7,22 +7,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import ch.epfl.qedit.model.AnswerFormat;
-import java.util.Objects;
+import ch.epfl.qedit.R;
 
-public class AnswerFragment extends Fragment {
-    private AnswerFormat format;
-    private int layout;
-
-    public AnswerFragment() {
-        // Required empty public constructor
-    }
-
+/** This is a dummy answer fragment, until the real ones are being coded. */
+public class DummyAnswerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        format = (AnswerFormat) Objects.requireNonNull(getArguments()).getSerializable("format");
-        layout = (int) Objects.requireNonNull(getArguments()).getSerializable("layout");
     }
 
     @Override
@@ -30,7 +21,7 @@ public class AnswerFragment extends Fragment {
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(layout, container, false);
+        return inflater.inflate(R.layout.answer_fragment, container, false);
     }
 
     @Override
