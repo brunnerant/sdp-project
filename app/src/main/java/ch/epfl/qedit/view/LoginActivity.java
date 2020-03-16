@@ -39,6 +39,15 @@ public class LoginActivity extends AppCompatActivity {
 
     public void handleLogin(View view) {
         String token = tokenText.getText().toString();
+        if(token.isEmpty()){
+            Toast toast =
+                    Toast.makeText(
+                            getApplicationContext(),
+                            R.string.empty_token_message,
+                            Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
         progressBar.setVisibility(View.VISIBLE);
 
         authService.sendRequest(
