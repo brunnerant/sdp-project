@@ -1,7 +1,6 @@
 package ch.epfl.qedit.view.answer;
 
 import android.content.Context;
-import android.graphics.drawable.AnimatedStateListDrawable;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -13,18 +12,12 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import java.util.ArrayList;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.MatrixFormat;
-import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.ArrayList;
 
 public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
@@ -71,12 +64,14 @@ public class MatrixFragment extends Fragment {
 
         tableLayout = view.findViewById(R.id.answersTable);
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        for(int i = 0; i < tableRowsNumber; ++i) {
+        getActivity()
+                .getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        for (int i = 0; i < tableRowsNumber; ++i) {
             TableRow t = new TableRow(getActivity());
             arrayButtons.add(new ArrayList<EditText>());
             tableRow.add(t);
-            for(int j = 0; j < tableColumnsNumber; ++j) {
+            for (int j = 0; j < tableColumnsNumber; ++j) {
                 EditText editText = newEditText();
                 arrayButtons.get(i).add(editText);
                 tableRow.get(i).addView(editText);
@@ -86,6 +81,7 @@ public class MatrixFragment extends Fragment {
 
         return view;
     }
+
     private void setValues() {
         hasDecimal = matrixFormat.getHasDecimal();
         hasSign = matrixFormat.getHasSign();

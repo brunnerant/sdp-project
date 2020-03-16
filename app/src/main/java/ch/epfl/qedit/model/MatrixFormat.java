@@ -1,10 +1,5 @@
 package ch.epfl.qedit.model;
 
-import android.widget.EditText;
-import android.widget.TableRow;
-
-import java.util.ArrayList;
-
 public class MatrixFormat extends AnswerFormat {
     private Visitor visitor;
     private boolean hasDecimal = true;
@@ -15,8 +10,12 @@ public class MatrixFormat extends AnswerFormat {
     private int maxCharacters = 3;
     private String hintString = hint();
 
-    public MatrixFormat(int tableColumnsNumber, int tableRowsNumber,
-                        boolean hasDecimal, boolean hasSign, int maxCharacters) {
+    public MatrixFormat(
+            int tableColumnsNumber,
+            int tableRowsNumber,
+            boolean hasDecimal,
+            boolean hasSign,
+            int maxCharacters) {
         super();
         this.tableColumnsNumber = tableColumnsNumber;
         this.tableRowsNumber = tableRowsNumber;
@@ -25,11 +24,13 @@ public class MatrixFormat extends AnswerFormat {
         this.maxCharacters = maxCharacters;
     }
 
-    public static MatrixFormat createMatrix33(boolean hasDecimal, boolean hasSign, int maxCharacters) {
+    public static MatrixFormat createMatrix33(
+            boolean hasDecimal, boolean hasSign, int maxCharacters) {
         return new MatrixFormat(3, 3, hasDecimal, hasSign, maxCharacters);
     }
 
-    public static MatrixFormat createSingleField(boolean hasDecimal, boolean hasSign, int maxCharacters) {
+    public static MatrixFormat createSingleField(
+            boolean hasDecimal, boolean hasSign, int maxCharacters) {
         return new MatrixFormat(1, 1, hasDecimal, hasSign, maxCharacters);
     }
 
