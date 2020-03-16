@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ch.epfl.qedit">
 
     <application
@@ -50,5 +51,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Addresses:
+            Warning: activity#com.google.firebase.auth.internal.FederatedSignInActivity@android:launchMode was tagged at AndroidManifest.xml:24 to replace other declarations but no other declaration present
+        -->
+        <activity
+            android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
+            tools:replace="android:launchMode"
+            android:launchMode="standard" />
     </application>
 </manifest>

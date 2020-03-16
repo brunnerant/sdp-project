@@ -48,6 +48,9 @@ public class QuizActivity extends AppCompatActivity {
 
         if (status == QuizViewModel.Status.CouldntLoad)
             Toast.makeText(
-                    getApplicationContext(), R.string.connection_error_message, Toast.LENGTH_SHORT);
+                            getApplicationContext(),
+                            R.string.connection_error_message,
+                            Toast.LENGTH_SHORT)
+                    .show();
     }
 }

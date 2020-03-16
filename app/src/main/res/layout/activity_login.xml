@@ -58,6 +58,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.415"
-        app:srcCompat="@drawable/qedit_light" />
+        app:srcCompat="@mipmap/qedit_light"
+        android:contentDescription="@string/qedit_logo_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

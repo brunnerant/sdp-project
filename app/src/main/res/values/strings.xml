@@ -11,4 +11,5 @@
     <string name="connection_error_message">Erreur de connexion</string>
     <string name="empty_quiz_error_message">Ce quiz est vide</string>
     <string name="give_answer_here_hint">Entrez ici votre réponse</string>
+    <string name="qedit_logo_description">QEDit Logo</string>
 </resources>
