@@ -7,17 +7,30 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.AnswerFormat;
+import java.util.Objects;
 
 public class AnswerFragment extends Fragment {
+    private AnswerFormat format;
+    private int layout;
+
+    public AnswerFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        format = (AnswerFormat) Objects.requireNonNull(getArguments()).getSerializable("format");
+        layout = (int) Objects.requireNonNull(getArguments()).getSerializable("layout");
+    }
 
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.answer_fragment, container, false);
-        return view;
+        return inflater.inflate(layout, container, false);
     }
 
     @Override

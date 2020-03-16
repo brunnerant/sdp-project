@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/fragment"
-        android:name="ch.epfl.qedit.view.question.QuestionFragment"
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/quizToolbar"
+        android:background="@color/colorAccent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
+        />
+
+    <FrameLayout
+        android:id="@+id/quiz_overview_frame"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/question_frame"
+        android:layout_width="764dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end">
+    </FrameLayout>
+
+</merge>
