@@ -1,8 +1,6 @@
 package ch.epfl.qedit.backend.database;
 
 import androidx.annotation.NonNull;
-import ch.epfl.qedit.model.Question;
-import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.BundledData;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
@@ -10,7 +8,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import java.util.ArrayList;
 
 public class FirebaseDBService implements DatabaseService {
 
@@ -38,7 +35,9 @@ public class FirebaseDBService implements DatabaseService {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists())
                                         if (collection.equals("quizzes"))
-                                            response = Response.ok(new BundledData(document.getData()));
+                                            response =
+                                                    Response.ok(
+                                                            new BundledData(document.getData()));
                                         else response = Response.error(WRONG_COLLECTION);
                                     else response = Response.error(WRONG_DOCUMENT);
                                 } else response = Response.error(CONNECTION_ERROR);
