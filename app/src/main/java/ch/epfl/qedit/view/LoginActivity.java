@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void handleLogin(View view) {
         String token = tokenText.getText().toString();
-        if(token.isEmpty()){
+        if (token.isEmpty()) {
             Toast toast =
                     Toast.makeText(
                             getApplicationContext(),
