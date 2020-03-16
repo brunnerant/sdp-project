@@ -12,31 +12,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.AnswerFormat;
-import ch.epfl.qedit.model.Question;
-import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.view.question.QuestionFragment;
 import ch.epfl.qedit.view.question.QuizOverviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.Arrays;
 
 public class QuizActivity extends AppCompatActivity {
-
-    private QuestionFragment questionFragment;
-    private final Quiz quiz =
-            new Quiz(
-                    Arrays.asList(
-                            new Question(
-                                    "The matches problem",
-                                    "How many matches can fit in a shoe of size 43?",
-                                    new AnswerFormat.NumberField(0, 1, 5)),
-                            new Question(
-                                    "Pigeons",
-                                    "How many pigeons are there on Earth? (Hint: do not count yourself)",
-                                    new AnswerFormat.NumberField(0, 1, 5)),
-                            new Question(
-                                    "Kitchen", "Oyster", new AnswerFormat.NumberField(0, 1, 5))));
+    private QuizViewModel model;
+    private Boolean overViewActive;
+    // private QuestionFragment questionFragment;
     private ProgressBar progressBar;
+    private QuizOverviewFragment overview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +29,11 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.quiz_activity);
         progressBar = findViewById(R.id.quiz_progress_bar);
 
-        QuizViewModel model = new ViewModelProvider(this).get(QuizViewModel.class);
+        model = new ViewModelProvider(this).get(QuizViewModel.class);
         model.loadQuiz();
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.quiz_overview_container, new QuizOverviewFragment())
                 .replace(R.id.question_details_container, new QuestionFragment())
                 .commit();
 
@@ -64,6 +48,7 @@ public class QuizActivity extends AppCompatActivity {
                         });
         Toolbar toolbar = findViewById(R.id.quizToolbar);
         setSupportActionBar(toolbar);
+        overViewActive = false;
     }
 
     // Check if the quiz is non empty
@@ -112,36 +97,36 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        int index = quiz.getQuestions().indexOf(questionFragment.getQuestion());
 
-        QuizViewModel quizViewModel = new QuizViewModel();
+        Integer index = model.getFocusedQuestion().getValue();
         if (id == R.id.next) {
-            quizViewModel
-                    .getFocusedQuestion()
-                    .setValue(quizViewModel.getFocusedQuestion().getValue() + 1);
-            /*FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("question",quiz.getQuestions().get(index+1));
-            questionFragment=new QuestionFragment();
-            questionFragment.setArguments(bundle);
-            ft.add(R.id.question_frame, questionFragment);
-            ft.commit();*/
+            if (index == null) {
+                model.getFocusedQuestion().setValue(0);
 
+            } else if ((index + 1) < model.getQuiz().getValue().getQuestions().size()) {
+                model.getFocusedQuestion().setValue(index + 1);
+            }
         } else if (id == R.id.previous) {
-
-            quizViewModel
-                    .getFocusedQuestion()
-                    .setValue(quizViewModel.getFocusedQuestion().getValue() - 1);
-            /* FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("question",quiz.getQuestions().get(index-1));
-            questionFragment=new QuestionFragment();
-            questionFragment.setArguments(bundle);
-            ft.add(R.id.question_frame, questionFragment);
-            ft.commit();*/
+            if (index == null) {
+                model.getFocusedQuestion().setValue(0);
+            } else if (index > 0) {
+                model.getFocusedQuestion().setValue(index - 1);
+            }
         } else if (id == R.id.time) {
             /*TODO
             display the quiz timer*/
+        } else if (id == R.id.overview) {
+            if (!overViewActive) {
+                overview = new QuizOverviewFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.quiz_overview_container, overview)
+                        .commit();
+                overViewActive = true;
+            } else {
+                getSupportFragmentManager().beginTransaction().remove(overview).commit();
+                overViewActive = false;
+            }
         }
         return true;
     }
