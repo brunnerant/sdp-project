@@ -1,7 +1,10 @@
 package ch.epfl.qedit;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -12,6 +15,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.HomeActivity;
 import ch.epfl.qedit.view.LoginActivity;
+import ch.epfl.qedit.view.QuizActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,5 +67,13 @@ public class HomeActivityTest {
                 new User("The", "Rock", User.Role.Administrator),
                 "Bienvenue The Rock !",
                 "Vous êtes un administrateur.");
+    }
+
+    @Test
+    public void testGoToQuiz() {
+        launchActivity(new User("The", "Rock", User.Role.Administrator));
+        onView(withId(R.id.quiz_button)).perform(click());
+        intended(hasComponent(QuizActivity.class.getName()));
+        finishActivity();
     }
 }
