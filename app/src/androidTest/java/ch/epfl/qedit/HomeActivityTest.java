@@ -70,9 +70,10 @@ public class HomeActivityTest {
     }
 
     @Test
-    public void testQuizButton() {
-        launchActivity(new User("Bill", "Gates", User.Role.Participant));
+    public void testGoToQuiz() {
+        launchActivity(new User("The", "Rock", User.Role.Administrator));
         onView(withId(R.id.quiz_button)).perform(click());
         intended(hasComponent(QuizActivity.class.getName()));
+        finishActivity();
     }
 }
