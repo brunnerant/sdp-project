@@ -40,12 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     public void handleLogin(View view) {
         String token = tokenText.getText().toString();
         if (token.isEmpty()) {
-            Toast toast =
-                    Toast.makeText(
-                            getApplicationContext(),
-                            R.string.empty_token_message,
-                            Toast.LENGTH_SHORT);
-            toast.show();
+            printShortToast(R.string.empty_token_message);
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
@@ -90,6 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                 break;
         }
 
+        printShortToast(stringId);
+    }
+
+    private void printShortToast(int stringId) {
         Toast toast =
                 Toast.makeText(
                         getApplicationContext(),
