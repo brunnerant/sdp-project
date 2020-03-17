@@ -14,7 +14,7 @@ public class QuizViewModel extends ViewModel {
         NotLoaded,
         Loading,
         Loaded,
-        CouldntLoad
+        CouldNotLoad
     }
 
     private final MutableLiveData<Status> status = new MutableLiveData<>(Status.NotLoaded);
@@ -35,7 +35,7 @@ public class QuizViewModel extends ViewModel {
                                         quiz.postValue(Quiz.fromBundle(response.getData()));
                                         status.postValue(Status.Loaded);
                                     } else {
-                                        status.postValue(Status.CouldntLoad);
+                                        status.postValue(Status.CouldNotLoad);
                                     }
                                 }
                             });

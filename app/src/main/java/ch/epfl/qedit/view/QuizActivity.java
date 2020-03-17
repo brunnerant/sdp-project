@@ -46,7 +46,7 @@ public class QuizActivity extends AppCompatActivity {
         if (status == QuizViewModel.Status.Loading) progressBar.setVisibility(View.VISIBLE);
         else progressBar.setVisibility(View.GONE);
 
-        if (status == QuizViewModel.Status.CouldntLoad)
+        if (status == QuizViewModel.Status.CouldNotLoad)
             Toast.makeText(
                             getApplicationContext(),
                             R.string.connection_error_message,

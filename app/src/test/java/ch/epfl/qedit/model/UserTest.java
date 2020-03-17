@@ -32,7 +32,7 @@ public class UserTest {
     }
 
     @Test
-    public void addQuizzesAddlTest() {
+    public void addQuizzesTest() {
         final User user = new User("John", "Doe", User.Role.Administrator);
         user.addQuiz("q0", "First Quiz");
         assertTrue(user.addQuiz("q0", "First again Quiz"));
