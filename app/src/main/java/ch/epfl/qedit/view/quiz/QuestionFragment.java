@@ -1,4 +1,4 @@
-package ch.epfl.qedit.view.question;
+package ch.epfl.qedit.view.quiz;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -53,7 +53,6 @@ public class QuestionFragment extends Fragment {
                                         model.getFocusedQuestion().getValue());
                             }
                         });
-
         return view;
     }
 
@@ -69,7 +68,7 @@ public class QuestionFragment extends Fragment {
         questionTitle.setText(questionTitleStr);
         questionDisplay.setText(question.getText());
 
-        // And dynamically instatiate the answer form
+        // And dynamically instantiate the answer form
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()

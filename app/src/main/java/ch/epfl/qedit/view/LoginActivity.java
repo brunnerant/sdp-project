@@ -39,6 +39,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public void handleLogin(View view) {
         String token = tokenText.getText().toString();
+        if (token.isEmpty()) {
+            printShortToast(R.string.empty_token_message);
+            return;
+        }
         progressBar.setVisibility(View.VISIBLE);
 
         authService.sendRequest(
@@ -61,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccessful(User user) {
-        Intent intent = new Intent(LoginActivity.this, ViewRoleActivity.class);
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
@@ -81,6 +85,10 @@ public class LoginActivity extends AppCompatActivity {
                 break;
         }
 
+        printShortToast(stringId);
+    }
+
+    private void printShortToast(int stringId) {
         Toast toast =
                 Toast.makeText(
                         getApplicationContext(),

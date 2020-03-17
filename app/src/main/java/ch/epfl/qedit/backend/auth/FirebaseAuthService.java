@@ -51,7 +51,6 @@ public class FirebaseAuthService implements AuthenticationService {
                                     else response = Response.error(WRONG_TOKEN);
                                 } else {
                                     response = Response.error(CONNECTION_ERROR);
-                                    task.getException().printStackTrace();
                                 }
 
                                 responseCallback.onReceive(response);

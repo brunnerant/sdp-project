@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.view.question.QuestionFragment;
-import ch.epfl.qedit.view.question.QuizOverviewFragment;
+import ch.epfl.qedit.view.quiz.QuestionFragment;
+import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuizActivity extends AppCompatActivity {
@@ -46,8 +46,11 @@ public class QuizActivity extends AppCompatActivity {
         if (status == QuizViewModel.Status.Loading) progressBar.setVisibility(View.VISIBLE);
         else progressBar.setVisibility(View.GONE);
 
-        if (status == QuizViewModel.Status.CouldntLoad)
+        if (status == QuizViewModel.Status.CouldNotLoad)
             Toast.makeText(
-                    getApplicationContext(), R.string.connection_error_message, Toast.LENGTH_SHORT);
+                            getApplicationContext(),
+                            R.string.connection_error_message,
+                            Toast.LENGTH_SHORT)
+                    .show();
     }
 }
