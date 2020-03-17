@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void onLoginSuccessful(User user) {
+    private void onLoginSuccessful(User user) {
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onLoginFailed(int error) {
+    private void onLoginFailed(int error) {
         int stringId = 0;
         switch (error) {
             case AuthenticationService.CONNECTION_ERROR:

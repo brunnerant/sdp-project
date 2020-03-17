@@ -18,9 +18,6 @@ import java.util.List;
 
 /** A simple {@link Fragment} subclass. */
 public class QuizOverviewFragment extends Fragment {
-    /** The view model from which data is observed */
-    private QuizViewModel model;
-
     private ListView listView;
 
     @Override
@@ -39,8 +36,7 @@ public class QuizOverviewFragment extends Fragment {
                         new Observer<Quiz>() {
                             @Override
                             public void onChanged(Quiz quiz) {
-                                if (quiz == null) return;
-                                else onDataArrived(quiz);
+                                if (quiz != null) onDataArrived(quiz);
                             }
                         });
 

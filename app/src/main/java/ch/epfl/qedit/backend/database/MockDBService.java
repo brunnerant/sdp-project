@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class MockDBService implements DatabaseService {
 
-    private CountingIdlingResource idlingResource;
+    private final CountingIdlingResource idlingResource;
     private final Map<String, BundledData> database;
 
     public MockDBService() {
