@@ -40,9 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     public void handleLogin(View view) {
         String token = tokenText.getText().toString();
         // Sanitize token
-        if (token == null) {
-            return;
-        }
         if (token.isEmpty()) {
             printShortToast(R.string.empty_token_message);
             return;

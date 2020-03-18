@@ -77,8 +77,8 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void testNicolasCannotLogIn() {
-        testLoginFailed("nothing", R.string.connection_error_message);
+    public void testConnectionErrorCannotLogIn() {
+        testLoginFailed("fjd4ywnzcCcLHaVb7oKg", R.string.connection_error_message);
     }
 
     @Test
@@ -93,7 +93,8 @@ public class LoginActivityTest {
 
     @Test
     public void testParticipantCanLogIn() {
-        testLoginSuccessful("fjd4ywnzXCXLHaVb7oKg", new User("Marcel", "Doe", User.Role.Participant));
+        testLoginSuccessful(
+                "fjd4ywnzXCXLHaVb7oKg", new User("Marcel", "Doe", User.Role.Participant));
     }
 
     @Test
@@ -103,6 +104,7 @@ public class LoginActivityTest {
 
     @Test
     public void testAdministratorCanLogIn() {
-        testLoginSuccessful("v5ns9OMqV4hH7jwD8S5w\n", new User("Anthony", "Iozzia", User.Role.Administrator));
+        testLoginSuccessful(
+                "v5ns9OMqV4hH7jwD8S5w", new User("Anthony", "Iozzia", User.Role.Administrator));
     }
 }
