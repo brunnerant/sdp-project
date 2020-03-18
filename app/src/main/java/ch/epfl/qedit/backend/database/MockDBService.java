@@ -88,8 +88,7 @@ public class MockDBService implements DatabaseService {
                                         new Question(
                                                 "Noix",
                                                 "Combien y a-t-il de noix ?",
-                                                new AnswerFormat.NumberField(0, 1, 5))
-                                        ))
+                                                new AnswerFormat.NumberField(0, 1, 5))))
                         .toBundle());
     }
 

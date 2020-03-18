@@ -78,7 +78,7 @@ public class LoginActivityTest {
 
     @Test
     public void testNicolasCannotLogIn() {
-        testLoginFailed("nicolas", R.string.connection_error_message);
+        testLoginFailed("nothing", R.string.connection_error_message);
     }
 
     @Test
@@ -87,17 +87,22 @@ public class LoginActivityTest {
     }
 
     @Test
+    public void testEmptyTokenCannotLogIn() {
+        testLoginFailed("", R.string.empty_token_message);
+    }
+
+    @Test
     public void testParticipantCanLogIn() {
-        testLoginSuccessful("nathan", new User("nathan", "greslin", User.Role.Participant));
+        testLoginSuccessful("fjd4ywnzXCXLHaVb7oKg", new User("Marcel", "Doe", User.Role.Participant));
     }
 
     @Test
     public void testEditorCanLogIn() {
-        testLoginSuccessful("anthony", new User("anthony", "iozzia", User.Role.Editor));
+        testLoginSuccessful("R4rXRVU3EMkgm5YEW52Q", new User("Cosme", "Jordan", User.Role.Editor));
     }
 
     @Test
     public void testAdministratorCanLogIn() {
-        testLoginSuccessful("antoine", new User("antoine", "brunner", User.Role.Administrator));
+        testLoginSuccessful("v5ns9OMqV4hH7jwD8S5w\n", new User("Anthony", "Iozzia", User.Role.Administrator));
     }
 }
