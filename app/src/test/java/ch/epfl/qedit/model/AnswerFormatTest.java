@@ -18,8 +18,7 @@ public class AnswerFormatTest {
                     }
 
                     @Override
-                    public void visitMatrixAnswerFormat(MatrixFormat matrixFormat) {
-                     }
+                    public void visitMatrixAnswerFormat(MatrixFormat matrixFormat) {}
                 });
     }
 

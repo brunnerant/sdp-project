@@ -1,6 +1,5 @@
 package ch.epfl.qedit.view.answer;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -67,10 +66,12 @@ public class MatrixFragment extends Fragment {
                 InputType.TYPE_CLASS_NUMBER
                         | InputType.TYPE_NUMBER_FLAG_DECIMAL
                         | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        editText.setKeyListener(DigitsKeyListener.getInstance(matrixFormat.hasSign(), matrixFormat.hasDecimal()));
+        editText.setKeyListener(
+                DigitsKeyListener.getInstance(matrixFormat.hasSign(), matrixFormat.hasDecimal()));
         editText.setHint(matrixFormat.getHint());
 
-        editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(matrixFormat.getMaxCharacters())});
+        editText.setFilters(
+                new InputFilter[] {new InputFilter.LengthFilter(matrixFormat.getMaxCharacters())});
 
         return editText;
     }

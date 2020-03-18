@@ -1,7 +1,8 @@
 package ch.epfl.qedit.model;
 
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class MatrixFormatTest {
     @Test
@@ -17,6 +18,7 @@ public class MatrixFormatTest {
         matrixFormat.setHint("00");
         checkAllElements(matrixFormat, true, true, 1, 1, 5, "00");
     }
+
     @Test
     public void checkMatrix3x3Normal() {
         MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3();
@@ -26,18 +28,20 @@ public class MatrixFormatTest {
 
     @Test
     public void checkMatrix3x3WithParam() {
-        MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3(true, true, 5);;
+        MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3(true, true, 5);
+        ;
 
         checkAllElements(matrixFormat, true, true, 3, 3, 5, "00000");
     }
 
-    private void checkAllElements(MatrixFormat matrixFormat,
-                                  boolean hasDecimal,
-                                  boolean hasSign,
-                                  int tableRowsNumber,
-                                  int tableColumnsNumber,
-                                  int maxCharacters,
-                                  String hintString) {
+    private void checkAllElements(
+            MatrixFormat matrixFormat,
+            boolean hasDecimal,
+            boolean hasSign,
+            int tableRowsNumber,
+            int tableColumnsNumber,
+            int maxCharacters,
+            String hintString) {
         assertEquals(matrixFormat.hasDecimal(), hasDecimal);
         assertEquals(matrixFormat.hasSign(), hasSign);
         assertEquals(matrixFormat.getTableColumnsNumber(), tableColumnsNumber);

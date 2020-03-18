@@ -1,7 +1,5 @@
 package ch.epfl.qedit.model;
 
-import android.opengl.Matrix;
-
 import java.io.Serializable;
 
 /** This class represents all the answer formats that are available in the app. */
@@ -43,6 +41,7 @@ public abstract class AnswerFormat implements Serializable {
 
     public interface Visitor {
         void visitNumberField(NumberField field);
+
         void visitMatrixAnswerFormat(MatrixFormat matrixFormat);
     }
 }
