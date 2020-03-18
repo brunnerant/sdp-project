@@ -1,14 +1,13 @@
 package ch.epfl.qedit.model;
 
 public class MatrixFormat extends AnswerFormat {
-    private Visitor visitor;
     private boolean hasDecimal = true;
     private boolean hasSign = true;
 
     private int tableRowsNumber = 1;
     private int tableColumnsNumber = 1;
     private int maxCharacters = 3;
-    private String hintString = hint();
+    private String hintString;
 
     public MatrixFormat(
             int tableColumnsNumber,
@@ -22,9 +21,14 @@ public class MatrixFormat extends AnswerFormat {
         this.hasDecimal = hasDecimal;
         this.hasSign = hasSign;
         this.maxCharacters = maxCharacters;
+        this.hintString = hint();
     }
 
-    public static MatrixFormat createMatrix33(
+    public static MatrixFormat createMatrix3x3() {
+        return new MatrixFormat(3, 3, true, true, 5);
+    }
+
+    public static MatrixFormat createMatrix3x3(
             boolean hasDecimal, boolean hasSign, int maxCharacters) {
         return new MatrixFormat(3, 3, hasDecimal, hasSign, maxCharacters);
     }
@@ -36,22 +40,22 @@ public class MatrixFormat extends AnswerFormat {
 
     @Override
     public void accept(Visitor visitor) {
-        this.visitor = visitor;
+        visitor.visitMatrixAnswerFormat(this);
     }
 
     public int getTableRowsNumber() {
         return tableRowsNumber;
     }
 
-    public int getTableColumnsNumberNumber() {
+    public int getTableColumnsNumber() {
         return tableColumnsNumber;
     }
 
-    public boolean getHasDecimal() {
+    public boolean hasDecimal() {
         return hasDecimal;
     }
 
-    public boolean getHasSign() {
+    public boolean hasSign() {
         return hasSign;
     }
 

@@ -21,37 +21,15 @@ import java.util.ArrayList;
 
 public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
-    private boolean hasDecimal = true;
-    private boolean hasSign = true;
+    private MatrixFormat matrixFormat;
 
     private ArrayList<TableRow> tableRow = new ArrayList<>();
     private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();;
-
-    private int tableRowsNumber = 1;
-    private int tableColumnsNumber = 1;
-    private int maxCharacters = 3;
-    private String hintString;
-    private MatrixFormat matrixFormat;
-    private Context context;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         matrixFormat = (MatrixFormat) getArguments().getSerializable("m0");
-        setValues();
-    }
-
-    // Used to get the context
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.context = context;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        context = null;
     }
 
     @Override
@@ -64,14 +42,15 @@ public class MatrixFragment extends Fragment {
 
         tableLayout = view.findViewById(R.id.answersTable);
 
+        // TODO center matrix
         getActivity()
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        for (int i = 0; i < tableRowsNumber; ++i) {
+        for (int i = 0; i < matrixFormat.getTableRowsNumber(); ++i) {
             TableRow t = new TableRow(getActivity());
             arrayButtons.add(new ArrayList<EditText>());
             tableRow.add(t);
-            for (int j = 0; j < tableColumnsNumber; ++j) {
+            for (int j = 0; j < matrixFormat.getTableColumnsNumber(); ++j) {
                 EditText editText = newEditText();
                 arrayButtons.get(i).add(editText);
                 tableRow.get(i).addView(editText);
@@ -82,25 +61,16 @@ public class MatrixFragment extends Fragment {
         return view;
     }
 
-    private void setValues() {
-        hasDecimal = matrixFormat.getHasDecimal();
-        hasSign = matrixFormat.getHasSign();
-        hintString = matrixFormat.getHint();
-        tableColumnsNumber = matrixFormat.getTableColumnsNumberNumber();
-        tableRowsNumber = matrixFormat.getTableRowsNumber();
-        maxCharacters = matrixFormat.getMaxCharacters();
-    }
-
     private EditText newEditText() {
         EditText editText = new EditText(getActivity());
         editText.setRawInputType(
                 InputType.TYPE_CLASS_NUMBER
                         | InputType.TYPE_NUMBER_FLAG_DECIMAL
                         | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        editText.setKeyListener(DigitsKeyListener.getInstance(hasSign, hasDecimal));
-        editText.setHint(hintString);
+        editText.setKeyListener(DigitsKeyListener.getInstance(matrixFormat.hasSign(), matrixFormat.hasDecimal()));
+        editText.setHint(matrixFormat.getHint());
 
-        editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxCharacters)});
+        editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(matrixFormat.getMaxCharacters())});
 
         return editText;
     }
