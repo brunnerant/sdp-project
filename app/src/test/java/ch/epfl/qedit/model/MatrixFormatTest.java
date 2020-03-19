@@ -36,7 +36,6 @@ public class MatrixFormatTest {
     @Test
     public void checkMatrix3x3WithParam() {
         MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3(true, true, 5);
-        ;
 
         checkAllElements(matrixFormat, true, true, 3, 3, 5, "00000");
     }
