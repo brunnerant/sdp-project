@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
@@ -98,25 +97,23 @@ public class QuizActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        MutableLiveData<Integer> focusedQuestion = model.getFocusedQuestion();
-        Integer index = model.getFocusedQuestion().getValue();
 
-        if (id == R.id.next || id == R.id.previous) {
+        if (item.getItemId() == R.id.next || item.getItemId() == R.id.previous) {
 
-            int temp = id == R.id.next ? 1 : -1;
-            if (index == null) {
-                focusedQuestion.setValue(0);
-            } else if ((index + temp) < model.getQuiz().getValue().getQuestions().size()
-                    && (index + temp) >= 0) {
-                focusedQuestion.setValue(index + temp);
+            int temp = item.getItemId() == R.id.next ? 1 : -1;
+            if (model.getFocusedQuestion().getValue() == null) {
+                model.getFocusedQuestion().setValue(0);
+            } else if ((model.getFocusedQuestion().getValue() + temp)
+                            < model.getQuiz().getValue().getQuestions().size()
+                    && (model.getFocusedQuestion().getValue() + temp) >= 0) {
+                model.getFocusedQuestion().setValue(model.getFocusedQuestion().getValue() + temp);
             }
 
-        } else if (id == R.id.time) {
+        } else if (item.getItemId() == R.id.time) {
             /*TODO
             display the quiz timer*/
             Toast.makeText(this, "Unimplemented Feature", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.overview) {
+        } else if (item.getItemId() == R.id.overview) {
             if (!overViewActive) {
 
                 getSupportFragmentManager()
