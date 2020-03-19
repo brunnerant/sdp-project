@@ -20,10 +20,11 @@ import java.util.ArrayList;
 
 public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
-    private MatrixFormat matrixFormat;
+    public MatrixFormat matrixFormat;
 
     private ArrayList<TableRow> tableRow = new ArrayList<>();
     private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();;
+    private ArrayList<ArrayList<Integer>> arrayIds = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,9 +48,10 @@ public class MatrixFragment extends Fragment {
         for (int i = 0; i < matrixFormat.getTableRowsNumber(); ++i) {
             TableRow t = new TableRow(getActivity());
             arrayButtons.add(new ArrayList<EditText>());
+            arrayIds.add(new ArrayList<Integer>());
             tableRow.add(t);
             for (int j = 0; j < matrixFormat.getTableColumnsNumber(); ++j) {
-                EditText editText = newEditText();
+                EditText editText = newEditText(i);
                 arrayButtons.get(i).add(editText);
                 tableRow.get(i).addView(editText);
             }
@@ -59,7 +61,11 @@ public class MatrixFragment extends Fragment {
         return view;
     }
 
-    private EditText newEditText() {
+    public int getId(int row, int column) {
+        return arrayIds.get(row).get(column);
+    }
+
+    private EditText newEditText(int row) {
         EditText editText = new EditText(getActivity());
         editText.setRawInputType(
                 InputType.TYPE_CLASS_NUMBER
@@ -71,6 +77,9 @@ public class MatrixFragment extends Fragment {
 
         editText.setFilters(
                 new InputFilter[] {new InputFilter.LengthFilter(matrixFormat.getMaxCharacters())});
+
+        arrayIds.get(row).add(View.generateViewId());
+        editText.setId(View.generateViewId());
 
         return editText;
     }

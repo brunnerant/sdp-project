@@ -6,8 +6,16 @@ public class MatrixFormat extends AnswerFormat {
 
     private int tableRowsNumber = 1;
     private int tableColumnsNumber = 1;
-    private int maxCharacters = 3;
+    private int maxCharacters = 5;
     private String hintString;
+    private String id = "m0";
+
+    public MatrixFormat(int tableColumnsNumber, int tableRowsNumber) {
+        super();
+        this.tableRowsNumber = tableRowsNumber;
+        this.tableColumnsNumber = tableColumnsNumber;
+        this.hintString = hint();
+    }
 
     public MatrixFormat(
             int tableColumnsNumber,
@@ -15,7 +23,6 @@ public class MatrixFormat extends AnswerFormat {
             boolean hasDecimal,
             boolean hasSign,
             int maxCharacters) {
-        super();
         this.tableColumnsNumber = tableColumnsNumber;
         this.tableRowsNumber = tableRowsNumber;
         this.hasDecimal = hasDecimal;
@@ -69,6 +76,14 @@ public class MatrixFormat extends AnswerFormat {
 
     public String getHint() {
         return hintString;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 
     // Function that allows to be placed as a placeholder for the EditText

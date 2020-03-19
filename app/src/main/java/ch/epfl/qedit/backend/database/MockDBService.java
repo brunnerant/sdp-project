@@ -2,7 +2,7 @@ package ch.epfl.qedit.backend.database;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import ch.epfl.qedit.model.AnswerFormat;
+import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.BundledData;
@@ -28,15 +28,16 @@ public class MockDBService implements DatabaseService {
                                         new Question(
                                                 "The matches problem",
                                                 "How many matches can fit in a shoe of size 43?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Pigeons",
                                                 "How many pigeons are there on Earth? (Hint: do not count yourself)",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
+                                        new Question("KitchenBu", "Oyster", new MatrixFormat(1, 1)),
                                         new Question(
-                                                "Kitchen",
-                                                "Oyster",
-                                                new AnswerFormat.NumberField(0, 1, 5))))
+                                                "Everything",
+                                                "What is the answer to life the univere and everything ?",
+                                                new MatrixFormat(3, 3))))
                         .toBundle());
     }
 
