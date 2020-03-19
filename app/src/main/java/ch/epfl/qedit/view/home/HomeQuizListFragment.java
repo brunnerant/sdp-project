@@ -49,17 +49,20 @@ public class HomeQuizListFragment extends Fragment {
                             AdapterView<?> parent, View view, int position, long id) {
                         Map.Entry<String, String> item =
                                 (Map.Entry<String, String>) adapter.getItem(position);
-                        String quizID = item.getKey();
 
-                        Intent intent = new Intent(getActivity(), QuizActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(QUIZID, quizID);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        startQuizActivity(item.getKey());
                     }
                 });
 
         return view;
+    }
+
+    private void startQuizActivity(String quizID) {
+        Intent intent = new Intent(getActivity(), QuizActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(QUIZID, quizID);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private class CustomAdapter extends BaseAdapter {
