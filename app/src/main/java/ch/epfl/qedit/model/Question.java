@@ -12,7 +12,6 @@ public class Question implements Bundlable, Serializable {
 
     private final String text;
 
-    private int index;
     /** The answer format for this question */
     private final AnswerFormat format;
 

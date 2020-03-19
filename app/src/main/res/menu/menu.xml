@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:title="Overview"
+        android:id="@+id/overview"
+        android:icon="@drawable/ic_menu"
+        app:showAsAction="always"
+
+        />
+    <item
         android:title="Time"
         android:id="@+id/time"
         android:icon="@drawable/ic_timer"
@@ -20,11 +27,6 @@
         android:icon="@drawable/ic_arrow_forward"
         app:showAsAction="always"
         />
-    <item
-        android:title="Overview"
-        android:id="@+id/overview"
-        android:icon="@drawable/ic_menu"
-        app:showAsAction="always"
-        />
+
 
 </menu>

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
@@ -48,6 +49,7 @@ public class QuizActivity extends AppCompatActivity {
                         });
         Toolbar toolbar = findViewById(R.id.quizToolbar);
         setSupportActionBar(toolbar);
+        overview = new QuizOverviewFragment();
         overViewActive = false;
     }
 
@@ -97,27 +99,25 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-
+        MutableLiveData<Integer> focusedQuestion = model.getFocusedQuestion();
         Integer index = model.getFocusedQuestion().getValue();
-        if (id == R.id.next) {
-            if (index == null) {
-                model.getFocusedQuestion().setValue(0);
 
-            } else if ((index + 1) < model.getQuiz().getValue().getQuestions().size()) {
-                model.getFocusedQuestion().setValue(index + 1);
-            }
-        } else if (id == R.id.previous) {
+        if (id == R.id.next || id == R.id.previous) {
+
+            int temp = id == R.id.next ? 1 : -1;
             if (index == null) {
-                model.getFocusedQuestion().setValue(0);
-            } else if (index > 0) {
-                model.getFocusedQuestion().setValue(index - 1);
+                focusedQuestion.setValue(0);
+            } else if ((index + temp) < model.getQuiz().getValue().getQuestions().size()
+                    && (index + temp) >= 0) {
+                focusedQuestion.setValue(index + temp);
             }
+
         } else if (id == R.id.time) {
             /*TODO
             display the quiz timer*/
         } else if (id == R.id.overview) {
             if (!overViewActive) {
-                overview = new QuizOverviewFragment();
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.quiz_overview_container, overview)
