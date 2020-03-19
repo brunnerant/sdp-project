@@ -8,7 +8,7 @@ public class MatrixFormatTest {
     @Test
     public void checkMatrixSingleField() {
         MatrixFormat matrixFormat = MatrixFormat.createSingleField(true, true, 5);
-
+        matrixFormat.setHint("00");
         checkAllElements(matrixFormat, true, true, 1, 1, 5, "00000");
     }
 
