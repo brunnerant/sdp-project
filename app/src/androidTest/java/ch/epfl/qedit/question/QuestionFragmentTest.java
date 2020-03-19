@@ -58,10 +58,9 @@ public class QuestionFragmentTest {
     public void testFragmentDisplaysQuestionCorrectly() {
         model.loadQuiz();
         model.getFocusedQuestion().postValue(0);
-        onView(withId(R.id.question_title))
-                .check(matches(withText("Question 1: The matches problem")));
+        onView(withId(R.id.question_title)).check(matches(withText("Question 1 - Banane")));
         onView(withId(R.id.question_display))
-                .check(matches(withText("How many matches can fit in a shoe of size 43?")));
+                .check(matches(withText("Combien y a-t-il de bananes ?")));
         onView(withId(R.id.answer_fragment)).check(matches(isDisplayed()));
     }
 }

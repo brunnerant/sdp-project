@@ -60,7 +60,10 @@ public class QuizOverviewFragment extends Fragment {
         String[] overviewItems = new String[questions.size()];
 
         // For each question of the quiz, we create an item in the list view
-        for (int i = 0; i < questions.size(); ++i) overviewItems[i] = "Question " + (i + 1);
+        for (int i = 0; i < questions.size(); ++i) {
+            String title = questions.get(i).getTitle();
+            overviewItems[i] = (i + 1) + ") " + title;
+        }
 
         ArrayAdapter<String> listViewAdapter =
                 new ArrayAdapter<>(

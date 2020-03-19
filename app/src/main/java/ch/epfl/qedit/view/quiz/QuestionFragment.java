@@ -64,7 +64,7 @@ public class QuestionFragment extends Fragment {
         Question question = quiz.getQuestions().get(index);
 
         // We have to change the question title and text
-        String questionTitleStr = "Question " + (index + 1) + ": " + question.getTitle();
+        String questionTitleStr = "Question " + (index + 1) + " - " + question.getTitle();
         questionTitle.setText(questionTitleStr);
         questionDisplay.setText(question.getText());
 
