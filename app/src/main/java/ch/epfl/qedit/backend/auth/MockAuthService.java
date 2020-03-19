@@ -18,10 +18,16 @@ public class MockAuthService implements AuthenticationService {
     private final HashMap<String, Response<User>> userResponses =
             new HashMap<String, Response<User>>() {
                 {
-                    put("nicolas", Response.<User>error(CONNECTION_ERROR));
-                    put("nathan", Response.ok(createNathan()));
-                    put("anthony", Response.ok(new User("anthony", "iozzia", User.Role.Editor)));
-                    put("antoine", Response.ok(createAntoine()));
+                    put("fjd4ywnzcCcLHaVb7oKg", Response.<User>error(CONNECTION_ERROR));
+                    put(
+                            "fjd4ywnzXCXLHaVb7oKg",
+                            Response.ok(new User("Marcel", "Doe", User.Role.Participant)));
+                    put(
+                            "R4rXRVU3EMkgm5YEW52Q",
+                            Response.ok(createCosme()));
+                    put(
+                            "v5ns9OMqV4hH7jwD8S5w",
+                            Response.ok(createAnthony()));
                 }
             };
 
@@ -54,19 +60,19 @@ public class MockAuthService implements AuthenticationService {
         return idlingResource;
     }
 
-    private User createNathan() {
-        User nathan = new User("nathan", "greslin", User.Role.Participant);
-        nathan.addQuiz("quiz0", "Qualification EPFL");
+    private User createCosme() {
+        User cosme = new User("Cosme", "Jordan", User.Role.Editor);
+        cosme.addQuiz("quiz0", "Qualification EPFL");
 
-        return nathan;
+        return cosme;
     }
 
-    private User createAntoine() {
-        User antoine = new User("antoine", "brunner", User.Role.Administrator);
-        antoine.addQuiz("quiz1", "Quiz 1");
-        antoine.addQuiz("quiz2", "Quiz 2");
-        antoine.addQuiz("quiz3", "Quiz 3");
+    private User createAnthony() {
+        User anthony = new User("Anthony", "Iozzia", User.Role.Administrator);
+        anthony.addQuiz("quiz1", "Quiz 1");
+        anthony.addQuiz("quiz2", "Quiz 2");
+        anthony.addQuiz("quiz3", "Quiz 3");
 
-        return antoine;
+        return anthony;
     }
 }
