@@ -56,7 +56,7 @@ public class QuestionFragmentTest {
 
     @Test
     public void testFragmentDisplaysQuestionCorrectly() {
-        model.loadQuiz();
+        model.loadQuiz("quiz0");
         model.getFocusedQuestion().postValue(0);
         onView(withId(R.id.question_title))
                 .check(matches(withText("Question 1: The matches problem")));

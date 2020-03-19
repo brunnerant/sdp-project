@@ -61,7 +61,7 @@ public class QuizOverviewFragmentTest {
 
     @Test
     public void testQuizIsProperlyLoaded() {
-        model.loadQuiz();
+        model.loadQuiz("quiz0");
         onData(anything())
                 .inAdapterView(withId(R.id.question_list))
                 .atPosition(0)

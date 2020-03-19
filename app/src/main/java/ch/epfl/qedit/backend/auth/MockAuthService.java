@@ -19,13 +19,9 @@ public class MockAuthService implements AuthenticationService {
             new HashMap<String, Response<User>>() {
                 {
                     put("nicolas", Response.<User>error(CONNECTION_ERROR));
-                    put(
-                            "nathan",
-                            Response.ok(new User("nathan", "greslin", User.Role.Participant)));
+                    put("nathan", Response.ok(createNathan()));
                     put("anthony", Response.ok(new User("anthony", "iozzia", User.Role.Editor)));
-                    put(
-                            "antoine",
-                            Response.ok(new User("antoine", "brunner", User.Role.Administrator)));
+                    put("antoine", Response.ok(createAntoine()));
                 }
             };
 
@@ -56,5 +52,21 @@ public class MockAuthService implements AuthenticationService {
 
     public IdlingResource getIdlingResource() {
         return idlingResource;
+    }
+
+    private User createNathan() {
+        User nathan = new User("nathan", "greslin", User.Role.Participant);
+        nathan.addQuiz("quiz0", "Qualification EPFL");
+
+        return nathan;
+    }
+
+    private User createAntoine() {
+        User antoine = new User("antoine", "brunner", User.Role.Administrator);
+        antoine.addQuiz("quiz1", "Quiz 1");
+        antoine.addQuiz("quiz2", "Quiz 2");
+        antoine.addQuiz("quiz3", "Quiz 3");
+
+        return antoine;
     }
 }
