@@ -20,7 +20,7 @@ import ch.epfl.qedit.viewmodel.QuizViewModel;
 public class QuizActivity extends AppCompatActivity {
     private QuizViewModel model;
     private Boolean overViewActive;
-    // private QuestionFragment questionFragment;
+
     private ProgressBar progressBar;
     private QuizOverviewFragment overview;
 
@@ -115,6 +115,7 @@ public class QuizActivity extends AppCompatActivity {
         } else if (id == R.id.time) {
             /*TODO
             display the quiz timer*/
+            Toast.makeText(this, "Unimplemented Feature", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.overview) {
             if (!overViewActive) {
 
