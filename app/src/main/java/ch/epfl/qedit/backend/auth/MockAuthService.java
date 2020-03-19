@@ -22,12 +22,8 @@ public class MockAuthService implements AuthenticationService {
                     put(
                             "fjd4ywnzXCXLHaVb7oKg",
                             Response.ok(new User("Marcel", "Doe", User.Role.Participant)));
-                    put(
-                            "R4rXRVU3EMkgm5YEW52Q",
-                            Response.ok(createCosme()));
-                    put(
-                            "v5ns9OMqV4hH7jwD8S5w",
-                            Response.ok(createAnthony()));
+                    put("R4rXRVU3EMkgm5YEW52Q", Response.ok(createCosme()));
+                    put("v5ns9OMqV4hH7jwD8S5w", Response.ok(createAnthony()));
                 }
             };
 
