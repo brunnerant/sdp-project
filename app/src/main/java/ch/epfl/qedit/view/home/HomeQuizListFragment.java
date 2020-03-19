@@ -42,7 +42,6 @@ public class HomeQuizListFragment extends Fragment {
                         entries); // TODO order does change as it comes from a set
 
         listView.setAdapter(adapter);
-
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
