@@ -23,7 +23,7 @@ public class MatrixFragment extends Fragment {
     public MatrixFormat matrixFormat;
 
     private ArrayList<TableRow> tableRow = new ArrayList<>();
-    private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();;
+    private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> arrayIds = new ArrayList<>();
 
     @Override
