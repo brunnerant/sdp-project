@@ -18,14 +18,16 @@ public class MockAuthService implements AuthenticationService {
     private final HashMap<String, Response<User>> userResponses =
             new HashMap<String, Response<User>>() {
                 {
-                    put("nicolas", Response.<User>error(CONNECTION_ERROR));
+                    put("fjd4ywnzcCcLHaVb7oKg", Response.<User>error(CONNECTION_ERROR));
                     put(
-                            "nathan",
-                            Response.ok(new User("nathan", "greslin", User.Role.Participant)));
-                    put("anthony", Response.ok(new User("anthony", "iozzia", User.Role.Editor)));
+                            "fjd4ywnzXCXLHaVb7oKg",
+                            Response.ok(new User("Marcel", "Doe", User.Role.Participant)));
                     put(
-                            "antoine",
-                            Response.ok(new User("antoine", "brunner", User.Role.Administrator)));
+                            "R4rXRVU3EMkgm5YEW52Q",
+                            Response.ok(new User("Cosme", "Jordan", User.Role.Editor)));
+                    put(
+                            "v5ns9OMqV4hH7jwD8S5w",
+                            Response.ok(new User("Anthony", "Iozzia", User.Role.Administrator)));
                 }
             };
 

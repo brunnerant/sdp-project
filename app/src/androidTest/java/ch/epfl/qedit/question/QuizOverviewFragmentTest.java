@@ -65,6 +65,6 @@ public class QuizOverviewFragmentTest {
         onData(anything())
                 .inAdapterView(withId(R.id.question_list))
                 .atPosition(0)
-                .check(matches(withText("Question 1")));
+                .check(matches(withText("1) Banane")));
     }
 }
