@@ -1,4 +1,4 @@
-package ch.epfl.qedit.view.question;
+package ch.epfl.qedit.view.quiz;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

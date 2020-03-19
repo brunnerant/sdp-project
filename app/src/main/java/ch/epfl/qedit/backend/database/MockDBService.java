@@ -37,7 +37,71 @@ public class MockDBService implements DatabaseService {
                                         new Question(
                                                 "Everything",
                                                 "What is the answer to life the univere and everything ?",
-                                                new MatrixFormat(3, 3))))
+                                                new MatrixFormat(3, 3)),
+                                        new Question(
+                                                "Banane",
+                                                "Combien y a-t-il de bananes ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Pomme",
+                                                "Combien y a-t-il de pommes ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Abricot",
+                                                "Combien y a-t-il d'abricots ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Cerise",
+                                                "Combien y a-t-il de cerises ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Amande",
+                                                "Combien y a-t-il d'amandes ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Ananas",
+                                                "Combien y a-t-il d'ananas ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Avocat",
+                                                "Combien y a-t-il d'avocats ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Citron",
+                                                "Combien y a-t-il de citrons ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Clémentine",
+                                                "Combien y a-t-il de clémentines ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Figue",
+                                                "Combien y a-t-il de figues ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Fraise",
+                                                "Combien y a-t-il de fraises ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Framboise",
+                                                "Combien y a-t-il de framboises ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Kiwi",
+                                                "Combien y a-t-il de kiwis ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Mandarine",
+                                                "Combien y a-t-il de mandarines ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Melon",
+                                                "Combien y a-t-il de melons ?",
+                                                new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Noix",
+                                                "Combien y a-t-il de noix ?",
+                                                new MatrixFormat(1, 1))))
                         .toBundle());
     }
 

@@ -23,8 +23,8 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.HomeActivity;
 import ch.epfl.qedit.view.LoginActivity;
-import ch.epfl.qedit.view.ViewRoleActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -64,7 +64,7 @@ public class LoginActivityTest {
         performLogin(token);
         intended(
                 allOf(
-                        hasComponent(ViewRoleActivity.class.getName()),
+                        hasComponent(HomeActivity.class.getName()),
                         hasExtra(LoginActivity.USER, user)));
     }
 
@@ -77,8 +77,8 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void testNicolasCannotLogIn() {
-        testLoginFailed("nicolas", R.string.connection_error_message);
+    public void testConnectionErrorCannotLogIn() {
+        testLoginFailed("fjd4ywnzcCcLHaVb7oKg", R.string.connection_error_message);
     }
 
     @Test
@@ -87,17 +87,24 @@ public class LoginActivityTest {
     }
 
     @Test
+    public void testEmptyTokenCannotLogIn() {
+        testLoginFailed("", R.string.empty_token_message);
+    }
+
+    @Test
     public void testParticipantCanLogIn() {
-        testLoginSuccessful("nathan", new User("nathan", "greslin", User.Role.Participant));
+        testLoginSuccessful(
+                "fjd4ywnzXCXLHaVb7oKg", new User("Marcel", "Doe", User.Role.Participant));
     }
 
     @Test
     public void testEditorCanLogIn() {
-        testLoginSuccessful("anthony", new User("anthony", "iozzia", User.Role.Editor));
+        testLoginSuccessful("R4rXRVU3EMkgm5YEW52Q", new User("Cosme", "Jordan", User.Role.Editor));
     }
 
     @Test
     public void testAdministratorCanLogIn() {
-        testLoginSuccessful("antoine", new User("antoine", "brunner", User.Role.Administrator));
+        testLoginSuccessful(
+                "v5ns9OMqV4hH7jwD8S5w", new User("Anthony", "Iozzia", User.Role.Administrator));
     }
 }

@@ -14,8 +14,20 @@ public class Quiz implements Bundlable, Serializable {
      */
     private final ImmutableList<Question> questions;
 
+    private final String title;
+
+    public Quiz(String title, List<Question> questions) {
+        this.questions = ImmutableList.copyOf(questions);
+        this.title = title;
+    }
+
     public Quiz(List<Question> questions) {
         this.questions = ImmutableList.copyOf(questions);
+        this.title = "Untitled Quiz";
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public ImmutableList<Question> getQuestions() {
