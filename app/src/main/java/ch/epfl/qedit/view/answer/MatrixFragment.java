@@ -40,8 +40,7 @@ public class MatrixFragment extends Fragment {
         View view = inflater.inflate(R.layout.answers_table, container, false);
 
         tableLayout = view.findViewById(R.id.answersTable);
-
-        // TODO center matrix
+        
         getActivity()
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
