@@ -1,18 +1,31 @@
 <resources>
-    <string name="app_name">QEDit</string>
 
-    <!-- LoginActivity -->
+    <!-- App and logo -->
+    <string name="app_name" translatable="false">QEDit</string>
+    <string name="qedit_logo_description">QEDit Logo</string>
+
+    <!-- Language selection -->
+    <string-array name="languages">
+        <item>Français</item>
+        <item>English</item>
+    </string-array>
+    <string-array name="language_codes">
+        <!-- Important: language codes must be in the same order as languages" -->
+        <item>fr</item>
+        <item>en</item>
+    </string-array>
+
+    <!-- Login -->
     <string name="login">Connexion</string>
     <string name="token_hint">Token de connexion</string>
     <string name="wrong_token_message">Token invalide</string>
     <string name="empty_token_message">Token vide</string>
     <string name="connection_error_message">Erreur de connexion</string>
-    <string name="qedit_logo_description">QEDit Logo</string>
 
-    <!-- HomeActivity -->
-    <string name="buttonOpenQuiz">Quiz</string>
+    <!-- Home -->
+    <string name="button_open_quiz">Quiz</string>
 
-    <!-- QuizActivity -->
+    <!-- Quiz -->
     <string name="empty_quiz_error_message">Ce quiz est vide</string>
     <string name="give_answer_here_hint">Votre réponse</string>
 

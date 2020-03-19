@@ -52,21 +52,21 @@
         android:id="@+id/qedit_logo"
         android:layout_width="374dp"
         android:layout_height="166dp"
+        android:contentDescription="@string/qedit_logo_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.567"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.415"
-        app:srcCompat="@mipmap/qedit_light"
-        android:contentDescription="@string/qedit_logo_description" />
+        app:layout_constraintVertical_bias="0.42"
+        app:srcCompat="@mipmap/qedit_light" />
 
     <Spinner
-        android:id="@+id/language_selection_login"
+        android:id="@+id/language_selection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown"
+        android:entries="@array/languages"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

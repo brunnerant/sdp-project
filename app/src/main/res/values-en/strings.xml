@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">QEDit</string>
+
 
     <!-- LoginActivity -->
     <string name="login">Login</string>
@@ -10,7 +11,7 @@
     <string name="qedit_logo_description">QEDit Logo</string>
 
     <!-- HomeActivity -->
-    <string name="buttonOpenQuiz">Quiz</string>
+    <string name="button_open_quiz">Quiz</string>
 
     <!-- QuizActivity -->
     <string name="empty_quiz_error_message">This quiz is empty</string>
