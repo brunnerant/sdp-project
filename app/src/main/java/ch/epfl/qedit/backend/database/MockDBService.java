@@ -2,7 +2,6 @@ package ch.epfl.qedit.backend.database;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import ch.epfl.qedit.model.AnswerFormat;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -23,10 +22,7 @@ public class MockDBService implements DatabaseService {
         database = new HashMap<>();
 
         Question bananaQuestion =
-                new Question(
-                        "Banane",
-                        "Combien y a-t-il de bananes ?",
-                        new AnswerFormat.NumberField(0, 1, 5));
+                new Question("Banane", "Combien y a-t-il de bananes ?", new MatrixFormat(1, 1));
 
         database.put(
                 "quizzes/quiz0",
@@ -40,7 +36,7 @@ public class MockDBService implements DatabaseService {
                                         new Question(
                                                 "The matches problem",
                                                 "How many matches can fit in a shoe of size 43?",
-                                                new MatrixFormat(1, 1)),
+                                                new MatrixFormat(3, 3)),
                                         new Question(
                                                 "Pigeons",
                                                 "How many pigeons are there on Earth? (Hint: do not count yourself)",
