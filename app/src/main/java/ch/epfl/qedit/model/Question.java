@@ -2,11 +2,10 @@ package ch.epfl.qedit.model;
 
 import ch.epfl.qedit.util.Bundlable;
 import ch.epfl.qedit.util.BundledData;
-import java.io.Serializable;
 import java.util.Objects;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
-public class Question implements Bundlable, Serializable {
+public class Question implements Bundlable {
     /** For now, a question consists of a number, a title, and a text */
     private final String title;
 

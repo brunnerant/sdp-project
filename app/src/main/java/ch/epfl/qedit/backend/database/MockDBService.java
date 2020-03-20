@@ -2,6 +2,7 @@ package ch.epfl.qedit.backend.database;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
+import ch.epfl.qedit.model.AnswerFormat;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -21,8 +22,14 @@ public class MockDBService implements DatabaseService {
         idlingResource = new CountingIdlingResource("MockDBService");
         database = new HashMap<>();
 
+        Question bananaQuestion =
+                new Question(
+                        "Banane",
+                        "Combien y a-t-il de bananes ?",
+                        new AnswerFormat.NumberField(0, 1, 5));
+
         database.put(
-                "quizzes/quiz1",
+                "quizzes/quiz0",
                 new Quiz(
                                 Arrays.asList(
                                         new Question(
@@ -46,6 +53,7 @@ public class MockDBService implements DatabaseService {
                                                 "Banane",
                                                 "Combien y a-t-il de bananes ?",
                                                 new MatrixFormat(1, 1)),
+                                        bananaQuestion,
                                         new Question(
                                                 "Pomme",
                                                 "Combien y a-t-il de pommes ?",
@@ -107,6 +115,12 @@ public class MockDBService implements DatabaseService {
                                                 "Combien y a-t-il de noix ?",
                                                 new MatrixFormat(1, 1))))
                         .toBundle());
+
+        database.put("quizzes/quiz1", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
+
+        database.put("quizzes/quiz2", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
+
+        database.put("quizzes/quiz3", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
     }
 
     @Override

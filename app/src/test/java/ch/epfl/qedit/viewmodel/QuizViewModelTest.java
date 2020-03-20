@@ -37,7 +37,7 @@ public class QuizViewModelTest {
         QuizViewModel model = new QuizViewModel();
         model.getStatus().observeForever(statusObserver);
         model.getQuiz().observeForever(quizObserver);
-        model.loadQuiz();
+        model.loadQuiz("quiz0");
 
         verify(statusObserver, timeout(5000).times(3)).onChanged(statusArgs.capture());
         verify(quizObserver, timeout(5000).times(2)).onChanged(quizArgs.capture());
