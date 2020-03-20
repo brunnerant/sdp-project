@@ -5,6 +5,13 @@
     <!-- App and logo -->
     <string name="qedit_logo_description">Logo QEDit</string>
 
+    <!-- Language selection -->
+    <string-array name="languages_list_translated">
+        <item>Français</item>
+        <item>Anglais</item>
+    </string-array>
+    <string name="language_changed">Langue changée en</string>
+
     <!-- Login -->
     <string name="login">Connexion</string>
     <string name="token_hint">Token de connexion</string>

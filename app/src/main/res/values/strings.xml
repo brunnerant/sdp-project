@@ -2,12 +2,13 @@
 <!-- English -->
 <!-- Note: this default string resource is for English. In fact, if the language of the system does not
      have an associated string resource, this default string resource is loaded and therefore the
-     app is in English. -->
+     app is in English.
+     -->
 <!-- To insert a string in the application:
-     getResources().getString(R.string.<string_name>), or
+     getResources().getString(R.string.<string_name>)
+     or
      getResources().getStringArray(R.array.<string_array_name>)[<position>]
-     To insert a string in a test:
-     add getInstrumentation().getContext(). before getResources() -->
+     -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
 
     <!-- App and logo -->
@@ -15,16 +16,21 @@
     <string name="qedit_logo_description">QEDit Logo</string>
 
     <!-- Language selection -->
-    <string-array name="languages" translatable="false">
+    <string-array name="languages_list" translatable="false">
         <!-- This list of languages will be the available languages that the user can select." -->
         <item>Français</item>
         <item>English</item>
     </string-array>
+    <string-array name="languages_list_translated">
+        <item>French</item>
+        <item>English</item>
+    </string-array>
     <string-array name="language_codes" translatable="false">
-        <!-- Important: language_codes must be in the same order as languages." -->
+        <!-- Important: language_codes must be in the same order as languages_list." -->
         <item>fr</item>
         <item>en</item>
     </string-array>
+    <string name="language_changed">Language changed to</string>
 
     <!-- Login -->
     <string name="login">Login</string>
