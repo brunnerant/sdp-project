@@ -108,8 +108,14 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     public void handleLogin(View view) {
         String token = tokenText.getText().toString();
+        // Sanitize token
         if (token.isEmpty()) {
             printShortToast(R.string.empty_token_message);
+            return;
+        }
+        token = token.trim();
+        if (!token.matches("[a-zA-Z0-9]{20}")) {
+            printShortToast(R.string.wrong_token_message);
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
