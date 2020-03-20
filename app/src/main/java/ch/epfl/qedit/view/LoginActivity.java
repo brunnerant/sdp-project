@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -11,7 +12,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 import ch.epfl.qedit.Language;
+import ch.epfl.qedit.LocaleUtils;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
@@ -34,7 +38,17 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
 
         // Set language
-        Language.setLanguage(LoginActivity.this, "en");//Language.getLanguage());
+        //Language.setLanguage(LoginActivity.this, "en");//Language.getLanguage());
+        /*
+        String languageToLoad = "en"; // your language
+        Configuration config = getBaseContext().getResources().getConfiguration();
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        recreate();
+
+         */
 
         setContentView(R.layout.activity_login);
 
