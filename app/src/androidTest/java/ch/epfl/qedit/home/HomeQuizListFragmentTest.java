@@ -1,20 +1,5 @@
 package ch.epfl.qedit.home;
 
-import android.os.Bundle;
-
-import com.android21buttons.fragmenttestrule.FragmentTestRule;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.home.HomeInfoFragment;
-import ch.epfl.qedit.view.home.HomeQuizListFragment;
-import ch.epfl.qedit.view.quiz.QuizActivity;
-
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -25,6 +10,18 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+
+import android.os.Bundle;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.home.HomeInfoFragment;
+import ch.epfl.qedit.view.home.HomeQuizListFragment;
+import ch.epfl.qedit.view.quiz.QuizActivity;
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class HomeQuizListFragmentTest {
     @Rule
@@ -43,7 +40,9 @@ public class HomeQuizListFragmentTest {
     }
 
     @After
-    public void cleanup() { testRule.finishActivity(); }
+    public void cleanup() {
+        testRule.finishActivity();
+    }
 
     @Test
     public void testQuizListIsProperlyLoaded() {
@@ -55,7 +54,10 @@ public class HomeQuizListFragmentTest {
 
     @Test
     public void testClickOnQuizLaunchesQuizActivity() {
-        onData(anything()).inAdapterView(withId(R.id.home_quiz_list)).atPosition(0).perform(click());
+        onData(anything())
+                .inAdapterView(withId(R.id.home_quiz_list))
+                .atPosition(0)
+                .perform(click());
         intended(
                 allOf(
                         hasComponent(QuizActivity.class.getName()),

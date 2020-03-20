@@ -1,23 +1,19 @@
 package ch.epfl.qedit.home;
 
-import android.os.Bundle;
-
-import androidx.test.espresso.matcher.ViewMatchers;
-
-import com.android21buttons.fragmenttestrule.FragmentTestRule;
-
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.home.HomeInfoFragment;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import android.os.Bundle;
+import androidx.test.espresso.matcher.ViewMatchers;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.home.HomeInfoFragment;
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class HomeInfoFragmentTest {
     @Rule
@@ -32,7 +28,9 @@ public class HomeInfoFragmentTest {
     }
 
     @After
-    public void cleanup() { testRule.finishActivity(); }
+    public void cleanup() {
+        testRule.finishActivity();
+    }
 
     public void testUserIsDisplayedCorrectly(User user, String greeting, String role) {
         init(user);

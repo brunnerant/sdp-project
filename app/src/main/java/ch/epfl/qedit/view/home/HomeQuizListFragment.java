@@ -101,9 +101,10 @@ public class HomeQuizListFragment extends Fragment {
         }
     }
 
-    private static Comparator<Map.Entry<String, String>> CustomComparator = new Comparator<Map.Entry<String, String>>() {
-        public int compare(Map.Entry<String, String> e1, Map.Entry<String, String> e2) {
-            return e1.getValue().compareTo(e2.getValue());
-        }
-    };
+    private static Comparator<Map.Entry<String, String>> CustomComparator =
+            new Comparator<Map.Entry<String, String>>() {
+                public int compare(Map.Entry<String, String> e1, Map.Entry<String, String> e2) {
+                    return e1.getValue().compareTo(e2.getValue());
+                }
+            };
 }
