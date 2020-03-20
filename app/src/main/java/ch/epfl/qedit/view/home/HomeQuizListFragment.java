@@ -15,6 +15,8 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 
@@ -68,6 +70,7 @@ public class HomeQuizListFragment extends Fragment {
 
         public CustomAdapter(Context context, ArrayList<Map.Entry<String, String>> entries) {
             this.entries = entries;
+            Collections.sort(this.entries, CustomComparator);
             inflater = LayoutInflater.from(context);
         }
 
@@ -97,4 +100,10 @@ public class HomeQuizListFragment extends Fragment {
             return view;
         }
     }
+
+    private static Comparator<Map.Entry<String, String>> CustomComparator = new Comparator<Map.Entry<String, String>>() {
+        public int compare(Map.Entry<String, String> e1, Map.Entry<String, String> e2) {
+            return e1.getValue().compareTo(e2.getValue());
+        }
+    };
 }
