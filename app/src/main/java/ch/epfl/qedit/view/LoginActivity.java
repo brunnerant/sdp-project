@@ -1,5 +1,6 @@
 package ch.epfl.qedit.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Locale;
 
 import ch.epfl.qedit.Language;
+import ch.epfl.qedit.LocaleHelper;
 import ch.epfl.qedit.LocaleUtils;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
@@ -61,6 +63,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // Language selection
         Spinner languageSelectionSpinner = (Spinner) findViewById(R.id.language_selection);
         languageSelectionSpinner.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     @Override
