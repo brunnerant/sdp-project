@@ -4,13 +4,12 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.QuizActivity">
+    tools:context=".view.quiz.QuizActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/quiz_overview_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/question_details_container"
         app:layout_constraintHorizontal_weight="30"

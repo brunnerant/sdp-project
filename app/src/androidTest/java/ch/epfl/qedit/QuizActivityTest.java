@@ -8,16 +8,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.IsNot.not;
 
 import android.content.Intent;
+import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
+import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import org.junit.Assert;
-
-import android.os.Bundle;
-import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

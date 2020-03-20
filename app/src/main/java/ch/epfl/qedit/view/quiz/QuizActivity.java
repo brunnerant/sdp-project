@@ -51,6 +51,7 @@ public class QuizActivity extends AppCompatActivity {
 
         overview = new QuizOverviewFragment();
         overviewActive = false;
+        handleToggleOverview();
 
         getSupportFragmentManager()
                 .beginTransaction()
