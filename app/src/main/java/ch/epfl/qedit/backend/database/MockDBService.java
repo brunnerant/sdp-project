@@ -2,7 +2,7 @@ package ch.epfl.qedit.backend.database;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import ch.epfl.qedit.model.AnswerFormat;
+import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.BundledData;
@@ -22,76 +22,95 @@ public class MockDBService implements DatabaseService {
         database = new HashMap<>();
 
         Question bananaQuestion =
-                new Question(
-                        "Banane",
-                        "Combien y a-t-il de bananes ?",
-                        new AnswerFormat.NumberField(0, 1, 5));
+                new Question("Banane", "Combien y a-t-il de bananes ?", new MatrixFormat(1, 1));
 
         database.put(
                 "quizzes/quiz0",
                 new Quiz(
                                 Arrays.asList(
+                                        new Question(
+                                                "Banane",
+                                                "Combien y a-t-il de bananes ?",
+                                                new MatrixFormat(1, 1)),
+                                        bananaQuestion,
+                                        new Question(
+                                                "The matches problem",
+                                                "How many matches can fit in a shoe of size 43?",
+                                                new MatrixFormat(3, 3)),
+                                        new Question(
+                                                "Pigeons",
+                                                "How many pigeons are there on Earth? (Hint: do not count yourself)",
+                                                new MatrixFormat(1, 1)),
+                                        new Question("KitchenBu", "Oyster", new MatrixFormat(1, 1)),
+                                        new Question(
+                                                "Everything",
+                                                "What is the answer to life the univere and everything ?",
+                                                new MatrixFormat(3, 3)),
+                                        new Question(
+                                                "Banane",
+                                                "Combien y a-t-il de bananes ?",
+                                                new MatrixFormat(1, 1)),
                                         bananaQuestion,
                                         new Question(
                                                 "Pomme",
                                                 "Combien y a-t-il de pommes ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Abricot",
                                                 "Combien y a-t-il d'abricots ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Cerise",
                                                 "Combien y a-t-il de cerises ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Amande",
                                                 "Combien y a-t-il d'amandes ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Ananas",
                                                 "Combien y a-t-il d'ananas ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Avocat",
                                                 "Combien y a-t-il d'avocats ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Citron",
                                                 "Combien y a-t-il de citrons ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Clémentine",
                                                 "Combien y a-t-il de clémentines ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Figue",
                                                 "Combien y a-t-il de figues ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Fraise",
                                                 "Combien y a-t-il de fraises ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Framboise",
                                                 "Combien y a-t-il de framboises ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Kiwi",
                                                 "Combien y a-t-il de kiwis ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Mandarine",
                                                 "Combien y a-t-il de mandarines ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Melon",
                                                 "Combien y a-t-il de melons ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Noix",
                                                 "Combien y a-t-il de noix ?",
-                                                new AnswerFormat.NumberField(0, 1, 5))))
+                                                new MatrixFormat(1, 1))))
                         .toBundle());
 
         database.put("quizzes/quiz1", new Quiz(Arrays.asList(bananaQuestion)).toBundle());

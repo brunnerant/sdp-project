@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuestionFragment extends Fragment {
@@ -68,11 +70,17 @@ public class QuestionFragment extends Fragment {
         questionTitle.setText(questionTitleStr);
         questionDisplay.setText(question.getText());
 
-        // And dynamically instantiate the answer form
+        MatrixFragment matrixFragment = new MatrixFragment();
+        MatrixFormat matrixFormat = (MatrixFormat) question.getFormat();
+        Bundle newB = new Bundle();
+        newB.putSerializable("m0", matrixFormat);
+        matrixFragment.setArguments(newB);
+
+        // And dynamically instatiate the answer form
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.answer_fragment_container, new DummyAnswerFragment())
+                .replace(R.id.answer_fragment_container, matrixFragment)
                 .commit();
     }
 }
