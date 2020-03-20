@@ -18,7 +18,7 @@ import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuizActivity extends AppCompatActivity {
     private QuizViewModel model;
-    private Boolean overViewActive;
+    private Boolean overviewActive;
 
     private ProgressBar progressBar;
     private QuizOverviewFragment overview;
@@ -47,7 +47,7 @@ public class QuizActivity extends AppCompatActivity {
                             }
                         });
         overview = new QuizOverviewFragment();
-        overViewActive = false;
+        overviewActive = false;
     }
 
     /** This handles the loading status of the quiz */
@@ -69,38 +69,52 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        MutableLiveData<Integer> FocusedQuestion = model.getFocusedQuestion();
-        Integer index = FocusedQuestion.getValue();
+
         switch (id) {
             case R.id.next:
             case R.id.previous:
-                int temp = id == R.id.next ? 1 : -1;
-                if (index == null) {
-                    FocusedQuestion.setValue(0);
-                } else if ((index + temp) < model.getQuiz().getValue().getQuestions().size()
-                        && (index + temp) >= 0) {
-                    FocusedQuestion.setValue((index + temp));
-                }
+                handleNavigation(id == R.id.next ? 1 : -1);
                 break;
             case R.id.time:
                 Toast.makeText(this, "Unimplemented Feature", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.overview:
-                if (!overViewActive) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.quiz_overview_container, overview)
-                            .commit();
-                    overViewActive = true;
-                } else {
-                    getSupportFragmentManager().beginTransaction().remove(overview).commit();
-                    overViewActive = false;
-                }
+                handleToggleOverview();
                 break;
             case android.R.id.home:
                 onBackPressed();
                 break;
         }
+
         return true;
+    }
+
+    /** This function handles navigating back and forth between questions */
+    private void handleNavigation(int offset) {
+        // If the quiz hasn't loaded yet, we cannot navigate
+        if (model.getQuiz().getValue() == null) return;
+
+        MutableLiveData<Integer> focusedQuestion = model.getFocusedQuestion();
+        Integer index = focusedQuestion.getValue();
+
+        if (index == null) focusedQuestion.setValue(0);
+        else if ((index + offset) < model.getQuiz().getValue().getQuestions().size()
+                && (index + offset) >= 0) focusedQuestion.setValue(index + offset);
+    }
+
+    /** This function handles toggling the overview fragment */
+    private void handleToggleOverview() {
+        if (!overviewActive) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.quiz_overview_container, overview)
+                    .commit();
+            findViewById(R.id.quiz_overview_container).setVisibility(View.VISIBLE);
+            overviewActive = true;
+        } else {
+            getSupportFragmentManager().beginTransaction().remove(overview).commit();
+            findViewById(R.id.quiz_overview_container).setVisibility(View.GONE);
+            overviewActive = false;
+        }
     }
 }
