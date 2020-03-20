@@ -8,7 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
@@ -46,38 +46,12 @@ public class QuizActivity extends AppCompatActivity {
                                 onStatusChanged(status);
                             }
                         });
-        Toolbar toolbar = findViewById(R.id.quizToolbar);
+        /*Toolbar toolbar = findViewById(R.id.quizToolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
         overview = new QuizOverviewFragment();
         overViewActive = false;
     }
-
-    // Check if the quiz is non empty
-    /*  if (quiz.getQuestions().size() > 0) {
-        // Start the QuizOverviewFragment
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("quiz", quiz);
-        QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
-        quizOverviewFragment.setArguments(bundle);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.quiz_overview_frame, quizOverviewFragment);
-
-        // Start QuestionFragment with the first question
-        bundle = new Bundle();
-        bundle.putSerializable("question", quiz.getQuestions().get(0));
-        questionFragment = new QuestionFragment();
-        questionFragment.setArguments(bundle);
-        ft.add(R.id.question_frame, questionFragment);
-        ft.commit();
-    } else { TODO
-          // Inform the user that the Quiz is empty
-          Toast toast =
-                  Toast.makeText(
-                          getApplicationContext(),
-                          getResources().getString(R.string.empty_quiz_error_message),
-                          Toast.LENGTH_SHORT);
-          toast.show();
-      }*/
 
     /** This handles the loading status of the quiz */
     private void onStatusChanged(QuizViewModel.Status status) {
@@ -97,34 +71,38 @@ public class QuizActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if (item.getItemId() == R.id.next || item.getItemId() == R.id.previous) {
-
-            int temp = item.getItemId() == R.id.next ? 1 : -1;
-            if (model.getFocusedQuestion().getValue() == null) {
-                model.getFocusedQuestion().setValue(0);
-            } else if ((model.getFocusedQuestion().getValue() + temp)
-                            < model.getQuiz().getValue().getQuestions().size()
-                    && (model.getFocusedQuestion().getValue() + temp) >= 0) {
-                model.getFocusedQuestion().setValue(model.getFocusedQuestion().getValue() + temp);
-            }
-
-        } else if (item.getItemId() == R.id.time) {
-            /*TODO
-            display the quiz timer*/
-            Toast.makeText(this, "Unimplemented Feature", Toast.LENGTH_SHORT).show();
-        } else if (item.getItemId() == R.id.overview) {
-            if (!overViewActive) {
-
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.quiz_overview_container, overview)
-                        .commit();
-                overViewActive = true;
-            } else {
-                getSupportFragmentManager().beginTransaction().remove(overview).commit();
-                overViewActive = false;
-            }
+        int id = item.getItemId();
+        MutableLiveData<Integer> FocusedQuestion = model.getFocusedQuestion();
+        Integer index = FocusedQuestion.getValue();
+        switch (id) {
+            case R.id.next:
+            case R.id.previous:
+                int temp = id == R.id.next ? 1 : -1;
+                if (index == null) {
+                    FocusedQuestion.setValue(0);
+                } else if ((index + temp) < model.getQuiz().getValue().getQuestions().size()
+                        && (index + temp) >= 0) {
+                    FocusedQuestion.setValue((index + temp));
+                }
+                break;
+            case R.id.time:
+                Toast.makeText(this, "Unimplemented Feature", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.overview:
+                if (!overViewActive) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.quiz_overview_container, overview)
+                            .commit();
+                    overViewActive = true;
+                } else {
+                    getSupportFragmentManager().beginTransaction().remove(overview).commit();
+                    overViewActive = false;
+                }
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
         }
         return true;
     }
