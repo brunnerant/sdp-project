@@ -36,6 +36,7 @@ public class MockDBService implements DatabaseService {
                                                 "Banane",
                                                 "Combien y a-t-il de bananes ?",
                                                 new MatrixFormat(1, 1)),
+                                        bananaQuestion,
                                         new Question(
                                                 "The matches problem",
                                                 "How many matches can fit in a shoe of size 43?",
