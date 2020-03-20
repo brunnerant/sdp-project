@@ -1,4 +1,4 @@
-package ch.epfl.qedit.question;
+package ch.epfl.qedit.quiz.question;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;

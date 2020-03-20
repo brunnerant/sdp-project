@@ -1,44 +1,43 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.home;
+
+import android.os.Bundle;
+
+import androidx.test.espresso.matcher.ViewMatchers;
+
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.home.HomeInfoFragment;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.content.Intent;
-import android.os.Bundle;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.LoginActivity;
-import ch.epfl.qedit.view.home.HomeActivity;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-@RunWith(AndroidJUnit4ClassRunner.class)
-public class HomeActivityTest {
+public class HomeInfoFragmentTest {
     @Rule
-    public final IntentsTestRule<HomeActivity> testRule =
-            new IntentsTestRule<>(HomeActivity.class, false, false);
+    public final FragmentTestRule<?, HomeInfoFragment> testRule =
+            FragmentTestRule.create(HomeInfoFragment.class);
 
-    public void launchActivity(User user) {
-        Intent intent = new Intent();
+    public void init(User user) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(LoginActivity.USER, user);
-        intent.putExtras(bundle);
-        testRule.launchActivity(intent);
+        bundle.putSerializable("user", user);
+        HomeInfoFragment homeInfoFragment = new HomeInfoFragment();
+        homeInfoFragment.setArguments(bundle);
     }
 
-    public void finishActivity() {
-        testRule.finishActivity();
-    }
+    @After
+    public void cleanup() { testRule.finishActivity(); }
 
     public void testUserIsDisplayedCorrectly(User user, String greeting, String role) {
-        launchActivity(user);
-        onView(withId(R.id.greeting)).check(matches(withText(greeting)));
+        init(user);
+        onView(ViewMatchers.withId(R.id.greeting)).check(matches(withText(greeting)));
         onView(withId(R.id.role)).check(matches(withText(role)));
-        finishActivity();
     }
 
     @Test

@@ -1,4 +1,4 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.quiz;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -11,11 +11,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import org.junit.Assert;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -96,6 +100,27 @@ public class QuizActivityTest {
         launchActivity();
         onView(withId(R.id.overview)).perform(click());
         onView(withId(R.id.quiz_overview_container)).check(matches(not(isDisplayed())));
+        finishActivity();
+    }
+
+    @Test
+    public void testQuizOverviewIsDisplayed() {
+        launchActivity();
+        onView(ViewMatchers.withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
+        finishActivity();
+    }
+
+    @Test
+    public void testQuizOverviewOnClick() {
+        launchActivity();
+        onView(withId(R.id.quiz_overview_container)).perform(click());
+        finishActivity();
+    }
+
+    @Test
+    public void testQuestionIsNotDisplayed() {
+        launchActivity();
+        onView(withId(R.id.question)).check(matches(isDisplayed()));
         finishActivity();
     }
 }
