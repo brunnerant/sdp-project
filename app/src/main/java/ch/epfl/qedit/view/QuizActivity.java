@@ -46,9 +46,6 @@ public class QuizActivity extends AppCompatActivity {
                                 onStatusChanged(status);
                             }
                         });
-        /*Toolbar toolbar = findViewById(R.id.quizToolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
         overview = new QuizOverviewFragment();
         overViewActive = false;
     }

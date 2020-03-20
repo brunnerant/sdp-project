@@ -6,10 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.QuizActivity">
 
-
-
-
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/quiz_overview_container"
         android:layout_width="0dp"
