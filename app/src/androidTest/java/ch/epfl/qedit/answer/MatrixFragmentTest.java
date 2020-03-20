@@ -11,6 +11,7 @@ import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.view.QuizActivity;
 import ch.epfl.qedit.view.answer.MatrixFragment;
+import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import org.junit.After;
 import org.junit.Before;
