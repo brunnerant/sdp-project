@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ch.epfl.qedit.Language;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
@@ -31,6 +32,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set language
+        Language.setLanguage(LoginActivity.this, "en");//Language.getLanguage());
+
         setContentView(R.layout.activity_login);
 
         tokenText = findViewById(R.id.login_token);
