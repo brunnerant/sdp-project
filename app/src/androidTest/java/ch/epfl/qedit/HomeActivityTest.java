@@ -44,13 +44,10 @@ public class HomeActivityTest {
         finishActivity();
     }
 // TODO tests hardcoded strings https://developer.android.com/training/testing/unit-testing/instrumented-unit-tests
+    /*
     @Test
     public void testParticipantIsDisplayedCorrectly() {
-        /*
-        String packageName = getPackageName();
-        int resId = getResources().getIdentifier(aString, "string", packageName);
-
-         */
+        
         testUserIsDisplayedCorrectly(
                 new User("Bill", "Gates", User.Role.Participant),
                 getResources().getString(R.string.welcome)
@@ -58,6 +55,7 @@ public class HomeActivityTest {
                         + getInstrumentation().getContext().getResources().getString(R.string.exclamation_point),
                 getResources().getString(R.string.role_participant));
     }
+    */
 /*
     @Test
     public void testEditorIsDisplayedCorrectly() {
