@@ -1,35 +1,40 @@
-package ch.epfl.qedit.view;
+package ch.epfl.qedit.view.home;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import java.util.Objects;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeInfoFragment extends Fragment {
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home_info, container, false);
 
-        // Get the Intent that started this activity and extract the string
-        Intent intent = getIntent();
-        User user =
-                (User)
-                        Objects.requireNonNull(intent.getExtras())
-                                .getSerializable(LoginActivity.USER);
+        // Get user from the bundle created by the parent activity
+        User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
+
         String message = "Bienvenue " + Objects.requireNonNull(user).getFullName() + " !";
 
         // Capture the layout's TextView and set the string as its text
-        TextView textViewWelcome = findViewById(R.id.greeting);
+        TextView textViewWelcome = view.findViewById(R.id.greeting);
         textViewWelcome.setText(message);
 
-        TextView textViewRole = findViewById(R.id.role);
+        TextView textViewRole = view.findViewById(R.id.role);
 
         textViewRole.setText(getRoleText(user.getRole()));
+
+        return view;
     }
 
     private String getRoleText(User.Role role) {
@@ -49,10 +54,5 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return roleText;
-    }
-
-    public void goToQuizActivity(View view) {
-        Intent intent = new Intent(this, QuizActivity.class);
-        startActivity(intent);
     }
 }

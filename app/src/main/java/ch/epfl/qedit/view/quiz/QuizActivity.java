@@ -1,5 +1,6 @@
-package ch.epfl.qedit.view;
+package ch.epfl.qedit.view.quiz;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -8,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.view.quiz.QuestionFragment;
-import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
+import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.Objects;
 
 public class QuizActivity extends AppCompatActivity {
     private ProgressBar progressBar;
@@ -18,11 +19,18 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quiz_activity);
+        setContentView(R.layout.activity_quiz);
         progressBar = findViewById(R.id.quiz_progress_bar);
 
+        // Get the Intent that started this activity and extract the string
+        Intent intent = getIntent();
+        String quizID =
+                (String)
+                        Objects.requireNonNull(intent.getExtras())
+                                .getSerializable(HomeQuizListFragment.QUIZID);
+
         QuizViewModel model = new ViewModelProvider(this).get(QuizViewModel.class);
-        model.loadQuiz();
+        model.loadQuiz(quizID);
 
         getSupportFragmentManager()
                 .beginTransaction()

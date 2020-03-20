@@ -7,9 +7,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import android.content.Intent;
+import android.os.Bundle;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import ch.epfl.qedit.view.QuizActivity;
+import ch.epfl.qedit.view.home.HomeQuizListFragment;
+import ch.epfl.qedit.view.quiz.QuizActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +24,9 @@ public class QuizActivityTest {
 
     public void launchActivity() {
         Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(HomeQuizListFragment.QUIZID, "quiz0");
+        intent.putExtras(bundle);
         testRule.launchActivity(intent);
     }
 

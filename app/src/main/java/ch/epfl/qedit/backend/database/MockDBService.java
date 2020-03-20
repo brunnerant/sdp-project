@@ -23,14 +23,17 @@ public class MockDBService implements DatabaseService {
         idlingResource = new CountingIdlingResource("MockDBService");
         database = new HashMap<>();
 
+        Question bananaQuestion =
+                new Question(
+                        "Banane",
+                        "Combien y a-t-il de bananes ?",
+                        new AnswerFormat.NumberField(0, 1, 5));
+
         database.put(
-                "quizzes/quiz1",
+                "quizzes/quiz0",
                 new Quiz(
                                 Arrays.asList(
-                                        new Question(
-                                                "Banane",
-                                                "Combien y a-t-il de bananes ?",
-                                                new MatrixFormat(1, 1)),
+                                        bananaQuestion,
                                         new Question(
                                                 "The matches problem",
                                                 "How many matches can fit in a shoe of size 43?",
@@ -44,10 +47,6 @@ public class MockDBService implements DatabaseService {
                                                 "Everything",
                                                 "What is the answer to life the univere and everything ?",
                                                 new MatrixFormat(3, 3)),
-                                        new Question(
-                                                "Banane",
-                                                "Combien y a-t-il de bananes ?",
-                                                new MatrixFormat(1, 1)),
                                         new Question(
                                                 "Pomme",
                                                 "Combien y a-t-il de pommes ?",
@@ -109,6 +108,12 @@ public class MockDBService implements DatabaseService {
                                                 "Combien y a-t-il de noix ?",
                                                 new MatrixFormat(1, 1))))
                         .toBundle());
+
+        database.put("quizzes/quiz1", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
+
+        database.put("quizzes/quiz2", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
+
+        database.put("quizzes/quiz3", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
     }
 
     @Override
