@@ -43,6 +43,7 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true // TODO needed?
     }
 }
 

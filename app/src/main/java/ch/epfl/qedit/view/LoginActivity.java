@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         languageSelectionSpinner.setOnItemSelectedListener(this);
     }
 
+    // TODO debug
     @Override
     public void onItemSelected(AdapterView parent, View view, int pos, long id) {
         String language = parent.getItemAtPosition(pos).toString();
@@ -59,23 +60,23 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 .show();
         String languageCode = getResources().getStringArray(R.array.language_codes)[pos];
 /*
-// TODO debug
+
         Locale locale = new Locale("language");
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
         this.getApplicationContext().getResources().updateConfiguration(config, null);
 */
-
+/*
         String currentLanguage = ChangeLocale.getLanguage(this);
-        System.out.println("curr = " + currentLanguage + " chosen = " + languageCode);
+        //System.out.println("curr = " + currentLanguage + " chosen = " + languageCode);
         if (!currentLanguage.equals(languageCode)) {
             ChangeLocale.onAttach(this, languageCode);
-            //this.recreate(); //TODO debug
+            //this.recreate();
         }
+*/
 
 
-// TODO debug
 
 /*
         Locale locale = new Locale(languageCode);
@@ -101,12 +102,13 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> parent) {
         // Do nothing
     }
-
+/*
+    // TODO debug
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(ChangeLocale.onAttach(base, "fr")); // TODO debug
+        super.attachBaseContext(ChangeLocale.onAttach(base, "fr"));
     }
-
+*/
     public void handleLogin(View view) {
         String token = tokenText.getText().toString();
         // Sanitize token

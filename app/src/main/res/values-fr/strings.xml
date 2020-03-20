@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- French -->
+<resources>
+
+    <!-- App and logo -->
+    <string name="qedit_logo_description">Logo QEDit</string>
+
+    <!-- Login -->
+    <string name="login">Connexion</string>
+    <string name="token_hint">Token de connexion</string>
+    <string name="wrong_token_message">Token invalide</string>
+    <string name="empty_token_message">Token vide</string>
+    <string name="connection_error_message">Erreur de connexion</string>
+
+    <!-- Home -->
+    <string name="welcome">Bienvenue,</string>
+    <string name="role_administrator">Vous êtes un administrateur/une administratrice.</string>
+    <string name="role_editor">Vous êtes un éditeur/une éditrice.</string>
+    <string name="role_participant">Vous êtes un participant/une participante.</string>
+
+    <!-- Quiz -->
+    <string name="give_answer_here_hint">Votre réponse</string>
+
+    <!-- Miscellaneous -->
+    <!-- In French, there is a space before the exclammation point!
+         We cant have leading and trailing spaces in string resources,
+         so we put \u0020 to force a space. -->
+    <string name="exclamation_point">\u0020!</string>
+
+</resources>

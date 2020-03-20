@@ -1,32 +1,49 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- English -->
+<!-- Note: this default string resource is for English. In fact, if the language of the system does not
+     have an associated string resource, this default string resource is loaded and therefore the
+     app is in English. -->
+<!-- To insert a string in the application:
+     getResources().getString(R.string.<string_name>), or
+     getResources().getStringArray(R.array.<string_array_name>)[<position>]
+     To insert a string in a test:
+     add getInstrumentation().getContext(). before getResources() -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
 
     <!-- App and logo -->
     <string name="app_name" translatable="false">QEDit</string>
     <string name="qedit_logo_description">QEDit Logo</string>
 
     <!-- Language selection -->
-    <string-array name="languages">
+    <string-array name="languages" translatable="false">
+        <!-- This list of languages will be the available languages that the user can select." -->
         <item>Français</item>
         <item>English</item>
     </string-array>
-    <string-array name="language_codes">
-        <!-- Important: language codes must be in the same order as languages" -->
+    <string-array name="language_codes" translatable="false">
+        <!-- Important: language_codes must be in the same order as languages." -->
         <item>fr</item>
         <item>en</item>
     </string-array>
 
     <!-- Login -->
-    <string name="login">Connexion</string>
-    <string name="token_hint">Token de connexion</string>
-    <string name="wrong_token_message">Token invalide</string>
-    <string name="empty_token_message">Token vide</string>
-    <string name="connection_error_message">Erreur de connexion</string>
+    <string name="login">Login</string>
+    <string name="token_hint">Login token</string>
+    <string name="wrong_token_message">Invalid token</string>
+    <string name="empty_token_message">Empty token</string>
+    <string name="connection_error_message">Connection error</string>
 
     <!-- Home -->
-    <string name="button_open_quiz">Quiz</string>
+    <string name="button_open_quiz" translatable="false">Quiz</string>
+    <string name="welcome">Welcome,</string>
+    <string name="role_administrator">You are an administrator.</string>
+    <string name="role_editor">You are an editor.</string>
+    <string name="role_participant">You are a participant.</string>
 
     <!-- Quiz -->
-    <string name="empty_quiz_error_message">Ce quiz est vide</string>
-    <string name="give_answer_here_hint">Votre réponse</string>
+    <string name="give_answer_here_hint">Your answer</string>
+
+    <!-- Miscellaneous -->
+    <string name="exclamation_point">!</string>
 
 </resources>

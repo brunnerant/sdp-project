@@ -7,6 +7,7 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,13 +45,15 @@ public class HomeActivityTest {
         onView(withId(R.id.role)).check(matches(withText(role)));
         finishActivity();
     }
-
+// TODO hardcoded strings https://developer.android.com/training/testing/unit-testing/instrumented-unit-tests
     @Test
     public void testParticipantIsDisplayedCorrectly() {
         testUserIsDisplayedCorrectly(
                 new User("Bill", "Gates", User.Role.Participant),
-                "Bienvenue Bill Gates !",
-                "Vous êtes un participant.");
+                getInstrumentation().getContext().getResources().getString(R.string.welcome)
+                        + "Bill Gates"
+                        + getInstrumentation().getContext().getResources().getString(R.string.exclamation_point),
+                getInstrumentation().getContext().getResources().getString(R.string.role_participant));
     }
 
     @Test

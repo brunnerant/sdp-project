@@ -9,7 +9,7 @@ import android.annotation.TargetApi;
         import android.preference.PreferenceManager;
 
         import java.util.Locale;
-
+// TODO debug
 /**
  * This class is used to change your application locale and persist this change for the next time
  * that your app is going to be used.
