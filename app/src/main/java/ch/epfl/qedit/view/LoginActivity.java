@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 .show();
         String languageCode = getResources().getStringArray(R.array.language_codes)[pos];
 /*
+// TODO debug
         Locale locale = new Locale("language");
         Locale.setDefault(locale);
         Configuration config = new Configuration();
@@ -70,11 +71,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         System.out.println("curr = " + currentLanguage + " chosen = " + languageCode);
         if (!currentLanguage.equals(languageCode)) {
             ChangeLocale.onAttach(this, languageCode);
-            //this.recreate();
+            //this.recreate(); //TODO debug
         }
 
 
-
+// TODO debug
 
 /*
         Locale locale = new Locale(languageCode);
@@ -103,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(ChangeLocale.onAttach(base, "fr"));
+        super.attachBaseContext(ChangeLocale.onAttach(base, "fr")); // TODO debug
     }
 
     public void handleLogin(View view) {
@@ -113,7 +114,9 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
             printShortToast(R.string.empty_token_message);
             return;
         }
-        token = token.trim();
+        token = token.trim(); // Remove leading and trailing spaces in the token
+        // This regular expression will accept only strings of length 20
+        // and composed of letters and digits
         if (!token.matches("[a-zA-Z0-9]{20}")) {
             printShortToast(R.string.wrong_token_message);
             return;
