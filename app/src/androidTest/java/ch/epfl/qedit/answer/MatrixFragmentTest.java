@@ -9,7 +9,6 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.MatrixFormat;
-import ch.epfl.qedit.view.QuizActivity;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
