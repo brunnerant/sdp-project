@@ -5,7 +5,6 @@
     <string name="login_button_text">Connexion</string>
     <string name="login_action_label">Connexion</string>
 
-    <string name="buttonOpenQuiz">Quiz</string>
     <string name="wrong_token_message">Token invalide</string>
     <string name="empty_token_message">Token vide</string>
     <string name="connection_error_message">Erreur de connexion</string>

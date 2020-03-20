@@ -5,7 +5,7 @@ import ch.epfl.qedit.util.BundledData;
 import java.util.Objects;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
-public class Question implements Bundlable {
+public class Question implements Bundleable {
     /** For now, a question consists of a number, a title, and a text */
     private final String title;
 
