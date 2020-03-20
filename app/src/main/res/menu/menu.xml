@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Overview"
+        android:id="@+id/overview"
+        android:icon="@drawable/ic_menu"
+        app:showAsAction="always"
+
+        />
+    <item
+        android:title="Time"
+        android:id="@+id/time"
+        android:icon="@drawable/ic_timer"
+        app:showAsAction="always"
+        />
+    <item
+        android:title="Previous"
+        android:id="@+id/previous"
+        android:icon="@drawable/ic_arrow_back"
+        app:showAsAction="always"
+        />
+    <item
+        android:title="Next"
+        android:id="@+id/next"
+        android:icon="@drawable/ic_arrow_forward"
+        app:showAsAction="always"
+        />
+
+
+</menu>
