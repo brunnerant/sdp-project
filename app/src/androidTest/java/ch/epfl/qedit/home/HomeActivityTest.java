@@ -10,12 +10,10 @@ import android.os.Bundle;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.LoginActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

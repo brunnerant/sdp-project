@@ -38,7 +38,6 @@ public class HomeQuizListFragment extends Fragment {
         ArrayList<Map.Entry<String, String>> entries =
                 new ArrayList<>(user.getQuizzes().entrySet());
 
-
         final CustomAdapter adapter = new CustomAdapter(requireActivity(), entries);
 
         listView.setAdapter(adapter);
