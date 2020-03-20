@@ -16,6 +16,9 @@ public class AnswerFormatTest {
                         assertEquals(field.getMax(), format.getMax(), 0);
                         assertEquals(field.getDigits(), format.getDigits());
                     }
+
+                    @Override
+                    public void visitMatrixAnswerFormat(MatrixFormat matrixFormat) {}
                 });
     }
 
