@@ -28,8 +28,8 @@ public class UserTest {
         User user = new User("John", "Doe", User.Role.Administrator);
         user.addQuiz("q0", "First Quiz");
         user.addQuiz("q1", "Second Quiz");
-        assertThat(user.getQuizzesKey(), hasItems("q0", "q1"));
-        assertThat(user.getQuizzesTitle(), hasItems("First Quiz", "Second Quiz"));
+        assertThat(user.getQuizzes().keySet(), hasItems("q0", "q1"));
+        assertThat(user.getQuizzes().values(), hasItems("First Quiz", "Second Quiz"));
     }
 
     @Test
@@ -46,6 +46,6 @@ public class UserTest {
         user.addQuiz("q0", "First Quiz");
         user.addQuiz("q1", "Second Quiz");
         user.removeQuiz("q1");
-        assertFalse(user.getQuizzesKey().contains("q1"));
+        assertFalse(user.getQuizzes().keySet().contains("q1"));
     }
 }

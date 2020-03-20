@@ -1,6 +1,6 @@
 package ch.epfl.qedit.model;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -17,7 +17,7 @@ public class User implements Serializable {
      * directly the title of the quiz so that we don't have to query it from the database every time
      * we go back to the HomeActivity
      */
-    private HashMap<String, String> quizzes;
+    private final HashMap<String, String> quizzes;
 
     private final String firstName;
     private final String lastName;
@@ -42,12 +42,8 @@ public class User implements Serializable {
         quizzes.remove(key);
     }
 
-    public ImmutableList<String> getQuizzesKey() {
-        return ImmutableList.copyOf(quizzes.keySet());
-    }
-
-    public ImmutableList<String> getQuizzesTitle() {
-        return ImmutableList.copyOf(quizzes.values());
+    public ImmutableMap<String, String> getQuizzes() {
+        return ImmutableMap.copyOf(quizzes);
     }
 
     public String getFirstName() {

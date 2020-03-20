@@ -14,6 +14,7 @@ import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
+import ch.epfl.qedit.view.home.HomeActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

@@ -21,13 +21,13 @@ public class QuizViewModel extends ViewModel {
     private final MutableLiveData<Quiz> quiz = new MutableLiveData<>(null);
     private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);
 
-    public void loadQuiz() {
+    public void loadQuiz(String quizID) {
         if (status.getValue() == Status.NotLoaded) {
             status.postValue(Status.Loading);
             DatabaseFactory.getInstance()
                     .getBundle(
                             "quizzes",
-                            "quiz1",
+                            quizID,
                             new Callback<Response<BundledData>>() {
                                 @Override
                                 public void onReceive(Response<BundledData> response) {
