@@ -19,7 +19,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
-import ch.epfl.qedit.view.question.QuizOverviewFragment;
+import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
@@ -61,10 +61,10 @@ public class QuizOverviewFragmentTest {
 
     @Test
     public void testQuizIsProperlyLoaded() {
-        model.loadQuiz();
+        model.loadQuiz("quiz0");
         onData(anything())
                 .inAdapterView(withId(R.id.question_list))
                 .atPosition(0)
-                .check(matches(withText("Question 1")));
+                .check(matches(withText("1) Banane")));
     }
 }

@@ -1,4 +1,4 @@
-package ch.epfl.qedit.view.question;
+package ch.epfl.qedit.view.quiz;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,7 +21,7 @@ public class DummyAnswerFragment extends Fragment {
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.answer_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_quiz_answer, container, false);
     }
 
     @Override

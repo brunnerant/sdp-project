@@ -1,4 +1,4 @@
-package ch.epfl.qedit.view.question;
+package ch.epfl.qedit.view.quiz;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,7 +26,7 @@ public class QuestionFragment extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.question_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_quiz_question, container, false);
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
         final QuizViewModel model =
@@ -53,7 +53,6 @@ public class QuestionFragment extends Fragment {
                                         model.getFocusedQuestion().getValue());
                             }
                         });
-
         return view;
     }
 
@@ -65,11 +64,11 @@ public class QuestionFragment extends Fragment {
         Question question = quiz.getQuestions().get(index);
 
         // We have to change the question title and text
-        String questionTitleStr = "Question " + (index + 1) + ": " + question.getTitle();
+        String questionTitleStr = "Question " + (index + 1) + " - " + question.getTitle();
         questionTitle.setText(questionTitleStr);
         questionDisplay.setText(question.getText());
 
-        // And dynamically instatiate the answer form
+        // And dynamically instantiate the answer form
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()

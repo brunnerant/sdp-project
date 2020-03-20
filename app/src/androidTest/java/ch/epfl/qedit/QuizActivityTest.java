@@ -11,9 +11,13 @@ import android.content.Intent;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import ch.epfl.qedit.view.QuizActivity;
+
+import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import org.junit.Assert;
+
+import android.os.Bundle;
+import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,18 +28,22 @@ public class QuizActivityTest {
     private Integer zero = 0;
 
     @Rule
-    public final IntentsTestRule<QuizActivity> quizRule =
+    public final IntentsTestRule<QuizActivity> testRule =
             new IntentsTestRule<>(QuizActivity.class, false, false);
 
     public void launchActivity() {
         Intent intent = new Intent();
-        quizRule.launchActivity(intent);
-        model = new ViewModelProvider(quizRule.getActivity()).get(QuizViewModel.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(HomeQuizListFragment.QUIZID, "quiz0");
+        intent.putExtras(bundle);
+        testRule.launchActivity(intent);
+        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+
         while (!model.getStatus().getValue().equals(QuizViewModel.Status.Loaded)) {}
     }
 
     public void finishActivity() {
-        quizRule.finishActivity();
+        testRule.finishActivity();
     }
 
     @Test
@@ -49,17 +57,14 @@ public class QuizActivityTest {
     @Test
     public void clickPreviousNull() {
         launchActivity();
-
         onView(withId(R.id.previous)).perform(click());
         Assert.assertEquals(model.getFocusedQuestion().getValue(), zero);
-
         finishActivity();
     }
 
     @Test
     public void cantGoUnder0() {
         launchActivity();
-
         onView(withId(R.id.previous)).perform(click());
         onView(withId(R.id.previous)).perform(click());
         Assert.assertEquals(model.getFocusedQuestion().getValue(), zero);
@@ -69,12 +74,15 @@ public class QuizActivityTest {
     @Test
     public void cantGoAboveQuizSize() {
         launchActivity();
+
         for (int i = 0; i < model.getQuiz().getValue().getQuestions().size(); ++i) {
             onView(withId(R.id.next)).perform(click());
         }
+
         onView(withId(R.id.next)).perform(click());
         Integer index = model.getQuiz().getValue().getQuestions().size() - 1;
         Assert.assertEquals(model.getFocusedQuestion().getValue(), index);
+
         finishActivity();
     }
 

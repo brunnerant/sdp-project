@@ -14,20 +14,20 @@ public class QuizViewModel extends ViewModel {
         NotLoaded,
         Loading,
         Loaded,
-        CouldntLoad
+        CouldNotLoad
     }
 
     private final MutableLiveData<Status> status = new MutableLiveData<>(Status.NotLoaded);
     private final MutableLiveData<Quiz> quiz = new MutableLiveData<>(null);
     private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);
 
-    public void loadQuiz() {
+    public void loadQuiz(String quizID) {
         if (status.getValue() == Status.NotLoaded) {
             status.postValue(Status.Loading);
             DatabaseFactory.getInstance()
                     .getBundle(
                             "quizzes",
-                            "quiz1",
+                            quizID,
                             new Callback<Response<BundledData>>() {
                                 @Override
                                 public void onReceive(Response<BundledData> response) {
@@ -35,7 +35,7 @@ public class QuizViewModel extends ViewModel {
                                         quiz.postValue(Quiz.fromBundle(response.getData()));
                                         status.postValue(Status.Loaded);
                                     } else {
-                                        status.postValue(Status.CouldntLoad);
+                                        status.postValue(Status.CouldNotLoad);
                                     }
                                 }
                             });

@@ -42,4 +42,12 @@ public class QuizTest {
                     }
                 });
     }
+
+    @Test
+    public void getTitleTest() {
+        Quiz quiz = new Quiz(initQuestionList());
+        Quiz quiz1 = new Quiz("About Math and Spider", initQuestionList());
+        assertEquals(quiz.getTitle(), "Untitled Quiz");
+        assertEquals(quiz1.getTitle(), "About Math and Spider");
+    }
 }

@@ -21,23 +21,84 @@ public class MockDBService implements DatabaseService {
         idlingResource = new CountingIdlingResource("MockDBService");
         database = new HashMap<>();
 
+        Question bananaQuestion =
+                new Question(
+                        "Banane",
+                        "Combien y a-t-il de bananes ?",
+                        new AnswerFormat.NumberField(0, 1, 5));
+
         database.put(
-                "quizzes/quiz1",
+                "quizzes/quiz0",
                 new Quiz(
                                 Arrays.asList(
+                                        bananaQuestion,
                                         new Question(
-                                                "The matches problem",
-                                                "How many matches can fit in a shoe of size 43?",
+                                                "Pomme",
+                                                "Combien y a-t-il de pommes ?",
                                                 new AnswerFormat.NumberField(0, 1, 5)),
                                         new Question(
-                                                "Pigeons",
-                                                "How many pigeons are there on Earth? (Hint: do not count yourself)",
+                                                "Abricot",
+                                                "Combien y a-t-il d'abricots ?",
                                                 new AnswerFormat.NumberField(0, 1, 5)),
                                         new Question(
-                                                "Kitchen",
-                                                "Oyster",
+                                                "Cerise",
+                                                "Combien y a-t-il de cerises ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Amande",
+                                                "Combien y a-t-il d'amandes ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Ananas",
+                                                "Combien y a-t-il d'ananas ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Avocat",
+                                                "Combien y a-t-il d'avocats ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Citron",
+                                                "Combien y a-t-il de citrons ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Clémentine",
+                                                "Combien y a-t-il de clémentines ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Figue",
+                                                "Combien y a-t-il de figues ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Fraise",
+                                                "Combien y a-t-il de fraises ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Framboise",
+                                                "Combien y a-t-il de framboises ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Kiwi",
+                                                "Combien y a-t-il de kiwis ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Mandarine",
+                                                "Combien y a-t-il de mandarines ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Melon",
+                                                "Combien y a-t-il de melons ?",
+                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        new Question(
+                                                "Noix",
+                                                "Combien y a-t-il de noix ?",
                                                 new AnswerFormat.NumberField(0, 1, 5))))
                         .toBundle());
+
+        database.put("quizzes/quiz1", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
+
+        database.put("quizzes/quiz2", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
+
+        database.put("quizzes/quiz3", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
     }
 
     @Override

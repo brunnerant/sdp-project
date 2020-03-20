@@ -1,4 +1,4 @@
-package ch.epfl.qedit.view.question;
+package ch.epfl.qedit.view.quiz;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +27,7 @@ public class QuizOverviewFragment extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.quiz_overview_fragment, container, false);
+        final View view = inflater.inflate(R.layout.fragment_quiz_overview, container, false);
         listView = view.findViewById(R.id.question_list);
 
         // Listen to the quiz live data
@@ -64,7 +64,10 @@ public class QuizOverviewFragment extends Fragment {
         String[] overviewItems = new String[questions.size()];
 
         // For each question of the quiz, we create an item in the list view
-        for (int i = 0; i < questions.size(); ++i) overviewItems[i] = "Question " + (i + 1);
+        for (int i = 0; i < questions.size(); ++i) {
+            String title = questions.get(i).getTitle();
+            overviewItems[i] = (i + 1) + ") " + title;
+        }
 
         ArrayAdapter<String> listViewAdapter =
                 new ArrayAdapter<>(
