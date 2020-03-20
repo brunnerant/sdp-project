@@ -78,6 +78,7 @@ public class LoginActivityTest {
 
     @Test
     public void testConnectionErrorCannotLogIn() {
+        //noinspection SpellCheckingInspection
         testLoginFailed("fjd4ywnzcCcLHaVb7oKg", R.string.connection_error_message);
     }
 
@@ -93,12 +94,14 @@ public class LoginActivityTest {
 
     @Test
     public void testParticipantCanLogIn() {
+        //noinspection SpellCheckingInspection
         testLoginSuccessful(
                 "fjd4ywnzXCXLHaVb7oKg", new User("Marcel", "Doe", User.Role.Participant));
     }
 
     @Test
     public void testEditorCanLogIn() {
+        //noinspection SpellCheckingInspection
         testLoginSuccessful("R4rXRVU3EMkgm5YEW52Q", new User("Cosme", "Jordan", User.Role.Editor));
     }
 

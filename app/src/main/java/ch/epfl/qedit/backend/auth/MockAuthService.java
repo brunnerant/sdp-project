@@ -18,10 +18,13 @@ public class MockAuthService implements AuthenticationService {
     private final HashMap<String, Response<User>> userResponses =
             new HashMap<String, Response<User>>() {
                 {
+                    //noinspection SpellCheckingInspection
                     put("fjd4ywnzcCcLHaVb7oKg", Response.<User>error(CONNECTION_ERROR));
+                    //noinspection SpellCheckingInspection
                     put(
                             "fjd4ywnzXCXLHaVb7oKg",
                             Response.ok(new User("Marcel", "Doe", User.Role.Participant)));
+                    //noinspection SpellCheckingInspection,SpellCheckingInspection
                     put(
                             "R4rXRVU3EMkgm5YEW52Q",
                             Response.ok(new User("Cosme", "Jordan", User.Role.Editor)));

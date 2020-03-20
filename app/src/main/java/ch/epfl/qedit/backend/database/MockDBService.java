@@ -17,6 +17,7 @@ public class MockDBService implements DatabaseService {
     private CountingIdlingResource idlingResource;
     private final Map<String, BundledData> database;
 
+    @SuppressWarnings("SpellCheckingInspection")
     public MockDBService() {
         idlingResource = new CountingIdlingResource("MockDBService");
         database = new HashMap<>();
