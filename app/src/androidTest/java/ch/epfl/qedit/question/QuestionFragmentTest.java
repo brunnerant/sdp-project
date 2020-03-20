@@ -61,6 +61,6 @@ public class QuestionFragmentTest {
         onView(withId(R.id.question_title)).check(matches(withText("Question 1 - Banane")));
         onView(withId(R.id.question_display))
                 .check(matches(withText("Combien y a-t-il de bananes ?")));
-        onView(withId(R.id.answer_fragment)).check(matches(isDisplayed()));
+        onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
     }
 }
