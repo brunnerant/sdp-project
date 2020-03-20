@@ -1,5 +1,23 @@
 package ch.epfl.qedit.home;
 
+<<<<<<< HEAD
+=======
+import android.os.Bundle;
+
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.home.HomeInfoFragment;
+import ch.epfl.qedit.view.home.HomeQuizListFragment;
+import ch.epfl.qedit.view.quiz.QuizActivity;
+
+>>>>>>> Tests for both fragments
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -11,6 +29,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
+<<<<<<< HEAD
 import android.os.Bundle;
 import androidx.test.espresso.intent.Intents;
 import ch.epfl.qedit.R;
@@ -31,11 +50,21 @@ public class HomeQuizListFragmentTest {
     @Before
     public void init() {
         Intents.init();
+=======
+public class HomeQuizListFragmentTest {
+    @Rule
+    public final FragmentTestRule<?, HomeQuizListFragment> testRule =
+            FragmentTestRule.create(HomeQuizListFragment.class);
+
+    @Before
+    public void init() {
+>>>>>>> Tests for both fragments
         User user = new User("Marcel", "Doe", User.Role.Participant);
         user.addQuiz("quiz0", "Qualification EPFL");
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("user", user);
+<<<<<<< HEAD
         HomeQuizListFragment homeQuizListFragment = new HomeQuizListFragment();
         homeQuizListFragment.setArguments(bundle);
 
@@ -47,6 +76,14 @@ public class HomeQuizListFragmentTest {
         Intents.release();
         testRule.finishActivity();
     }
+=======
+        HomeInfoFragment homeInfoFragment = new HomeInfoFragment();
+        homeInfoFragment.setArguments(bundle);
+    }
+
+    @After
+    public void cleanup() { testRule.finishActivity(); }
+>>>>>>> Tests for both fragments
 
     @Test
     public void testQuizListIsProperlyLoaded() {
@@ -58,11 +95,15 @@ public class HomeQuizListFragmentTest {
 
     @Test
     public void testClickOnQuizLaunchesQuizActivity() {
+<<<<<<< HEAD
         onData(anything())
                 .inAdapterView(withId(R.id.home_quiz_list))
                 .atPosition(0)
                 .perform(click());
 
+=======
+        onData(anything()).inAdapterView(withId(R.id.home_quiz_list)).atPosition(0).perform(click());
+>>>>>>> Tests for both fragments
         intended(
                 allOf(
                         hasComponent(QuizActivity.class.getName()),
