@@ -87,7 +87,6 @@ public class QuizActivityTest {
     @Test
     public void quizOverviewDisplayed() {
         launchActivity();
-        onView(withId(R.id.overview)).perform(click());
         onView(withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
         finishActivity();
     }
@@ -95,7 +94,6 @@ public class QuizActivityTest {
     @Test
     public void quizOverviewDisappears() {
         launchActivity();
-        onView(withId(R.id.overview)).perform(click());
         onView(withId(R.id.overview)).perform(click());
         onView(withId(R.id.quiz_overview_container)).check(matches(not(isDisplayed())));
         finishActivity();
