@@ -21,14 +21,17 @@ public class MockDBService implements DatabaseService {
         idlingResource = new CountingIdlingResource("MockDBService");
         database = new HashMap<>();
 
+        Question bananaQuestion =
+                new Question(
+                        "Banane",
+                        "Combien y a-t-il de bananes ?",
+                        new AnswerFormat.NumberField(0, 1, 5));
+
         database.put(
-                "quizzes/quiz1",
+                "quizzes/quiz0",
                 new Quiz(
                                 Arrays.asList(
-                                        new Question(
-                                                "Banane",
-                                                "Combien y a-t-il de bananes ?",
-                                                new AnswerFormat.NumberField(0, 1, 5)),
+                                        bananaQuestion,
                                         new Question(
                                                 "Pomme",
                                                 "Combien y a-t-il de pommes ?",
@@ -90,6 +93,12 @@ public class MockDBService implements DatabaseService {
                                                 "Combien y a-t-il de noix ?",
                                                 new AnswerFormat.NumberField(0, 1, 5))))
                         .toBundle());
+
+        database.put("quizzes/quiz1", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
+
+        database.put("quizzes/quiz2", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
+
+        database.put("quizzes/quiz3", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
     }
 
     @Override

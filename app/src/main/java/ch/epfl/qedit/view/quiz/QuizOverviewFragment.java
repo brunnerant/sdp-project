@@ -27,7 +27,7 @@ public class QuizOverviewFragment extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.quiz_overview_fragment, container, false);
+        final View view = inflater.inflate(R.layout.fragment_quiz_overview, container, false);
         listView = view.findViewById(R.id.question_list);
 
         // Listen to the quiz live data
