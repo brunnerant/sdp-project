@@ -73,7 +73,7 @@ public class QuestionFragment extends Fragment {
         MatrixFragment matrixFragment = new MatrixFragment();
         MatrixFormat matrixFormat = (MatrixFormat) question.getFormat();
         Bundle newB = new Bundle();
-        newB.putSerializable("m0", matrixFormat);
+        newB.putSerializable(MatrixFragment.MATRIXID, matrixFormat);
         matrixFragment.setArguments(newB);
 
         // And dynamically instatiate the answer form

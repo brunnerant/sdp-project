@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
@@ -36,10 +40,7 @@ public class HomeQuizListFragment extends Fragment {
         ArrayList<Map.Entry<String, String>> entries =
                 new ArrayList<>(user.getQuizzes().entrySet());
 
-        final CustomAdapter adapter =
-                new CustomAdapter(
-                        requireActivity(),
-                        entries); // TODO order does change as it comes from a set
+        final CustomAdapter adapter = new CustomAdapter(requireActivity(), entries);
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(
@@ -54,7 +55,32 @@ public class HomeQuizListFragment extends Fragment {
                     }
                 });
 
+        // Have to set it to true to show the menu, if the user is an editor
+        if (user.getRole() == User.Role.Editor) {
+            setHasOptionsMenu(true);
+        }
+
         return view;
+    }
+
+    private void addPopUp() {}
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_editor_mode, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.add:
+                break;
+        }
+
+        return true;
     }
 
     private void startQuizActivity(String quizID) {
@@ -95,7 +121,7 @@ public class HomeQuizListFragment extends Fragment {
             if (view == null) {
                 view = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }
-            TextView text = (TextView) view.findViewById(android.R.id.text1);
+            TextView text = view.findViewById(android.R.id.text1);
             text.setText(entries.get(position).getValue());
             return view;
         }

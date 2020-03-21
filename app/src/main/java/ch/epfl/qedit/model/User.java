@@ -3,6 +3,7 @@ package ch.epfl.qedit.model;
 import com.google.common.collect.ImmutableMap;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /** Represents a user of the QEDit app. */
 public class User implements Serializable {
@@ -27,7 +28,7 @@ public class User implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
-        this.quizzes = new HashMap<>();
+        this.quizzes = new LinkedHashMap<>();
     }
 
     /**

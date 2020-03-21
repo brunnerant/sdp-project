@@ -59,6 +59,12 @@ public class MockAuthService implements AuthenticationService {
     private User createCosme() {
         User cosme = new User("Cosme", "Jordan", User.Role.Editor);
         cosme.addQuiz("quiz0", "Qualification EPFL");
+        cosme.addQuiz("quiz1", "Quizz 1");
+        cosme.addQuiz("quiz2", "Quizz 2");
+        cosme.addQuiz("quiz3", "Quizz 3");
+        cosme.addQuiz("quiz4", "Quizz 4");
+        cosme.addQuiz("quiz5", "Quizz 5");
+        cosme.addQuiz("quiz6", "Quizz 6");
 
         return cosme;
     }

@@ -19,6 +19,7 @@ import ch.epfl.qedit.model.MatrixFormat;
 import java.util.ArrayList;
 
 public class MatrixFragment extends Fragment {
+    public static final String MATRIXID = "ch.epfl.qedit.view.answer.MATRIXID";
     private TableLayout tableLayout;
     public MatrixFormat matrixFormat;
 
@@ -29,7 +30,7 @@ public class MatrixFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        matrixFormat = (MatrixFormat) getArguments().getSerializable("m0");
+        matrixFormat = (MatrixFormat) getArguments().getSerializable(MATRIXID);
     }
 
     @Override

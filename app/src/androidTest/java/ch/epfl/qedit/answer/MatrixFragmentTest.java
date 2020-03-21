@@ -45,22 +45,16 @@ public class MatrixFragmentTest {
     }
 
     public void launchFragment() {
-        matrixFragment = new MatrixFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("m0", MatrixFormat.createMatrix3x3());
-        matrixFragment.setArguments(bundle);
-        // testRule.launchFragment(matrixFragment);
-    }
-
-    @Test
-    public void testFragmentIsEmptyByDefault() {
-        // matrixFragment = new MatrixFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("m0", MatrixFormat.createMatrix3x3());
+        bundle.putSerializable(MatrixFragment.MATRIXID, MatrixFormat.createMatrix3x3());
         // matrixFragment.setArguments(bundle);
         Intent intent = new Intent();
         intent.putExtras(bundle);
         testRule.launchActivity(intent);
+    }
+
+    @Test
+    public void testFragmentIsEmptyByDefault() {
 
         // testRule.getActivity().getSupportFragmentManager().getFragments().get(R.id.answersTable);
         // onView(withId(R.id.answersTable));
