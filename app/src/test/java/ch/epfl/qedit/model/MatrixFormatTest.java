@@ -27,13 +27,6 @@ public class MatrixFormatTest {
     }
 
     @Test
-    public void testId() {
-        MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3();
-        matrixFormat.setId("m1");
-        assertEquals(matrixFormat.getId(), "m1");
-    }
-
-    @Test
     public void checkMatrix3x3WithParam() {
         MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3(true, true, 5);
 
