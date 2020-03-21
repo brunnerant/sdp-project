@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,12 +16,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
+
+import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG;
+import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_IDLE;
+import static androidx.recyclerview.widget.ItemTouchHelper.DOWN;
+import static androidx.recyclerview.widget.ItemTouchHelper.UP;
 
 
 /**
@@ -51,9 +58,11 @@ public class EditOverviewFragment extends Fragment {
         recyclerView = view.findViewById(R.id.question_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recyclerView.setAdapter(new QuestionListAdapter(questions));
+        QuestionListAdapter adapter = new QuestionListAdapter(questions);
+        recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(),
                 DividerItemDecoration.VERTICAL));
+        new ItemTouchHelper(new QuestionTouchCallback(adapter)).attachToRecyclerView(recyclerView);
 
         return view;
     }
@@ -110,5 +119,45 @@ public class EditOverviewFragment extends Fragment {
         public int getItemCount() {
             return questions.size();
         }
+
+        public void moveItem(int from, int to) {
+            if (from == to) return;
+
+            if (from < to) {
+                for (int i = from; i < to; i++)
+                    Collections.swap(questions, i, i + 1);
+            } else {
+                for (int i = from; i > to; i--)
+                    Collections.swap(questions, i, i - 1);
+            }
+
+            if (from == selectedQuestion)
+                selectedQuestion = to;
+
+            notifyItemMoved(from, to);
+        }
+    }
+
+    private static class QuestionTouchCallback extends ItemTouchHelper.Callback {
+
+        private final QuestionListAdapter adapter;
+
+        public QuestionTouchCallback(QuestionListAdapter adapter) {
+            this.adapter = adapter;
+        }
+
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            return makeFlag(ACTION_STATE_IDLE, UP | DOWN) | makeFlag(ACTION_STATE_DRAG, UP | DOWN);
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            adapter.moveItem(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {}
     }
 }
