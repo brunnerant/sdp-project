@@ -35,11 +35,14 @@ public class Quiz implements Bundlable {
 
     @Override
     public BundledData toBundle() {
-        return new BundledData().update("questions", questions);
+        return new BundledData().update("questions", questions).update("title", title);
     }
 
     public static Quiz fromBundle(BundledData bundle) throws IllegalArgumentException {
         List<Question> questions = (List<Question>) bundle.get("questions");
-        return new Quiz(questions);
+        String title = (String) bundle.get("title");
+        return new Quiz(title, questions);
     }
 }
+
+
