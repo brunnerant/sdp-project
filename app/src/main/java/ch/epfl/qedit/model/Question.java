@@ -20,6 +20,11 @@ public class Question implements Bundleable {
         this.format = Objects.requireNonNull(format);
     }
 
+    @Override
+    public Question clone(){
+        return new Question(title, text, format.clone());
+    }
+
     public String getTitle() {
         return title;
     }

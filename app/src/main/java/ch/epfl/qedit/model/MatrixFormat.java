@@ -31,6 +31,14 @@ public class MatrixFormat extends AnswerFormat {
         this.hintString = hint();
     }
 
+    @Override
+    public MatrixFormat clone(){
+        MatrixFormat mat = new MatrixFormat(tableColumnsNumber, tableRowsNumber, hasDecimal, hasSign, maxCharacters);
+        mat.id = this.id;
+        mat.hintString = this.hintString;
+        return mat;
+    }
+
     public static MatrixFormat createMatrix3x3() {
         return new MatrixFormat(3, 3, true, true, 5);
     }
