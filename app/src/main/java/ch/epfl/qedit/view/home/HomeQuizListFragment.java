@@ -28,6 +28,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.w3c.dom.Text;
 
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import java.util.ArrayList;
@@ -39,6 +41,10 @@ public class HomeQuizListFragment extends Fragment {
     public static final String QUIZID = "ch.epfl.qedit.view.QUIZID";
 
     private RecyclerView recyclerView;
+    private CustomAdapter customAdapter;
+    private User user;
+
+    // make it final
 
     @Override
     public View onCreateView(
@@ -49,44 +55,30 @@ public class HomeQuizListFragment extends Fragment {
 
         // Get user from the bundle created by the parent activity
         final User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
+        this.user = user;
 
-        final ArrayList<Map.Entry<String, String>> entries =
-                new ArrayList<>(user.getQuizzes().entrySet());
-
-        final CustomAdapter adapter = new CustomAdapter(requireActivity(), entries);
-
-        recyclerView.setAdapter(adapter);
+        this.customAdapter = new CustomAdapter(requireActivity(), user);
+        recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        //listView.setOnItemClickListener(
-//        listView.setOnClickListener(
-//                new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(
-//                            AdapterView<?> parent, View view, int position, long id) {
-//                        Map.Entry<String, String> item =
-//                                (Map.Entry<String, String>) adapter.getItem(position);
+
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+//            @Override
+//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                return false;
+//            }
 //
-//                        startQuizActivity(item.getKey());
-//                    }
-//                });
+//            @Override
+//            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+//                // Remove item from backing list here
+//                adapter.notifyDataSetChanged();
+                    // TODO Show trash can and edit stuff on other side
+//            }
+//        });
 
+//        itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                // Remove item from backing list here
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        itemTouchHelper.attachToRecyclerView(recyclerView);
         // Have to set it to true to show the menu, if the user is an editor
         if (user.getRole() == User.Role.Editor) {
             setHasOptionsMenu(true);
@@ -95,11 +87,25 @@ public class HomeQuizListFragment extends Fragment {
         return view;
     }
 
+    // TODO delete below
+    int i = 0;
     private void addQuizz() {
+        addPopUp();
 
+        // TODO Let popup handle this
+        String title = "Some test for now" + i;
+        ++i;
+
+        int insertIndex = user.getQuizzes().size();
+        while(user.addQuiz(title, title) == true) {
+            // TODO Popup saying not possible must enter something else
+        }
+        customAdapter.notifyItemInserted(insertIndex);
     }
 
-    private void addPopUp() {}
+    private void addPopUp() {
+        // TODO create pop up for name of quizz, or maybe find another solution
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -129,24 +135,13 @@ public class HomeQuizListFragment extends Fragment {
     }
 
     private class CustomAdapter extends RecyclerView.Adapter {
-        private ArrayList<Map.Entry<String, String>> entries;
         private LayoutInflater inflater;
+        private User user;
 
-
-        public CustomAdapter(Context context, ArrayList<Map.Entry<String, String>> entries) {
-            this.entries = entries;
+        public CustomAdapter(Context context, User user) {
+            this.user = user;
             inflater = LayoutInflater.from(context);
         }
-
-//        @Override
-//        public int getCount() {
-//            return entries.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int position) {
-//            return entries.get(position);
-//        }
 
         @NonNull
         @Override
@@ -156,13 +151,16 @@ public class HomeQuizListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            CustomViewHolder customViewHolder = ((CustomViewHolder)holder);
-            customViewHolder.name.setText(entries.get(position).getValue());
-            final int position2 = position;
+            CustomViewHolder customViewHolder = (CustomViewHolder) holder;
+
+            // TODO Find a better than this...
+            final Map.Entry<String, String> entryScrew = new ArrayList<>(user.getQuizzes().entrySet()).get(position);
+            customViewHolder.name.setText(entryScrew.getValue());
+
             customViewHolder.parentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                     public void onClick(View v){
-                            Map.Entry<String, String> item = entries.get(position2);
+                            Map.Entry<String, String> item = entryScrew;
                         startQuizActivity(item.getKey());
                     }
                 });
@@ -175,19 +173,9 @@ public class HomeQuizListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return entries.size();
+            return user.getQuizzes().size();
         }
 
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            View view = convertView;
-//            if (view == null) {
-//                view = inflater.inflate(android.R.layout.simple_list_item_1, null);
-//            }
-//            TextView text = view.findViewById(android.R.id.text1);
-//            text.setText(entries.get(position).getValue());
-//            return view;
-//        }
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         private View parentView;
         private TextView name;
