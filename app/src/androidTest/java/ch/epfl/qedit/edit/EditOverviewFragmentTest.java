@@ -4,25 +4,20 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.*;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.RecyclerViewMatcher.withRecyclerView;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
-
-import static androidx.test.espresso.contrib.RecyclerViewActions.*;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.edit.EditOverviewFragment;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 public class EditOverviewFragmentTest {
     @Rule
@@ -35,9 +30,7 @@ public class EditOverviewFragmentTest {
 
     public static ViewInteraction itemView(int position, int id, ViewMatchers... matchers) {
         scrollTo(position);
-        return onView(
-                withRecyclerView(R.id.question_list)
-                        .atPositionOnView(position, id));
+        return onView(withRecyclerView(R.id.question_list).atPositionOnView(position, id));
     }
 
     public static ViewInteraction overlay(int position) {
@@ -51,10 +44,8 @@ public class EditOverviewFragmentTest {
 
     public void testOverlayAt(int position, int size) {
         for (int i = 0; i < size; i++) {
-            if (i == position)
-                overlay(i).check(matches(isDisplayed()));
-            else
-                overlay(i).check(matches(not(isDisplayed())));
+            if (i == position) overlay(i).check(matches(isDisplayed()));
+            else overlay(i).check(matches(not(isDisplayed())));
         }
     }
 
