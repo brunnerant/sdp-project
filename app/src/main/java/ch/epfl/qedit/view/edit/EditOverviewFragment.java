@@ -27,7 +27,7 @@ public class EditOverviewFragment extends Fragment {
 
         // For now, we just add dummy questions to the quiz
         questions = new LinkedList<>();
-        for (numQuestions = 0; numQuestions < 20; numQuestions++)
+        for (numQuestions = 0; numQuestions < 5; numQuestions++)
             questions.add(
                     new Question(
                             "Q" + (numQuestions + 1),
