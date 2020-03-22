@@ -25,13 +25,14 @@ import java.util.Objects;
 
 /**
  * This class is a utility class that allows to create editable lists. It supports the addition,
- * removal and reordering of items. Items additionally have an edit button that can be linked
- * to a custom action.
+ * removal and reordering of items. Items additionally have an edit button that can be linked to a
+ * custom action.
  */
 public class ListEditView extends RecyclerView {
 
     /**
      * This interface is used to retrieve the text for one of the items in the list.
+     *
      * @param <T> the type of the list items
      */
     public interface GetItemText<T> {
@@ -191,6 +192,7 @@ public class ListEditView extends RecyclerView {
 
     /**
      * Binds this ListEditView with the given adapter
+     *
      * @param adapter the ListEditAdapter to bind with the ListEditView
      */
     public void setAdapter(ListEditAdapter adapter) {
