@@ -10,7 +10,6 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.view.util.ListEditView;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +17,7 @@ import java.util.List;
 public class EditOverviewFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<Question> questions;
+    private int numQuestions;
 
     @Override
     public View onCreateView(
@@ -25,29 +25,44 @@ public class EditOverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
 
-        // For now, we just create a dummy list of questions. We will later link it to the rest.
-        questions =
-                new LinkedList<>(
-                        Arrays.asList(
-                                new Question("Q1", "why ?", new MatrixFormat(1, 1)),
-                                new Question("Q2", "how ?", new MatrixFormat(1, 1)),
-                                new Question("Q3", "what ?", new MatrixFormat(1, 1)),
-                                new Question("Q4", "when ?", new MatrixFormat(1, 1))));
+        // For now, we just add dummy questions to the quiz
+        questions = new LinkedList<>();
+        for (numQuestions = 0; numQuestions < 20; numQuestions++)
+            questions.add(
+                    new Question(
+                            "Q" + (numQuestions + 1),
+                            "is it " + (numQuestions + 1) + " ?",
+                            new MatrixFormat(1, 1)));
 
-        for (int i = 5; i <= 20; i++)
-            questions.add(new Question("Q" + i, "is it " + i + " ?", new MatrixFormat(1, 1)));
-
-        // Retrieve and configure the recycler view
-        ListEditView listEditView = view.findViewById(R.id.question_list);
-        listEditView.setAdapter(
-                new ListEditView.ListEditAdapter<Question>(
+        // Create an adapter for the question list
+        final ListEditView.ListEditAdapter<Question> adapter =
+                new ListEditView.ListEditAdapter<>(
                         questions,
                         new ListEditView.GetItemText<Question>() {
                             @Override
-                            public String getText(Question question) {
-                                return question.getTitle();
+                            public String getText(Question item) {
+                                return item.getTitle();
                             }
-                        }));
+                        });
+
+        // Retrieve and configure the recycler view
+        ListEditView listEditView = view.findViewById(R.id.question_list);
+        listEditView.setAdapter(adapter);
+
+        // Configure the add button
+        view.findViewById(R.id.add_question_button)
+                .setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                numQuestions++;
+                                adapter.addItem(
+                                        new Question(
+                                                "Q" + numQuestions,
+                                                "is it " + numQuestions + " ?",
+                                                new MatrixFormat(1, 1)));
+                            }
+                        });
 
         return view;
     }

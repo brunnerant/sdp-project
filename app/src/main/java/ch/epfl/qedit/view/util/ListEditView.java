@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -40,7 +41,17 @@ public class ListEditView extends RecyclerView {
             super(itemView);
             text = itemView.findViewById(android.R.id.text1);
             overlayButtons = itemView.findViewById(R.id.overlay_buttons);
+            ImageButton editButton = itemView.findViewById(R.id.edit_button);
             itemView.setOnClickListener(this);
+
+            itemView.findViewById(R.id.delete_button)
+                    .setOnClickListener(
+                            new OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    adapter.removeItem(getLayoutPosition());
+                                }
+                            });
         }
 
         void onTextChanged(String newText) {
@@ -99,6 +110,19 @@ public class ListEditView extends RecyclerView {
             this.getText = Objects.requireNonNull(getText);
         }
 
+        public void addItem(T item) {
+            items.add(item);
+            notifyItemInserted(items.size() - 1);
+        }
+
+        private void removeItem(int position) {
+            if (position == listEditView.selectedQuestion)
+                listEditView.selectedQuestion = NO_POSITION;
+
+            items.remove(position);
+            notifyItemRemoved(position);
+        }
+
         @NonNull
         @Override
         public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -128,7 +152,10 @@ public class ListEditView extends RecyclerView {
                 for (int i = from; i > to; i--) Collections.swap(items, i, i - 1);
             }
 
-            if (from == listEditView.selectedQuestion) listEditView.selectedQuestion = to;
+            int sel = listEditView.selectedQuestion;
+            if (from == sel) listEditView.selectedQuestion = to;
+            else if (from < sel && to >= sel) listEditView.selectedQuestion--;
+            else if (from > sel && to <= sel) listEditView.selectedQuestion++;
 
             notifyItemMoved(from, to);
         }
