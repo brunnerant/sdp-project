@@ -23,4 +23,8 @@ public interface DatabaseService {
      */
     void getBundle(
             String collection, String document, Callback<Response<BundledData>> responseCallback);
+
+    void getQuizQuestions(String quizID, Callback<Response<BundledData>> responseCallback);
+
+    void getQuizTitle(String quizID, Callback<Response<BundledData>> responseCallback);
 }

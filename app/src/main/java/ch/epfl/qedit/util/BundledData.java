@@ -14,6 +14,11 @@ public class BundledData {
         this.attributes = new HashMap<>(attributes);
     }
 
+    public BundledData(String attribute, Object value) {
+        this.attributes = new HashMap<>();
+        this.update(attribute, value);
+    }
+
     public Object get(String attribute) {
         if (!attributes.containsKey(attribute)) throw new IllegalArgumentException();
 
