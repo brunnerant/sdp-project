@@ -32,8 +32,10 @@ public class MatrixFormat extends AnswerFormat {
     }
 
     @Override
-    public MatrixFormat clone(){
-        MatrixFormat mat = new MatrixFormat(tableColumnsNumber, tableRowsNumber, hasDecimal, hasSign, maxCharacters);
+    public MatrixFormat clone() {
+        MatrixFormat mat =
+                new MatrixFormat(
+                        tableColumnsNumber, tableRowsNumber, hasDecimal, hasSign, maxCharacters);
         mat.id = this.id;
         mat.hintString = this.hintString;
         return mat;

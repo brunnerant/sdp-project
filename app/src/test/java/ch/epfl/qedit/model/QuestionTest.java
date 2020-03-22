@@ -9,7 +9,7 @@ import org.junit.Test;
 public class QuestionTest {
     @Test
     public void questionConstructorIsCorrect() {
-        AnswerFormat f = new AnswerFormat.NumberField(0, 1, 0);
+        AnswerFormat f = new MatrixFormat(1, 1);
         Question q = new Question("Question 1", "How old are you ?", f);
 
         assertEquals(q.getTitle(), "Question 1");
@@ -19,12 +19,12 @@ public class QuestionTest {
 
     @Test(expected = NullPointerException.class)
     public void invalidQuestionsCannotBeBuilt2() {
-        new Question(null, "", new AnswerFormat.NumberField(0, 1, 0));
+        new Question(null, "", new MatrixFormat(1, 1));
     }
 
     @Test(expected = NullPointerException.class)
     public void invalidQuestionsCannotBeBuilt3() {
-        new Question("", null, new AnswerFormat.NumberField(0, 1, 0));
+        new Question("", null, new MatrixFormat(1, 1));
     }
 
     @Test(expected = NullPointerException.class)
@@ -34,7 +34,7 @@ public class QuestionTest {
 
     @Test
     public void toBundleTest() {
-        AnswerFormat f = new AnswerFormat.NumberField(0, 1, 0);
+        AnswerFormat f = new MatrixFormat(1, 1);
         Question q = new Question("Question 1", "How old are you ?", f);
         BundledData b = q.toBundle();
         assertEquals("Question 1", b.get("title"));
@@ -43,7 +43,7 @@ public class QuestionTest {
 
     @Test
     public void fromBundleTest() {
-        AnswerFormat f = new AnswerFormat.NumberField(0, 1, 0);
+        AnswerFormat f = new MatrixFormat(1, 1);
         Question q = new Question("Question 1", "How old are you ?", f);
         BundledData b = q.toBundle();
         assertEquals("Question 1", fromBundle(b).getTitle());

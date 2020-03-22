@@ -13,9 +13,9 @@ public class QuizTest {
 
     private List<Question> initQuestionList() {
         List<Question> questions = new ArrayList<>();
-        questions.add(new Question("q1", "text", new AnswerFormat.NumberField(10, 20, 17)));
-        questions.add(new Question("q2", "text", new AnswerFormat.NumberField(1, 20, 16)));
-        questions.add(new Question("q3", "text", new AnswerFormat.NumberField(10, 20, 18)));
+        questions.add(new Question("q1", "text", new MatrixFormat(1, 1)));
+        questions.add(new Question("q2", "text", new MatrixFormat(1, 1)));
+        questions.add(new Question("q3", "text", new MatrixFormat(1, 1)));
 
         return questions;
     }

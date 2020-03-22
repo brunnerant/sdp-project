@@ -25,7 +25,7 @@ public class QuizViewModel extends ViewModel {
         if (status.getValue() == Status.NotLoaded) {
             status.postValue(Status.Loading);
             DatabaseFactory.getInstance()
-                  .getBundle(
+                    .getBundle(
                             "quizzes",
                             quizID,
                             new Callback<Response<BundledData>>() {

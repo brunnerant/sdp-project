@@ -21,7 +21,7 @@ public class Question implements Bundlable {
     }
 
     @Override
-    public Question clone(){
+    public Question clone() {
         return new Question(title, text, format.clone());
     }
 
@@ -45,6 +45,6 @@ public class Question implements Bundlable {
     public static Question fromBundle(BundledData bundle) throws IllegalArgumentException {
         String title = (String) bundle.get("title");
         String text = (String) bundle.get("text");
-        return new Question(title, text, new AnswerFormat.NumberField(0, 100, 0));
+        return new Question(title, text, new MatrixFormat(1, 1));
     }
 }
