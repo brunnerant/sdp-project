@@ -21,7 +21,28 @@ public class QuizViewModel extends ViewModel {
     private final MutableLiveData<Quiz> quiz = new MutableLiveData<>(null);
     private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);
 
-    public void loadQuiz(String quizID) {
+    public void loadQuestions(String quizID) {
+        if (status.getValue() == Status.NotLoaded) {
+            status.postValue(Status.Loading);
+            DatabaseFactory.getInstance()
+                    .getBundle(
+                            "quizzes",
+                            quizID,
+                            new Callback<Response<BundledData>>() {
+                                @Override
+                                public void onReceive(Response<BundledData> response) {
+                                    if (response.successful()) {
+                                        quiz.postValue(Quiz.fromBundle(response.getData()));
+                                        status.postValue(Status.Loaded);
+                                    } else {
+                                        status.postValue(Status.CouldNotLoad);
+                                    }
+                                }
+                            });
+        }
+    }
+
+    public void loadTitle(String quizID) {
         if (status.getValue() == Status.NotLoaded) {
             status.postValue(Status.Loading);
             DatabaseFactory.getInstance()

@@ -149,6 +149,12 @@ public class MockDBService implements DatabaseService {
                 .start();
     }
 
+    @Override
+    public void getQuizQuestions(String quizID, Callback<Response<BundledData>> responseCallback) {}
+
+    @Override
+    public void getQuizTitle(String quizID, Callback<Response<BundledData>> responseCallback) {}
+
     public IdlingResource getIdlingResource() {
         return idlingResource;
     }

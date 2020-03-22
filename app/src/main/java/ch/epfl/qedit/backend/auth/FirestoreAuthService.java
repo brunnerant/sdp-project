@@ -9,11 +9,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class FirebaseAuthService implements AuthenticationService {
+public class FirestoreAuthService implements AuthenticationService {
 
     private FirebaseFirestore db;
 
-    public FirebaseAuthService() {
+    public FirestoreAuthService() {
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
     }
@@ -46,7 +46,7 @@ public class FirebaseAuthService implements AuthenticationService {
                                 Response<User> response;
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
-                                    if (document.exists())
+                                    if (document != null && document.exists())
                                         response = Response.ok(getUserFromDocument(document));
                                     else response = Response.error(WRONG_TOKEN);
                                 } else {

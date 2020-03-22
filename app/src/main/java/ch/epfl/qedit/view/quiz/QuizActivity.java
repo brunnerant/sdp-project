@@ -47,7 +47,7 @@ public class QuizActivity extends AppCompatActivity {
                                 onStatusChanged(status);
                             }
                         });
-        model.loadQuiz(quizID);
+        model.loadQuestions(quizID);
 
         overview = new QuizOverviewFragment();
         overviewActive = false;
