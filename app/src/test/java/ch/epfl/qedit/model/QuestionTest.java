@@ -29,7 +29,12 @@ public class QuestionTest {
 
     @Test(expected = NullPointerException.class)
     public void invalidQuestionsCannotBeBuilt4() {
-        new Question("", "", null);
+        new Question("", "", (AnswerFormat) null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void invalidQuestionsCannotBeBuilt() {
+        new Question("", "", "");
     }
 
     @Test

@@ -20,6 +20,13 @@ public class Question implements Bundlable {
         this.format = Objects.requireNonNull(format);
     }
 
+    /** Construct a question with a string to parse for the answer_format */
+    public Question(String title, String text, String answer_format) {
+        this.title = Objects.requireNonNull(title);
+        this.text = Objects.requireNonNull(text);
+        this.format = Objects.requireNonNull(AnswerFormat.parse(answer_format));
+    }
+
     public String getTitle() {
         return title;
     }
