@@ -1,9 +1,7 @@
 package ch.epfl.qedit.view.edit;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-
+import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 
 public class EditQuizActivity extends AppCompatActivity {
@@ -14,7 +12,8 @@ public class EditQuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         // For now, we inflate the quiz edit overview fragment
-        getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager()
+                .beginTransaction()
                 .replace(R.id.quiz_overview_container, new EditOverviewFragment())
                 .commit();
     }
