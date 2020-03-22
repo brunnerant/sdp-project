@@ -32,13 +32,18 @@ public class MatrixFormat extends AnswerFormat {
     }
 
     @Override
-    public MatrixFormat clone() {
-        MatrixFormat mat =
-                new MatrixFormat(
-                        tableColumnsNumber, tableRowsNumber, hasDecimal, hasSign, maxCharacters);
-        mat.id = this.id;
-        mat.hintString = this.hintString;
-        return mat;
+    public boolean equals(Object o) {
+        if (o instanceof MatrixFormat) {
+            MatrixFormat other = (MatrixFormat) o;
+            return this.hasDecimal == other.hasDecimal
+                    && this.hasSign == other.hasSign
+                    && this.tableRowsNumber == other.tableRowsNumber
+                    && this.tableColumnsNumber == other.tableColumnsNumber
+                    && this.maxCharacters == other.maxCharacters
+                    && this.hintString.equals(other.hintString)
+                    && this.id.equals(other.id);
+        }
+        return false;
     }
 
     public static MatrixFormat createMatrix3x3() {
