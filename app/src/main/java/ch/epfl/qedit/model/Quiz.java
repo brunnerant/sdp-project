@@ -44,5 +44,3 @@ public class Quiz implements Bundleable {
         return new Quiz(title, questions);
     }
 }
-
-

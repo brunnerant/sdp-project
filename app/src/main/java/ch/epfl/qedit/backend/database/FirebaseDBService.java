@@ -6,7 +6,6 @@ import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Objects;
@@ -36,14 +35,11 @@ public class FirebaseDBService implements DatabaseService {
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists())
-                                            response =
-                                                    Response.ok(
-                                                            new BundledData(document.getData()));
+                                        response = Response.ok(new BundledData(document.getData()));
                                     else response = Response.error(WRONG_DOCUMENT);
                                 } else response = Response.error(CONNECTION_ERROR);
                                 responseCallback.onReceive(response);
                             }
                         });
     }
-
 }
