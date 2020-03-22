@@ -20,12 +20,20 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.qedit.R;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class is a utility class that allows to create editable lists. It supports the addition,
+ * removal and reordering of items. Items additionally have an edit button that can be linked
+ * to a custom action.
+ */
 public class ListEditView extends RecyclerView {
 
+    /**
+     * This interface is used to retrieve the text for one of the items in the list.
+     * @param <T> the type of the list items
+     */
     public interface GetItemText<T> {
         String getText(T item);
     }
@@ -33,6 +41,7 @@ public class ListEditView extends RecyclerView {
     private ListEditAdapter adapter;
     private int selectedQuestion = NO_POSITION;
 
+    // This class is holding the view and data for one item
     private final class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView text;
         private final LinearLayout overlayButtons;
@@ -54,14 +63,17 @@ public class ListEditView extends RecyclerView {
                             });
         }
 
+        // This changes the text of an item when the recycler view wants to reuse it
         void onTextChanged(String newText) {
             text.setText(newText);
         }
 
+        // This toggles the visibility
         void onSelected(boolean selected) {
             overlayButtons.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
         }
 
+        // This handles the toggling of the overlay buttons when an item is clicked
         @Override
         public void onClick(View v) {
             int previousQuestion = selectedQuestion;
@@ -83,6 +95,7 @@ public class ListEditView extends RecyclerView {
         private final GetItemText<T> getText;
         private ListEditView listEditView;
 
+        // This class is used to enable drag-and-drop of items
         private class ItemTouchCallback extends ItemTouchHelper.Callback {
             @Override
             public int getMovementFlags(
@@ -143,14 +156,10 @@ public class ListEditView extends RecyclerView {
             return items.size();
         }
 
+        // This handles items being moved around
         private void moveItem(int from, int to) {
             if (from == to) return;
-
-            if (from < to) {
-                for (int i = from; i < to; i++) Collections.swap(items, i, i + 1);
-            } else {
-                for (int i = from; i > to; i--) Collections.swap(items, i, i - 1);
-            }
+            items.add(to, items.remove(from));
 
             int sel = listEditView.selectedQuestion;
             if (from == sel) listEditView.selectedQuestion = to;
@@ -180,6 +189,10 @@ public class ListEditView extends RecyclerView {
         init(context);
     }
 
+    /**
+     * Binds this ListEditView with the given adapter
+     * @param adapter the ListEditAdapter to bind with the ListEditView
+     */
     public void setAdapter(ListEditAdapter adapter) {
         this.adapter = Objects.requireNonNull(adapter);
         adapter.setListEditView(this);
