@@ -1,6 +1,8 @@
 package ch.epfl.qedit.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -55,5 +57,25 @@ public class MatrixFormatTest {
         assertEquals(matrixFormat.getTableRowsNumber(), tableRowsNumber);
         assertEquals(matrixFormat.getMaxCharacters(), maxCharacters);
         assertEquals(matrixFormat.getHint(), hintString);
+    }
+
+    /** Parsing Test */
+    @Test
+    public void parseMatrixCorrectly() {
+        assertEquals(new MatrixFormat(1, 1), AnswerFormat.parse("matrix1x1"));
+        assertEquals(new MatrixFormat(4, 1), AnswerFormat.parse("matrix4x1"));
+        assertEquals(new MatrixFormat(1, 7878), AnswerFormat.parse("matrix1x7878"));
+    }
+
+    @Test
+    public void parseMatrixFailed() {
+        assertNull(AnswerFormat.parse("matrix1xx1"));
+        assertNull(AnswerFormat.parse("matrix4x1x"));
+        assertNull(AnswerFormat.parse("matrerix1x7878"));
+    }
+
+    @Test
+    public void testNotEquals() {
+        assertNotEquals(new MatrixFormat(1, 1), "Gorille");
     }
 }
