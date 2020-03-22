@@ -20,11 +20,6 @@ public class Question implements Bundlable {
         this.format = Objects.requireNonNull(format);
     }
 
-    @Override
-    public Question clone() {
-        return new Question(title, text, format.clone());
-    }
-
     public String getTitle() {
         return title;
     }
@@ -46,5 +41,16 @@ public class Question implements Bundlable {
         String title = (String) bundle.get("title");
         String text = (String) bundle.get("text");
         return new Question(title, text, new MatrixFormat(1, 1));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Question) {
+            Question other = (Question) o;
+            return this.title.equals(other.title)
+                    && this.text.equals(other.text)
+                    && this.format.equals(other.format);
+        }
+        return false;
     }
 }
