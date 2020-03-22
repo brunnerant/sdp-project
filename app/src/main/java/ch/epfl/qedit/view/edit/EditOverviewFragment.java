@@ -25,28 +25,9 @@ public class EditOverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
 
-        // For now, we just add dummy questions to the quiz
-        questions = new LinkedList<>();
-        for (numQuestions = 0; numQuestions < 5; numQuestions++)
-            questions.add(
-                    new Question(
-                            "Q" + (numQuestions + 1),
-                            "is it " + (numQuestions + 1) + " ?",
-                            new MatrixFormat(1, 1)));
-
-        // Create an adapter for the question list
-        final ListEditView.ListEditAdapter<Question> adapter =
-                new ListEditView.ListEditAdapter<>(
-                        questions,
-                        new ListEditView.GetItemText<Question>() {
-                            @Override
-                            public String getText(Question item) {
-                                return item.getTitle();
-                            }
-                        });
-
         // Retrieve and configure the recycler view
         ListEditView listEditView = view.findViewById(R.id.question_list);
+        final ListEditView.ListEditAdapter adapter = createAdapter();
         listEditView.setAdapter(adapter);
 
         // Configure the add button
@@ -65,5 +46,26 @@ public class EditOverviewFragment extends Fragment {
                         });
 
         return view;
+    }
+
+    private ListEditView.ListEditAdapter createAdapter() {
+        // For now, we just add dummy questions to the quiz
+        questions = new LinkedList<>();
+        for (numQuestions = 0; numQuestions < 5; numQuestions++)
+            questions.add(
+                    new Question(
+                            "Q" + (numQuestions + 1),
+                            "is it " + (numQuestions + 1) + " ?",
+                            new MatrixFormat(1, 1)));
+
+        // Create an adapter for the question list
+        return new ListEditView.ListEditAdapter<>(
+                questions,
+                new ListEditView.GetItemText<Question>() {
+                    @Override
+                    public String getText(Question item) {
+                        return item.getTitle();
+                    }
+                });
     }
 }
