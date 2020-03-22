@@ -1,9 +1,15 @@
 package ch.epfl.qedit.view.home;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +50,10 @@ public class HomeQuizListFragment extends Fragment {
     private RecyclerView recyclerView;
     private CustomAdapter customAdapter;
     private User user;
+    private String errorBlank = "Can't be blank";
 
-    // make it final
+    // The magic number comes from button color in android
+    private final int colorButton = -2614432;
 
     @Override
     public View onCreateView(
@@ -87,24 +96,70 @@ public class HomeQuizListFragment extends Fragment {
         return view;
     }
 
-    // TODO delete below
-    int i = 0;
-    private void addQuizz() {
-        addPopUp();
-
-        // TODO Let popup handle this
-        String title = "Some test for now" + i;
-        ++i;
-
-        int insertIndex = user.getQuizzes().size();
-        while(user.addQuiz(title, title) == true) {
-            // TODO Popup saying not possible must enter something else
-        }
-        customAdapter.notifyItemInserted(insertIndex);
+    private void addQuizzes(String title) {
+        int index = user.getQuizzes().size();
+        user.addQuiz(title, title);
+        customAdapter.notifyItemInserted(index);
     }
 
     private void addPopUp() {
-        // TODO create pop up for name of quizz, or maybe find another solution
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Add quiz's name");
+
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                    addQuizzes(input.getText().toString());
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.create();
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+        input.setError(errorBlank);
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String title = input.getText().toString().trim();
+
+                boolean canAdd = user.canAdd(title);
+
+                if (input.length() <= 0 || !canAdd) {
+                    String error = input.length() <= 0 ? errorBlank : "Can't have duplicate names";
+                    setAlertError(alertDialog, input, false, Color.WHITE, error);
+                } else {
+                    setAlertError(alertDialog, input, true, colorButton, null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void setAlertError(AlertDialog alertDialog, EditText editText,
+                               boolean isClickable, int color, String error) {
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(isClickable);
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(color);
+        editText.setError(error);
     }
 
     @Override
@@ -115,14 +170,11 @@ public class HomeQuizListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.add:
-                addQuizz();
+                addPopUp();
                 break;
         }
-
         return true;
     }
 
@@ -155,7 +207,7 @@ public class HomeQuizListFragment extends Fragment {
 
             // TODO Find a better than this...
             final Map.Entry<String, String> entryScrew = new ArrayList<>(user.getQuizzes().entrySet()).get(position);
-            customViewHolder.name.setText(entryScrew.getValue());
+            customViewHolder.name.setText(entryScrew.getValue().trim());
 
             customViewHolder.parentView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -176,7 +228,7 @@ public class HomeQuizListFragment extends Fragment {
             return user.getQuizzes().size();
         }
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
+    private class CustomViewHolder extends RecyclerView.ViewHolder {
         private View parentView;
         private TextView name;
 

@@ -31,11 +31,15 @@ public class User implements Serializable {
         this.quizzes = new LinkedHashMap<>();
     }
 
+    public boolean canAdd(String string) {
+        return !quizzes.containsValue(string);
+    }
+
     /**
      * add a quiz to the user's quizzes list and return true if this quiz is replacing an other,
      * i.e. if the key already is in the quizzes map
      */
-    public Boolean addQuiz(String key, String title) {
+    public boolean addQuiz(String key, String title) {
         return quizzes.put(key, title) != null;
     }
 
