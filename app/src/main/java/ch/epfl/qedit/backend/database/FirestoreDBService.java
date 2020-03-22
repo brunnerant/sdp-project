@@ -1,8 +1,6 @@
 package ch.epfl.qedit.backend.database;
 
 import androidx.annotation.NonNull;
-import ch.epfl.qedit.model.AnswerFormat;
-import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.util.BundledData;
 import ch.epfl.qedit.util.Callback;
@@ -14,9 +12,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class FirestoreDBService implements DatabaseService {
 
@@ -27,40 +22,23 @@ public class FirestoreDBService implements DatabaseService {
         db = FirebaseFirestore.getInstance();
     }
 
-    /** Parse AnswerFormat from the string answer_format extract from the database */
-    private AnswerFormat parseFormat(String format) throws Exception {
+    // TODO Check if we can use toObject method
+    private Question getQuestionFromDoc(QueryDocumentSnapshot doc) throws Exception {
 
-        Matcher matrixMatcher = Pattern.compile("^matrix(\\d+)x(\\d+)$").matcher(format);
-
-        /** Match format: 'matrixNxM' where N and M are [0-9]+ */
-        if (matrixMatcher.find()) {
-            /** Extract the row and column size */
-            Matcher digit = Pattern.compile("(\\d+)").matcher(format);
-            digit.find();
-            int i = Integer.parseInt(digit.group(1));
-            digit.find();
-            int j = Integer.parseInt(digit.group(1));
-            return new MatrixFormat(i, j);
-        } else {
-            throw new Exception("Invalid answer format.");
-        }
-    }
-
-    private Question getQuestionFromDoc(Map<String, Object> doc) throws Exception {
-
-        Object title = doc.get("title");
+        String title = doc.get("title", String.class);
         if (title == null) throw new Exception("Title not found in question document");
-        Object text = doc.get("text");
+        String text = doc.get("text", String.class);
         if (text == null) throw new Exception("Text not found in question document");
-        Object format = doc.get("answer_format");
+        String format = doc.get("answer_format", String.class);
         if (format == null) throw new Exception("Answer format not found in question document");
 
-        return new Question((String) title, (String) text, parseFormat((String) format));
+        return new Question(title, text, format);
     }
 
     @Override
     public void getQuizQuestions(
             String quizID, final Callback<Response<BundledData>> responseCallback) {
+
         String language = "en";
         db.collection("quizzes")
                 .document(quizID)
@@ -74,21 +52,45 @@ public class FirestoreDBService implements DatabaseService {
                                 if (task.isSuccessful()) {
                                     QuerySnapshot docs = task.getResult();
                                     if (docs != null && !docs.isEmpty()) {
+                                        /**
+                                         * We get all questions store as document in firestore and
+                                         * translate them as Question object
+                                         */
                                         ArrayList<Question> questions = new ArrayList<>();
                                         for (QueryDocumentSnapshot doc : docs) {
                                             try {
-                                                questions.add(getQuestionFromDoc(doc.getData()));
+                                                questions.add(getQuestionFromDoc(doc));
                                             } catch (Exception e) {
-                                                e.printStackTrace(); // TODO
+                                                /**
+                                                 * If the translation raise an exception then the
+                                                 * format of the document is wrong, we print the
+                                                 * stack trace for debug purpose, and response an
+                                                 * error
+                                                 */
+                                                e.printStackTrace();
+                                                response = Response.error(WRONG_DOCUMENT);
+                                                responseCallback.onReceive(response);
+                                                return;
                                             }
                                         }
                                         response =
                                                 Response.ok(
                                                         new BundledData("questions", questions));
                                     } else {
+                                        /**
+                                         * If the QuerySnapshot is empty then the collection does
+                                         * not exist because we don't support Quizzes with no
+                                         * Questions
+                                         */
                                         response = Response.error(WRONG_COLLECTION);
                                     }
-                                } else response = Response.error(CONNECTION_ERROR);
+                                } else {
+                                    /**
+                                     * If task is not successful, we don't retrieve any information
+                                     * with this query from the database
+                                     */
+                                    response = Response.error(CONNECTION_ERROR);
+                                }
                                 responseCallback.onReceive(response);
                             }
                         });
@@ -96,7 +98,42 @@ public class FirestoreDBService implements DatabaseService {
 
     @Override
     public void getQuizTitle(
-            String quizID, final Callback<Response<BundledData>> responseCallback) {}
+            String quizID, final Callback<Response<BundledData>> responseCallback) {
+
+        final String language = "en";
+
+        db.collection("quizzes")
+                .document(quizID)
+                .get()
+                .addOnCompleteListener(
+                        new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                Response<BundledData> response;
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        String title =
+                                                document.get("title_" + language, String.class);
+                                        response = Response.ok(new BundledData("title", title));
+                                    } else {
+                                        /**
+                                         * If the document does not exist then quizID does not
+                                         * describe an existing quiz in the database
+                                         */
+                                        response = Response.error(WRONG_DOCUMENT);
+                                    }
+                                } else {
+                                    /**
+                                     * If task is not successful, we don't retrieve any information
+                                     * with this query from the database
+                                     */
+                                    response = Response.error(CONNECTION_ERROR);
+                                }
+                                responseCallback.onReceive(response);
+                            }
+                        });
+    }
 
     @Override
     public void getBundle(

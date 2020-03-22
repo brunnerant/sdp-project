@@ -12,4 +12,12 @@ public abstract class AnswerFormat implements Serializable {
 
         void visitMatrixAnswerFormat(MatrixFormat matrixFormat);
     }
+
+    /**
+     * Parse AnswerFormat from a string answer_format, call the parse method override in child
+     * classes
+     */
+    public static AnswerFormat parse(String format) {
+        return MatrixFormat.parse(format);
+    }
 }

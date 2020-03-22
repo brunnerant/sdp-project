@@ -1,6 +1,10 @@
 package ch.epfl.qedit.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MatrixFormat extends AnswerFormat {
+
     private boolean hasDecimal = true;
     private boolean hasSign = true;
 
@@ -29,6 +33,21 @@ public class MatrixFormat extends AnswerFormat {
         this.hasSign = hasSign;
         this.maxCharacters = maxCharacters;
         this.hintString = hint();
+    }
+
+    public static MatrixFormat parse(String format) {
+        /** Match format: 'matrixNxM' where N and M are [0-9]+ */
+        if (Pattern.compile("^matrix(\\d+)x(\\d+)$").matcher(format).find()) {
+            /** Extract the row and column size */
+            Matcher digit = Pattern.compile("(\\d+)").matcher(format);
+            digit.find();
+            int i = Integer.parseInt(digit.group(1));
+            digit.find();
+            int j = Integer.parseInt(digit.group(1));
+            return new MatrixFormat(i, j);
+        } else {
+            return null;
+        }
     }
 
     @Override
