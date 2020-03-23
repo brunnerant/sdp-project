@@ -8,11 +8,11 @@ import static androidx.test.espresso.contrib.RecyclerViewActions.*;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
 import static ch.epfl.qedit.util.RecyclerViewMatcher.withRecyclerView;
 import static org.hamcrest.Matchers.not;
 
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.matcher.ViewMatchers;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.edit.EditOverviewFragment;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
@@ -28,7 +28,7 @@ public class EditOverviewFragmentTest {
         onView(withId(R.id.question_list)).perform(scrollToPosition(position));
     }
 
-    public static ViewInteraction itemView(int position, int id, ViewMatchers... matchers) {
+    public static ViewInteraction itemView(int position, int id) {
         scrollTo(position);
         return onView(withRecyclerView(R.id.question_list).atPositionOnView(position, id));
     }
@@ -42,7 +42,11 @@ public class EditOverviewFragmentTest {
         return onView(withRecyclerView(R.id.question_list).atPosition(position));
     }
 
-    public void testOverlayAt(int position, int size) {
+    public static void checkText(int position, String text) {
+        itemView(position, android.R.id.text1).check(matches(withText(text)));
+    }
+
+    public void assertOverlayAt(int position, int size) {
         for (int i = 0; i < size; i++) {
             if (i == position) overlay(i).check(matches(isDisplayed()));
             else overlay(i).check(matches(not(isDisplayed())));
@@ -51,13 +55,13 @@ public class EditOverviewFragmentTest {
 
     @Test
     public void testCanSelectItem() {
-        testOverlayAt(-1, 5);
+        assertOverlayAt(-1, 5);
         item(0).perform(click());
-        testOverlayAt(0, 5);
+        assertOverlayAt(0, 5);
         item(3).perform(click());
-        testOverlayAt(3, 5);
+        assertOverlayAt(3, 5);
         item(3).perform(click());
-        testOverlayAt(-1, 5);
+        assertOverlayAt(-1, 5);
     }
 
     @Test
@@ -65,7 +69,7 @@ public class EditOverviewFragmentTest {
         item(0).perform(click());
         itemView(0, R.id.delete_button).perform(click());
         onView(withText("Q1")).check(doesNotExist());
-        testOverlayAt(-1, 4);
+        assertOverlayAt(-1, 4);
     }
 
     @Test
@@ -73,5 +77,30 @@ public class EditOverviewFragmentTest {
         onView(withText("Q6")).check(doesNotExist());
         onView(withId(R.id.add_question_button)).perform(click());
         onView(withText("Q6")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testCanDragAndDrop() {
+        checkText(0, "Q1");
+        checkText(1, "Q2");
+        onView(withId(R.id.question_list)).perform(dragAndDrop(0, 1));
+        checkText(0, "Q2");
+        checkText(1, "Q1");
+
+        item(0).perform(click());
+        assertOverlayAt(0, 5);
+        onView(withId(R.id.question_list)).perform(dragAndDrop(1, 0));
+        assertOverlayAt(1, 5);
+
+        item(4).perform(click());
+        assertOverlayAt(4, 5);
+        onView(withId(R.id.question_list)).perform(dragAndDrop(4, 0));
+        assertOverlayAt(0, 5);
+
+        checkText(0, "Q5");
+        checkText(1, "Q1");
+        checkText(2, "Q2");
+        checkText(3, "Q3");
+        checkText(4, "Q4");
     }
 }
