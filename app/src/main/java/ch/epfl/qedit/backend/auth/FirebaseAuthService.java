@@ -10,11 +10,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Objects;
 
-public class FirestoreAuthService implements AuthenticationService {
+public class FirebaseAuthService implements AuthenticationService {
 
     private final FirebaseFirestore db;
 
-    public FirestoreAuthService() {
+    public FirebaseAuthService() {
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
     }

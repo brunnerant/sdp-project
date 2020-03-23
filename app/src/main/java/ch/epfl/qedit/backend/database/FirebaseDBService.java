@@ -13,11 +13,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
-public class FirestoreDBService implements DatabaseService {
+public class FirebaseDBService implements DatabaseService {
 
     private FirebaseFirestore db;
 
-    public FirestoreDBService() {
+    public FirebaseDBService() {
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
     }
