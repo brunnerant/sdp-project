@@ -27,7 +27,7 @@ public class FirebaseAuthService implements AuthenticationService {
         if (docRole == null || docRole.equals("participant")) role = User.Role.Participant;
         else if (docRole.equals("admin")) role = User.Role.Administrator;
         else if (docRole.equals("editor")) role = User.Role.Editor;
-        else role = User.Role.Participant; // TODO Exception?
+        else role = User.Role.Participant;
 
         return new User(
                 document.get("first_name", String.class),

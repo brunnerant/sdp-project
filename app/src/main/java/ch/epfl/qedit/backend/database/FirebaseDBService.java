@@ -14,7 +14,6 @@ public class FirebaseDBService implements DatabaseService {
 
     private final FirebaseFirestore db;
 
-    // TODO unused?
     public FirebaseDBService() {
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();

@@ -36,10 +36,7 @@ public class HomeQuizListFragment extends Fragment {
         ArrayList<Map.Entry<String, String>> entries =
                 new ArrayList<>(user.getQuizzes().entrySet());
 
-        final CustomAdapter adapter =
-                new CustomAdapter(
-                        requireActivity(),
-                        entries); // TODO order does change as it comes from a set
+        final CustomAdapter adapter = new CustomAdapter(requireActivity(), entries);
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(
