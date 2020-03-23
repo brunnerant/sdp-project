@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class MockAuthService implements AuthenticationService {
 
-    private CountingIdlingResource idlingResource;
+    private final CountingIdlingResource idlingResource;
 
     public MockAuthService() {
         idlingResource = new CountingIdlingResource("MockAuthService");
