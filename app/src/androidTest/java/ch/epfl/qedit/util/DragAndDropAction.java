@@ -87,9 +87,9 @@ public class DragAndDropAction implements ViewAction {
     private float[][] interpolate(float[] start, float[] end) {
         final float[][] result = new float[SWIPE_EVENT_COUNT][2];
 
-        for (int i = 0; i < SWIPE_EVENT_COUNT; i++) {
-            result[i][0] = start[0] + (end[0] - start[0]) * (i + 1) / SWIPE_EVENT_COUNT;
-            result[i][1] = start[1] + (end[1] - start[1]) * (i + 1) / SWIPE_EVENT_COUNT;
+        for (int j = 0; j < 2; j++) {
+            for (int i = 0; i < SWIPE_EVENT_COUNT; i++)
+                result[i][j] = start[j] + (end[j] - start[j]) * (i + 1) / SWIPE_EVENT_COUNT;
         }
 
         return result;
