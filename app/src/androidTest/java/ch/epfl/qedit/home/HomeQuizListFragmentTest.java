@@ -12,9 +12,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
 import android.os.Bundle;
-
 import androidx.test.espresso.intent.Intents;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
