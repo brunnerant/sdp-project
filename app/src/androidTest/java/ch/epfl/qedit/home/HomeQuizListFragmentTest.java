@@ -35,7 +35,6 @@ public class HomeQuizListFragmentTest {
     public final FragmentTestRule<?, HomeQuizListFragment> testRule =
             FragmentTestRule.create(HomeQuizListFragment.class, false, false);
 
-
     @Before
     public void init() {
         Intents.init();
@@ -67,7 +66,11 @@ public class HomeQuizListFragmentTest {
 
     @Test
     public void testClickOnQuizLaunchesQuizActivity() {
-        onData(anything()).inAdapterView(withId(R.id.home_quiz_list)).atPosition(0).perform(click());
+        onData(anything())
+                .inAdapterView(withId(R.id.home_quiz_list))
+                .atPosition(0)
+                .perform(click());
+
         intended(
                 allOf(
                         hasComponent(QuizActivity.class.getName()),
