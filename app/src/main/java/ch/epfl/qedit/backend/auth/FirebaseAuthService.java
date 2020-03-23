@@ -9,11 +9,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class FirestoreAuthService implements AuthenticationService {
+public class FirebaseAuthService implements AuthenticationService {
 
     private FirebaseFirestore db;
 
-    public FirestoreAuthService() {
+    public FirebaseAuthService() {
         // Access a Cloud Firestore instance
         db = FirebaseFirestore.getInstance();
     }
