@@ -12,9 +12,11 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
 import android.os.Bundle;
+
+import androidx.test.espresso.intent.Intents;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.home.HomeInfoFragment;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
@@ -26,21 +28,25 @@ import org.junit.Test;
 public class HomeQuizListFragmentTest {
     @Rule
     public final FragmentTestRule<?, HomeQuizListFragment> testRule =
-            FragmentTestRule.create(HomeQuizListFragment.class);
+            FragmentTestRule.create(HomeQuizListFragment.class, false, false);
 
     @Before
     public void init() {
+        Intents.init();
         User user = new User("Marcel", "Doe", User.Role.Participant);
         user.addQuiz("quiz0", "Qualification EPFL");
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("user", user);
-        HomeInfoFragment homeInfoFragment = new HomeInfoFragment();
-        homeInfoFragment.setArguments(bundle);
+        HomeQuizListFragment homeQuizListFragment = new HomeQuizListFragment();
+        homeQuizListFragment.setArguments(bundle);
+
+        testRule.launchFragment(homeQuizListFragment);
     }
 
     @After
     public void cleanup() {
+        Intents.release();
         testRule.finishActivity();
     }
 
@@ -58,6 +64,7 @@ public class HomeQuizListFragmentTest {
                 .inAdapterView(withId(R.id.home_quiz_list))
                 .atPosition(0)
                 .perform(click());
+
         intended(
                 allOf(
                         hasComponent(QuizActivity.class.getName()),
