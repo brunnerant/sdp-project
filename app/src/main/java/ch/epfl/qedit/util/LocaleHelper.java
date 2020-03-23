@@ -1,4 +1,4 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import java.util.Locale;
 
 /**
+ * Copied from https://gunhansancar.com/change-language-programmatically-in-android/
  * This class is used to change your application locale and persist this change for the next time
  * that your app is going to be used.
  * <p/>

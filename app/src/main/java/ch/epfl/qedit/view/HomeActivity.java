@@ -1,13 +1,18 @@
 package ch.epfl.qedit.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Objects;
+
+import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
-import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
     @Override
@@ -32,6 +37,13 @@ public class HomeActivity extends AppCompatActivity {
         TextView textViewRole = findViewById(R.id.role);
 
         textViewRole.setText(getRoleText(user.getRole()));
+
+        setTitle(R.string.home);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     private String getRoleText(User.Role role) {

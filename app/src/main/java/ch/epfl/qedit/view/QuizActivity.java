@@ -1,12 +1,16 @@
 package ch.epfl.qedit.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
@@ -39,6 +43,11 @@ public class QuizActivity extends AppCompatActivity {
                                 onStatusChanged(status);
                             }
                         });
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     /** This handles the loading status of the quiz */

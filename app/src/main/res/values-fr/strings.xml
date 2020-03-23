@@ -7,8 +7,8 @@
 
     <!-- Language selection -->
     <string-array name="languages_list_translated">
-        <item>Français</item>
         <item>Anglais</item>
+        <item>Français</item>
     </string-array>
     <string name="language_changed">Langue changée en</string>
 
@@ -20,6 +20,7 @@
     <string name="connection_error_message">Erreur de connexion</string>
 
     <!-- Home -->
+    <string name="home">Accueil</string>
     <string name="welcome">Bienvenue,</string>
     <string name="role_administrator">Vous êtes un administrateur/une administratrice.</string>
     <string name="role_editor">Vous êtes un éditeur/une éditrice.</string>

@@ -1,7 +1,10 @@
 package ch.epfl.qedit;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
@@ -18,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.view.QuizActivity;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class HomeActivityTest {
@@ -43,20 +47,17 @@ public class HomeActivityTest {
         onView(withId(R.id.role)).check(matches(withText(role)));
         finishActivity();
     }
-// TODO tests hardcoded strings https://developer.android.com/training/testing/unit-testing/instrumented-unit-tests
-    /*
+
     @Test
     public void testParticipantIsDisplayedCorrectly() {
-        
         testUserIsDisplayedCorrectly(
                 new User("Bill", "Gates", User.Role.Participant),
-                getResources().getString(R.string.welcome)
-                        + "Bill Gates"
-                        + getInstrumentation().getContext().getResources().getString(R.string.exclamation_point),
-                getResources().getString(R.string.role_participant));
+                testRule.getActivity().getString(R.string.welcome)
+                        + " Bill Gates"
+                        + testRule.getActivity().getString(R.string.exclamation_point),
+                testRule.getActivity().getString(R.string.role_participant));
     }
-    */
-/*
+
     @Test
     public void testEditorIsDisplayedCorrectly() {
         testUserIsDisplayedCorrectly(
@@ -80,6 +81,4 @@ public class HomeActivityTest {
         intended(hasComponent(QuizActivity.class.getName()));
         finishActivity();
     }
-
- */
 }
