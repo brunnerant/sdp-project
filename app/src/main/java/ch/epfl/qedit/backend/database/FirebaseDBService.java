@@ -24,7 +24,6 @@ public class FirebaseDBService implements DatabaseService {
         db = FirebaseFirestore.getInstance();
     }
 
-    // TODO Check if we can use toObject method
     private Question getQuestionFromDoc(QueryDocumentSnapshot doc) throws Exception {
 
         String title = doc.get("title", String.class);

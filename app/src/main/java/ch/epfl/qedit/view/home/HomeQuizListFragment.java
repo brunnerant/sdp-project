@@ -47,7 +47,7 @@ public class HomeQuizListFragment extends Fragment {
         // Get user from the bundle created by the parent activity
         final User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
 
-        // Instanciate Handler and the DatabaseService
+        // Instantiate Handler and the DatabaseService
         db = DatabaseFactory.getInstance();
         handler = new Handler();
 
