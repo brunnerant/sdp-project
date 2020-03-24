@@ -72,6 +72,9 @@ public class MatrixFormatTest {
         assertNull(AnswerFormat.parse("matrix1xx1"));
         assertNull(AnswerFormat.parse("matrix4x1x"));
         assertNull(AnswerFormat.parse("matrerix1x7878"));
+        assertNull(AnswerFormat.parse("matrix1x7878hjhjhjhj"));
+        assertNull(AnswerFormat.parse("atatatatmatrix1x7878"));
+        assertNull(AnswerFormat.parse("qzwsrxetdcryftvugybhunij,ko"));
     }
 
     @Test

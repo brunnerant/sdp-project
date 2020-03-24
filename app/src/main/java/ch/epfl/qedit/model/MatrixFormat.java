@@ -39,11 +39,11 @@ public class MatrixFormat extends AnswerFormat {
         /** Match format: 'matrixNxM' where N and M are [0-9]+ */
         if (Pattern.compile("^matrix(\\d+)x(\\d+)$").matcher(format).find()) {
             /** Extract the row and column size */
-            Matcher digit = Pattern.compile("(\\d+)").matcher(format);
-            digit.find();
-            int i = Integer.parseInt(digit.group(1));
-            digit.find();
-            int j = Integer.parseInt(digit.group(1));
+            Matcher number = Pattern.compile("(\\d+)").matcher(format);
+            number.find();
+            int i = Integer.parseInt(number.group(1));
+            number.find();
+            int j = Integer.parseInt(number.group(1));
             return new MatrixFormat(i, j);
         } else {
             return null;

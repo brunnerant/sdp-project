@@ -31,6 +31,10 @@ public class QuestionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_quiz_question, container, false);
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
+
+        // Get the parent QuizActivity of this fragment
+        final QuizActivity activity = (QuizActivity) getActivity();
+
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
@@ -40,21 +44,10 @@ public class QuestionFragment extends Fragment {
                         new Observer<Integer>() {
                             @Override
                             public void onChanged(Integer index) {
-                                onQuestionChanged(model.getQuiz().getValue(), index);
+                                onQuestionChanged(activity.getQuiz(), index);
                             }
                         });
 
-        model.getStatus()
-                .observe(
-                        getViewLifecycleOwner(),
-                        new Observer<QuizViewModel.Status>() {
-                            @Override
-                            public void onChanged(QuizViewModel.Status status) {
-                                onQuestionChanged(
-                                        model.getQuiz().getValue(),
-                                        model.getFocusedQuestion().getValue());
-                            }
-                        });
         return view;
     }
 

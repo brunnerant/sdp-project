@@ -1,10 +1,8 @@
 package ch.epfl.qedit.model;
 
-import static ch.epfl.qedit.model.Question.fromBundle;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import ch.epfl.qedit.util.BundledData;
 import org.junit.Test;
 
 public class QuestionTest {
@@ -59,23 +57,5 @@ public class QuestionTest {
     @Test(expected = NullPointerException.class)
     public void invalidQuestionsCannotBeBuilt() {
         new Question("", "", "");
-    }
-
-    @Test
-    public void toBundleTest() {
-        AnswerFormat f = new MatrixFormat(1, 1);
-        Question q = new Question("Question 1", "How old are you ?", f);
-        BundledData b = q.toBundle();
-        assertEquals("Question 1", b.get("title"));
-        assertEquals("How old are you ?", b.get("text"));
-    }
-
-    @Test
-    public void fromBundleTest() {
-        AnswerFormat f = new MatrixFormat(1, 1);
-        Question q = new Question("Question 1", "How old are you ?", f);
-        BundledData b = q.toBundle();
-        assertEquals("Question 1", fromBundle(b).getTitle());
-        assertEquals("How old are you ?", fromBundle(b).getText());
     }
 }
