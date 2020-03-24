@@ -98,4 +98,8 @@ public class QuizActivity extends AppCompatActivity {
     public Quiz getQuiz() {
         return quiz;
     }
+    /** Allow the fragment to access the quiz of this activity */
+    public Quiz getQuiz() {
+        return quiz;
+    }
 }
