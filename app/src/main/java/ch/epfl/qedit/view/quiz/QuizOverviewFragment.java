@@ -28,7 +28,7 @@ public class QuizOverviewFragment extends Fragment {
         listView = view.findViewById(R.id.question_list);
 
         QuizActivity activity = (QuizActivity) getActivity();
-        onDataArrived(activity.getQuiz());
+        setupListView(activity.getQuiz());
 
         // Listen to the quiz live data
         final QuizViewModel model =
@@ -48,8 +48,8 @@ public class QuizOverviewFragment extends Fragment {
         return view;
     }
 
-    /** Handles the arrival of the quiz from the database */
-    private void onDataArrived(Quiz quiz) {
+    /** Handles the initialization of the ListView showing the list of questions */
+    private void setupListView(Quiz quiz) {
         List<Question> questions = quiz.getQuestions();
         String[] overviewItems = new String[questions.size()];
 

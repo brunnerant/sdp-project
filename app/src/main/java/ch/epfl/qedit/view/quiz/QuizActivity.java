@@ -94,10 +94,7 @@ public class QuizActivity extends AppCompatActivity {
                 .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
         overviewActive = !overviewActive;
     }
-    /** Allow the fragment to access the quiz of this activity */
-    public Quiz getQuiz() {
-        return quiz;
-    }
+
     /** Allow the fragment to access the quiz of this activity */
     public Quiz getQuiz() {
         return quiz;
