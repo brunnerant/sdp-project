@@ -9,7 +9,7 @@ public final class DatabaseFactory {
     private static DatabaseService dbService = null;
 
     public static DatabaseService getInstance() {
-        if (dbService == null) dbService = new MockDBService();
+        if (dbService == null) dbService = new FirebaseDBService();
 
         return dbService;
     }
