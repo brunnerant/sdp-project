@@ -42,6 +42,19 @@ public class MatrixFormatTest {
         checkAllElements(matrixFormat, true, true, 3, 3, 5, "00000");
     }
 
+    @Test
+    public void answerCanBeCorrectlyVisited() {
+        MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3();
+        matrixFormat.accept(
+                new AnswerFormat.Visitor() {
+                    @Override
+                    public void visitMatrixAnswerFormat(MatrixFormat matrixFormat) {
+                        matrixFormat.setId("m1");
+                        assertEquals(matrixFormat.getId(), "m1");
+                    }
+                });
+    }
+
     private void checkAllElements(
             MatrixFormat matrixFormat,
             boolean hasDecimal,

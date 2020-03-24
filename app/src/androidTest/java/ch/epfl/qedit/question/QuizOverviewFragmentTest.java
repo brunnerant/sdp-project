@@ -8,16 +8,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
-import androidx.lifecycle.ViewModelProvider;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.FragmentTestUsingDB;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.database.DatabaseFactory;
-import ch.epfl.qedit.backend.database.MockDBService;
-import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
-import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
 import org.junit.Before;
@@ -26,43 +20,28 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class QuizOverviewFragmentTest {
-
-    private IdlingResource idlingResource;
-    private QuizViewModel model;
-
+public class QuizOverviewFragmentTest extends FragmentTestUsingDB {
     @Rule
     public final FragmentTestRule<?, QuizOverviewFragment> testRule =
             FragmentTestRule.create(QuizOverviewFragment.class, false, false);
 
     @Before
-    public void init() {
-        MockDBService dbService = new MockDBService();
-        idlingResource = dbService.getIdlingResource();
-        IdlingRegistry.getInstance().register(idlingResource);
-        DatabaseFactory.setInstance(dbService);
-
-        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
-        model.setQuiz(Util.createMockQuiz("QuizOverviewFragmentTest"));
-
-        QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
-
-        testRule.launchFragment(quizOverviewFragment);
+    public void setup() {
+        super.setup(testRule, new QuizOverviewFragment());
     }
 
     @After
     public void cleanup() {
-        IdlingRegistry.getInstance().unregister(idlingResource);
+        super.cleanup();
     }
 
     @Test
-    public void testOverviewIsLoading() {
+    public void testOverviewIsDisplayed() {
         onView(withId(R.id.question_list)).check(matches(isDisplayed()));
-        // .check(matches(not(hasDescendant(any(View.class))))); TODO
     }
 
     @Test
-    public void testQuizIsProperlyLoaded() {
+    public void testQuizOverviewIsProperlyShown() {
         onData(anything())
                 .inAdapterView(withId(R.id.question_list))
                 .atPosition(0)

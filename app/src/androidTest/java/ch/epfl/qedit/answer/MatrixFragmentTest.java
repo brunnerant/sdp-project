@@ -53,7 +53,7 @@ public class MatrixFragmentTest {
 
     @Test
     public void testFragmentIsEmptyByDefault() {
-        //        // matrixFragment = new MatrixFragment(); TODO
+        //        // matrixFragment = new MatrixFragment(); TODO improve this class and add get id
         //        Bundle bundle = new Bundle();
         //        bundle.putSerializable("m0", MatrixFormat.createMatrix3x3());
         //        // matrixFragment.setArguments(bundle);
