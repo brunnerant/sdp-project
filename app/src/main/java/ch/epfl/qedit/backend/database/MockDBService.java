@@ -189,13 +189,12 @@ public class MockDBService implements DatabaseService {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                Response<Quiz> response = Response.error(WRONG_DOCUMENT);
+                                Response<Quiz> response;
                                 if (!db.containsKey(quizID))
                                     response = Response.error(WRONG_DOCUMENT);
                                 else {
                                     List<Question> questions =
-                                            new ArrayList<Question>(
-                                                    db.get(quizID).getQuestions_en());
+                                            new ArrayList<>(db.get(quizID).getQuestions_en());
                                     response =
                                             Response.ok(
                                                     new Quiz(

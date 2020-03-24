@@ -87,8 +87,8 @@ public class HomeQuizListFragment extends Fragment {
                                         /** Determine what to do when the quiz is loaded or not */
                                         progressBar.setVisibility(View.GONE);
                                         if (response.successful())
-                                            loadingSuccessful(response.getData());
-                                        else loadingFailed(response.getError());
+                                            onLoadingSuccessful(response.getData());
+                                        else onLoadingFailed(response.getError());
                                     }
                                 });
                     }
@@ -99,7 +99,7 @@ public class HomeQuizListFragment extends Fragment {
      * If loading a quiz succeeds, pass the Quiz through a Bundle to the QuizActivity, switch to
      * QuizActivity
      */
-    private void loadingSuccessful(Quiz quiz) {
+    private void onLoadingSuccessful(Quiz quiz) {
         Intent intent = new Intent(getActivity(), QuizActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZID, quiz);
@@ -108,7 +108,7 @@ public class HomeQuizListFragment extends Fragment {
     }
 
     /** If loading a quiz fails */
-    private void loadingFailed(int error) {
+    private void onLoadingFailed(int error) {
         int stringId = 0;
         switch (error) {
             case DatabaseService.CONNECTION_ERROR:

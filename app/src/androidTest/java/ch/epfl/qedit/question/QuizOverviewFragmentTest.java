@@ -43,7 +43,7 @@ public class QuizOverviewFragmentTest {
         DatabaseFactory.setInstance(dbService);
 
         model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
-        model.setQuiz(Util.createMockQuiz("QuestionFragmentTest"));
+        model.setQuiz(Util.createMockQuiz("QuizOverviewFragmentTest"));
 
         QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
 
