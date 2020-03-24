@@ -40,7 +40,8 @@ public class HomeInfoFragmentTest {
 
     @Test
     public void testParticipantIsDisplayedCorrectly() {
-        onView(ViewMatchers.withId(R.id.greeting)).check(matches(withText("Bienvenue Bill Gates !")));
+        onView(ViewMatchers.withId(R.id.greeting))
+                .check(matches(withText("Bienvenue Bill Gates !")));
         onView(withId(R.id.role)).check(matches(withText("Vous êtes un participant.")));
     }
 }

@@ -13,14 +13,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
-
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import org.junit.Assert;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
