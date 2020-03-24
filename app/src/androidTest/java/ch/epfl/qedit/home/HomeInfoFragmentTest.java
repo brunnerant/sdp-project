@@ -17,9 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class HomeInfoFragmentTest {
-    private User user = new User("Bill", "Gates", User.Role.Participant);
-    private String greeting = "Bienvenue Bill Gates !";
-    private String role = "Vous êtes un participant.";
+    private final User user = new User("Bill", "Gates", User.Role.Participant);
 
     @Rule
     public final FragmentTestRule<?, HomeInfoFragment> testRule =
@@ -42,7 +40,7 @@ public class HomeInfoFragmentTest {
 
     @Test
     public void testParticipantIsDisplayedCorrectly() {
-        onView(ViewMatchers.withId(R.id.greeting)).check(matches(withText(greeting)));
-        onView(withId(R.id.role)).check(matches(withText(role)));
+        onView(ViewMatchers.withId(R.id.greeting)).check(matches(withText("Bienvenue Bill Gates !")));
+        onView(withId(R.id.role)).check(matches(withText("Vous êtes un participant.")));
     }
 }
