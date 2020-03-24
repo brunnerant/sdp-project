@@ -37,13 +37,21 @@ public class QuizActivity extends AppCompatActivity {
 
         model = new ViewModelProvider(this).get(QuizViewModel.class);
 
-        overview = new QuizOverviewFragment();
         overviewActive = false;
         handleToggleOverview();
 
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("quiz", quiz);
+
+        QuestionFragment questionFragment = new QuestionFragment();
+        questionFragment.setArguments(bundle);
+
+        overview = new QuizOverviewFragment();
+        overview.setArguments(bundle);
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.question_details_container, new QuestionFragment())
+                .replace(R.id.question_details_container, questionFragment)
                 .replace(R.id.quiz_overview_container, overview)
                 .commit();
     }
@@ -93,10 +101,5 @@ public class QuizActivity extends AppCompatActivity {
         findViewById(R.id.quiz_overview_container)
                 .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
         overviewActive = !overviewActive;
-    }
-
-    /** Allow the fragment to access the quiz of this activity */
-    public Quiz getQuiz() {
-        return quiz;
     }
 }
