@@ -22,7 +22,7 @@ public class QuizTest {
 
     @Test
     public void quizConstructorTest() {
-        Quiz quiz = new Quiz(initQuestionList());
+        Quiz quiz = new Quiz("Title", initQuestionList());
         assertNotNull(quiz);
         assertEquals(3, quiz.getQuestions().size());
         assertEquals("q1", quiz.getQuestions().get(0).getTitle());
@@ -31,7 +31,7 @@ public class QuizTest {
 
     @Test
     public void getQuestionIsImmutableTest() {
-        Quiz quiz = new Quiz(initQuestionList());
+        Quiz quiz = new Quiz("Title", initQuestionList());
         final List<Question> questions = quiz.getQuestions();
         assertThrows(
                 UnsupportedOperationException.class,
@@ -45,9 +45,7 @@ public class QuizTest {
 
     @Test
     public void getTitleTest() {
-        Quiz quiz = new Quiz(initQuestionList());
-        Quiz quiz1 = new Quiz("About Math and Spider", initQuestionList());
-        assertEquals(quiz.getTitle(), "Untitled Quiz");
-        assertEquals(quiz1.getTitle(), "About Math and Spider");
+        Quiz quiz = new Quiz("About Math and Spider", initQuestionList());
+        assertEquals(quiz.getTitle(), "About Math and Spider");
     }
 }

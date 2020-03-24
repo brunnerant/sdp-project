@@ -2,6 +2,7 @@ package ch.epfl.qedit.backend.database;
 
 import androidx.annotation.NonNull;
 import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.BundledData;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
@@ -12,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FirebaseDBService implements DatabaseService {
 
@@ -37,7 +39,7 @@ public class FirebaseDBService implements DatabaseService {
 
     @Override
     public void getQuizQuestions(
-            String quizID, final Callback<Response<BundledData>> responseCallback) {
+            String quizID, final Callback<Response<List<Question>>> responseCallback) {
 
         String language = "en";
         db.collection("quizzes")
@@ -48,7 +50,7 @@ public class FirebaseDBService implements DatabaseService {
                         new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                Response<BundledData> response;
+                                Response<List<Question>> response;
                                 if (task.isSuccessful()) {
                                     QuerySnapshot docs = task.getResult();
                                     if (docs != null && !docs.isEmpty()) {
@@ -56,7 +58,7 @@ public class FirebaseDBService implements DatabaseService {
                                          * We get all questions store as document in firestore and
                                          * translate them as Question object
                                          */
-                                        ArrayList<Question> questions = new ArrayList<>();
+                                        List<Question> questions = new ArrayList<>();
                                         for (QueryDocumentSnapshot doc : docs) {
                                             try {
                                                 questions.add(getQuestionFromDoc(doc));
@@ -73,9 +75,7 @@ public class FirebaseDBService implements DatabaseService {
                                                 return;
                                             }
                                         }
-                                        response =
-                                                Response.ok(
-                                                        new BundledData("questions", questions));
+                                        response = Response.ok(questions);
                                     } else {
                                         /**
                                          * If the QuerySnapshot is empty then the collection does
@@ -97,8 +97,7 @@ public class FirebaseDBService implements DatabaseService {
     }
 
     @Override
-    public void getQuizTitle(
-            String quizID, final Callback<Response<BundledData>> responseCallback) {
+    public void getQuizTitle(String quizID, final Callback<Response<String>> responseCallback) {
 
         final String language = "en";
 
@@ -109,13 +108,13 @@ public class FirebaseDBService implements DatabaseService {
                         new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                Response<BundledData> response;
+                                Response<String> response;
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
                                         String title =
                                                 document.get("title_" + language, String.class);
-                                        response = Response.ok(new BundledData("title", title));
+                                        response = Response.ok(title);
                                     } else {
                                         /**
                                          * If the document does not exist then quizID does not
@@ -133,6 +132,51 @@ public class FirebaseDBService implements DatabaseService {
                                 responseCallback.onReceive(response);
                             }
                         });
+    }
+
+    public void getQuiz(final String quizID, final Callback<Response<Quiz>> responseCallback) {
+        /** First we load the title from the database */
+        getQuizTitle(
+                quizID,
+                new Callback<Response<String>>() {
+                    @Override
+                    public void onReceive(final Response<String> titleResponse) {
+                        /** If we manage to extract the title */
+                        if (titleResponse.getError() == Response.NO_ERROR) {
+                            final String title = titleResponse.getData();
+                            /** We try to extract the list of Questions */
+                            getQuizQuestions(
+                                    quizID,
+                                    new Callback<Response<List<Question>>>() {
+                                        @Override
+                                        public void onReceive(
+                                                Response<List<Question>> questionsResponse) {
+                                            if (questionsResponse.getError() == Response.NO_ERROR) {
+                                                Quiz quiz =
+                                                        new Quiz(
+                                                                title, questionsResponse.getData());
+                                                responseCallback.onReceive(Response.ok(quiz));
+                                            } else {
+                                                /**
+                                                 * If we cannot load the questions, we response the
+                                                 * error we get from getQuizTitle
+                                                 */
+                                                responseCallback.onReceive(
+                                                        Response.<Quiz>error(
+                                                                questionsResponse.getError()));
+                                            }
+                                        }
+                                    });
+                        } else {
+                            /**
+                             * If we cannot load the title, we response the error we get from
+                             * getQuizTitle
+                             */
+                            responseCallback.onReceive(
+                                    Response.<Quiz>error(titleResponse.getError()));
+                        }
+                    }
+                });
     }
 
     @Override

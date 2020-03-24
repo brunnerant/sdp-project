@@ -12,9 +12,12 @@ import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,12 +35,18 @@ public class QuizActivityTest {
     public void launchActivity() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(HomeQuizListFragment.QUIZID, "quiz0");
+        Quiz quiz =
+                new Quiz(
+                        "Title",
+                        Arrays.asList(
+                                new Question("Banane", "How many?", "matrix1x1"),
+                                new Question("Vector", "Fill this Vector!", "matrix7x1")));
+        bundle.putSerializable(HomeQuizListFragment.QUIZID, quiz);
         intent.putExtras(bundle);
         testRule.launchActivity(intent);
         model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
 
-        while (!model.getStatus().getValue().equals(QuizViewModel.Status.Loaded)) {}
+        //  while (!model.getStatus().getValue().equals(QuizViewModel.Status.Loaded)) {}
     }
 
     public void finishActivity() {
@@ -73,12 +82,12 @@ public class QuizActivityTest {
     public void cantGoAboveQuizSize() {
         launchActivity();
 
-        for (int i = 0; i < model.getQuiz().getValue().getQuestions().size(); ++i) {
+        for (int i = 0; i < testRule.getActivity().getQuiz().getQuestions().size(); ++i) {
             onView(withId(R.id.next)).perform(click());
         }
 
         onView(withId(R.id.next)).perform(click());
-        Integer index = model.getQuiz().getValue().getQuestions().size() - 1;
+        Integer index = testRule.getActivity().getQuiz().getQuestions().size() - 1;
         Assert.assertEquals(model.getFocusedQuestion().getValue(), index);
 
         finishActivity();
