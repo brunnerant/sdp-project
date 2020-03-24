@@ -8,7 +8,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
-import android.os.Bundle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
@@ -17,6 +17,7 @@ import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
+import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
 import org.junit.Before;
@@ -28,6 +29,7 @@ import org.junit.runner.RunWith;
 public class QuizOverviewFragmentTest {
 
     private IdlingResource idlingResource;
+    private QuizViewModel model;
 
     @Rule
     public final FragmentTestRule<?, QuizOverviewFragment> testRule =
@@ -40,11 +42,10 @@ public class QuizOverviewFragmentTest {
         IdlingRegistry.getInstance().register(idlingResource);
         DatabaseFactory.setInstance(dbService);
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("quiz", Util.createMockQuiz("QuizOverviewFragmentTest"));
+        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+        model.setQuiz(Util.createMockQuiz("QuestionFragmentTest"));
 
         QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
-        quizOverviewFragment.setArguments(bundle);
 
         testRule.launchFragment(quizOverviewFragment);
     }

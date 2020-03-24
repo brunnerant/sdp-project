@@ -4,7 +4,6 @@ import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.util.BundledData;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
 import com.google.common.collect.ImmutableList;
@@ -119,23 +118,6 @@ public class MockDBService implements DatabaseService {
                         "Titre",
                         Arrays.asList(bananaQuestion_en),
                         Arrays.asList(bananaQuestion_fr)));
-    }
-
-    @Override
-    public void getBundle(
-            final String collection,
-            final String document,
-            final Callback<Response<BundledData>> responseCallback) {
-        /**
-         * idlingResource.increment(); new Thread( new Runnable() { @Override public void run() {
-         * try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(); }
-         *
-         * <p>Response<BundledData> response; String key = collection + "/" + document; if
-         * (!database.containsKey(key)) response = Response.error(WRONG_DOCUMENT); else response =
-         * Response.ok(database.get(key));
-         *
-         * <p>idlingResource.decrement(); responseCallback.onReceive(response); } }) .start();*
-         */
     }
 
     @Override

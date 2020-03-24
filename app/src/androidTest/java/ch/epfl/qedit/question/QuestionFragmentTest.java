@@ -7,7 +7,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
@@ -42,12 +41,9 @@ public class QuestionFragmentTest {
         IdlingRegistry.getInstance().register(idlingResource);
         DatabaseFactory.setInstance(dbService);
         model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("quiz", Util.createMockQuiz("QuestionFragmentTest"));
+        model.setQuiz(Util.createMockQuiz("QuestionFragmentTest"));
 
         QuestionFragment questionFragment = new QuestionFragment();
-        questionFragment.setArguments(bundle);
 
         testRule.launchFragment(questionFragment);
     }

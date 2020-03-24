@@ -16,7 +16,6 @@ import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.Objects;
 
 public class QuestionFragment extends Fragment {
     private TextView questionTitle;
@@ -33,9 +32,6 @@ public class QuestionFragment extends Fragment {
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
 
-        // Get the quiz from the bundle
-        final Quiz quiz = (Quiz) Objects.requireNonNull(getArguments()).getSerializable("quiz");
-
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
@@ -45,7 +41,7 @@ public class QuestionFragment extends Fragment {
                         new Observer<Integer>() {
                             @Override
                             public void onChanged(Integer index) {
-                                onQuestionChanged(quiz, index);
+                                onQuestionChanged(model.getQuiz(), index);
                             }
                         });
 
