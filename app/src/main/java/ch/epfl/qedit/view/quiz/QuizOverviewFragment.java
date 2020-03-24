@@ -14,7 +14,6 @@ import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.List;
-import java.util.Objects;
 
 /** A simple {@link Fragment} subclass. */
 public class QuizOverviewFragment extends Fragment {
@@ -28,13 +27,10 @@ public class QuizOverviewFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_quiz_overview, container, false);
         listView = view.findViewById(R.id.question_list);
 
-        // Get the quiz from the bundle and setup the list view that shows the quizzes
-        Quiz quiz = (Quiz) Objects.requireNonNull(getArguments()).getSerializable("quiz");
-        setupListView(quiz);
-
         // Listen to the quiz live data
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        setupListView(model.getQuiz());
 
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {

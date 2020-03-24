@@ -8,18 +8,17 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
-import android.os.Bundle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
-import ch.epfl.qedit.model.Question;
-import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
+import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
-import java.util.Arrays;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,6 +29,7 @@ import org.junit.runner.RunWith;
 public class QuizOverviewFragmentTest {
 
     private IdlingResource idlingResource;
+    private QuizViewModel model;
 
     @Rule
     public final FragmentTestRule<?, QuizOverviewFragment> testRule =
@@ -42,31 +42,10 @@ public class QuizOverviewFragmentTest {
         IdlingRegistry.getInstance().register(idlingResource);
         DatabaseFactory.setInstance(dbService);
 
-        Quiz quiz =
-                new Quiz(
-                        "QuizOverviewFragmentTest",
-                        Arrays.asList(
-                                new Question(
-                                        "The matches problem",
-                                        "How many matches can fit in a shoe of size 43 ?",
-                                        "matrix3x3"),
-                                new Question(
-                                        "Pigeons",
-                                        "How many pigeons are there on Earth ? (Hint: do not count yourself)",
-                                        "matrix1x1"),
-                                new Question("KitchenBu", "Oyster", "matrix1x1"),
-                                new Question(
-                                        "Everything",
-                                        "What is the answer to life the univere and everything ?",
-                                        "matrix3x3"),
-                                new Question(
-                                        "Banane", "Combien y a-t-il de bananes ?", "matrix1x1")));
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("quiz", quiz);
+        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+        model.setQuiz(Util.createMockQuiz("QuestionFragmentTest"));
 
         QuizOverviewFragment quizOverviewFragment = new QuizOverviewFragment();
-        quizOverviewFragment.setArguments(bundle);
 
         testRule.launchFragment(quizOverviewFragment);
     }

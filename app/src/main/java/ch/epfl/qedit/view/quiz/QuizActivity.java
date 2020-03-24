@@ -36,18 +36,13 @@ public class QuizActivity extends AppCompatActivity {
                                 .getSerializable(HomeQuizListFragment.QUIZID);
 
         model = new ViewModelProvider(this).get(QuizViewModel.class);
+        model.setQuiz(quiz);
 
         overviewActive = false;
         handleToggleOverview();
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("quiz", quiz);
-
         QuestionFragment questionFragment = new QuestionFragment();
-        questionFragment.setArguments(bundle);
-
         overview = new QuizOverviewFragment();
-        overview.setArguments(bundle);
 
         getSupportFragmentManager()
                 .beginTransaction()
