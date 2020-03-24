@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
         LocaleHelper.setLocale(this, languageCode);
+
         this.recreate();
     }
 
