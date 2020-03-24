@@ -8,10 +8,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.Objects;
 
 public class FirebaseDBService implements DatabaseService {
 
-    private FirebaseFirestore db;
+    private final FirebaseFirestore db;
 
     public FirebaseDBService() {
         // Access a Cloud Firestore instance
@@ -33,7 +34,7 @@ public class FirebaseDBService implements DatabaseService {
                                 Response<BundledData> response;
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
-                                    if (document.exists())
+                                    if (Objects.requireNonNull(document).exists())
                                         if (collection.equals("quizzes"))
                                             response =
                                                     Response.ok(

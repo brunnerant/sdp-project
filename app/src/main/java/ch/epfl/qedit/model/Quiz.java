@@ -1,12 +1,12 @@
 package ch.epfl.qedit.model;
 
-import ch.epfl.qedit.util.Bundlable;
+import ch.epfl.qedit.util.Bundleable;
 import ch.epfl.qedit.util.BundledData;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 /** Represents a quiz. For now, it is simply a immutable list of question. */
-public class Quiz implements Bundlable {
+public class Quiz implements Bundleable {
     /**
      * We cannot modify this list of question in the Quiz class, this list will be edited in a Quiz
      * builder

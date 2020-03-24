@@ -8,10 +8,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.Objects;
 
 public class FirebaseAuthService implements AuthenticationService {
 
-    private FirebaseFirestore db;
+    private final FirebaseFirestore db;
 
     public FirebaseAuthService() {
         // Access a Cloud Firestore instance
@@ -21,12 +22,12 @@ public class FirebaseAuthService implements AuthenticationService {
     private User getUserFromDocument(DocumentSnapshot document) {
 
         String docRole = document.get("role", String.class);
-        User.Role role = User.Role.Participant;
+        User.Role role;
 
-        if (docRole.equals(null)) role = User.Role.Participant;
-        if (docRole.equals("admin")) role = User.Role.Administrator;
-        if (docRole.equals("participant")) role = User.Role.Participant;
-        if (docRole.equals("editor")) role = User.Role.Editor;
+        if (docRole == null || docRole.equals("participant")) role = User.Role.Participant;
+        else if (docRole.equals("admin")) role = User.Role.Administrator;
+        else if (docRole.equals("editor")) role = User.Role.Editor;
+        else role = User.Role.Participant;
 
         return new User(
                 document.get("first_name", String.class),
@@ -46,7 +47,7 @@ public class FirebaseAuthService implements AuthenticationService {
                                 Response<User> response;
                                 if (task.isSuccessful()) {
                                     DocumentSnapshot document = task.getResult();
-                                    if (document.exists())
+                                    if (Objects.requireNonNull(document).exists())
                                         response = Response.ok(getUserFromDocument(document));
                                     else response = Response.error(WRONG_TOKEN);
                                 } else {
