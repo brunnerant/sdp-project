@@ -47,7 +47,7 @@ public class QuestionFragmentTest {
 
         Quiz quiz =
                 new Quiz(
-                        "QuizOverviewFragmentTest",
+                        "QuestionFragmentTest",
                         Arrays.asList(
                                 new Question(
                                         "The matches problem",
