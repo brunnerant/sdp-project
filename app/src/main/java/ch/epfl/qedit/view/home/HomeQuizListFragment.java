@@ -79,19 +79,7 @@ public class HomeQuizListFragment extends Fragment {
 
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                        CustomAdapter.CustomViewHolder customViewHolder =
-                                (CustomAdapter.CustomViewHolder) viewHolder;
-                        int position = viewHolder.getAdapterPosition();
-                        final Map.Entry<String, String> entryScrew =
-                                new ArrayList<>(user.getQuizzes().entrySet()).get(position);
-
-                        if (swipeDir == ItemTouchHelper.LEFT) {
-                            homePopUp.popUpWarningDelete(entryScrew.getValue(), position);
-                        } else if (swipeDir == ItemTouchHelper.RIGHT) {
-                            homePopUp.popUpEdit(entryScrew.getValue(), position);
-                        }
-
-                        customAdapter.notifyDataSetChanged();
+                        doOnSwipe(viewHolder, swipeDir);
                     }
 
                     @Override
@@ -150,9 +138,21 @@ public class HomeQuizListFragment extends Fragment {
                     }
                 };
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        return new ItemTouchHelper(simpleCallback);
+    }
 
-        return itemTouchHelper;
+    private void doOnSwipe(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+        int position = viewHolder.getAdapterPosition();
+        final Map.Entry<String, String> entryScrew =
+                new ArrayList<>(user.getQuizzes().entrySet()).get(position);
+
+        if (swipeDir == ItemTouchHelper.LEFT) {
+            homePopUp.popUpWarningDelete(entryScrew.getValue(), position);
+        } else if (swipeDir == ItemTouchHelper.RIGHT) {
+            homePopUp.popUpEdit(entryScrew.getValue(), position);
+        }
+
+        customAdapter.notifyDataSetChanged();
     }
 
     private RecyclerView.ViewHolder setVisibilityOnChildDraw(
