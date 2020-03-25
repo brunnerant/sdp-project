@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MockDBService implements DatabaseService {
 
-    public class MockQuiz {
+    public static class MockQuiz {
         private String title_en;
         private String title_fr;
         private ImmutableList<Question> questions_fr;
@@ -134,13 +134,12 @@ public class MockDBService implements DatabaseService {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                Response<List<Question>> response = Response.error(WRONG_DOCUMENT);
+                                Response<List<Question>> response;
                                 if (!db.containsKey(quizID))
                                     response = Response.error(WRONG_DOCUMENT);
                                 else {
                                     List<Question> questions =
-                                            new ArrayList<Question>(
-                                                    db.get(quizID).getQuestions_en());
+                                            new ArrayList<>(db.get(quizID).getQuestions_en());
                                     response = Response.ok(questions);
                                 }
                                 idlingResource.decrement();
@@ -164,7 +163,7 @@ public class MockDBService implements DatabaseService {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                Response<String> response = Response.error(WRONG_DOCUMENT);
+                                Response<String> response;
                                 if (!db.containsKey(quizID))
                                     response = Response.error(WRONG_DOCUMENT);
                                 else {

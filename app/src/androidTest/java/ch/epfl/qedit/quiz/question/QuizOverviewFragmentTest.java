@@ -2,16 +2,14 @@ package ch.epfl.qedit.quiz.question;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 
-import android.view.View;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
@@ -43,18 +41,26 @@ public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
     }
 
     @Test
-    public void testOverviewIsLoading() {
-        onView(withId(R.id.question_list))
-                .check(matches(isDisplayed()))
-                .check(matches(not(hasDescendant(any(View.class)))));
+    public void testOverviewIsDisplayed() {
+        onView(withId(R.id.question_list)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testQuizIsProperlyLoaded() {
-        model.loadQuiz("quiz0");
+    public void testQuizOverviewIsProperlyShown() {
         onData(anything())
                 .inAdapterView(withId(R.id.question_list))
                 .atPosition(0)
-                .check(matches(withText("1) Banane")));
+                .check(matches(withText("1) The matches problem")));
+    }
+
+    @Test
+    public void testFocusedQuestionChangesOnClick() {
+        onData(anything()).inAdapterView(withId(R.id.question_list)).atPosition(0).perform(click());
+
+        assertEquals(0, (int) model.getFocusedQuestion().getValue());
+
+        onData(anything()).inAdapterView(withId(R.id.question_list)).atPosition(1).perform(click());
+
+        assertEquals(1, (int) model.getFocusedQuestion().getValue());
     }
 }

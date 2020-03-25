@@ -28,7 +28,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
             FragmentTestRule.create(QuestionFragment.class, false, false);
 
     @Before
-    public void init() {
+    public void setup() {
         model = super.setup(testRule, new QuestionFragment());
     }
 
@@ -41,16 +41,16 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
     public void testFragmentIsEmptyByDefault() {
         onView(withId(R.id.question_title)).check(matches(withText("")));
         onView(withId(R.id.question_display)).check(matches(withText("")));
-        onView(withId(R.id.answer_fragment)).check(doesNotExist());
+        onView(withId(R.id.answersTable)).check(doesNotExist());
     }
 
     @Test
     public void testFragmentDisplaysQuestionCorrectly() {
-        model.loadQuiz("quiz0");
         model.getFocusedQuestion().postValue(0);
-        onView(withId(R.id.question_title)).check(matches(withText("Question 1 - Banane")));
+        onView(withId(R.id.question_title))
+                .check(matches(withText("Question 1 - The matches problem")));
         onView(withId(R.id.question_display))
-                .check(matches(withText("Combien y a-t-il de bananes ?")));
+                .check(matches(withText("How many matches can fit in a shoe of size 43 ?")));
         onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
     }
 }
