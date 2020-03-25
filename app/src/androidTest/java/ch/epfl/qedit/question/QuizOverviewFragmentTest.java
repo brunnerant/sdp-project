@@ -11,7 +11,6 @@ import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertEquals;
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import ch.epfl.qedit.FragmentTestUsingDB;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
@@ -23,7 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class QuizOverviewFragmentTest extends FragmentTestUsingDB {
+public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
     private QuizViewModel model;
 
     @Rule

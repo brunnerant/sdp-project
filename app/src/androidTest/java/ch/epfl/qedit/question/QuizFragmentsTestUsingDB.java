@@ -1,4 +1,4 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.question;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,7 +12,7 @@ import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
 
-public class FragmentTestUsingDB {
+public class QuizFragmentsTestUsingDB {
     private IdlingResource idlingResource;
 
     public QuizViewModel setup(FragmentTestRule testRule, Fragment fragment) {

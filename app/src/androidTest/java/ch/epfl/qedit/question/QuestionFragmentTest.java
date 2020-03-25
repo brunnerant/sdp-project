@@ -8,7 +8,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import ch.epfl.qedit.FragmentTestUsingDB;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
@@ -19,7 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class QuestionFragmentTest extends FragmentTestUsingDB {
+public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
     private QuizViewModel model;
 
     @Rule
