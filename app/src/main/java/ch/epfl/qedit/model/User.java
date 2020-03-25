@@ -67,20 +67,7 @@ public class User implements Serializable {
     }
 
     public void removeQuiz(String key) {
-        System.err.println("===========================================================");
-        for (String name : quizzes.keySet()) {
-            String key2 = name.toString();
-            String value = quizzes.get(name).toString();
-            System.out.println(key2 + " " + value);
-        }
-
         quizzes.remove(key);
-        for (String name : quizzes.keySet()) {
-            String key2 = name.toString();
-            String value = quizzes.get(name).toString();
-            System.out.println(key2 + " " + value);
-        }
-        System.err.println("===========================================================");
     }
 
     public ImmutableMap<String, String> getQuizzes() {
