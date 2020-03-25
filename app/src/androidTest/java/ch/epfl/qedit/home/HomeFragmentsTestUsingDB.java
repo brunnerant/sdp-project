@@ -11,7 +11,7 @@ public class HomeFragmentsTestUsingDB {
     public void setup(FragmentTestRule testRule, Fragment fragment) {
         this.testRule = testRule;
 
-        User user = new User("Marcel", "Doe", User.Role.Participant);
+        User user = new User("Jon", "Snow", User.Role.Participant);
         user.addQuiz("quiz0", "Qualification EPFL");
 
         Bundle bundle = new Bundle();

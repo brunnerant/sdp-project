@@ -31,8 +31,7 @@ public class HomeInfoFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Test
     public void testParticipantIsDisplayedCorrectly() {
-        onView(ViewMatchers.withId(R.id.greeting))
-                .check(matches(withText("Bienvenue Marcel Doe !")));
+        onView(ViewMatchers.withId(R.id.greeting)).check(matches(withText("Bienvenue Jon Snow !")));
         onView(withId(R.id.role)).check(matches(withText("Vous êtes un participant.")));
     }
 }
