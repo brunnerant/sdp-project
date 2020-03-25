@@ -12,6 +12,7 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,6 +29,11 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
     @Before
     public void setup() {
         model = super.setup(testRule, new QuestionFragment());
+    }
+
+    @After
+    public void cleanup() {
+        super.cleanup();
     }
 
     @Test

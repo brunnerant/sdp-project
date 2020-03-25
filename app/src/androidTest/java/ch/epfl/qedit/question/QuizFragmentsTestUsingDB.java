@@ -10,7 +10,6 @@ import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
-import org.junit.After;
 
 public class QuizFragmentsTestUsingDB {
     private IdlingResource idlingResource;
@@ -31,7 +30,6 @@ public class QuizFragmentsTestUsingDB {
         return model;
     }
 
-    @After
     public void cleanup() {
         IdlingRegistry.getInstance().unregister(idlingResource);
     }
