@@ -26,4 +26,6 @@
     <string name="give_answer_here_hint">Entrez ici votre réponse</string>
     <string name="qedit_logo_description">QEDit Logo</string>
     <string name="textview">TextView</string>
+    <string name="delete">delete</string>
+    <string name="edit">Edit</string>
 </resources>

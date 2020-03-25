@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -13,12 +13,32 @@
         tools:layout_editor_absoluteY="1dp">
 
         <TextView
+            android:id="@+id/edit"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center_vertical"
+            android:text="@string/edit"
+            android:textColor="#FFFFFF"
+            android:background="#00FF00"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/delete"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center_vertical|end"
+            android:text="@string/delete"
+            android:textColor="#FFFFFF"
+            android:background="#FF0000"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_weight="1"
+            android:background="#FFFFFF"
             android:gravity="center_vertical"
             android:text="@string/textview"
             android:textSize="15sp" />
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

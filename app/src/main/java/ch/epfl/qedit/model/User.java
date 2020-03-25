@@ -3,7 +3,9 @@ package ch.epfl.qedit.model;
 import com.google.common.collect.ImmutableMap;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /** Represents a user of the QEDit app. */
 public class User implements Serializable {
@@ -43,8 +45,42 @@ public class User implements Serializable {
         return quizzes.put(key, title) != null;
     }
 
+    public void removeQuizOnValue(String value) {
+        // Using iterator to avoid ConcurrentModificationException
+        Iterator<Map.Entry<String, String>> it = quizzes.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            if (entry.getValue().equals(value)) {
+                it.remove();
+            }
+        }
+    }
+
+    public void updateQuizOnValue(String oldValue, String newValue) {
+        String value = newValue.trim();
+
+        for (Map.Entry<String, String> entry : quizzes.entrySet()) {
+            if (entry.getValue().equals(oldValue)) {
+                quizzes.put(entry.getKey(), value);
+            }
+        }
+    }
+
     public void removeQuiz(String key) {
+        System.err.println("===========================================================");
+        for (String name : quizzes.keySet()) {
+            String key2 = name.toString();
+            String value = quizzes.get(name).toString();
+            System.out.println(key2 + " " + value);
+        }
+
         quizzes.remove(key);
+        for (String name : quizzes.keySet()) {
+            String key2 = name.toString();
+            String value = quizzes.get(name).toString();
+            System.out.println(key2 + " " + value);
+        }
+        System.err.println("===========================================================");
     }
 
     public ImmutableMap<String, String> getQuizzes() {
