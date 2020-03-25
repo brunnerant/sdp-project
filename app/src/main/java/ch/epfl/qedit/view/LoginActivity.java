@@ -2,6 +2,8 @@ package ch.epfl.qedit.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -10,11 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Locale;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
@@ -22,6 +20,7 @@ import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Response;
+import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -47,48 +46,71 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
 
-        // Language selection
+        /** Language selection */
+        // Create spinner (language list)
         Spinner languageSelectionSpinner = (Spinner) findViewById(R.id.language_selection);
+
+        // Find app's current language's position in languages list
         String currentLanguage = Locale.getDefault().getLanguage();
         int positionInLanguageList = 0;
         String[] languageList = getResources().getStringArray(R.array.languages_codes);
-        for (int i = 0; i < languageList.length; ++i) {
-            if (currentLanguage.equals(languageList[i])) positionInLanguageList = i;
+        boolean languageFound = false;
+        for (int i = 0; i < languageList.length && !languageFound; ++i) {
+            if (currentLanguage.equals(languageList[i])) {
+                positionInLanguageList = i;
+                languageFound = true;
+            }
         }
+
+        // Set current language in spinner at startup
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
+        // Set listener
         languageSelectionSpinner.setOnItemSelectedListener(this);
+        // Reset page title to display it in the right language
         setTitle(R.string.login);
     }
 
     @Override
+    /** This method is needed to apply the desired language at the activity startup */
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     @Override
+    /** This method tells us if the user has interacted with the activity since it was started */
     public void onUserInteraction() {
         super.onUserInteraction();
         userHasInteracted = true;
     }
 
     @Override
+    /** This method runs if the user selects another language */
     public void onItemSelected(AdapterView parent, View view, int pos, long id) {
+        // Do not run if user has not chosen on a language
         if (!userHasInteracted) {
             return;
         }
+
+        // Get language code from the position of the clicked language in the spinner
+        String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
+        // Set new language
+        LocaleHelper.setLocale(this, languageCode);
+        // Recreate activity to apply new language
+        this.recreate();
+
+        // Set new language for toast
+        Configuration config = getResources().getConfiguration();
+        config.locale = new Locale(languageCode);
+        Resources resources = new Resources(getAssets(), getResources().getDisplayMetrics(), config);
+        // Display changed language confirmation
         Toast.makeText(
                         getApplicationContext(),
-                        getResources().getString(R.string.language_changed)
+                getResources().getString(R.string.language_changed)
                                 + " "
                                 + getResources()
-                                        .getStringArray(R.array.languages_list_translated)[pos],
+                                        .getStringArray(R.array.languages_list)[pos],
                         Toast.LENGTH_SHORT)
                 .show();
-
-        String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
-        LocaleHelper.setLocale(this, languageCode);
-
-        this.recreate();
     }
 
     @Override

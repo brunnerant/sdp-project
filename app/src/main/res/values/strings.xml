@@ -20,15 +20,13 @@
         <!-- This list of languages will be the available languages that the user can select." -->
         <item>English</item>
         <item>Français</item>
-    </string-array>
-    <string-array name="languages_list_translated">
-        <item>English</item>
-        <item>French</item>
+        <!-- Add new language here -->
     </string-array>
     <string-array name="languages_codes" translatable="false">
         <!-- Important: language_codes must be in the same order as languages_list." -->
         <item>en</item>
         <item>fr</item>
+        <!-- Add new language code here -->
     </string-array>
     <string name="language_changed">Language changed to</string>
 

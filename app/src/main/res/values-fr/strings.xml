@@ -6,10 +6,6 @@
     <string name="qedit_logo_description">Logo QEDit</string>
 
     <!-- Language selection -->
-    <string-array name="languages_list_translated">
-        <item>Anglais</item>
-        <item>Français</item>
-    </string-array>
     <string name="language_changed">Langue changée en</string>
 
     <!-- Login -->
