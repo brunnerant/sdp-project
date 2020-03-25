@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
 
         textViewRole.setText(getRoleText(user.getRole()));
 
-        setTitle(R.string.home);
+        setTitle(R.string.label_home);
     }
 
     @Override

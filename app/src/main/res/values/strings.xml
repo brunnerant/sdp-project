@@ -31,14 +31,15 @@
     <string name="language_changed">Language changed to</string>
 
     <!-- Login -->
-    <string name="login">Login</string>
+    <string name="label_login">Login</string>
+    <string name="button_login">Login</string>
     <string name="token_hint">Login token</string>
     <string name="wrong_token_message">Invalid token</string>
     <string name="empty_token_message">Empty token</string>
     <string name="connection_error_message">Connection error</string>
 
     <!-- Home -->
-    <string name="home">Home</string>
+    <string name="label_home">Home</string>
     <string name="button_open_quiz" translatable="false">Quiz</string>
     <string name="welcome">Welcome,</string>
     <string name="role_administrator">You are an administrator.</string>

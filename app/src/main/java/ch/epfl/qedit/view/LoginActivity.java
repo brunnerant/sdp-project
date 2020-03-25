@@ -1,13 +1,16 @@
 package ch.epfl.qedit.view;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -66,8 +69,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
         // Set listener
         languageSelectionSpinner.setOnItemSelectedListener(this);
-        // Reset page title to display it in the right language
-        setTitle(R.string.login);
+        // Set page title to display it in the right language
+        setTitle(R.string.label_login);
     }
 
     @Override
@@ -95,21 +98,55 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
         // Set new language
         LocaleHelper.setLocale(this, languageCode);
-        // Recreate activity to apply new language
-        this.recreate();
 
-        // Set new language for toast
-        Configuration config = getResources().getConfiguration();
-        config.locale = new Locale(languageCode);
-        Resources resources = new Resources(getAssets(), getResources().getDisplayMetrics(), config);
+        setLocale(languageCode);
+
         // Display changed language confirmation
+        printToastLanguageChanged(pos);
+
+
+        unsetLocale();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // refresh your views here
+        tokenText.setHint(R.string.token_hint);
+        Button mButton = (Button) findViewById(R.id.login_button);
+        mButton.setText(R.string.button_login);
+        setTitle(R.string.label_login);
+
+        super.onConfigurationChanged(newConfig);
+    }
+
+    public void unsetLocale() {
+        Locale myLocale = new Locale(Locale.getDefault().getLanguage());
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    public void setLocale(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        onConfigurationChanged(conf);
+    }
+
+    private void printToastLanguageChanged(int languagePos) {
         Toast.makeText(
-                        getApplicationContext(),
+                getApplicationContext(),
                 getResources().getString(R.string.language_changed)
-                                + " "
-                                + getResources()
-                                        .getStringArray(R.array.languages_list)[pos],
-                        Toast.LENGTH_SHORT)
+                        + " "
+                        + getResources()
+                        .getStringArray(R.array.languages_list)[languagePos],
+                Toast.LENGTH_SHORT)
                 .show();
     }
 

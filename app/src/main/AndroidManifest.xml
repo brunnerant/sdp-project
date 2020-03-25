@@ -14,7 +14,7 @@
 
         <activity
             android:name=".view.LoginActivity"
-            android:label="@string/login">
+            android:label="@string/label_login">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
 
         <activity
             android:name=".view.HomeActivity"
-            android:label="@string/home"
+            android:label="@string/label_home"
             android:parentActivityName=".view.LoginActivity"
             android:launchMode="singleTop">
 
