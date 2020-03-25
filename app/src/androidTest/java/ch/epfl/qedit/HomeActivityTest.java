@@ -17,10 +17,13 @@ import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.HomeActivity;
 import ch.epfl.qedit.view.LoginActivity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.function.Function;
 
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.QuizActivity;
@@ -31,13 +34,6 @@ public class HomeActivityTest {
     public final IntentsTestRule<HomeActivity> testRule =
             new IntentsTestRule<>(HomeActivity.class, false, false);
 
-    @Before
-    public void before() {
-        //Intent intent = getIntent();
-        //testRule.launchActivity(Intent intent = getIntent();)
-        //testrule.finishactivity
-    }
-
     public void launchActivity(User user) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -46,14 +42,15 @@ public class HomeActivityTest {
         testRule.launchActivity(intent);
     }
 
+    @After
     public void finishActivity() {
         testRule.finishActivity();
     }
 
-    public void testUserIsDisplayedCorrectly(User user, String greeting, String role) {
+    public void testUserIsDisplayedCorrectly(User user, Function<HomeActivity, String> greeting, Function<HomeActivity, String> role) {
         launchActivity(user);
-        onView(withId(R.id.greeting)).check(matches(withText(greeting)));
-        onView(withId(R.id.role)).check(matches(withText(role)));
+        onView(withId(R.id.greeting)).check(matches(withText(greeting.apply(testRule.getActivity()))));
+        onView(withId(R.id.role)).check(matches(withText(role.apply(testRule.getActivity()))));
         finishActivity();
     }
 
@@ -61,10 +58,20 @@ public class HomeActivityTest {
     public void testParticipantIsDisplayedCorrectly() {
         testUserIsDisplayedCorrectly(
                 new User("Bill", "Gates", User.Role.Participant),
-                testRule.getActivity().getString(R.string.welcome)
-                        + " Bill Gates"
-                        + testRule.getActivity().getString(R.string.exclamation_point),
-                testRule.getActivity().getString(R.string.role_participant));
+                new Function<HomeActivity, String>() {
+                    @Override
+                    public String apply(HomeActivity homeActivity) {
+                        return homeActivity.getString(R.string.welcome)
+                                + " Bill Gates"
+                                + homeActivity.getString(R.string.exclamation_point);
+                    }
+                },
+                new Function<HomeActivity, String>() {
+                    @Override
+                    public String apply(HomeActivity homeActivity) {
+                        return homeActivity.getString(R.string.role_participant);
+                    }
+                });
     }
 /*
     @Test
