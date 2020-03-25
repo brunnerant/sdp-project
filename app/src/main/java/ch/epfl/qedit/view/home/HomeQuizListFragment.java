@@ -60,8 +60,6 @@ public class HomeQuizListFragment extends Fragment {
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-
-
         getNewItemTouchHelper().attachToRecyclerView(recyclerView);
 
         // Have to set it to true to show the menu, if the user is an editor
@@ -73,58 +71,96 @@ public class HomeQuizListFragment extends Fragment {
     }
 
     private ItemTouchHelper getNewItemTouchHelper() {
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return true;
-            }
+        ItemTouchHelper itemTouchHelper =
+                new ItemTouchHelper(
+                        new ItemTouchHelper.SimpleCallback(
+                                0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                            @Override
+                            public boolean onMove(
+                                    @NonNull RecyclerView recyclerView,
+                                    @NonNull RecyclerView.ViewHolder viewHolder,
+                                    @NonNull RecyclerView.ViewHolder target) {
+                                return true;
+                            }
 
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                CustomAdapter.CustomViewHolder customViewHolder =
-                        (CustomAdapter.CustomViewHolder) viewHolder;
-                int position = viewHolder.getAdapterPosition();
-                final Map.Entry<String, String> entryScrew =
-                        new ArrayList<>(user.getQuizzes().entrySet()).get(position);
+                            @Override
+                            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                                CustomAdapter.CustomViewHolder customViewHolder =
+                                        (CustomAdapter.CustomViewHolder) viewHolder;
+                                int position = viewHolder.getAdapterPosition();
+                                final Map.Entry<String, String> entryScrew =
+                                        new ArrayList<>(user.getQuizzes().entrySet()).get(position);
 
-                if (swipeDir == ItemTouchHelper.LEFT) {
-                    popUpWarningDelete(entryScrew.getValue(), position);
-                } else if (swipeDir == ItemTouchHelper.RIGHT) {
-                    popUpEdit(entryScrew.getValue(), position);
-                }
+                                if (swipeDir == ItemTouchHelper.LEFT) {
+                                    popUpWarningDelete(entryScrew.getValue(), position);
+                                } else if (swipeDir == ItemTouchHelper.RIGHT) {
+                                    popUpEdit(entryScrew.getValue(), position);
+                                }
 
-                customAdapter.notifyDataSetChanged();
-            }
+                                customAdapter.notifyDataSetChanged();
+                            }
 
-            @Override
-            public void onChildDrawOver(Canvas c,  RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                CustomAdapter.CustomViewHolder customViewHolder = (CustomAdapter.CustomViewHolder) viewHolder;
-                getDefaultUIUtil().onDrawOver(c, recyclerView, customViewHolder.name, dX, dY, actionState, isCurrentlyActive);
-            }
+                            @Override
+                            public void onChildDrawOver(
+                                    Canvas c,
+                                    RecyclerView recyclerView,
+                                    RecyclerView.ViewHolder viewHolder,
+                                    float dX,
+                                    float dY,
+                                    int actionState,
+                                    boolean isCurrentlyActive) {
+                                CustomAdapter.CustomViewHolder customViewHolder =
+                                        (CustomAdapter.CustomViewHolder) viewHolder;
+                                getDefaultUIUtil()
+                                        .onDrawOver(
+                                                c,
+                                                recyclerView,
+                                                customViewHolder.name,
+                                                dX,
+                                                dY,
+                                                actionState,
+                                                isCurrentlyActive);
+                            }
 
-            @Override
-            public void onSelectedChanged(
-                    RecyclerView.ViewHolder viewHolder, int actionState) {
-                if (viewHolder != null) {
-                    CustomAdapter.CustomViewHolder customViewHolder =
-                            (CustomAdapter.CustomViewHolder) viewHolder;
-                    getDefaultUIUtil().onSelected(customViewHolder.name);
-                }
-            }
+                            @Override
+                            public void onSelectedChanged(
+                                    RecyclerView.ViewHolder viewHolder, int actionState) {
+                                if (viewHolder != null) {
+                                    CustomAdapter.CustomViewHolder customViewHolder =
+                                            (CustomAdapter.CustomViewHolder) viewHolder;
+                                    getDefaultUIUtil().onSelected(customViewHolder.name);
+                                }
+                            }
 
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                CustomAdapter.CustomViewHolder customViewHolder = (CustomAdapter.CustomViewHolder) viewHolder;
-                if (dX > 0) {
-                    customViewHolder.delete.setVisibility(View.INVISIBLE);
-                    customViewHolder.edit.setVisibility(View.VISIBLE);
-                } else if (dX < 0) {
-                    customViewHolder.edit.setVisibility(View.INVISIBLE);
-                    customViewHolder.delete.setVisibility(View.VISIBLE);
-                }
-                getDefaultUIUtil().onDraw(c, recyclerView, customViewHolder.name, dX, dY, actionState, isCurrentlyActive);
-            }
-        });
+                            @Override
+                            public void onChildDraw(
+                                    Canvas c,
+                                    RecyclerView recyclerView,
+                                    RecyclerView.ViewHolder viewHolder,
+                                    float dX,
+                                    float dY,
+                                    int actionState,
+                                    boolean isCurrentlyActive) {
+                                CustomAdapter.CustomViewHolder customViewHolder =
+                                        (CustomAdapter.CustomViewHolder) viewHolder;
+                                if (dX > 0) {
+                                    customViewHolder.delete.setVisibility(View.INVISIBLE);
+                                    customViewHolder.edit.setVisibility(View.VISIBLE);
+                                } else if (dX < 0) {
+                                    customViewHolder.edit.setVisibility(View.INVISIBLE);
+                                    customViewHolder.delete.setVisibility(View.VISIBLE);
+                                }
+                                getDefaultUIUtil()
+                                        .onDraw(
+                                                c,
+                                                recyclerView,
+                                                customViewHolder.name,
+                                                dX,
+                                                dY,
+                                                actionState,
+                                                isCurrentlyActive);
+                            }
+                        });
 
         return itemTouchHelper;
     }
@@ -159,7 +195,9 @@ public class HomeQuizListFragment extends Fragment {
     }
 
     private void setNegativeButton(AlertDialog.Builder builder) {
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -174,7 +212,9 @@ public class HomeQuizListFragment extends Fragment {
 
         setNegativeButton(builder);
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         user.removeQuizOnValue(title);
@@ -197,7 +237,9 @@ public class HomeQuizListFragment extends Fragment {
 
         setNegativeButton(builder);
 
-        builder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(
+                "Done",
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         addQuizzes(input.getText().toString());
@@ -226,13 +268,20 @@ public class HomeQuizListFragment extends Fragment {
                         boolean canAdd = user.canAdd(title);
 
                         if (editText.length() <= 0 || !canAdd) {
-                            String error =  editText.length() <= 0 ? errorBlank : "Can't have duplicate names";
+                            String error =
+                                    editText.length() <= 0
+                                            ? errorBlank
+                                            : "Can't have duplicate names";
                             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
-                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
+                            alertDialog
+                                    .getButton(AlertDialog.BUTTON_POSITIVE)
+                                    .setTextColor(Color.WHITE);
                             editText.setError(error);
                         } else {
                             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
-                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(colorButton);
+                            alertDialog
+                                    .getButton(AlertDialog.BUTTON_POSITIVE)
+                                    .setTextColor(colorButton);
                             editText.setError(null);
                         }
                     }
@@ -286,7 +335,8 @@ public class HomeQuizListFragment extends Fragment {
             CustomViewHolder customViewHolder = (CustomViewHolder) holder;
 
             // TODO Find a better way than this...
-            final Map.Entry<String, String> entryScrew = new ArrayList<>(user.getQuizzes().entrySet()).get(position);
+            final Map.Entry<String, String> entryScrew =
+                    new ArrayList<>(user.getQuizzes().entrySet()).get(position);
             customViewHolder.name.setText(entryScrew.getValue().trim());
             customViewHolder.delete.isShown();
 
