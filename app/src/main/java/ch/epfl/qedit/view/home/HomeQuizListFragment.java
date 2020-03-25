@@ -70,10 +70,7 @@ public class HomeQuizListFragment extends Fragment {
                 new ItemTouchHelper.SimpleCallback(
                         0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
-                    public boolean onMove(
-                            @NonNull RecyclerView recyclerView,
-                            @NonNull RecyclerView.ViewHolder viewHolder,
-                            @NonNull RecyclerView.ViewHolder target) {
+                    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                         return true;
                     }
 
@@ -83,30 +80,17 @@ public class HomeQuizListFragment extends Fragment {
                     }
 
                     @Override
-                    public void onChildDrawOver(
-                            Canvas c,
-                            RecyclerView recyclerView,
-                            RecyclerView.ViewHolder viewHolder,
-                            float dX,
-                            float dY,
+                    public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY,
                             int actionState,
                             boolean isCurrentlyActive) {
                         CustomAdapter.CustomViewHolder customViewHolder =
                                 (CustomAdapter.CustomViewHolder) viewHolder;
                         getDefaultUIUtil()
-                                .onDrawOver(
-                                        c,
-                                        recyclerView,
-                                        customViewHolder.name,
-                                        dX,
-                                        dY,
-                                        actionState,
-                                        isCurrentlyActive);
+                                .onDrawOver(c, recyclerView, customViewHolder.name, dX, dY, actionState, isCurrentlyActive);
                     }
 
                     @Override
-                    public void onSelectedChanged(
-                            RecyclerView.ViewHolder viewHolder, int actionState) {
+                    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
                         if (viewHolder != null) {
                             CustomAdapter.CustomViewHolder customViewHolder =
                                     (CustomAdapter.CustomViewHolder) viewHolder;
@@ -115,26 +99,11 @@ public class HomeQuizListFragment extends Fragment {
                     }
 
                     @Override
-                    public void onChildDraw(
-                            Canvas c,
-                            RecyclerView recyclerView,
-                            RecyclerView.ViewHolder viewHolder,
-                            float dX,
-                            float dY,
-                            int actionState,
-                            boolean isCurrentlyActive) {
+                    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                         CustomAdapter.CustomViewHolder customViewHolder =
                                 (CustomAdapter.CustomViewHolder) viewHolder;
                         setVisibilityOnChildDraw(dX, customViewHolder);
-                        getDefaultUIUtil()
-                                .onDraw(
-                                        c,
-                                        recyclerView,
-                                        customViewHolder.name,
-                                        dX,
-                                        dY,
-                                        actionState,
-                                        isCurrentlyActive);
+                        getDefaultUIUtil().onDraw(c, recyclerView, customViewHolder.name, dX, dY, actionState, isCurrentlyActive);
                     }
                 };
 
