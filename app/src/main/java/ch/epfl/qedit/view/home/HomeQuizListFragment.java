@@ -1,22 +1,15 @@
 package ch.epfl.qedit.view.home;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -37,10 +30,12 @@ public class HomeQuizListFragment extends Fragment {
     private RecyclerView recyclerView;
     private CustomAdapter customAdapter;
     private User user;
-    private String errorBlank = "Can't be blank";
 
-    // The magic number comes from button color in android
-    private final int colorButton = -2614432;
+    private HomePopUp homePopUp;
+    //    private String errorBlank = "Can't be blank";
+    //
+    //    // The magic number comes from button color in android
+    //    private final int colorButton = -2614432;
 
     @Override
     public View onCreateView(
@@ -53,17 +48,17 @@ public class HomeQuizListFragment extends Fragment {
         final User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
         this.user = user;
 
-        this.customAdapter = new CustomAdapter(requireActivity());
+        this.customAdapter = new CustomAdapter(requireActivity(), user);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
-        getNewItemTouchHelper().attachToRecyclerView(recyclerView);
-
+        homePopUp = new HomePopUp(getContext(), this.user, customAdapter);
         // Have to set it to true to show the menu, if the user is an editor
         if (user.getRole() == User.Role.Editor) {
+            getNewItemTouchHelper().attachToRecyclerView(recyclerView);
             setHasOptionsMenu(true);
         }
 
@@ -92,9 +87,9 @@ public class HomeQuizListFragment extends Fragment {
                                         new ArrayList<>(user.getQuizzes().entrySet()).get(position);
 
                                 if (swipeDir == ItemTouchHelper.LEFT) {
-                                    popUpWarningDelete(entryScrew.getValue(), position);
+                                    homePopUp.popUpWarningDelete(entryScrew.getValue(), position);
                                 } else if (swipeDir == ItemTouchHelper.RIGHT) {
-                                    popUpEdit(entryScrew.getValue(), position);
+                                    homePopUp.popUpEdit(entryScrew.getValue(), position);
                                 }
 
                                 customAdapter.notifyDataSetChanged();
@@ -165,133 +160,137 @@ public class HomeQuizListFragment extends Fragment {
         return itemTouchHelper;
     }
 
-    private void addQuizzes(String title) {
-        int index = user.getQuizzes().size();
-        user.addQuiz(title, title);
-        customAdapter.notifyItemInserted(index);
-    }
+    //    private void addQuizzes(String title) {
+    //        int index = user.getQuizzes().size();
+    //        user.addQuiz(title, title);
+    //        customAdapter.notifyItemInserted(index);
+    //    }
 
-    private void popUpEdit(final String oldValue, final int position) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Give a new name... Or the same one");
+    //    private void popUpEdit(final String oldValue, final int position) {
+    //        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    //        builder.setTitle("Give a new name... Or the same one");
+    //
+    //        final EditText input = new EditText(getContext());
+    //        input.setInputType(InputType.TYPE_CLASS_TEXT);
+    //        builder.setView(input);
+    //
+    //        setNegativeButton(builder);
+    //
+    //        builder.setPositiveButton(
+    //                "Done",
+    //                new DialogInterface.OnClickListener() {
+    //                    @Override
+    //                    public void onClick(DialogInterface dialog, int which) {
+    //                        user.updateQuizOnValue(oldValue, input.getText().toString());
+    //                        customAdapter.notifyItemChanged(position);
+    //                    }
+    //                });
+    //
+    //        errorDialog(builder, input).show();
+    //    }
+    //
+    //    private void setNegativeButton(AlertDialog.Builder builder) {
+    //        builder.setNegativeButton(
+    //                "Cancel",
+    //                new DialogInterface.OnClickListener() {
+    //                    @Override
+    //                    public void onClick(DialogInterface dialog, int which) {
+    //                        dialog.cancel();
+    //                    }
+    //                });
+    //    }
 
-        final EditText input = new EditText(getContext());
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
+    //    private void popUpWarningDelete(final String title, final int position) {
+    //        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    //        builder.setTitle(
+    //                "Are you sure you want to delete, deleting will delete all questions from this
+    // quiz");
+    //
+    //        setNegativeButton(builder);
+    //
+    //        builder.setPositiveButton(
+    //                "Yes",
+    //                new DialogInterface.OnClickListener() {
+    //                    @Override
+    //                    public void onClick(DialogInterface dialog, int which) {
+    //                        user.removeQuizOnValue(title);
+    //                        customAdapter.notifyItemRemoved(position);
+    //                    }
+    //                });
+    //
+    //        final AlertDialog alertDialog = builder.create();
+    //        alertDialog.create();
+    //        alertDialog.show();
+    //    }
 
-        setNegativeButton(builder);
+    //    private void addPopUp() {
+    //        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    //        builder.setTitle("Add quiz's name");
+    //
+    //        final EditText input = new EditText(getContext());
+    //        input.setInputType(InputType.TYPE_CLASS_TEXT);
+    //        builder.setView(input);
+    //
+    //        setNegativeButton(builder);
+    //
+    //        builder.setPositiveButton(
+    //                "Done",
+    //                new DialogInterface.OnClickListener() {
+    //                    @Override
+    //                    public void onClick(DialogInterface dialog, int which) {
+    //                        addQuizzes(input.getText().toString());
+    //                    }
+    //                });
+    //
+    //        errorDialog(builder, input).show();
+    //    }
 
-        builder.setPositiveButton(
-                "Done",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        user.updateQuizOnValue(oldValue, input.getText().toString());
-                        customAdapter.notifyItemChanged(position);
-                    }
-                });
-
-        erorDialog(builder, input).show();
-    }
-
-    private void setNegativeButton(AlertDialog.Builder builder) {
-        builder.setNegativeButton(
-                "Cancel",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-    }
-
-    private void popUpWarningDelete(final String title, final int position) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(
-                "Are you sure you want to delete, deleting will delete all questions from this quiz");
-
-        setNegativeButton(builder);
-
-        builder.setPositiveButton(
-                "Yes",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        user.removeQuizOnValue(title);
-                        customAdapter.notifyItemRemoved(position);
-                    }
-                });
-
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.create();
-        alertDialog.show();
-    }
-
-    private void addPopUp() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Add quiz's name");
-
-        final EditText input = new EditText(getContext());
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        setNegativeButton(builder);
-
-        builder.setPositiveButton(
-                "Done",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        addQuizzes(input.getText().toString());
-                    }
-                });
-
-        erorDialog(builder, input).show();
-    }
-
-    private AlertDialog erorDialog(AlertDialog.Builder builder, final EditText editText) {
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.create();
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
-        editText.setError(errorBlank);
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
-        editText.addTextChangedListener(
-                new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(
-                            CharSequence s, int start, int count, int after) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        String title = editText.getText().toString().trim();
-
-                        boolean canAdd = user.canAdd(title);
-
-                        if (editText.length() <= 0 || !canAdd) {
-                            String error =
-                                    editText.length() <= 0
-                                            ? errorBlank
-                                            : "Can't have duplicate names";
-                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
-                            alertDialog
-                                    .getButton(AlertDialog.BUTTON_POSITIVE)
-                                    .setTextColor(Color.WHITE);
-                            editText.setError(error);
-                        } else {
-                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
-                            alertDialog
-                                    .getButton(AlertDialog.BUTTON_POSITIVE)
-                                    .setTextColor(colorButton);
-                            editText.setError(null);
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {}
-                });
-
-        return alertDialog;
-    }
+    //    private AlertDialog errorDialog(AlertDialog.Builder builder, final EditText editText) {
+    //        final AlertDialog alertDialog = builder.create();
+    //        alertDialog.create();
+    //        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+    //        editText.setError(errorBlank);
+    //        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
+    //        editText.addTextChangedListener(
+    //                new TextWatcher() {
+    //                    @Override
+    //                    public void beforeTextChanged(
+    //                            CharSequence s, int start, int count, int after) {}
+    //
+    //                    @Override
+    //                    public void onTextChanged(CharSequence s, int start, int before, int
+    // count) {
+    //                        String title = editText.getText().toString().trim();
+    //
+    //                        boolean canAdd = user.canAdd(title);
+    //
+    //                        if (editText.length() <= 0 || !canAdd) {
+    //                            String error =
+    //                                    editText.length() <= 0
+    //                                            ? errorBlank
+    //                                            : "Can't have duplicate names";
+    //
+    // alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+    //                            alertDialog
+    //                                    .getButton(AlertDialog.BUTTON_POSITIVE)
+    //                                    .setTextColor(Color.WHITE);
+    //                            editText.setError(error);
+    //                        } else {
+    //
+    // alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
+    //                            alertDialog
+    //                                    .getButton(AlertDialog.BUTTON_POSITIVE)
+    //                                    .setTextColor(colorButton);
+    //                            editText.setError(null);
+    //                        }
+    //                    }
+    //
+    //                    @Override
+    //                    public void afterTextChanged(Editable s) {}
+    //                });
+    //
+    //        return alertDialog;
+    //    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -303,7 +302,7 @@ public class HomeQuizListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add:
-                addPopUp();
+                homePopUp.addPopUp();
                 break;
         }
         return true;
@@ -317,10 +316,12 @@ public class HomeQuizListFragment extends Fragment {
         startActivity(intent);
     }
 
-    private class CustomAdapter extends RecyclerView.Adapter {
+    public class CustomAdapter extends RecyclerView.Adapter {
         private LayoutInflater inflater;
+        private User user;
 
-        public CustomAdapter(Context context) {
+        public CustomAdapter(Context context, User user) {
+            this.user = user;
             inflater = LayoutInflater.from(context);
         }
 
@@ -348,11 +349,6 @@ public class HomeQuizListFragment extends Fragment {
                             startQuizActivity(item.getKey());
                         }
                     });
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
         }
 
         @Override
