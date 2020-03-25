@@ -97,16 +97,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // Get language code from the position of the clicked language in the spinner
         String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
         // Set new language
-        //LocaleHelper.setLocale(this, languageCode);
-        updateViews(languageCode);
-
-        //setLocale1(languageCode);
-        // Display changed language confirmation
-        printToastLanguageChanged(pos);
+        updateViewsAndMakeToast(languageCode, pos);
 
     }
 
-    private void updateViews(String languageCode) {
+    private void updateViewsAndMakeToast(String languageCode, int languagePos) {
         Context context = LocaleHelper.setLocale(this, languageCode);
         Resources resources = context.getResources();
 
@@ -114,36 +109,13 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         Button mButton = (Button) findViewById(R.id.login_button);
         mButton.setText(resources.getString(R.string.button_login));
         setTitle(resources.getString(R.string.label_login));
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        // refresh your views here
-        tokenText.setHint(R.string.token_hint);
-        Button mButton = (Button) findViewById(R.id.login_button);
-        mButton.setText(R.string.button_login);
-        setTitle(R.string.label_login);
-
-        super.onConfigurationChanged(newConfig);
-    }
-
-    public void setLocale1(String lang) {
-        Locale myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        onConfigurationChanged(conf);
-    }
-
-    private void printToastLanguageChanged(int languagePos) {
+        // Display changed language confirmation
         Toast.makeText(
                 getApplicationContext(),
-                getResources().getString(R.string.language_changed)
+                resources.getString(R.string.language_changed)
                         + " "
-                        + getResources()
-                        .getStringArray(R.array.languages_list)[languagePos],
+                        + resources.getStringArray(R.array.languages_list)[languagePos],
                 Toast.LENGTH_SHORT)
                 .show();
     }
