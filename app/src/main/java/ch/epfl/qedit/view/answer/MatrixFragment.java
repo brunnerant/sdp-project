@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
-    public MatrixFormat matrixFormat;
+    private MatrixFormat matrixFormat;
 
     private ArrayList<TableRow> tableRow = new ArrayList<>();
     private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
@@ -78,8 +78,9 @@ public class MatrixFragment extends Fragment {
         editText.setFilters(
                 new InputFilter[] {new InputFilter.LengthFilter(matrixFormat.getMaxCharacters())});
 
-        arrayIds.get(row).add(View.generateViewId());
-        editText.setId(View.generateViewId());
+        int id = View.generateViewId();
+        arrayIds.get(row).add(id);
+        editText.setId(id);
 
         return editText;
     }
