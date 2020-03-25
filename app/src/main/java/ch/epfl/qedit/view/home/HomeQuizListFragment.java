@@ -27,22 +27,17 @@ import java.util.Objects;
 public class HomeQuizListFragment extends Fragment {
     public static final String QUIZID = "ch.epfl.qedit.view.QUIZID";
 
-    private RecyclerView recyclerView;
     private CustomAdapter customAdapter;
     private User user;
 
     private HomePopUp homePopUp;
-    //    private String errorBlank = "Can't be blank";
-    //
-    //    // The magic number comes from button color in android
-    //    private final int colorButton = -2614432;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home_quiz_list, container, false);
-        recyclerView = view.findViewById(R.id.home_quiz_list);
+        RecyclerView recyclerView = view.findViewById(R.id.home_quiz_list);
 
         // Get user from the bundle created by the parent activity
         final User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
