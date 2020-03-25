@@ -12,13 +12,9 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
 
 import android.view.View;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.database.DatabaseFactory;
-import ch.epfl.qedit.backend.database.MockDBService;
+import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
 import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
@@ -29,27 +25,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class QuizOverviewFragmentTest {
-
-    private IdlingResource idlingResource;
+public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
     private QuizViewModel model;
 
     @Rule
     public final FragmentTestRule<?, QuizOverviewFragment> testRule =
-            FragmentTestRule.create(QuizOverviewFragment.class);
+            FragmentTestRule.create(QuizOverviewFragment.class, false, false);
 
     @Before
-    public void init() {
-        MockDBService dbService = new MockDBService();
-        idlingResource = dbService.getIdlingResource();
-        IdlingRegistry.getInstance().register(idlingResource);
-        DatabaseFactory.setInstance(dbService);
-        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+    public void setup() {
+        model = super.setup(testRule, new QuizOverviewFragment());
     }
 
     @After
     public void cleanup() {
-        IdlingRegistry.getInstance().unregister(idlingResource);
+        super.cleanup();
     }
 
     @Test
