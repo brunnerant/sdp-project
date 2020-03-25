@@ -66,40 +66,7 @@ public class HomePopUp {
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
         editText.setError(errorBlank);
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
-        editText.addTextChangedListener(
-                new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(
-                            CharSequence s, int start, int count, int after) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        String title = editText.getText().toString().trim();
-
-                        boolean canAdd = user.canAdd(title);
-
-                        if (editText.length() <= 0 || !canAdd) {
-                            String error =
-                                    editText.length() <= 0
-                                            ? errorBlank
-                                            : "Can't have duplicate names";
-                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
-                            alertDialog
-                                    .getButton(AlertDialog.BUTTON_POSITIVE)
-                                    .setTextColor(Color.WHITE);
-                            editText.setError(error);
-                        } else {
-                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
-                            alertDialog
-                                    .getButton(AlertDialog.BUTTON_POSITIVE)
-                                    .setTextColor(colorButton);
-                            editText.setError(null);
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {}
-                });
+        editText.addTextChangedListener(new CustomTextWatcher(editText, alertDialog));
 
         return alertDialog;
     }
@@ -152,5 +119,39 @@ public class HomePopUp {
         int index = user.getQuizzes().size();
         user.addQuiz(title, title);
         customAdapter.notifyItemInserted(index);
+    }
+
+    private class CustomTextWatcher implements TextWatcher {
+        private EditText editText;
+        private AlertDialog alertDialog;
+
+        public CustomTextWatcher(EditText editText, AlertDialog alertDialog) {
+            this.editText = editText;
+            this.alertDialog = alertDialog;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String title = editText.getText().toString().trim();
+
+            boolean canAdd = user.canAdd(title);
+
+            if (editText.length() <= 0 || !canAdd) {
+                String error = editText.length() <= 0 ? errorBlank : "Can't have duplicate names";
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
+                editText.setError(error);
+            } else {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(colorButton);
+                editText.setError(null);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {}
     }
 }
