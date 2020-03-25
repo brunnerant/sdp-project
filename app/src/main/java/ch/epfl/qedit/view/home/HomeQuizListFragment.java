@@ -61,79 +61,9 @@ public class HomeQuizListFragment extends Fragment {
     }
 
     private ItemTouchHelper getNewItemTouchHelper() {
-        ItemTouchHelper.SimpleCallback simpleCallback =
-                new ItemTouchHelper.SimpleCallback(
-                        0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                    @Override
-                    public boolean onMove(
-                            @NonNull RecyclerView recyclerView,
-                            @NonNull RecyclerView.ViewHolder viewHolder,
-                            @NonNull RecyclerView.ViewHolder target) {
-                        return true;
-                    }
-
-                    @Override
-                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                        doOnSwipe(viewHolder, swipeDir);
-                    }
-
-                    @Override
-                    public void onChildDrawOver(
-                            Canvas c,
-                            RecyclerView recyclerView,
-                            RecyclerView.ViewHolder viewHolder,
-                            float dX,
-                            float dY,
-                            int actionState,
-                            boolean isCurrentlyActive) {
-                        CustomAdapter.CustomViewHolder customViewHolder =
-                                (CustomAdapter.CustomViewHolder) viewHolder;
-                        getDefaultUIUtil()
-                                .onDrawOver(
-                                        c,
-                                        recyclerView,
-                                        customViewHolder.name,
-                                        dX,
-                                        dY,
-                                        actionState,
-                                        isCurrentlyActive);
-                    }
-
-                    @Override
-                    public void onSelectedChanged(
-                            RecyclerView.ViewHolder viewHolder, int actionState) {
-                        if (viewHolder != null) {
-                            CustomAdapter.CustomViewHolder customViewHolder =
-                                    (CustomAdapter.CustomViewHolder) viewHolder;
-                            getDefaultUIUtil().onSelected(customViewHolder.name);
-                        }
-                    }
-
-                    @Override
-                    public void onChildDraw(
-                            Canvas c,
-                            RecyclerView recyclerView,
-                            RecyclerView.ViewHolder viewHolder,
-                            float dX,
-                            float dY,
-                            int actionState,
-                            boolean isCurrentlyActive) {
-                        CustomAdapter.CustomViewHolder customViewHolder =
-                                (CustomAdapter.CustomViewHolder) viewHolder;
-                        setVisibilityOnChildDraw(dX, customViewHolder);
-                        getDefaultUIUtil()
-                                .onDraw(
-                                        c,
-                                        recyclerView,
-                                        customViewHolder.name,
-                                        dX,
-                                        dY,
-                                        actionState,
-                                        isCurrentlyActive);
-                    }
-                };
-
-        return new ItemTouchHelper(simpleCallback);
+        CustomCallBack customCallBack = new CustomCallBack(
+                        0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        return new ItemTouchHelper(customCallBack);
     }
 
     private void doOnSwipe(RecyclerView.ViewHolder viewHolder, int swipeDir) {
@@ -185,6 +115,97 @@ public class HomeQuizListFragment extends Fragment {
         bundle.putSerializable(QUIZID, quizID);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    private class CustomCallBack extends ItemTouchHelper.SimpleCallback {
+
+        /**
+         * Creates a Callback for the given drag and swipe allowance. These values serve as
+         * defaults
+         * and if you want to customize behavior per ViewHolder, you can override
+         * {@link #getSwipeDirs(RecyclerView, ViewHolder)}
+         * and / or {@link #getDragDirs(RecyclerView, ViewHolder)}.
+         *
+         * @param dragDirs  Binary OR of direction flags in which the Views can be dragged. Must be
+         *                  composed of {@link #LEFT}, {@link #RIGHT}, {@link #START}, {@link
+         *                  #END},
+         *                  {@link #UP} and {@link #DOWN}.
+         * @param swipeDirs Binary OR of direction flags in which the Views can be swiped. Must be
+         *                  composed of {@link #LEFT}, {@link #RIGHT}, {@link #START}, {@link
+         *                  #END},
+         *                  {@link #UP} and {@link #DOWN}.
+         */
+        public CustomCallBack(int dragDirs, int swipeDirs) {
+            super(dragDirs, swipeDirs);
+        }
+
+        @Override
+        public boolean onMove(
+                @NonNull RecyclerView recyclerView,
+                @NonNull RecyclerView.ViewHolder viewHolder,
+                @NonNull RecyclerView.ViewHolder target) {
+            return true;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            doOnSwipe(viewHolder, swipeDir);
+        }
+
+        @Override
+        public void onChildDrawOver(
+                Canvas c,
+                RecyclerView recyclerView,
+                RecyclerView.ViewHolder viewHolder,
+                float dX,
+                float dY,
+                int actionState,
+                boolean isCurrentlyActive) {
+            CustomAdapter.CustomViewHolder customViewHolder =
+                    (CustomAdapter.CustomViewHolder) viewHolder;
+            getDefaultUIUtil()
+                    .onDrawOver(
+                            c,
+                            recyclerView,
+                            customViewHolder.name,
+                            dX,
+                            dY,
+                            actionState,
+                            isCurrentlyActive);
+        }
+
+        @Override
+        public void onSelectedChanged(
+                RecyclerView.ViewHolder viewHolder, int actionState) {
+            if (viewHolder != null) {
+                CustomAdapter.CustomViewHolder customViewHolder =
+                        (CustomAdapter.CustomViewHolder) viewHolder;
+                getDefaultUIUtil().onSelected(customViewHolder.name);
+            }
+        }
+
+        @Override
+        public void onChildDraw(
+                Canvas c,
+                RecyclerView recyclerView,
+                RecyclerView.ViewHolder viewHolder,
+                float dX,
+                float dY,
+                int actionState,
+                boolean isCurrentlyActive) {
+            CustomAdapter.CustomViewHolder customViewHolder =
+                    (CustomAdapter.CustomViewHolder) viewHolder;
+            setVisibilityOnChildDraw(dX, customViewHolder);
+            getDefaultUIUtil()
+                    .onDraw(
+                            c,
+                            recyclerView,
+                            customViewHolder.name,
+                            dX,
+                            dY,
+                            actionState,
+                            isCurrentlyActive);
+        }
     }
 
     public class CustomAdapter extends RecyclerView.Adapter {
