@@ -32,7 +32,6 @@
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:onClick="handleLogin"
         android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +63,6 @@
         android:id="@+id/language_selection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown"
         android:entries="@array/languages_list"
         app:layout_constraintBottom_toBottomOf="parent"

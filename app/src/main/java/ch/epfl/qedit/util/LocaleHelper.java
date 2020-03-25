@@ -7,17 +7,16 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
-
 import java.util.Locale;
 
 /**
- * Copied from https://gunhansancar.com/change-language-programmatically-in-android/
- * This class is used to change your application locale and persist this change for the next time
- * that your app is going to be used.
- * <p/>
- * You can also change the locale of your application on the fly by using the setLocale method.
- * <p/>
- * Created by gunhansancar on 07/10/15.
+ * [Copied from https://gunhansancar.com/change-language-programmatically-in-android] This class is
+ * used to change your application locale and persist this change for the next time that your app is
+ * going to be used.
+ *
+ * <p>You can also change the locale of your application on the fly by using the setLocale method.
+ *
+ * <p>Created by gunhansancar on 07/10/15.
  */
 public class LocaleHelper {
 

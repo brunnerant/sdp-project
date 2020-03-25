@@ -1,5 +1,23 @@
 package ch.epfl.qedit;
 
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.function.Function;
+
+import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.HomeActivity;
+import ch.epfl.qedit.view.LoginActivity;
+import ch.epfl.qedit.view.QuizActivity;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -7,26 +25,6 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-
-import android.content.Intent;
-import android.os.Bundle;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.HomeActivity;
-import ch.epfl.qedit.view.LoginActivity;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.util.function.Function;
-
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.view.QuizActivity;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class HomeActivityTest {
@@ -47,22 +45,31 @@ public class HomeActivityTest {
         testRule.finishActivity();
     }
 
-    public void testUserIsDisplayedCorrectly(User user, Function<HomeActivity, String> greeting, Function<HomeActivity, String> role) {
+    public void testUserIsDisplayedCorrectly(
+            User user,
+            Function<HomeActivity, String> greeting,
+            Function<HomeActivity, String> role) {
         launchActivity(user);
-        onView(withId(R.id.greeting)).check(matches(withText(greeting.apply(testRule.getActivity()))));
+        onView(withId(R.id.greeting))
+                .check(matches(withText(greeting.apply(testRule.getActivity()))));
         onView(withId(R.id.role)).check(matches(withText(role.apply(testRule.getActivity()))));
         finishActivity();
     }
 
     @Test
     public void testParticipantIsDisplayedCorrectly() {
+        final String firstName = "Bill";
+        final String lastName = "Gates";
         testUserIsDisplayedCorrectly(
-                new User("Bill", "Gates", User.Role.Participant),
+                new User(firstName, lastName, User.Role.Participant),
                 new Function<HomeActivity, String>() {
                     @Override
                     public String apply(HomeActivity homeActivity) {
                         return homeActivity.getString(R.string.welcome)
-                                + " Bill Gates"
+                                + " "
+                                + firstName
+                                + " "
+                                + lastName
                                 + homeActivity.getString(R.string.exclamation_point);
                     }
                 },
@@ -73,21 +80,55 @@ public class HomeActivityTest {
                     }
                 });
     }
-/*
+
     @Test
     public void testEditorIsDisplayedCorrectly() {
+        final String firstName = "John";
+        final String lastName = "Cena";
         testUserIsDisplayedCorrectly(
-                new User("John", "Cena", User.Role.Editor),
-                "Bienvenue John Cena !",
-                "Vous êtes un éditeur.");
+                new User(firstName, lastName, User.Role.Editor),
+                new Function<HomeActivity, String>() {
+                    @Override
+                    public String apply(HomeActivity homeActivity) {
+                        return homeActivity.getString(R.string.welcome)
+                                + " "
+                                + firstName
+                                + " "
+                                + lastName
+                                + homeActivity.getString(R.string.exclamation_point);
+                    }
+                },
+                new Function<HomeActivity, String>() {
+                    @Override
+                    public String apply(HomeActivity homeActivity) {
+                        return homeActivity.getString(R.string.role_editor);
+                    }
+                });
     }
 
     @Test
     public void testAdministratorIsDisplayedCorrectly() {
+        final String firstName = "The";
+        final String lastName = "Rock";
         testUserIsDisplayedCorrectly(
-                new User("The", "Rock", User.Role.Administrator),
-                "Bienvenue The Rock !",
-                "Vous êtes un administrateur.");
+                new User(firstName, lastName, User.Role.Administrator),
+                new Function<HomeActivity, String>() {
+                    @Override
+                    public String apply(HomeActivity homeActivity) {
+                        return homeActivity.getString(R.string.welcome)
+                                + " "
+                                + firstName
+                                + " "
+                                + lastName
+                                + homeActivity.getString(R.string.exclamation_point);
+                    }
+                },
+                new Function<HomeActivity, String>() {
+                    @Override
+                    public String apply(HomeActivity homeActivity) {
+                        return homeActivity.getString(R.string.role_administrator);
+                    }
+                });
     }
 
     @Test
@@ -96,5 +137,5 @@ public class HomeActivityTest {
         onView(withId(R.id.quiz_button)).perform(click());
         intended(hasComponent(QuizActivity.class.getName()));
         finishActivity();
-    }*/
+    }
 }

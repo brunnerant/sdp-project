@@ -52,8 +52,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         String currentLanguage = Locale.getDefault().getLanguage();
         int positionInLanguageList = 0;
         String[] languageList = getResources().getStringArray(R.array.languages_codes);
-        for(int i = 0; i < languageList.length; ++i) {
-            if(currentLanguage.equals(languageList[i])) positionInLanguageList = i;
+        for (int i = 0; i < languageList.length; ++i) {
+            if (currentLanguage.equals(languageList[i])) positionInLanguageList = i;
         }
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
         languageSelectionSpinner.setOnItemSelectedListener(this);
@@ -76,10 +76,14 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         if (!userHasInteracted) {
             return;
         }
-        Toast.makeText(getApplicationContext(),
-                getResources().getString(R.string.language_changed) + " "
-                        + getResources().getStringArray(R.array.languages_list_translated)[pos],
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(
+                        getApplicationContext(),
+                        getResources().getString(R.string.language_changed)
+                                + " "
+                                + getResources()
+                                        .getStringArray(R.array.languages_list_translated)[pos],
+                        Toast.LENGTH_SHORT)
+                .show();
 
         String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
         LocaleHelper.setLocale(this, languageCode);
@@ -88,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView parent) {
         // Do nothing
     }
 

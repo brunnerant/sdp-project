@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Objects;
-
-import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.util.LocaleHelper;
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
     @Override
@@ -26,7 +23,9 @@ public class HomeActivity extends AppCompatActivity {
                 (User)
                         Objects.requireNonNull(intent.getExtras())
                                 .getSerializable(LoginActivity.USER);
-        String message = getResources().getString(R.string.welcome) + " "
+        String message =
+                getResources().getString(R.string.welcome)
+                        + " "
                         + Objects.requireNonNull(user).getFullName()
                         + getResources().getString(R.string.exclamation_point);
 
