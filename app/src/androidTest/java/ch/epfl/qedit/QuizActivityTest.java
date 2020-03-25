@@ -3,8 +3,13 @@ package ch.epfl.qedit;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
 import android.content.Intent;
@@ -18,6 +23,7 @@ import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.Arrays;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -95,7 +101,21 @@ public class QuizActivityTest {
     @Test
     public void testUpArrowIsClicked() {
         launchActivity();
-        // onView(withId(R.id.home)).perform(click()); TODO
+        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        assertTrue(testRule.getActivity().isFinishing());
+        finishActivity();
+    }
+
+    @Test
+    public void testTimeIsClicked() {
+        launchActivity();
+        onView(withId(R.id.time)).perform(click());
+        onView(withText("Unimplemented Feature"))
+                .inRoot(
+                        withDecorView(
+                                Matchers.not(
+                                        is(testRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
         finishActivity();
     }
 
