@@ -11,11 +11,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
-import android.os.Bundle;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
@@ -26,30 +24,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class HomeQuizListFragmentTest {
+public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
     @Rule
     public final FragmentTestRule<?, HomeQuizListFragment> testRule =
             FragmentTestRule.create(HomeQuizListFragment.class, false, false);
 
     @Before
-    public void init() {
+    public void setup() {
         Intents.init();
-
-        User user = new User("Marcel", "Doe", User.Role.Participant);
-        user.addQuiz("quiz0", "Qualification EPFL");
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
-        HomeQuizListFragment homeQuizListFragment = new HomeQuizListFragment();
-        homeQuizListFragment.setArguments(bundle);
-
-        testRule.launchFragment(homeQuizListFragment);
+        super.setup(testRule, new HomeQuizListFragment());
     }
 
     @After
     public void cleanup() {
         Intents.release();
-        testRule.finishActivity();
+        super.cleanup();
     }
 
     @Test
