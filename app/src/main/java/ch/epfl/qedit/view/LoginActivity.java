@@ -97,15 +97,23 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // Get language code from the position of the clicked language in the spinner
         String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
         // Set new language
-        LocaleHelper.setLocale(this, languageCode);
+        //LocaleHelper.setLocale(this, languageCode);
+        updateViews(languageCode);
 
-        setLocale(languageCode);
-
+        //setLocale1(languageCode);
         // Display changed language confirmation
         printToastLanguageChanged(pos);
 
+    }
 
-        unsetLocale();
+    private void updateViews(String languageCode) {
+        Context context = LocaleHelper.setLocale(this, languageCode);
+        Resources resources = context.getResources();
+
+        tokenText.setHint(resources.getString(R.string.token_hint));
+        Button mButton = (Button) findViewById(R.id.login_button);
+        mButton.setText(resources.getString(R.string.button_login));
+        setTitle(resources.getString(R.string.label_login));
     }
 
     @Override
@@ -119,17 +127,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onConfigurationChanged(newConfig);
     }
 
-    public void unsetLocale() {
-        Locale myLocale = new Locale(Locale.getDefault().getLanguage());
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        onConfigurationChanged(conf);
-    }
-
-    public void setLocale(String lang) {
+    public void setLocale1(String lang) {
         Locale myLocale = new Locale(lang);
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
