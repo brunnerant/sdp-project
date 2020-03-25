@@ -28,11 +28,6 @@
             android:parentActivityName=".view.LoginActivity"
             android:launchMode="singleTop">
 
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.LoginActivity" />
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW_ROLE" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -42,11 +37,6 @@
         <activity
             android:name=".view.QuizActivity"
             android:parentActivityName=".view.HomeActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.HomeActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
