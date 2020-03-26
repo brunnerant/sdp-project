@@ -26,8 +26,7 @@ public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
     public MatrixFormat matrixFormat;
 
-    private final QuizViewModel model =
-            new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+    private QuizViewModel model;
 
     private ArrayList<TableRow> tableRow = new ArrayList<>();
     private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
@@ -48,7 +47,7 @@ public class MatrixFragment extends Fragment {
         View view = inflater.inflate(R.layout.answers_table, container, false);
 
         tableLayout = view.findViewById(R.id.answersTable);
-
+        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
         getActivity()
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -110,8 +109,9 @@ public class MatrixFragment extends Fragment {
         editText.setFilters(
                 new InputFilter[] {new InputFilter.LengthFilter(matrixFormat.getMaxCharacters())});
 
-        arrayIds.get(row).add(View.generateViewId());
-        editText.setId(View.generateViewId());
+        int id = View.generateViewId();
+        arrayIds.get(row).add(id);
+        editText.setId(id);
 
         return editText;
     }

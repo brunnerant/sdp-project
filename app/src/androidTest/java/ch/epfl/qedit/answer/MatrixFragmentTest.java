@@ -27,7 +27,7 @@ public class MatrixFragmentTest {
 
     @Rule
     public final FragmentTestRule<?, MatrixFragment> testRule =
-            FragmentTestRule.create(MatrixFragment.class);
+            FragmentTestRule.create(MatrixFragment.class, false, false);
 
     @Before
     public void init() {
@@ -55,6 +55,6 @@ public class MatrixFragmentTest {
         int id = testRule.getFragment().getId(0, 0);
 
         onView(withId(id)).perform(typeText("47.3"));
-        Assert.assertEquals(model.getAnswers().getValue().get(0).get(0), (Float) 47.3f);
+        Assert.assertEquals(model.getAnswers().getValue().get(0).get(id), (Float) 47.3f);
     }
 }
