@@ -12,11 +12,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Locale;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
@@ -24,6 +20,7 @@ import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Response;
+import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -108,7 +105,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     /**
-     *  Set new language, update activity's texts and display a toast to inform the user
+     * Set new language, update activity's texts and display a toast to inform the user
+     *
      * @param languageCode the universal language code (e.g. "en" for English, "fr" for French)
      * @param languagePos position of the language in the spinner
      */

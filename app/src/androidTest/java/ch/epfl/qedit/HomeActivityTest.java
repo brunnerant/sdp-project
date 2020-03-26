@@ -1,23 +1,5 @@
 package ch.epfl.qedit;
 
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.util.function.Function;
-
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.HomeActivity;
-import ch.epfl.qedit.view.LoginActivity;
-import ch.epfl.qedit.view.QuizActivity;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -25,6 +7,20 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import android.content.Intent;
+import android.os.Bundle;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.HomeActivity;
+import ch.epfl.qedit.view.LoginActivity;
+import ch.epfl.qedit.view.QuizActivity;
+import java.util.function.Function;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class HomeActivityTest {
