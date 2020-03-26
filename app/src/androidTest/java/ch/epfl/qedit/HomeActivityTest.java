@@ -16,7 +16,6 @@ import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.HomeActivity;
 import ch.epfl.qedit.view.LoginActivity;
 import ch.epfl.qedit.view.QuizActivity;
-import java.util.function.Function;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,10 +41,7 @@ public class HomeActivityTest {
     }
 
     public void testUserIsDisplayedCorrectly(
-            String firstName,
-            String lastName,
-            User.Role role,
-            int roleString) {
+            String firstName, String lastName, User.Role role, int roleString) {
         User user = new User(firstName, lastName, role);
         launchActivity(user);
         String greetingString =
@@ -64,28 +60,18 @@ public class HomeActivityTest {
     @Test
     public void testParticipantIsDisplayedCorrectly() {
         testUserIsDisplayedCorrectly(
-                "Bill",
-                "Gates",
-                User.Role.Participant,
-                R.string.role_participant);
+                "Bill", "Gates", User.Role.Participant, R.string.role_participant);
     }
 
     @Test
     public void testEditorIsDisplayedCorrectly() {
-        testUserIsDisplayedCorrectly(
-                "John",
-                "Cena",
-                User.Role.Editor,
-                R.string.role_editor);
+        testUserIsDisplayedCorrectly("John", "Cena", User.Role.Editor, R.string.role_editor);
     }
 
     @Test
     public void testAdministratorIsDisplayedCorrectly() {
         testUserIsDisplayedCorrectly(
-                "The",
-                "Rock",
-                User.Role.Administrator,
-                R.string.role_administrator);
+                "The", "Rock", User.Role.Administrator, R.string.role_administrator);
     }
 
     @Test
