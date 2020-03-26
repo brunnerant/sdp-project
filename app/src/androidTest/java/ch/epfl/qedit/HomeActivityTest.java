@@ -42,33 +42,26 @@ public class HomeActivityTest {
     }
 
     public void testUserIsDisplayedCorrectly(
-            User user,
-            Function<HomeActivity, String> greeting,
-            Function<HomeActivity, String> role) {
+            String firstName, String lastName, User.Role role,
+            Function<HomeActivity, String> roleString) {
+        User user = new User(firstName, lastName, role);
         launchActivity(user);
+        String greetingString = testRule.getActivity().getString(R.string.welcome)
+                + " "
+                + firstName
+                + " "
+                + lastName
+                + testRule.getActivity().getString(R.string.exclamation_point);
         onView(withId(R.id.greeting))
-                .check(matches(withText(greeting.apply(testRule.getActivity()))));
-        onView(withId(R.id.role)).check(matches(withText(role.apply(testRule.getActivity()))));
+                .check(matches(withText(greetingString)));
+        onView(withId(R.id.role)).check(matches(withText(roleString.apply(testRule.getActivity()))));
         finishActivity();
     }
 
     @Test
     public void testParticipantIsDisplayedCorrectly() {
-        final String firstName = "Bill";
-        final String lastName = "Gates";
         testUserIsDisplayedCorrectly(
-                new User(firstName, lastName, User.Role.Participant),
-                new Function<HomeActivity, String>() {
-                    @Override
-                    public String apply(HomeActivity homeActivity) {
-                        return homeActivity.getString(R.string.welcome)
-                                + " "
-                                + firstName
-                                + " "
-                                + lastName
-                                + homeActivity.getString(R.string.exclamation_point);
-                    }
-                },
+                "Bill", "Gates", User.Role.Participant,
                 new Function<HomeActivity, String>() {
                     @Override
                     public String apply(HomeActivity homeActivity) {
@@ -79,21 +72,8 @@ public class HomeActivityTest {
 
     @Test
     public void testEditorIsDisplayedCorrectly() {
-        final String firstName = "John";
-        final String lastName = "Cena";
         testUserIsDisplayedCorrectly(
-                new User(firstName, lastName, User.Role.Editor),
-                new Function<HomeActivity, String>() {
-                    @Override
-                    public String apply(HomeActivity homeActivity) {
-                        return homeActivity.getString(R.string.welcome)
-                                + " "
-                                + firstName
-                                + " "
-                                + lastName
-                                + homeActivity.getString(R.string.exclamation_point);
-                    }
-                },
+                "John", "Cena", User.Role.Editor,
                 new Function<HomeActivity, String>() {
                     @Override
                     public String apply(HomeActivity homeActivity) {
@@ -104,21 +84,8 @@ public class HomeActivityTest {
 
     @Test
     public void testAdministratorIsDisplayedCorrectly() {
-        final String firstName = "The";
-        final String lastName = "Rock";
         testUserIsDisplayedCorrectly(
-                new User(firstName, lastName, User.Role.Administrator),
-                new Function<HomeActivity, String>() {
-                    @Override
-                    public String apply(HomeActivity homeActivity) {
-                        return homeActivity.getString(R.string.welcome)
-                                + " "
-                                + firstName
-                                + " "
-                                + lastName
-                                + homeActivity.getString(R.string.exclamation_point);
-                    }
-                },
+                "The", "Rock", User.Role.Administrator,
                 new Function<HomeActivity, String>() {
                     @Override
                     public String apply(HomeActivity homeActivity) {
