@@ -8,7 +8,12 @@
      getResources().getString(R.string.<string_name>)
      or
      getResources().getStringArray(R.array.<string_array_name>)[<position>]
+     In tests:
+     <the activity rule>.getActivity().getString(R.string.<string_name>)
      -->
+<!-- To access the current language:
+     Locale.getDefault().getLanguage())
+     will return the language code (e.g. "en" for English, "fr" for French) -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
 
     <!-- App and logo -->
@@ -31,15 +36,14 @@
     <string name="language_changed">Language changed to</string>
 
     <!-- Login -->
-    <string name="label_login">Login</string>
-    <string name="button_login">Login</string>
+    <string name="login">Login</string>
     <string name="token_hint">Login token</string>
     <string name="wrong_token_message">Invalid token</string>
     <string name="empty_token_message">Empty token</string>
     <string name="connection_error_message">Connection error</string>
 
     <!-- Home -->
-    <string name="label_home">Home</string>
+    <string name="home">Home</string>
     <string name="button_open_quiz" translatable="false">Quiz</string>
     <string name="welcome">Welcome,</string>
     <string name="role_administrator">You are an administrator.</string>

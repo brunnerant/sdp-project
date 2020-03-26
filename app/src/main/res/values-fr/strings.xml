@@ -9,15 +9,14 @@
     <string name="language_changed">Langue changée en</string>
 
     <!-- Login -->
-    <string name="label_login">Connexion</string>
-    <string name="button_login">Connexion</string>
+    <string name="login">Connexion</string>
     <string name="token_hint">Token de connexion</string>
     <string name="wrong_token_message">Token invalide</string>
     <string name="empty_token_message">Token vide</string>
     <string name="connection_error_message">Erreur de connexion</string>
 
     <!-- Home -->
-    <string name="label_home">Accueil</string>
+    <string name="home">Accueil</string>
     <string name="welcome">Bienvenue,</string>
     <string name="role_administrator">Vous êtes un administrateur/une administratrice.</string>
     <string name="role_editor">Vous êtes un éditeur/une éditrice.</string>

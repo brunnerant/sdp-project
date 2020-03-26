@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Objects;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
-import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
     @Override
@@ -37,7 +40,8 @@ public class HomeActivity extends AppCompatActivity {
 
         textViewRole.setText(getRoleText(user.getRole()));
 
-        setTitle(R.string.label_home);
+        // Set page title to display it in the right language
+        setTitle(R.string.home);
     }
 
     @Override
