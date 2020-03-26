@@ -8,7 +8,7 @@
      getResources().getString(R.string.<string_name>)
      or
      getResources().getStringArray(R.array.<string_array_name>)[<position>]
-     In tests:
+     for arrays. In the tests:
      <the activity rule>.getActivity().getString(R.string.<string_name>)
      -->
 <!-- To access the current language:
