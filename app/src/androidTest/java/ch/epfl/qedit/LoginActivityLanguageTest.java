@@ -17,7 +17,6 @@ import static org.hamcrest.core.Is.is;
 import android.content.Intent;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.LoginActivity;
 import java.util.Locale;
@@ -54,9 +53,9 @@ public class LoginActivityLanguageTest {
 
         // Language position
         int pos = 0;
-        if(languageCode.equals("en")) {
+        if (languageCode.equals("en")) {
             pos = 0;
-        } else if(languageCode.equals("fr")) {
+        } else if (languageCode.equals("fr")) {
             pos = 1;
         }
 
