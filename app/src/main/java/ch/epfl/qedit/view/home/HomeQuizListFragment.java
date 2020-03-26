@@ -102,6 +102,8 @@ public class HomeQuizListFragment extends Fragment {
      * QuizActivity
      */
     private void onLoadingSuccessful(Quiz quiz) {
+        if (isDetached()) {}
+
         Intent intent = new Intent(requireActivity(), QuizActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZID, quiz);

@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
+import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
@@ -26,9 +27,14 @@ import org.junit.runner.RunWith;
 public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
     private QuizViewModel model;
 
+    //    @Rule //TODO
+    //    public final FragmentTestRule<?, QuizOverviewFragment> testRule =
+    //            FragmentTestRule.create(QuizOverviewFragment.class, false, false);
+
     @Rule
-    public final FragmentTestRule<?, QuizOverviewFragment> testRule =
-            FragmentTestRule.create(QuizOverviewFragment.class, false, false);
+    public final FragmentTestRule<QuizActivity, QuizOverviewFragment> testRule =
+            new FragmentTestRule(
+                    QuizActivity.class, QuizOverviewFragment.class, false, false, false);
 
     @Before
     public void setup() {
@@ -56,11 +62,9 @@ public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
     @Test
     public void testFocusedQuestionChangesOnClick() {
         onData(anything()).inAdapterView(withId(R.id.question_list)).atPosition(0).perform(click());
-
         assertEquals(0, (int) model.getFocusedQuestion().getValue());
 
         onData(anything()).inAdapterView(withId(R.id.question_list)).atPosition(1).perform(click());
-
         assertEquals(1, (int) model.getFocusedQuestion().getValue());
     }
 }
