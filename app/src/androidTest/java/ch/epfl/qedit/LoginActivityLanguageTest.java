@@ -17,6 +17,8 @@ import static org.hamcrest.core.Is.is;
 import android.content.Intent;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+
+import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.LoginActivity;
 import java.util.Locale;
 import org.junit.After;
@@ -45,10 +47,19 @@ public class LoginActivityLanguageTest {
     private void testChangeLanguage(
             String language,
             String languageCode,
-            int pos,
             String loginString,
             String languageChangedString) {
         String startupLanguage = Locale.getDefault().getLanguage();
+        String lang = LocaleHelper.getLanguage(testRule.getActivity());
+
+        // Language position
+        int pos = 0;
+        if(languageCode.equals("en")) {
+            pos = 0;
+        } else if(languageCode.equals("fr")) {
+            pos = 1;
+        }
+
         onView(withId(R.id.login_button)).perform(closeSoftKeyboard());
         onView(withId(R.id.language_selection)).perform(click());
         onData(anything()).atPosition(pos).perform(click());
@@ -67,11 +78,11 @@ public class LoginActivityLanguageTest {
 
     @Test
     public void testChangeLanguageEnglish() {
-        testChangeLanguage("English", "en", 0, "Login", "Language changed to English");
+        testChangeLanguage("English", "en", "Login", "Language changed to English");
     }
 
     @Test
     public void testChangeLanguageFrench() {
-        testChangeLanguage("Français", "fr", 1, "Connexion", "Langue changée en Français");
+        testChangeLanguage("Français", "fr", "Connexion", "Langue changée en Français");
     }
 }
