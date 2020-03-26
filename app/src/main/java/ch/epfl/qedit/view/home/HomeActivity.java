@@ -1,11 +1,12 @@
 package ch.epfl.qedit.view.home;
 
+import static ch.epfl.qedit.view.LoginActivity.USER;
+
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.LoginActivity;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
@@ -16,14 +17,11 @@ public class HomeActivity extends AppCompatActivity {
 
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
-        User user =
-                (User)
-                        Objects.requireNonNull(intent.getExtras())
-                                .getSerializable(LoginActivity.USER);
+        User user = (User) Objects.requireNonNull(intent.getExtras()).getSerializable(USER);
 
         // Prepare a bundle that contains the user and create a new HomeInfoFragment
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
+        bundle.putSerializable(USER, user);
         HomeInfoFragment homeInfoFragment = new HomeInfoFragment();
         homeInfoFragment.setArguments(bundle);
 

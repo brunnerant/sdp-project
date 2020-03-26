@@ -42,11 +42,11 @@ public class MatrixFragment extends Fragment {
 
         tableLayout = view.findViewById(R.id.answersTable);
 
-        getActivity()
+        requireActivity()
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         for (int i = 0; i < matrixFormat.getTableRowsNumber(); ++i) {
-            TableRow t = new TableRow(getActivity());
+            TableRow t = new TableRow(requireActivity());
             arrayButtons.add(new ArrayList<EditText>());
             arrayIds.add(new ArrayList<Integer>());
             tableRow.add(t);
@@ -66,7 +66,7 @@ public class MatrixFragment extends Fragment {
     }
 
     private EditText newEditText(int row) {
-        EditText editText = new EditText(getActivity());
+        EditText editText = new EditText(requireActivity());
         editText.setRawInputType(
                 InputType.TYPE_CLASS_NUMBER
                         | InputType.TYPE_NUMBER_FLAG_DECIMAL

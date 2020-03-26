@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.home;
 
+import static ch.epfl.qedit.view.LoginActivity.USER;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,7 +47,7 @@ public class HomeQuizListFragment extends Fragment {
         progressBar = view.findViewById(R.id.quiz_loading);
 
         // Get user from the bundle created by the parent activity
-        final User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
+        final User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
 
         // Instantiate Handler and the DatabaseService
         db = DatabaseFactory.getInstance();
@@ -100,7 +102,7 @@ public class HomeQuizListFragment extends Fragment {
      * QuizActivity
      */
     private void onLoadingSuccessful(Quiz quiz) {
-        Intent intent = new Intent(getActivity(), QuizActivity.class);
+        Intent intent = new Intent(requireActivity(), QuizActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZID, quiz);
         intent.putExtras(bundle);
@@ -122,7 +124,7 @@ public class HomeQuizListFragment extends Fragment {
         }
         Toast toast =
                 Toast.makeText(
-                        getActivity(), getResources().getString(stringId), Toast.LENGTH_SHORT);
+                        requireActivity(), getResources().getString(stringId), Toast.LENGTH_SHORT);
         toast.show();
     }
 

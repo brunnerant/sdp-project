@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class QuizActivityTest { // TODO fails
+public class QuizActivityTest {
     private QuizViewModel model;
     private final Integer zero = 0;
 
@@ -50,7 +50,9 @@ public class QuizActivityTest { // TODO fails
                                 new Question("Vector", "Fill this Vector!", "matrix7x1")));
         bundle.putSerializable(HomeQuizListFragment.QUIZID, quiz);
         intent.putExtras(bundle);
+
         testRule.launchActivity(intent);
+
         model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
         model.setQuiz(quiz);
     }

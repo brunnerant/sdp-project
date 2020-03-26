@@ -42,6 +42,35 @@ public class MatrixFragmentTest {
         testRule.launchFragment(matrixFragment);
     }
 
+    //    @Rule TODO
+    //    public final FragmentTestRule<QuizActivity, MatrixFragment> testRule =
+    //            new FragmentTestRule(QuizActivity.class, MatrixFragment.class, false, false);
+    //
+    //    @Before
+    //    public void init() {
+    //        MockDBService dbService = new MockDBService();
+    //        DatabaseFactory.setInstance(dbService);
+    //
+    //        Intent intent = new Intent();
+    //        Bundle bundle = new Bundle();
+    //        bundle.putSerializable(HomeQuizListFragment.QUIZID, Util.createMockQuiz("Title"));
+    //        intent.putExtras(bundle);
+    //
+    //        assertNotNull(bundle);
+    //        assertNotNull(intent);
+    //
+    //        testRule.launchActivity(intent);
+    //
+    //        throw new Error("HEHHEHEHRHER");
+    //
+    //     /*   bundle = new Bundle();
+    //        bundle.putSerializable("m0", MatrixFormat.createMatrix3x3());
+    //        MatrixFragment matrixFragment = new MatrixFragment();
+    //        matrixFragment.setArguments(bundle);
+    //
+    //        testRule.launchFragment(matrixFragment);*/
+    //    }
+
     @After
     public void cleanup() {
         testRule.finishActivity();
