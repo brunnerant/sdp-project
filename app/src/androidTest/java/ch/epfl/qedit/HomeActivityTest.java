@@ -42,26 +42,31 @@ public class HomeActivityTest {
     }
 
     public void testUserIsDisplayedCorrectly(
-            String firstName, String lastName, User.Role role,
+            String firstName,
+            String lastName,
+            User.Role role,
             Function<HomeActivity, String> roleString) {
         User user = new User(firstName, lastName, role);
         launchActivity(user);
-        String greetingString = testRule.getActivity().getString(R.string.welcome)
-                + " "
-                + firstName
-                + " "
-                + lastName
-                + testRule.getActivity().getString(R.string.exclamation_point);
-        onView(withId(R.id.greeting))
-                .check(matches(withText(greetingString)));
-        onView(withId(R.id.role)).check(matches(withText(roleString.apply(testRule.getActivity()))));
+        String greetingString =
+                testRule.getActivity().getString(R.string.welcome)
+                        + " "
+                        + firstName
+                        + " "
+                        + lastName
+                        + testRule.getActivity().getString(R.string.exclamation_point);
+        onView(withId(R.id.greeting)).check(matches(withText(greetingString)));
+        onView(withId(R.id.role))
+                .check(matches(withText(roleString.apply(testRule.getActivity()))));
         finishActivity();
     }
 
     @Test
     public void testParticipantIsDisplayedCorrectly() {
         testUserIsDisplayedCorrectly(
-                "Bill", "Gates", User.Role.Participant,
+                "Bill",
+                "Gates",
+                User.Role.Participant,
                 new Function<HomeActivity, String>() {
                     @Override
                     public String apply(HomeActivity homeActivity) {
@@ -73,7 +78,9 @@ public class HomeActivityTest {
     @Test
     public void testEditorIsDisplayedCorrectly() {
         testUserIsDisplayedCorrectly(
-                "John", "Cena", User.Role.Editor,
+                "John",
+                "Cena",
+                User.Role.Editor,
                 new Function<HomeActivity, String>() {
                     @Override
                     public String apply(HomeActivity homeActivity) {
@@ -85,7 +92,9 @@ public class HomeActivityTest {
     @Test
     public void testAdministratorIsDisplayedCorrectly() {
         testUserIsDisplayedCorrectly(
-                "The", "Rock", User.Role.Administrator,
+                "The",
+                "Rock",
+                User.Role.Administrator,
                 new Function<HomeActivity, String>() {
                     @Override
                     public String apply(HomeActivity homeActivity) {
