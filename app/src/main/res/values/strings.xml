@@ -28,12 +28,12 @@
     <string name="edit">Edit</string>
     <string name="title_activity_edit_quiz">Édition</string>
 
-    <string name="NO_DUPLICATE">"Can't have duplicate names"</string>
-    <string name="CANCEL">"Cancel"</string>
-    <string name="DONE">"Done"</string>
-    <string name="YES">"Yes"</string>
-    <string name="ADD_POP_UP">"Add quiz name"</string>
-    <string name="ERROR_BLANK">"Can't be blank"</string>
-    <string name="EDIT_TITLE">"Give a new name... Or the same one"</string>
-    <string name="WARNING_DELETE">"Are you sure you want to delete, deleting will delete all questions from this quiz"</string>
+    <string name="no_duplicate">"Can't have duplicate names"</string>
+    <string name="cancel">"Cancel"</string>
+    <string name="done">"Done"</string>
+    <string name="yes">"Yes"</string>
+    <string name="add_pop_up">"Add quiz name"</string>
+    <string name="error_blanck">"Can't be blank"</string>
+    <string name="edit_title">"Give a new name... Or the same one"</string>
+    <string name="warning_delete">"Are you sure you want to delete, deleting will delete all questions from this quiz"</string>
 </resources>

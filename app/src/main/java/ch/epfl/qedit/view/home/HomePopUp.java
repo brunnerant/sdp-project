@@ -30,7 +30,7 @@ public class HomePopUp {
 
     public AlertDialog popUpEdit(final String oldValue, final int position) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(resources.getString(R.string.EDIT_TITLE));
+        builder.setTitle(resources.getString(R.string.edit_title));
 
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -39,7 +39,7 @@ public class HomePopUp {
         setNegativeButton(builder);
 
         builder.setPositiveButton(
-                resources.getString(R.string.DONE),
+                resources.getString(R.string.done),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -53,7 +53,7 @@ public class HomePopUp {
 
     private void setNegativeButton(AlertDialog.Builder builder) {
         builder.setNegativeButton(
-                resources.getString(R.string.CANCEL),
+                resources.getString(R.string.cancel),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -66,7 +66,7 @@ public class HomePopUp {
         final AlertDialog alertDialog = builder.create();
         alertDialog.create();
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
-        editText.setError(resources.getString(R.string.ERROR_BLANK));
+        editText.setError(resources.getString(R.string.error_blanck));
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
         editText.addTextChangedListener(new CustomTextWatcher(editText, alertDialog));
 
@@ -75,12 +75,12 @@ public class HomePopUp {
 
     public AlertDialog popUpWarningDelete(final String title, final int position) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(resources.getString(R.string.WARNING_DELETE));
+        builder.setTitle(resources.getString(R.string.warning_delete));
 
         setNegativeButton(builder);
 
         builder.setPositiveButton(
-                resources.getString(R.string.YES),
+                resources.getString(R.string.yes),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -96,7 +96,7 @@ public class HomePopUp {
 
     public void addPopUp() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(resources.getString(R.string.ADD_POP_UP));
+        builder.setTitle(resources.getString(R.string.add_pop_up));
 
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -105,7 +105,7 @@ public class HomePopUp {
         setNegativeButton(builder);
 
         builder.setPositiveButton(
-                resources.getString(R.string.DONE),
+                resources.getString(R.string.done),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -143,8 +143,8 @@ public class HomePopUp {
             if (editText.length() <= 0 || !canAdd) {
                 String error =
                         editText.length() <= 0
-                                ? resources.getString(R.string.ERROR_BLANK)
-                                : resources.getString(R.string.NO_DUPLICATE);
+                                ? resources.getString(R.string.error_blanck)
+                                : resources.getString(R.string.no_duplicate);
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
                 editText.setError(error);
