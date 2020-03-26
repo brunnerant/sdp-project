@@ -12,8 +12,10 @@ import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
@@ -53,6 +55,10 @@ public class MatrixFragmentTest {
         }
     }
 
+    @Test
+    public void dummyTest() {
+        Assert.assertEquals(true, true);
+    }
     /*@Test
     public void testAnswersStoredCorrectly() {
 
