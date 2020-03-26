@@ -1,27 +1,67 @@
-<resources>
-    <string name="app_name">QEDit</string>
-    <string name="title_activity_login">Connexion</string>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- English -->
+<!-- Note: this default string resource is for English. In fact, if the language of the system does not
+     have an associated string resource, this default string resource is loaded and therefore the
+     app is in English.
+     -->
+<!-- To insert a string in the application:
+     getResources().getString(R.string.<string_name>)
+     or
+     getResources().getStringArray(R.array.<string_array_name>)[<position>]
+     for arrays. In the tests:
+     <the activity rule>.getActivity().getString(R.string.<string_name>)
+     -->
+<!-- To access the current language:
+     Locale.getDefault().getLanguage())
+     will return the language code (e.g. "en" for English, "fr" for French) -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
 
-    <string name="prompt_email">Nom d\'utilisateur</string>
-    <string name="prompt_password">Mot de passe</string>
-    <string name="action_sign_in">Connexion</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="greeting">"Hello!"</string>
-    <string name="role">"Display role"</string>
-    <string name="buttonLogin">"Connexion"</string>
-
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
-    <string name="token_hint">Token de connexion</string>
-    <string name="login_button_text">Connexion</string>
-    <string name="login_action_label">Connexion</string>
-
-    <string name="wrong_token_message">Token invalide</string>
-    <string name="empty_token_message">Token vide</string>
-    <string name="connection_error_message">Erreur de connexion</string>
-    <string name="give_answer_here_hint">Entrez ici votre réponse</string>
+    <!-- App and logo -->
+    <string name="app_name" translatable="false">QEDit</string>
     <string name="qedit_logo_description">QEDit Logo</string>
-    <string name="title_activity_edit_quiz">Édition</string>
+
+    <!-- Language selection -->
+    <string-array name="languages_list" translatable="false">
+        <!-- This list of languages will be the available languages that the user can select." -->
+        <item>English</item>
+        <item>Français</item>
+        <!-- Add new language here -->
+    </string-array>
+    <string-array name="languages_codes" translatable="false">
+        <!-- Important: language_codes must be in the same order as languages_list." -->
+        <item>en</item>
+        <item>fr</item>
+        <!-- Add new language code here -->
+    </string-array>
+    <string name="language_changed">Language changed to</string>
+
+    <!-- Login -->
+    <string name="title_activity_login">Login</string>
+    <string name="login_button_text">Login</string>
+    <string name="login_action_label">Login</string>
+    <string name="token_hint">Login token</string>
+    <string name="wrong_token_message">Invalid token</string>
+    <string name="empty_token_message">Empty token</string>
+    <string name="connection_error_message">Connection error</string>
+
+    <!-- Home -->
+    <string name="title_activity_home">Home</string>
+    <string name="welcome">Welcome,</string>
+    <string name="role_administrator">You are an administrator.</string>
+    <string name="role_editor">You are an editor.</string>
+    <string name="role_participant">You are a participant.</string>
+
+    <!-- Menu -->
+    <string name="menu_overview">Overview</string>
+    <string name="menu_timer">Timer</string>
+    <string name="menu_previous">Previous</string>
+    <string name="menu_next">Next</string>
+
+    <!-- Quiz -->
+    <string name="title_activity_edit_quiz">Edit</string>
+    <string name="give_answer_here_hint">Your answer</string>
+
+    <!-- Miscellaneous -->
+    <string name="exclamation_point">!</string>
+
 </resources>

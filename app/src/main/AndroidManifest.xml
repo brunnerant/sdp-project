@@ -4,6 +4,7 @@
     package="ch.epfl.qedit">
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,6 +34,7 @@
         </activity>
         <activity
             android:name=".view.home.HomeActivity"
+            android:label="@string/title_activity_home"
             android:launchMode="singleTop"
             android:parentActivityName=".view.LoginActivity">
 
