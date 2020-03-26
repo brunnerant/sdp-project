@@ -43,6 +43,12 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+    }
+    bundle {
+        language {
+            enableSplit = false
+        }
     }
 }
 
