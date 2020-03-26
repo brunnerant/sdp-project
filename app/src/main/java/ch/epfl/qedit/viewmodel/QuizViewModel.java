@@ -21,9 +21,8 @@ public class QuizViewModel extends ViewModel {
     private final MutableLiveData<Status> status = new MutableLiveData<>(Status.NotLoaded);
     private final MutableLiveData<Quiz> quiz = new MutableLiveData<>(null);
     private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);
-    private HashMap<Integer, HashMap<Integer, Float>> questionsAnswers = new HashMap<>();
     private final MutableLiveData<HashMap<Integer, HashMap<Integer, Float>>> Answers =
-            new MutableLiveData<>(null);
+            new MutableLiveData<>(new HashMap<Integer, HashMap<Integer, Float>>());
 
     public void loadQuiz(String quizID) {
         if (status.getValue() == Status.NotLoaded) {
@@ -41,17 +40,20 @@ public class QuizViewModel extends ViewModel {
 
                                         // when Quiz is loaded, create space in Hashmap to store
                                         // answers
-                                        for (int i = 0;
-                                                i < quiz.getValue().getQuestions().size();
-                                                i++) {
-                                            questionsAnswers.put(i, new HashMap<Integer, Float>());
-                                        }
-                                        Answers.postValue(questionsAnswers);
+                                        // initializeAnswersMap();
+
                                     } else {
                                         status.postValue(Status.CouldNotLoad);
                                     }
                                 }
                             });
+        }
+    }
+
+    public void initializeAnswersMap() {
+
+        for (int i = 0; i < quiz.getValue().getQuestions().size(); i++) {
+            Answers.getValue().put(i, new HashMap<Integer, Float>());
         }
     }
 

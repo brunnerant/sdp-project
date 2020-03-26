@@ -24,6 +24,7 @@ public class QuizViewModelTest {
         assertEquals(QuizViewModel.Status.NotLoaded, model.getStatus().getValue());
         assertNull(model.getQuiz().getValue());
         assertNull(model.getFocusedQuestion().getValue());
+        assertNull(model.getAnswers().getValue());
     }
 
     @Test
