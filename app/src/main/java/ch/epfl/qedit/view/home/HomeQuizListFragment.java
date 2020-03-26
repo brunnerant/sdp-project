@@ -52,7 +52,7 @@ public class HomeQuizListFragment extends Fragment {
 
         homePopUp = new HomePopUp(getContext(), this.user, customAdapter);
         // Have to set it to true to show the menu, if the user is an editor
-        if (user.getRole() == User.Role.Editor) {
+        if (user.getRole() == User.Role.Editor | user.getRole() == User.Role.Administrator) {
             getNewItemTouchHelper().attachToRecyclerView(recyclerView);
             setHasOptionsMenu(true);
         }

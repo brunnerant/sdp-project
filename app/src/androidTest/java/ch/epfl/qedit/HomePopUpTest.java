@@ -91,17 +91,6 @@ public class HomePopUpTest {
                         });
 
         finishActivity();
-        //        final RecyclerView.Adapter adapter =
-        //                new HomeQuizListFragment().new CustomAdapter(rule.getActivity());
-        //
-        //                                HomePopUp homePopUp =
-        //                                        new HomePopUp(rule.getActivity(), user, adapter);
-        //                                homePopUp.popUpWarningDelete("", 2);
-        //
-        //                                // Check it exists
-        //                                onView(withText("Cancel")).check(matches(isDisplayed()));
-        //                                onView(withText("Yes")).check(matches(isDisplayed()));
-        //        finishActivity();
     }
 
     // No @Before because it has a parameter

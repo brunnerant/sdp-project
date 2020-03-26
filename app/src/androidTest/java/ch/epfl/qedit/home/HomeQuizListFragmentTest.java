@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import androidx.test.espresso.ViewInteraction;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
@@ -22,6 +23,28 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
+import static ch.epfl.qedit.util.RecyclerViewMatcher.withRecyclerView;
+import static org.hamcrest.Matchers.not;
+
+import androidx.test.espresso.ViewInteraction;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.view.edit.EditOverviewFragment;
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import org.junit.Rule;
+import org.junit.Test;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
@@ -39,26 +62,5 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
     public void cleanup() {
         Intents.release();
         super.cleanup();
-    }
-
-    @Test
-    public void testQuizListIsProperlyLoaded() {
-        onData(anything())
-                .inAdapterView(withId(R.id.home_quiz_list))
-                .atPosition(0)
-                .check(matches(withText("Qualification EPFL")));
-    }
-
-    @Test
-    public void testClickOnQuizLaunchesQuizActivity() {
-        onData(anything())
-                .inAdapterView(withId(R.id.home_quiz_list))
-                .atPosition(0)
-                .perform(click());
-
-        intended(
-                allOf(
-                        hasComponent(QuizActivity.class.getName()),
-                        hasExtra(HomeQuizListFragment.QUIZID, "quiz0")));
     }
 }
