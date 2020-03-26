@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">QEDit</string>
     <string name="title_activity_login">Connexion</string>
-
+<!-- placeholder -->
     <string name="prompt_email">Nom d\'utilisateur</string>
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Connexion</string>
