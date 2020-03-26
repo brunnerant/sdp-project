@@ -94,7 +94,7 @@ public class HomePopUpTest {
     }
 
     // No @Before because it has a parameter
-    public User launchActivity() {
+    private User launchActivity() {
         User user = createUser();
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -104,7 +104,7 @@ public class HomePopUpTest {
         return user;
     }
 
-    public void finishActivity() {
+    private void finishActivity() {
         rule.finishActivity();
     }
 

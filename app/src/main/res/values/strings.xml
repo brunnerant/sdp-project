@@ -24,7 +24,16 @@
     <string name="give_answer_here_hint">Entrez ici votre réponse</string>
     <string name="qedit_logo_description">QEDit Logo</string>
     <string name="textview">TextView</string>
-    <string name="delete">delete</string>
+    <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="title_activity_edit_quiz">Édition</string>
+
+    <string name="NO_DUPLICATE">"Can't have duplicate names"</string>
+    <string name="CANCEL">"Cancel"</string>
+    <string name="DONE">"Done"</string>
+    <string name="YES">"Yes"</string>
+    <string name="ADD_POP_UP">"Add quiz name"</string>
+    <string name="ERROR_BLANK">"Can't be blank"</string>
+    <string name="EDIT_TITLE">"Give a new name... Or the same one"</string>
+    <string name="WARNING_DELETE">"Are you sure you want to delete, deleting will delete all questions from this quiz"</string>
 </resources>

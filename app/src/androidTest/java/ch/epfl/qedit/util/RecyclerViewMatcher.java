@@ -14,7 +14,7 @@ import org.hamcrest.TypeSafeMatcher;
 public class RecyclerViewMatcher {
     private final int recyclerViewId;
 
-    public RecyclerViewMatcher(int recyclerViewId) {
+    private RecyclerViewMatcher(int recyclerViewId) {
         this.recyclerViewId = recyclerViewId;
     }
 

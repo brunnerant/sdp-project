@@ -51,7 +51,8 @@ public class HomeQuizListFragment extends Fragment {
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
         homePopUp = new HomePopUp(getContext(), this.user, customAdapter);
-        // Have to set it to true to show the menu, if the user is an editor
+
+        // Have to set it to true to show the menu, if the user is an editor or administrator
         if (user.getRole() == User.Role.Editor | user.getRole() == User.Role.Administrator) {
             getNewItemTouchHelper().attachToRecyclerView(recyclerView);
             setHasOptionsMenu(true);
@@ -101,10 +102,8 @@ public class HomeQuizListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add:
-                homePopUp.addPopUp();
-                break;
+        if (item.getItemId() == R.id.add) {
+            homePopUp.addPopUp();
         }
         return true;
     }
@@ -118,21 +117,7 @@ public class HomeQuizListFragment extends Fragment {
     }
 
     private class CustomCallBack extends ItemTouchHelper.SimpleCallback {
-
-        /**
-         * Creates a Callback for the given drag and swipe allowance. These values serve as defaults
-         * and if you want to customize behavior per ViewHolder, you can override {@link
-         * #getSwipeDirs(RecyclerView, ViewHolder)} and / or {@link #getDragDirs(RecyclerView,
-         * ViewHolder)}.
-         *
-         * @param dragDirs Binary OR of direction flags in which the Views can be dragged. Must be
-         *     composed of {@link #LEFT}, {@link #RIGHT}, {@link #START}, {@link #END}, {@link #UP}
-         *     and {@link #DOWN}.
-         * @param swipeDirs Binary OR of direction flags in which the Views can be swiped. Must be
-         *     composed of {@link #LEFT}, {@link #RIGHT}, {@link #START}, {@link #END}, {@link #UP}
-         *     and {@link #DOWN}.
-         */
-        public CustomCallBack(int dragDirs, int swipeDirs) {
+        CustomCallBack(int dragDirs, int swipeDirs) {
             super(dragDirs, swipeDirs);
         }
 
@@ -204,7 +189,7 @@ public class HomeQuizListFragment extends Fragment {
         }
     }
 
-    public class CustomAdapter extends RecyclerView.Adapter {
+    public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
         private LayoutInflater inflater;
 
         public CustomAdapter(Context context) {
@@ -213,26 +198,23 @@ public class HomeQuizListFragment extends Fragment {
 
         @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             return new CustomViewHolder(inflater.inflate(R.layout.recycler_row, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            CustomViewHolder customViewHolder = (CustomViewHolder) holder;
-
+        public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
             // TODO Find a better way than this...
             final Map.Entry<String, String> entryScrew =
                     new ArrayList<>(user.getQuizzes().entrySet()).get(position);
-            customViewHolder.name.setText(entryScrew.getValue().trim());
-            customViewHolder.delete.isShown();
+            holder.name.setText(entryScrew.getValue().trim());
+            holder.delete.isShown();
 
-            customViewHolder.parentView.setOnClickListener(
+            holder.parentView.setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Map.Entry<String, String> item = entryScrew;
-                            startQuizActivity(item.getKey());
+                            startQuizActivity(entryScrew.getKey());
                         }
                     });
         }
@@ -242,13 +224,13 @@ public class HomeQuizListFragment extends Fragment {
             return user.getQuizzes().size();
         }
 
-        public class CustomViewHolder extends RecyclerView.ViewHolder {
+        class CustomViewHolder extends RecyclerView.ViewHolder {
             private View parentView;
             private TextView name;
             private TextView delete;
             private TextView edit;
 
-            public CustomViewHolder(@NonNull View itemView) {
+            CustomViewHolder(@NonNull View itemView) {
                 super(itemView);
                 parentView = itemView;
                 name = itemView.findViewById(R.id.name);

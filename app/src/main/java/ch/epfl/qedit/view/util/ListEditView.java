@@ -47,7 +47,7 @@ public class ListEditView extends RecyclerView {
         private final TextView text;
         private final LinearLayout overlayButtons;
 
-        public ItemHolder(@NonNull View itemView) {
+        ItemHolder(@NonNull View itemView) {
             super(itemView);
             text = itemView.findViewById(android.R.id.text1);
             overlayButtons = itemView.findViewById(R.id.overlay_buttons);

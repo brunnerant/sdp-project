@@ -21,11 +21,11 @@ import java.util.ArrayList;
 public class MatrixFragment extends Fragment {
     public static final String MATRIXID = "ch.epfl.qedit.view.answer.MATRIXID";
     private TableLayout tableLayout;
-    public MatrixFormat matrixFormat;
+    private MatrixFormat matrixFormat;
 
-    private ArrayList<TableRow> tableRow = new ArrayList<>();
-    private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
-    private ArrayList<ArrayList<Integer>> arrayIds = new ArrayList<>();
+    private final ArrayList<TableRow> tableRow = new ArrayList<>();
+    private final ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
+    private final ArrayList<ArrayList<Integer>> arrayIds = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

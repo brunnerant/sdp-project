@@ -25,7 +25,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class QuizActivityTest {
     private QuizViewModel model;
-    private Integer zero = 0;
+    private final Integer zero = 0;
 
     @Rule
     public final IntentsTestRule<QuizActivity> testRule =

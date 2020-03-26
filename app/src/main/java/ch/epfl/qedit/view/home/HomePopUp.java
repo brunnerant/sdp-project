@@ -3,20 +3,21 @@ package ch.epfl.qedit.view.home;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import androidx.recyclerview.widget.RecyclerView;
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 
 public class HomePopUp {
-    private String errorBlank = "Can't be blank";
-
     // The magic number comes from button color in android
-    private final int colorButton = -2614432;
+    private static final int COLOR_BUTTON = -2614432;
     private Context context;
+    private Resources resources;
     private User user;
     private RecyclerView.Adapter customAdapter;
 
@@ -24,11 +25,12 @@ public class HomePopUp {
         this.context = context;
         this.user = user;
         this.customAdapter = customAdapter;
+        this.resources = context.getResources();
     }
 
     public AlertDialog popUpEdit(final String oldValue, final int position) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Give a new name... Or the same one");
+        builder.setTitle(resources.getString(R.string.EDIT_TITLE));
 
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -37,7 +39,7 @@ public class HomePopUp {
         setNegativeButton(builder);
 
         builder.setPositiveButton(
-                "Done",
+                resources.getString(R.string.DONE),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -51,7 +53,7 @@ public class HomePopUp {
 
     private void setNegativeButton(AlertDialog.Builder builder) {
         builder.setNegativeButton(
-                "Cancel",
+                resources.getString(R.string.CANCEL),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -60,11 +62,11 @@ public class HomePopUp {
                 });
     }
 
-    public AlertDialog errorDialog(AlertDialog.Builder builder, final EditText editText) {
+    private AlertDialog errorDialog(AlertDialog.Builder builder, final EditText editText) {
         final AlertDialog alertDialog = builder.create();
         alertDialog.create();
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
-        editText.setError(errorBlank);
+        editText.setError(resources.getString(R.string.ERROR_BLANK));
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
         editText.addTextChangedListener(new CustomTextWatcher(editText, alertDialog));
 
@@ -73,13 +75,12 @@ public class HomePopUp {
 
     public AlertDialog popUpWarningDelete(final String title, final int position) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(
-                "Are you sure you want to delete, deleting will delete all questions from this quiz");
+        builder.setTitle(resources.getString(R.string.WARNING_DELETE));
 
         setNegativeButton(builder);
 
         builder.setPositiveButton(
-                "Yes",
+                resources.getString(R.string.YES),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -95,7 +96,7 @@ public class HomePopUp {
 
     public void addPopUp() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Add quiz's name");
+        builder.setTitle(resources.getString(R.string.ADD_POP_UP));
 
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -104,7 +105,7 @@ public class HomePopUp {
         setNegativeButton(builder);
 
         builder.setPositiveButton(
-                "Done",
+                resources.getString(R.string.DONE),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -125,7 +126,7 @@ public class HomePopUp {
         private EditText editText;
         private AlertDialog alertDialog;
 
-        public CustomTextWatcher(EditText editText, AlertDialog alertDialog) {
+        CustomTextWatcher(EditText editText, AlertDialog alertDialog) {
             this.editText = editText;
             this.alertDialog = alertDialog;
         }
@@ -140,13 +141,16 @@ public class HomePopUp {
             boolean canAdd = user.canAdd(title);
 
             if (editText.length() <= 0 || !canAdd) {
-                String error = editText.length() <= 0 ? errorBlank : "Can't have duplicate names";
+                String error =
+                        editText.length() <= 0
+                                ? resources.getString(R.string.ERROR_BLANK)
+                                : resources.getString(R.string.NO_DUPLICATE);
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
                 editText.setError(error);
             } else {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(colorButton);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(COLOR_BUTTON);
                 editText.setError(null);
             }
         }

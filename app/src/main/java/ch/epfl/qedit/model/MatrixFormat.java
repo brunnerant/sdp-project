@@ -16,7 +16,7 @@ public class MatrixFormat extends AnswerFormat {
         this.hintString = hint();
     }
 
-    public MatrixFormat(
+    private MatrixFormat(
             int tableColumnsNumber,
             int tableRowsNumber,
             boolean hasDecimal,
@@ -79,6 +79,6 @@ public class MatrixFormat extends AnswerFormat {
 
     // Function that allows to be placed as a placeholder for the EditText
     private String hint() {
-        return String.format("%0" + maxCharacters + "d", 0).replace("0", "0");
+        return String.format("%0" + maxCharacters + "d", 0);
     }
 }
