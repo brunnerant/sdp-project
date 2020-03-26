@@ -1,8 +1,10 @@
 package ch.epfl.qedit.view.answer;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +16,18 @@ import android.widget.TableRow;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.MatrixFormat;
+import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.ArrayList;
 
 public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
     public MatrixFormat matrixFormat;
+
+    private final QuizViewModel model =
+            new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
     private ArrayList<TableRow> tableRow = new ArrayList<>();
     private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
@@ -52,6 +59,7 @@ public class MatrixFragment extends Fragment {
             tableRow.add(t);
             for (int j = 0; j < matrixFormat.getTableColumnsNumber(); ++j) {
                 EditText editText = newEditText(i);
+                addTextWatcher(editText, i, j);
                 arrayButtons.get(i).add(editText);
                 tableRow.get(i).addView(editText);
             }
@@ -63,6 +71,30 @@ public class MatrixFragment extends Fragment {
 
     public int getId(int row, int column) {
         return arrayIds.get(row).get(column);
+    }
+
+    private void addTextWatcher(final EditText editText, final int row, final int col) {
+        editText.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        model.getAnswers()
+                                .getValue()
+                                .put(
+                                        model.getFocusedQuestion().getValue(),
+                                        model.getAnswers()
+                                                .getValue()
+                                                .get(model.getFocusedQuestion().getValue()))
+                                .put(getId(row, col), Float.valueOf(editText.getText().toString()));
+                    }
+                });
     }
 
     private EditText newEditText(int row) {
