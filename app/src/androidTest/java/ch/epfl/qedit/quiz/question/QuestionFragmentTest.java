@@ -1,4 +1,4 @@
-package ch.epfl.qedit.question;
+package ch.epfl.qedit.quiz.question;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -7,13 +7,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import androidx.lifecycle.ViewModelProvider;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.database.DatabaseFactory;
-import ch.epfl.qedit.backend.database.MockDBService;
+import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
@@ -24,27 +20,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class QuestionFragmentTest {
-
-    private IdlingResource idlingResource;
+public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
     private QuizViewModel model;
 
     @Rule
     public final FragmentTestRule<?, QuestionFragment> testRule =
-            FragmentTestRule.create(QuestionFragment.class);
+            FragmentTestRule.create(QuestionFragment.class, false, false);
 
     @Before
     public void init() {
-        MockDBService dbService = new MockDBService();
-        idlingResource = dbService.getIdlingResource();
-        IdlingRegistry.getInstance().register(idlingResource);
-        DatabaseFactory.setInstance(dbService);
-        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+        model = super.setup(testRule, new QuestionFragment());
     }
 
     @After
     public void cleanup() {
-        IdlingRegistry.getInstance().unregister(idlingResource);
+        super.cleanup();
     }
 
     @Test

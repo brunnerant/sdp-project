@@ -56,6 +56,7 @@ public class QuizActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.question_details_container, new QuestionFragment())
+                .replace(R.id.quiz_overview_container, overview)
                 .commit();
     }
 
@@ -116,17 +117,8 @@ public class QuizActivity extends AppCompatActivity {
 
     /** This function handles toggling the overview fragment */
     private void handleToggleOverview() {
-        if (!overviewActive) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.quiz_overview_container, overview)
-                    .commit();
-            findViewById(R.id.quiz_overview_container).setVisibility(View.VISIBLE);
-            overviewActive = true;
-        } else {
-            getSupportFragmentManager().beginTransaction().remove(overview).commit();
-            findViewById(R.id.quiz_overview_container).setVisibility(View.GONE);
-            overviewActive = false;
-        }
+        findViewById(R.id.quiz_overview_container)
+                .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
+        overviewActive = !overviewActive;
     }
 }
