@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- French -->
+<resources>
+
+    <!-- App and logo -->
+    <string name="qedit_logo_description">Logo QEDit</string>
+
+    <!-- Language selection -->
+    <string name="language_changed">Langue changée en</string>
+
+    <!-- Login -->
+    <string name="title_activity_login">Connexion</string>
+    <string name="login_button_text">Connexion</string>
+    <string name="login_action_label">Connexion</string>
+    <string name="token_hint">Token de connexion</string>
+    <string name="wrong_token_message">Token invalide</string>
+    <string name="empty_token_message">Token vide</string>
+    <string name="connection_error_message">Erreur de connexion</string>
+
+    <!-- Home -->
+    <string name="title_activity_home">Accueil</string>
+    <string name="welcome">Bienvenue,</string>
+    <string name="role_administrator">Vous êtes un administrateur/une administratrice.</string>
+    <string name="role_editor">Vous êtes un éditeur/une éditrice.</string>
+    <string name="role_participant">Vous êtes un participant/une participante.</string>
+
+    <!-- Menu -->
+    <string name="menu_overview">Aperçu</string>
+    <string name="menu_timer">Minuteur</string>
+    <string name="menu_previous">Précédent</string>
+    <string name="menu_next">Suivant</string>
+
+    <!-- Quiz -->
+    <string name="title_activity_edit_quiz">Édition</string>
+    <string name="give_answer_here_hint">Votre réponse</string>
+
+    <!-- Miscellaneous -->
+    <!-- In French, there is a space before the exclammation point!
+         We cant have leading and trailing spaces in string resources,
+         so we put \u0020 to force a space. -->
+    <string name="exclamation_point">\u0020!</string>
+
+
+    <string name="textview">TextView</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Editer</string>
+    <string name="no_duplicate">"Les noms de quizzes ne peuvent pas être dupliquer"</string>
+    <string name="cancel">"Annuler"</string>
+    <string name="done">"Fini"</string>
+    <string name="yes">"Ouai"</string>
+    <string name="add_pop_up">"Rajouter un nom de quiz"</string>
+    <string name="error_blanck">"Cela ne peux pas ëtre blanc"</string>
+    <string name="edit_title">"Donner un nouveau nom"</string>
+    <string name="warning_delete">"Etes-vous sur de vouloir supprimer ce quiz, cela supprimera toutes les questions de ce quiz"</string>
+
+
+</resources>

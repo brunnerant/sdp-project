@@ -49,6 +49,7 @@ public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
                 .check(matches(not(hasDescendant(any(View.class)))));
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void testQuizIsProperlyLoaded() {
         model.loadQuiz("quiz0");

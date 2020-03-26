@@ -3,26 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="Overview"
+        android:title="@string/menu_overview"
         android:id="@+id/overview"
         android:icon="@drawable/ic_menu"
         app:showAsAction="always"
 
         />
     <item
-        android:title="Time"
+        android:title="@string/menu_timer"
         android:id="@+id/time"
         android:icon="@drawable/ic_timer"
         app:showAsAction="always"
         />
     <item
-        android:title="Previous"
+        android:title="@string/menu_previous"
         android:id="@+id/previous"
         android:icon="@drawable/ic_arrow_back"
         app:showAsAction="always"
         />
     <item
-        android:title="Next"
+        android:title="@string/menu_next"
         android:id="@+id/next"
         android:icon="@drawable/ic_arrow_forward"
         app:showAsAction="always"
