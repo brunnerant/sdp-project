@@ -63,7 +63,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     @Override
-    /** This method is needed to apply the desired language at the activity startup */
+    /* This method is needed to apply the desired language at the activity startup */
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }

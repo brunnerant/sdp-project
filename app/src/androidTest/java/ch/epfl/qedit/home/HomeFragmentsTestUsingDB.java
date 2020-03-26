@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.model.User;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 
-public class HomeFragmentsTestUsingDB {
+class HomeFragmentsTestUsingDB {
     private FragmentTestRule testRule;
 
     public void setup(FragmentTestRule testRule, Fragment fragment) {

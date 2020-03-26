@@ -107,7 +107,6 @@ public class LoginActivityTest {
 
     @Test
     public void testAdministratorCanLogIn() {
-        //noinspection SpellCheckingInspection
         testLoginSuccessful(
                 "v5ns9OMqV4hH7jwD8S5w", new User("Anthony", "Iozzia", User.Role.Administrator));
     }

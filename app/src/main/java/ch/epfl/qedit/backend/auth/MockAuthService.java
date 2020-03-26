@@ -26,7 +26,6 @@ public class MockAuthService implements AuthenticationService {
                             Response.ok(new User("Marcel", "Doe", User.Role.Participant)));
                     //noinspection SpellCheckingInspection
                     put("R4rXRVU3EMkgm5YEW52Q", Response.ok(createCosme()));
-                    //noinspection SpellCheckingInspection
                     put("v5ns9OMqV4hH7jwD8S5w", Response.ok(createAnthony()));
                 }
             };

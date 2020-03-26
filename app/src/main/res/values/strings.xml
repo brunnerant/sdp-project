@@ -43,19 +43,19 @@
     <string name="wrong_token_message">Invalid token</string>
     <string name="empty_token_message">Empty token</string>
     <string name="connection_error_message">Connection error</string>
-    <string name="prompt_email">Username</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Login</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="greeting">"Hello!"</string>
 
     <!-- Home -->
     <string name="title_activity_home">Home</string>
-    <string name="button_open_quiz" translatable="false">Quiz</string>
     <string name="welcome">Welcome,</string>
     <string name="role_administrator">You are an administrator.</string>
     <string name="role_editor">You are an editor.</string>
     <string name="role_participant">You are a participant.</string>
+
+    <!-- Menu -->
+    <string name="menu_overview">Overview</string>
+    <string name="menu_timer">Timer</string>
+    <string name="menu_previous">Previous</string>
+    <string name="menu_next">Next</string>
 
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Edit</string>

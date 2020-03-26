@@ -76,7 +76,7 @@ public class QuestionFragment extends Fragment {
         newB.putSerializable("m0", matrixFormat);
         matrixFragment.setArguments(newB);
 
-        // And dynamically instatiate the answer form
+        // And dynamically instantiate the answer form
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()

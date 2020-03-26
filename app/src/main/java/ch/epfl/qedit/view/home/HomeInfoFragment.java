@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import java.util.Objects;
@@ -25,7 +24,11 @@ public class HomeInfoFragment extends Fragment {
         // Get user from the bundle created by the parent activity
         User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
 
-        String message = getResources().getString(R.string.welcome) + " " + Objects.requireNonNull(user).getFullName() + getResources().getString(R.string.exclamation_point);
+        String message =
+                getResources().getString(R.string.welcome)
+                        + " "
+                        + Objects.requireNonNull(user).getFullName()
+                        + getResources().getString(R.string.exclamation_point);
 
         // Capture the layout's TextView and set the string as its text
         TextView textViewWelcome = view.findViewById(R.id.greeting);

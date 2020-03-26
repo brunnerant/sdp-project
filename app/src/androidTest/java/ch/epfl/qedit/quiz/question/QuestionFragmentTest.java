@@ -44,6 +44,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
         onView(withId(R.id.answer_fragment)).check(doesNotExist());
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void testFragmentDisplaysQuestionCorrectly() {
         model.loadQuiz("quiz0");

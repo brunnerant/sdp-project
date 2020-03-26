@@ -13,9 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Locale;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
@@ -24,6 +21,7 @@ import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Response;
 import ch.epfl.qedit.view.home.HomeActivity;
+import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -50,9 +48,9 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
 
-        /** Language selection */
+        /* Language selection */
         // Create spinner (language list)
-        Spinner languageSelectionSpinner = (Spinner) findViewById(R.id.language_selection);
+        Spinner languageSelectionSpinner = findViewById(R.id.language_selection);
 
         // Find app's current language position in languages list
         String currentLanguage = Locale.getDefault().getLanguage();
@@ -75,20 +73,20 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     @Override
-    /** This method is needed to apply the desired language at the activity startup */
+    /* This method is needed to apply the desired language at the activity startup */
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     @Override
-    /** This method tells us if the user has interacted with the activity since it was started */
+    /* This method tells us if the user has interacted with the activity since it was started */
     public void onUserInteraction() {
         super.onUserInteraction();
         userHasInteracted = true;
     }
 
     @Override
-    /** This method runs if the user selects another language */
+    /* This method runs if the user selects another language */
     public void onItemSelected(AdapterView parent, View view, int pos, long id) {
         // Do not run if user has not chosen a language
         if (!userHasInteracted) {
@@ -124,11 +122,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         // Display changed language confirmation
         Toast.makeText(
-                getApplicationContext(),
-                resources.getString(R.string.language_changed)
-                        + " "
-                        + resources.getStringArray(R.array.languages_list)[languagePos],
-                Toast.LENGTH_SHORT)
+                        getApplicationContext(),
+                        resources.getString(R.string.language_changed)
+                                + " "
+                                + resources.getStringArray(R.array.languages_list)[languagePos],
+                        Toast.LENGTH_SHORT)
                 .show();
     }
 
