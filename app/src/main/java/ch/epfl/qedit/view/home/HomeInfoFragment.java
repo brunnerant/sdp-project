@@ -9,8 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.firestore.auth.User;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import java.util.Objects;

@@ -36,6 +36,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     private AuthenticationService authService;
     private Handler handler;
 
+    private boolean userHasInteracted = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // Set listener
         languageSelectionSpinner.setOnItemSelectedListener(this);
         // Set page title to display it in the right language
-        setTitle(R.string.login);
+        setTitle(R.string.title_activity_login);
     }
 
     @Override
@@ -117,8 +119,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // Update texts
         Resources resources = context.getResources();
         tokenText.setHint(resources.getString(R.string.token_hint));
-        loginButton.setText(resources.getString(R.string.login));
-        setTitle(resources.getString(R.string.login));
+        loginButton.setText(resources.getString(R.string.login_button_text));
+        setTitle(resources.getString(R.string.title_activity_login));
 
         // Display changed language confirmation
         Toast.makeText(
@@ -137,7 +139,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
             printShortToast(R.string.empty_token_message);
             return;
         }
-        token = token.trim();
+        token = token.trim(); // Remove leading and trailing spaces in the token
+
+        // This regular expression will accept only strings of length 20
+        // and composed of letters and digits
         if (!token.matches("[a-zA-Z0-9]{20}")) {
             printShortToast(R.string.wrong_token_message);
             return;

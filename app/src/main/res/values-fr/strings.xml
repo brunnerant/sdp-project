@@ -23,15 +23,15 @@
     <string name="greeting">"Bonjour !"</string>
 
     <!-- Home -->
-    <string name="home">Accueil</string>
+    <string name="title_activity_home">Accueil</string>
     <string name="welcome">Bienvenue,</string>
     <string name="role_administrator">Vous êtes un administrateur/une administratrice.</string>
     <string name="role_editor">Vous êtes un éditeur/une éditrice.</string>
     <string name="role_participant">Vous êtes un participant/une participante.</string>
 
     <!-- Quiz -->
-    <string name="give_answer_here_hint">Votre réponse</string>
     <string name="title_activity_edit_quiz">Édition</string>
+    <string name="give_answer_here_hint">Votre réponse</string>
 
     <!-- Miscellaneous -->
     <!-- In French, there is a space before the exclammation point!

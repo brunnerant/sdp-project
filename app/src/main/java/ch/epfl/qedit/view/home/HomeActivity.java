@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.firestore.auth.User;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
@@ -44,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
                 .commit();
 
         // Set page title to display it in the right language
-        setTitle(R.string.home);
+        setTitle(R.string.title_activity_home);
     }
 
     @Override

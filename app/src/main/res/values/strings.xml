@@ -50,7 +50,7 @@
     <string name="greeting">"Hello!"</string>
 
     <!-- Home -->
-    <string name="home">Home</string>
+    <string name="title_activity_home">Home</string>
     <string name="button_open_quiz" translatable="false">Quiz</string>
     <string name="welcome">Welcome,</string>
     <string name="role_administrator">You are an administrator.</string>
@@ -58,8 +58,8 @@
     <string name="role_participant">You are a participant.</string>
 
     <!-- Quiz -->
-    <string name="give_answer_here_hint">Your answer</string>
     <string name="title_activity_edit_quiz">Edit</string>
+    <string name="give_answer_here_hint">Your answer</string>
 
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
