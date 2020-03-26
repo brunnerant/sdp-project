@@ -45,7 +45,7 @@ public class HomeActivityTest {
             String firstName,
             String lastName,
             User.Role role,
-            Function<HomeActivity, String> roleString) {
+            int roleString) {
         User user = new User(firstName, lastName, role);
         launchActivity(user);
         String greetingString =
@@ -57,7 +57,7 @@ public class HomeActivityTest {
                         + testRule.getActivity().getString(R.string.exclamation_point);
         onView(withId(R.id.greeting)).check(matches(withText(greetingString)));
         onView(withId(R.id.role))
-                .check(matches(withText(roleString.apply(testRule.getActivity()))));
+                .check(matches(withText(testRule.getActivity().getString(roleString))));
         finishActivity();
     }
 
@@ -67,12 +67,7 @@ public class HomeActivityTest {
                 "Bill",
                 "Gates",
                 User.Role.Participant,
-                new Function<HomeActivity, String>() {
-                    @Override
-                    public String apply(HomeActivity homeActivity) {
-                        return homeActivity.getString(R.string.role_participant);
-                    }
-                });
+                R.string.role_participant);
     }
 
     @Test
@@ -81,12 +76,7 @@ public class HomeActivityTest {
                 "John",
                 "Cena",
                 User.Role.Editor,
-                new Function<HomeActivity, String>() {
-                    @Override
-                    public String apply(HomeActivity homeActivity) {
-                        return homeActivity.getString(R.string.role_editor);
-                    }
-                });
+                R.string.role_editor);
     }
 
     @Test
@@ -95,12 +85,7 @@ public class HomeActivityTest {
                 "The",
                 "Rock",
                 User.Role.Administrator,
-                new Function<HomeActivity, String>() {
-                    @Override
-                    public String apply(HomeActivity homeActivity) {
-                        return homeActivity.getString(R.string.role_administrator);
-                    }
-                });
+                R.string.role_administrator);
     }
 
     @Test
