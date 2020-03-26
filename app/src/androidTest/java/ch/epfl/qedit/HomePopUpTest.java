@@ -1,8 +1,6 @@
 package ch.epfl.qedit;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.instanceOf;
 
@@ -29,8 +27,8 @@ public class HomePopUpTest {
 
     @Test
     public void testCreationOfPopUp() {
-        User user = createUser();
-        launchActivity(user);
+        final User user = createUser();
+        launchActivity();
         RecyclerView.Adapter adapter =
                 new HomeQuizListFragment().new CustomAdapter(rule.getActivity());
 
@@ -44,7 +42,7 @@ public class HomePopUpTest {
     @Test
     public void testEdit() {
         final User user = createUser();
-        launchActivity(user);
+        launchActivity();
 
         rule.getActivity()
                 .runOnUiThread(
@@ -72,9 +70,7 @@ public class HomePopUpTest {
 
     @Test
     public void testDelete() {
-        final User user = createUser();
-        launchActivity(user);
-
+        final User user = launchActivity();
         final RecyclerView.Adapter adapter =
                 new HomeQuizListFragment().new CustomAdapter(rule.getActivity());
         new Handler(Looper.getMainLooper())
@@ -88,8 +84,8 @@ public class HomePopUpTest {
                                 final AlertDialog alertDialog = homePopUp.popUpWarningDelete("", 2);
                                 alertDialog.show();
                                 // Check it exists
-                                onView(withText("Cancel")).check(matches(isDisplayed()));
-                                onView(withText("Yes")).check(matches(isDisplayed()));
+                                onView(withText("Cancel"));
+                                onView(withText("Yes"));
                                 alertDialog.cancel();
                             }
                         });
@@ -109,12 +105,14 @@ public class HomePopUpTest {
     }
 
     // No @Before because it has a parameter
-    public void launchActivity(User user) {
+    public User launchActivity() {
+        User user = createUser();
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable(LoginActivity.USER, user);
         intent.putExtras(bundle);
         rule.launchActivity(intent);
+        return user;
     }
 
     public void finishActivity() {
