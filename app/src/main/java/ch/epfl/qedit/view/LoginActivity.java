@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onNothingSelected(AdapterView parent) {
-        // Do nothing
+        // Not used because there will always be something selected
     }
 
     /**
