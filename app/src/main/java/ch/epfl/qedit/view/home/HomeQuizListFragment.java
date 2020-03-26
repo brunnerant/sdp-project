@@ -72,9 +72,9 @@ public class HomeQuizListFragment extends Fragment {
                 new ArrayList<>(user.getQuizzes().entrySet()).get(position);
 
         if (swipeDir == ItemTouchHelper.LEFT) {
-            homePopUp.popUpWarningDelete(entryScrew.getValue(), position);
+            homePopUp.popUpWarningDelete(entryScrew.getValue(), position).show();
         } else if (swipeDir == ItemTouchHelper.RIGHT) {
-            homePopUp.popUpEdit(entryScrew.getValue(), position);
+            homePopUp.popUpEdit(entryScrew.getValue(), position).show();
         }
 
         customAdapter.notifyDataSetChanged();
@@ -206,7 +206,6 @@ public class HomeQuizListFragment extends Fragment {
 
     public class CustomAdapter extends RecyclerView.Adapter {
         private LayoutInflater inflater;
-
 
         public CustomAdapter(Context context) {
             inflater = LayoutInflater.from(context);

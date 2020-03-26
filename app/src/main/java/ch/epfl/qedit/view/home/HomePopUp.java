@@ -26,7 +26,7 @@ public class HomePopUp {
         this.customAdapter = customAdapter;
     }
 
-    public void popUpEdit(final String oldValue, final int position) {
+    public AlertDialog popUpEdit(final String oldValue, final int position) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Give a new name... Or the same one");
 
@@ -46,7 +46,7 @@ public class HomePopUp {
                     }
                 });
 
-        errorDialog(builder, input).show();
+        return errorDialog(builder, input);
     }
 
     private void setNegativeButton(AlertDialog.Builder builder) {
@@ -71,7 +71,7 @@ public class HomePopUp {
         return alertDialog;
     }
 
-    public void popUpWarningDelete(final String title, final int position) {
+    public AlertDialog popUpWarningDelete(final String title, final int position) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(
                 "Are you sure you want to delete, deleting will delete all questions from this quiz");
@@ -90,7 +90,7 @@ public class HomePopUp {
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.create();
-        alertDialog.show();
+        return alertDialog;
     }
 
     public void addPopUp() {
