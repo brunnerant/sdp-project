@@ -43,7 +43,7 @@ public class HomeQuizListFragment extends Fragment {
         final User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
         this.user = user;
 
-        this.customAdapter = new CustomAdapter(requireActivity(), user);
+        this.customAdapter = new CustomAdapter(requireActivity());
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
@@ -204,12 +204,11 @@ public class HomeQuizListFragment extends Fragment {
         }
     }
 
-    private class CustomAdapter extends RecyclerView.Adapter {
+    public class CustomAdapter extends RecyclerView.Adapter {
         private LayoutInflater inflater;
-        private User user;
 
-        public CustomAdapter(Context context, User user) {
-            this.user = user;
+
+        public CustomAdapter(Context context) {
             inflater = LayoutInflater.from(context);
         }
 
