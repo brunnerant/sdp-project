@@ -11,6 +11,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 import ch.epfl.qedit.model.Quiz;
 import java.util.Arrays;
+import java.util.HashMap;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -24,7 +25,8 @@ public class QuizViewModelTest {
         assertEquals(QuizViewModel.Status.NotLoaded, model.getStatus().getValue());
         assertNull(model.getQuiz().getValue());
         assertNull(model.getFocusedQuestion().getValue());
-        assertNull(model.getAnswers().getValue());
+        assertEquals(
+                model.getAnswers().getValue(), new HashMap<Integer, HashMap<Integer, Float>>());
     }
 
     @Test
