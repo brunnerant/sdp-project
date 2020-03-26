@@ -21,6 +21,7 @@ import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Response;
 import ch.epfl.qedit.view.home.HomeActivity;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -36,6 +37,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private boolean userHasInteracted = false;
 
+    Resources resources;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,21 +51,16 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
 
+        resources = getResources();
+
         /* Language selection */
         // Create spinner (language list)
         Spinner languageSelectionSpinner = findViewById(R.id.language_selection);
 
         // Find app's current language position in languages list
         String currentLanguage = Locale.getDefault().getLanguage();
-        int positionInLanguageList = 0;
         String[] languageList = getResources().getStringArray(R.array.languages_codes);
-        boolean languageFound = false;
-        for (int i = 0; i < languageList.length && !languageFound; ++i) {
-            if (currentLanguage.equals(languageList[i])) {
-                positionInLanguageList = i;
-                languageFound = true;
-            }
-        }
+        int positionInLanguageList = Arrays.asList(languageList).indexOf(currentLanguage);
 
         // Set current language in spinner at startup
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
@@ -115,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         Context context = LocaleHelper.setLocale(this, languageCode);
 
         // Update texts
-        Resources resources = context.getResources();
+        resources = context.getResources();
         tokenText.setHint(resources.getString(R.string.token_hint));
         loginButton.setText(resources.getString(R.string.login_button_text));
         setTitle(resources.getString(R.string.title_activity_login));
@@ -193,9 +191,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     private void printShortToast(int stringId) {
         Toast toast =
                 Toast.makeText(
-                        getApplicationContext(),
-                        getResources().getString(stringId),
-                        Toast.LENGTH_SHORT);
+                        getApplicationContext(), resources.getString(stringId), Toast.LENGTH_SHORT);
         toast.show();
     }
 }
