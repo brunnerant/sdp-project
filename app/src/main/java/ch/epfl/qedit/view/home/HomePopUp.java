@@ -66,7 +66,7 @@ public class HomePopUp {
         final AlertDialog alertDialog = builder.create();
         alertDialog.create();
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
-        editText.setError(resources.getString(R.string.error_blanck));
+        editText.setError(resources.getString(R.string.error_blank));
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);
         editText.addTextChangedListener(new CustomTextWatcher(editText, alertDialog));
 
@@ -143,7 +143,7 @@ public class HomePopUp {
             if (editText.length() <= 0 || !canAdd) {
                 String error =
                         editText.length() <= 0
-                                ? resources.getString(R.string.error_blanck)
+                                ? resources.getString(R.string.error_blank)
                                 : resources.getString(R.string.no_duplicate);
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.WHITE);

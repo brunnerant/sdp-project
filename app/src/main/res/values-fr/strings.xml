@@ -44,9 +44,9 @@
     <string name="textview">TextView</string>
     <string name="delete">Supprimer</string>
     <string name="edit">Editer</string>
-    <string name="no_duplicate">Les noms des quizzes ne peuvent pas être dupliqués</string>
+    <string name="no_duplicate">Ce nom de quiz est déjà utilisé</string>
     <string name="cancel">Annuler</string>
-    <string name="done">Fini</string>
+    <string name="done">Ok</string>
     <string name="yes">Oui</string>
     <string name="add_pop_up">Entrez un nom de quiz</string>
     <string name="error_blank">Le nom ne peut pas être vide</string>
