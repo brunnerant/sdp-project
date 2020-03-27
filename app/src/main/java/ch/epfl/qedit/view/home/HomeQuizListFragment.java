@@ -102,8 +102,13 @@ public class HomeQuizListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.add) {
-            homePopUp.addPopUp();
+        switch (item.getItemId()) {
+            case R.id.add:
+                homePopUp.addPopUp();
+                break;
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                break;
         }
         return true;
     }

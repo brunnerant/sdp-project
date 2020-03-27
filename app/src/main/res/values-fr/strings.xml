@@ -44,7 +44,7 @@
     <string name="textview">TextView</string>
     <string name="delete">Supprimer</string>
     <string name="edit">Editer</string>
-    <string name="no_duplicate">"Les noms de quizzes ne peuvent pas être dupliquer"</string>
+    <string name="no_duplicate">"Les noms des quizzes ne peuvent pas être dupliqués"</string>
     <string name="cancel">"Annuler"</string>
     <string name="done">"Fini"</string>
     <string name="yes">"Ouai"</string>
