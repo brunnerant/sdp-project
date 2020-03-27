@@ -13,7 +13,6 @@ import static org.junit.Assert.assertEquals;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
-import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.quiz.QuizOverviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
@@ -27,14 +26,9 @@ import org.junit.runner.RunWith;
 public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
     private QuizViewModel model;
 
-    //    @Rule //TODO
-    //    public final FragmentTestRule<?, QuizOverviewFragment> testRule =
-    //            FragmentTestRule.create(QuizOverviewFragment.class, false, false);
-
     @Rule
-    public final FragmentTestRule<QuizActivity, QuizOverviewFragment> testRule =
-            new FragmentTestRule(
-                    QuizActivity.class, QuizOverviewFragment.class, false, false, false);
+    public final FragmentTestRule<?, QuizOverviewFragment> testRule =
+            FragmentTestRule.create(QuizOverviewFragment.class, false, false);
 
     @Before
     public void setup() {

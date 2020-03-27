@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.anything;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
@@ -21,14 +20,9 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
-    //    @Rule //TODO
-    //    public final FragmentTestRule<?, HomeQuizListFragment> testRule =
-    //            FragmentTestRule.create(HomeQuizListFragment.class, false, false);
-
     @Rule
-    public final FragmentTestRule<HomeActivity, HomeQuizListFragment> testRule =
-            new FragmentTestRule(
-                    HomeActivity.class, HomeQuizListFragment.class, false, false, false);
+    public final FragmentTestRule<?, HomeQuizListFragment> testRule =
+            FragmentTestRule.create(HomeQuizListFragment.class, false, false);
 
     @Before
     public void setup() {
@@ -57,7 +51,8 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
                 .atPosition(0)
                 .perform(click());
 
-        //        intended( //TODO progress bar is no showing
+        //        intended( //TODO progress bar is now shown as the load happens here,
+        // idlingresource?
         //                allOf(
         //                        hasComponent(QuizActivity.class.getName()),
         //                        hasExtra(HomeQuizListFragment.QUIZID, "quiz0")));

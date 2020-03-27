@@ -6,7 +6,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.home.HomeInfoFragment;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
@@ -15,13 +14,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class HomeInfoFragmentTest extends HomeFragmentsTestUsingDB {
-    //    @Rule //TODO
-    //    public final FragmentTestRule<?, HomeInfoFragment> testRule =
-    //            FragmentTestRule.create(HomeInfoFragment.class, false, false);
-
     @Rule
-    public final FragmentTestRule<HomeActivity, HomeInfoFragment> testRule =
-            new FragmentTestRule(HomeActivity.class, HomeInfoFragment.class, false, false, false);
+    public final FragmentTestRule<?, HomeInfoFragment> testRule =
+            FragmentTestRule.create(HomeInfoFragment.class, false, false);
 
     @Before
     public void setup() {

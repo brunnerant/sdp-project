@@ -11,7 +11,6 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
-import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
@@ -24,13 +23,9 @@ import org.junit.runner.RunWith;
 public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
     private QuizViewModel model;
 
-    //    @Rule //TODO
-    //    public final FragmentTestRule<?, QuestionFragment> testRule =
-    //            FragmentTestRule.create(QuestionFragment.class, false, false);
-
     @Rule
-    public final FragmentTestRule<QuizActivity, QuestionFragment> testRule =
-            new FragmentTestRule(QuizActivity.class, QuestionFragment.class, false, false, false);
+    public final FragmentTestRule<?, QuestionFragment> testRule =
+            FragmentTestRule.create(QuestionFragment.class, false, false);
 
     @Before
     public void setup() {
