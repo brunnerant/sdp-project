@@ -121,7 +121,7 @@ public class HomeQuizListFragment extends Fragment {
             case DatabaseService.WRONG_DOCUMENT:
                 stringId = R.string.wrong_quiz_id_message;
                 break;
-            default:
+            default: // TODO handle WRONG_COLLECTION
                 break;
         }
         Toast toast =

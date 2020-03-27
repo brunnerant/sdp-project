@@ -9,6 +9,7 @@ public class AnswerFormatTest {
 
     @Test
     public void parseWrong() {
+        //noinspection SpellCheckingInspection
         assertNull(AnswerFormat.parse("iufbziub"));
         assertNull(AnswerFormat.parse("matrix45x8x6"));
         assertNull(AnswerFormat.parse(""));

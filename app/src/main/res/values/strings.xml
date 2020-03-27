@@ -22,6 +22,7 @@
     <string name="empty_token_message">Token vide</string>
     <string name="connection_error_message">Erreur de connexion</string>
 
+    <!-- TODO put them into the corresponding xml -> Anthony multilanguage -->
     <string name="wrong_quiz_id_message">Ce quiz n\'existe pas</string>
     <string name="empty_quiz_error_message">Ce quiz est vide</string>
 
