@@ -44,14 +44,14 @@
     <string name="textview">TextView</string>
     <string name="delete">Supprimer</string>
     <string name="edit">Editer</string>
-    <string name="no_duplicate">"Les noms des quizzes ne peuvent pas être dupliqués"</string>
-    <string name="cancel">"Annuler"</string>
-    <string name="done">"Fini"</string>
-    <string name="yes">"Ouai"</string>
-    <string name="add_pop_up">"Rajouter un nom de quiz"</string>
-    <string name="error_blanck">"Cela ne peux pas ëtre blanc"</string>
-    <string name="edit_title">"Donner un nouveau nom"</string>
-    <string name="warning_delete">"Etes-vous sur de vouloir supprimer ce quiz, cela supprimera toutes les questions de ce quiz"</string>
+    <string name="no_duplicate">Les noms des quizzes ne peuvent pas être dupliqués</string>
+    <string name="cancel">Annuler</string>
+    <string name="done">Fini</string>
+    <string name="yes">Oui</string>
+    <string name="add_pop_up">Entrez un nom de quiz</string>
+    <string name="error_blank">Le nom ne peut pas être vide</string>
+    <string name="edit_title">Renommer</string>
+    <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz? Cela va supprimer toutes les questions de ce quiz.</string>
 
 
 </resources>
