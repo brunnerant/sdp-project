@@ -38,7 +38,7 @@ public interface DatabaseService {
 
     /**
      * Asynchronously retrieves an entire quiz from the database. Note that we assume for
-     * convenience that that database model is key-based, because it is the case for Firestore.
+     * convenience that database model is key-based, because it is the case for Firestore.
      *
      * @param quizID the id of the quiz in the database
      * @param responseCallback the callback that will be triggered when the data arrives

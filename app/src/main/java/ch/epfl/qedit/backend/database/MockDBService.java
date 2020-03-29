@@ -59,11 +59,11 @@ public class MockDBService implements DatabaseService {
         Question bananaQuestion_fr =
                 new Question("Banane", "Combien y a-t-il de bananes ?", "matrix1x1");
         Question bananaQuestion_en =
-                new Question("Banana", "How many banana can you count ?", "matrix1x1");
+                new Question("Banana", "How many bananas can you count ?", "matrix1x1");
         List<Question> q_en =
                 Arrays.asList(
-                        new Question("Banana", "How many banana is there on earth ?", "matrix1x1"),
-                        new Question("Apple", "How many apple is there on earth ?", "matrix1x1"),
+                        new Question("Banana", "How many bananas is there on earth ?", "matrix1x1"),
+                        new Question("Apple", "How many apples is there on earth ?", "matrix1x1"),
                         new Question("Vector", "Qive a unit vecor ? ", "matrix1x3"),
                         new Question("Operation", "What is the results of 1 + 10 ?", "matrix1x1"),
                         new Question("Matrix", "Fill this matrix ?", "matrix3x3"));
@@ -71,8 +71,9 @@ public class MockDBService implements DatabaseService {
         List<Question> q_fr =
                 Arrays.asList(
                         new Question(
-                                "Banane", "Combien y a t'il de banane sur terre ?", "matrix1x1"),
-                        new Question("Pomme", "Combien y a t'il de pomme sur terre ?", "matrix1x1"),
+                                "Banane", "Combien y a t'il de bananes sur terre ?", "matrix1x1"),
+                        new Question(
+                                "Pomme", "Combien y a t'il de pommes sur terre ?", "matrix1x1"),
                         new Question("Vecteur", "Donnez un vecteur unitaire ?", "matrix1x3"),
                         new Question("Operation", "Quel est le resultat de 1 + 10 ?", "matrix1x1"),
                         new Question("Matrice", "Remplissez cette matrice ?", "matrix3x3"));

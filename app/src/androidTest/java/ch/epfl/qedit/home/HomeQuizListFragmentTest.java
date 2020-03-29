@@ -50,11 +50,5 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
                 .inAdapterView(withId(R.id.home_quiz_list))
                 .atPosition(0)
                 .perform(click());
-
-        //        intended( //TODO progress bar is now shown as the load happens here,
-        // idlingresource?
-        //                allOf(
-        //                        hasComponent(QuizActivity.class.getName()),
-        //                        hasExtra(HomeQuizListFragment.QUIZID, "quiz0")));
     }
 }

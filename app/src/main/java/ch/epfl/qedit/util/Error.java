@@ -14,6 +14,7 @@ public class Error {
     public Error(int stringId) {
         this.stringId = stringId;
     }
+
     /**
      * @param context context in where to print the toast if 'this' is an error
      * @return true if 'this' is a NO_ERROR, return false and print a toast in the context if 'this'

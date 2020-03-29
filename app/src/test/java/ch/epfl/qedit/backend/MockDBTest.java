@@ -27,7 +27,7 @@ public class MockDBTest {
     private Question bananaQuestion_fr =
             new Question("Banane", "Combien y a-t-il de bananes ?", "matrix1x1");
     private Question bananaQuestion_en =
-            new Question("Banana", "How many banana can you count ?", "matrix1x1");
+            new Question("Banana", "How many bananas can you count ?", "matrix1x1");
 
     private void lockWait() {
         try {

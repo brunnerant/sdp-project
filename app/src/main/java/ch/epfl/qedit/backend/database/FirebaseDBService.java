@@ -65,7 +65,7 @@ public class FirebaseDBService implements DatabaseService {
                                                 /**
                                                  * If the translation raise an exception then the
                                                  * format of the document is wrong, we print the
-                                                 * stack trace for debug purpose, and response an
+                                                 * stack trace for debug purpose, and respond an
                                                  * error
                                                  */
                                                 e.printStackTrace();
@@ -157,7 +157,7 @@ public class FirebaseDBService implements DatabaseService {
                                                 responseCallback.onReceive(Response.ok(quiz));
                                             } else {
                                                 /**
-                                                 * If we cannot load the questions, we response the
+                                                 * If we cannot load the questions, we respond the
                                                  * error we get from getQuizTitle
                                                  */
                                                 responseCallback.onReceive(
@@ -168,7 +168,7 @@ public class FirebaseDBService implements DatabaseService {
                                     });
                         } else {
                             /**
-                             * If we cannot load the title, we response the error we get from
+                             * If we cannot load the title, we respond the error we get from
                              * getQuizTitle
                              */
                             responseCallback.onReceive(
