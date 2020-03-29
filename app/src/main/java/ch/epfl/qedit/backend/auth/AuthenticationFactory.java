@@ -9,7 +9,7 @@ public final class AuthenticationFactory {
     private static AuthenticationService authService = null;
 
     public static AuthenticationService getInstance() {
-        if (authService == null) authService = new MockAuthService();
+        if (authService == null) { authService = new FirebaseAuthService();}
 
         return authService;
     }

@@ -37,7 +37,7 @@ public class MatrixFormat extends AnswerFormat {
 
     public static MatrixFormat parse(String format) {
         /** Match format: 'matrixNxM' where N and M are [0-9]+ */
-        if (Pattern.compile("^matrix(\\d+)x(\\d+)$").matcher(format).find()) {
+        if (Pattern.compile("^(\\s*)matrix(\\d+)x(\\d+)(\\s*)$").matcher(format).find()) {
             /** Extract the row and column size */
             Matcher number = Pattern.compile("(\\d+)").matcher(format);
             number.find();

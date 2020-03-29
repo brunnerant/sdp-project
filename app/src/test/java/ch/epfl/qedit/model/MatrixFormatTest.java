@@ -76,18 +76,19 @@ public class MatrixFormatTest {
     @Test
     public void parseMatrixCorrectly() {
         assertEquals(new MatrixFormat(1, 1), AnswerFormat.parse("matrix1x1"));
-        assertEquals(new MatrixFormat(4, 1), AnswerFormat.parse("matrix4x1"));
-        assertEquals(new MatrixFormat(1, 7878), AnswerFormat.parse("matrix1x7878"));
+        assertEquals(new MatrixFormat(1, 1), AnswerFormat.parse("matrix1x1   "));
+        assertEquals(new MatrixFormat(4, 1), AnswerFormat.parse("    matrix4x1"));
+        assertEquals(new MatrixFormat(1, 7878), AnswerFormat.parse("    matrix1x7878   "));
     }
 
     @Test
     public void parseMatrixFailed() {
         assertNull(AnswerFormat.parse("matrix1xx1"));
         assertNull(AnswerFormat.parse("matrix4x1x"));
-        assertNull(AnswerFormat.parse("matrerix1x7878"));
-        assertNull(AnswerFormat.parse("matrix1x7878hjhjhjhj"));
-        assertNull(AnswerFormat.parse("atatatatmatrix1x7878"));
-        assertNull(AnswerFormat.parse("qzwsrxetdcryftvugybhunij,ko"));
+        assertNull(AnswerFormat.parse("m_matrix1x7878"));
+        assertNull(AnswerFormat.parse("matrix1x7878a"));
+        assertNull(AnswerFormat.parse("m matrix1x7878"));
+        assertNull(AnswerFormat.parse("@@@@,ko"));
     }
 
     @Test

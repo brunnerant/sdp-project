@@ -93,9 +93,11 @@ public class QuizActivity extends AppCompatActivity {
         MutableLiveData<Integer> focusedQuestion = model.getFocusedQuestion();
         Integer index = focusedQuestion.getValue();
 
-        if (index == null) focusedQuestion.setValue(0);
-        else if ((index + offset) < quiz.getQuestions().size() && (index + offset) >= 0)
+        if (index == null) {
+            focusedQuestion.setValue(0);
+        } else if ((index + offset) < quiz.getQuestions().size() && (index + offset) >= 0) {
             focusedQuestion.setValue(index + offset);
+        }
     }
 
     /** This function handles toggling the overview fragment */

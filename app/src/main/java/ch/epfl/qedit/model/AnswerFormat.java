@@ -22,7 +22,7 @@ public abstract class AnswerFormat implements Serializable {
      *     a correct format
      */
     public static AnswerFormat parse(String format) {
-        if (format == null) return null;
+        if (format == null) { return null;}
         return MatrixFormat.parse(format);
     }
 }
