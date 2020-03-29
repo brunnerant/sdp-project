@@ -25,6 +25,9 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MatrixFragmentTest {
+
+    final int MATRIX_DIM = 3;
+
     @Rule
     public final FragmentTestRule<?, MatrixFragment> testRule =
             FragmentTestRule.create(MatrixFragment.class, false, false);
@@ -54,8 +57,8 @@ public class MatrixFragmentTest {
 
     @Test
     public void testFieldsAreDisplayed() {
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
+        for (int i = 0; i < MATRIX_DIM; ++i) {
+            for (int j = 0; j < MATRIX_DIM; ++j) {
                 onView(withId(testRule.getFragment().getId(i, j))).check(matches(isDisplayed()));
             }
         }
@@ -63,8 +66,8 @@ public class MatrixFragmentTest {
 
     @Test
     public void testFieldsAreEmptyAtFirst() {
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
+        for (int i = 0; i < MATRIX_DIM; ++i) {
+            for (int j = 0; j < MATRIX_DIM; ++j) {
                 onView(withId(testRule.getFragment().getId(i, j))).check(matches(withText("")));
             }
         }

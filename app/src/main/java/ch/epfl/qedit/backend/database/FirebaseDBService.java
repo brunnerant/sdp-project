@@ -24,16 +24,17 @@ public class FirebaseDBService implements DatabaseService {
         db = FirebaseFirestore.getInstance();
     }
 
+    private String getField(String field, QueryDocumentSnapshot doc) throws Exception {
+        String string = doc.get(field, String.class);
+        if (string == null) {
+            throw new Exception(field + " not found in firestore document");
+        }
+        return string;
+    }
+
     private Question getQuestionFromDoc(QueryDocumentSnapshot doc) throws Exception {
-
-        String title = doc.get("title", String.class);
-        if (title == null) throw new Exception("Title not found in question document");
-        String text = doc.get("text", String.class);
-        if (text == null) throw new Exception("Text not found in question document");
-        String format = doc.get("answer_format", String.class);
-        if (format == null) throw new Exception("Answer format not found in question document");
-
-        return new Question(title, text, format);
+        return new Question(
+                getField("title", doc), getField("text", doc), getField("answer_format", doc));
     }
 
     @Override
