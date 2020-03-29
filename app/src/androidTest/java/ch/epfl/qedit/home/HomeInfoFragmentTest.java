@@ -20,12 +20,12 @@ public class HomeInfoFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Before
     public void setup() {
-        super.setup(testRule, new HomeInfoFragment());
+        setup(testRule, new HomeInfoFragment());
     }
 
     @After
     public void cleanup() {
-        super.cleanup();
+        cleanup(testRule);
     }
 
     private void testUserIsDisplayedCorrectly(String firstName, String lastName, int roleString) {

@@ -27,13 +27,13 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
     @Before
     public void setup() {
         Intents.init();
-        super.setup(testRule, new HomeQuizListFragment());
+        setup(testRule, new HomeQuizListFragment());
     }
 
     @After
     public void cleanup() {
         Intents.release();
-        super.cleanup();
+        cleanup(testRule);
     }
 
     @Test
@@ -50,5 +50,10 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
                 .inAdapterView(withId(R.id.home_quiz_list))
                 .atPosition(0)
                 .perform(click());
+
+        /**
+         * intended( allOf( hasComponent(QuizActivity.class.getName()),
+         * hasExtra(HomeQuizListFragment.QUIZID, "quiz0")));*
+         */
     }
 }
