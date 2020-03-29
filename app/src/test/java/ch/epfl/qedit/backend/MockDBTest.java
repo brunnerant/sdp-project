@@ -54,7 +54,7 @@ public class MockDBTest {
         if (Locale.getDefault().getLanguage().equals("en")) {
             assertEquals("I am a Mock Quiz!", title);
         } else {
-            assertEquals("Je suis un Mock Quiz!", title);
+            assertEquals("Je suis un Mock Quiz !", title);
         }
     }
 
