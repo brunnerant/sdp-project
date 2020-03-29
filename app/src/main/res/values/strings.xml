@@ -43,8 +43,8 @@
     <string name="wrong_token_message">Invalid token</string>
     <string name="empty_token_message">Empty token</string>
 
-    <!-- Connexion error -->
-    <string name="connection_error_message">Connexion error</string>
+    <!-- Connection error -->
+    <string name="connection_error_message">Connection error</string>
 
     <!-- Database -->
     <string name="wrong_quiz_id_message">Quiz does not exist</string>

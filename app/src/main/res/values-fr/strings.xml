@@ -16,7 +16,7 @@
     <string name="wrong_token_message">Token invalide</string>
     <string name="empty_token_message">Token vide</string>
 
-    <!-- Connexion error -->
+    <!-- Connection error -->
     <string name="connection_error_message">Erreur de connexion</string>
 
     <!-- Database -->
@@ -41,9 +41,9 @@
     <string name="give_answer_here_hint">Votre réponse</string>
 
     <!-- Miscellaneous -->
-    <!-- In French, there is a space before the exclammation point!
-         We cant have leading and trailing spaces in string resources,
-         so we put \u0020 to force a space. -->
+    <!-- In French, there is a space before the exclammation point.
+         Since we cannot have leading and trailing spaces in string resources,
+         we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
 
 </resources>
