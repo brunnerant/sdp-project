@@ -17,7 +17,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
 
     <!-- App and logo -->
-    <string name="app_name" translatable="false">QEDit</string>
+    <string name="app_name" translatable="false">QED<font color="#FF0000">it</font></string>
     <string name="qedit_logo_description">QEDit Logo</string>
 
     <!-- Language selection -->

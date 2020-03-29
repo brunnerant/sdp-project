@@ -4,6 +4,8 @@ import static ch.epfl.qedit.view.LoginActivity.USER;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.User;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 
@@ -19,6 +21,8 @@ class HomeFragmentsTestUsingDB {
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         fragment.setArguments(bundle);
+
+        DatabaseFactory.setInstance(new MockDBService());
 
         testRule.launchFragment(fragment);
     }
