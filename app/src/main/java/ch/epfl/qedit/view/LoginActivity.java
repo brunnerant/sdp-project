@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private boolean userHasInteracted = false;
 
+    Context context;
     Resources resources;
 
     @Override
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
 
+        context = getBaseContext();
         resources = getResources();
 
         /* Language selection */
@@ -59,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         // Find app's current language position in languages list
         String currentLanguage = Locale.getDefault().getLanguage();
-        String[] languageList = getResources().getStringArray(R.array.languages_codes);
+        String[] languageList = resources.getStringArray(R.array.languages_codes);
         int positionInLanguageList = Arrays.asList(languageList).indexOf(currentLanguage);
 
         // Set current language in spinner at startup
@@ -92,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         }
 
         // Get language code from the position of the clicked language in the spinner
-        String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
+        String languageCode = resources.getStringArray(R.array.languages_codes)[pos];
 
         updateTextsAndMakeToast(languageCode, pos);
     }
@@ -110,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
      */
     private void updateTextsAndMakeToast(String languageCode, int languagePos) {
         // Set new language
-        Context context = LocaleHelper.setLocale(this, languageCode);
+        context = LocaleHelper.setLocale(this, languageCode);
 
         // Update texts
         resources = context.getResources();
@@ -155,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                                     @Override
                                     public void run() {
                                         progressBar.setVisibility(View.GONE);
-                                        if (response.getError().noError(getBaseContext())) {
+                                        if (response.getError().noError(context)) {
                                             onLoginSuccessful(response.getData());
                                         }
                                     }
