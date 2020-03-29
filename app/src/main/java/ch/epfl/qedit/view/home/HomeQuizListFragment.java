@@ -14,7 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
@@ -35,14 +34,12 @@ public class HomeQuizListFragment extends Fragment {
     private Handler handler;
     private ProgressBar progressBar;
 
-    private ListView listView;
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home_quiz_list, container, false);
-        listView = view.findViewById(R.id.home_quiz_list);
+        ListView listView = view.findViewById(R.id.home_quiz_list);
 
         progressBar = view.findViewById(R.id.quiz_loading);
 
@@ -88,9 +85,9 @@ public class HomeQuizListFragment extends Fragment {
                                     public void run() {
                                         /** Determine what to do when the quiz is loaded or not */
                                         progressBar.setVisibility(View.GONE);
-                                        if (response.successful())
+                                        if (response.getError().noError(getContext())) {
                                             onLoadingSuccessful(response.getData());
-                                        else onLoadingFailed(response.getError());
+                                        }
                                     }
                                 });
                     }
@@ -109,25 +106,6 @@ public class HomeQuizListFragment extends Fragment {
         bundle.putSerializable(QUIZID, quiz);
         intent.putExtras(bundle);
         startActivity(intent);
-    }
-
-    /** If loading a quiz fails */
-    private void onLoadingFailed(int error) {
-        int stringId = 0;
-        switch (error) {
-            case DatabaseService.CONNECTION_ERROR:
-                stringId = R.string.connection_error_message;
-                break;
-            case DatabaseService.WRONG_DOCUMENT:
-                stringId = R.string.wrong_quiz_id_message;
-                break;
-            default: // TODO handle WRONG_COLLECTION
-                break;
-        }
-        Toast toast =
-                Toast.makeText(
-                        requireActivity(), getResources().getString(stringId), Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     private class CustomAdapter extends BaseAdapter {

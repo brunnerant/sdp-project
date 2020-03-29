@@ -62,9 +62,9 @@ public class LoginActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         progressBar.setVisibility(View.GONE);
-                                        if (response.successful())
+                                        if (response.getError().noError(getBaseContext())) {
                                             onLoginSuccessful(response.getData());
-                                        else onLoginFailed(response.getError());
+                                        }
                                     }
                                 });
                     }
@@ -77,22 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
         startActivity(intent);
-    }
-
-    private void onLoginFailed(int error) {
-        int stringId = 0;
-        switch (error) {
-            case AuthenticationService.CONNECTION_ERROR:
-                stringId = R.string.connection_error_message;
-                break;
-            case AuthenticationService.WRONG_TOKEN:
-                stringId = R.string.wrong_token_message;
-                break;
-            default:
-                break;
-        }
-
-        printShortToast(stringId);
     }
 
     private void printShortToast(int stringId) {

@@ -1,7 +1,9 @@
 package ch.epfl.qedit.backend.auth;
 
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.Error;
 import ch.epfl.qedit.util.Response;
 
 /**
@@ -9,8 +11,9 @@ import ch.epfl.qedit.util.Response;
  * handles asynchronous responses by using a callback.
  */
 public interface AuthenticationService {
-    int CONNECTION_ERROR = 1;
-    int WRONG_TOKEN = 2;
+
+    Error CONNECTION_ERROR = new Error(R.string.connection_error_message);
+    Error WRONG_TOKEN = new Error(R.string.wrong_token_message);
 
     /**
      * Sends a request to the authentication service, and receives the response asynchronously

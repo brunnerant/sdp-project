@@ -20,7 +20,6 @@ public class QuizActivity extends AppCompatActivity {
     private QuizViewModel model;
     private Boolean overviewActive;
 
-    private QuizOverviewFragment overview;
     private Quiz quiz;
 
     @Override
@@ -42,7 +41,7 @@ public class QuizActivity extends AppCompatActivity {
         handleToggleOverview();
 
         QuestionFragment questionFragment = new QuestionFragment();
-        overview = new QuizOverviewFragment();
+        QuizOverviewFragment overview = new QuizOverviewFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()

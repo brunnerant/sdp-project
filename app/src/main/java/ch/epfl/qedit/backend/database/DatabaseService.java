@@ -1,8 +1,10 @@
 package ch.epfl.qedit.backend.database;
 
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.Error;
 import ch.epfl.qedit.util.Response;
 import java.util.List;
 
@@ -11,9 +13,10 @@ import java.util.List;
  * getting data is possible, but in the future, there will be support for modifying data.
  */
 public interface DatabaseService {
-    int CONNECTION_ERROR = 1;
-    int WRONG_COLLECTION = 2;
-    int WRONG_DOCUMENT = 3;
+
+    Error CONNECTION_ERROR = new Error(R.string.connection_error_message);
+    Error WRONG_COLLECTION = new Error(R.string.wrong_quiz_id_message);
+    Error WRONG_DOCUMENT = new Error(R.string.wrong_document_error_message);
 
     /**
      * Asynchronously retrieves a list of question of a quiz from the database. Note that we assume

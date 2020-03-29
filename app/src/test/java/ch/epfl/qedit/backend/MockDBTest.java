@@ -8,6 +8,7 @@ import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.Error;
 import ch.epfl.qedit.util.Response;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -20,14 +21,14 @@ public class MockDBTest {
     private String title;
     private Quiz quiz;
     private List<Question> questions;
-    private int error;
+    private Error error;
 
     private Question bananaQuestion_en =
             new Question("Banana", "How many banana can you count ?", "matrix1x1");
 
-    private void lockWait(long time) {
+    private void lockWait() {
         try {
-            lock.await(time, TimeUnit.MILLISECONDS);
+            lock.await(2100, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -45,7 +46,7 @@ public class MockDBTest {
                         error = data.getError();
                     }
                 });
-        lockWait(2100);
+        lockWait();
         assertEquals(Response.NO_ERROR, error);
         assertEquals("I am a Mock Quiz!", title);
     }
@@ -62,7 +63,7 @@ public class MockDBTest {
                         error = data.getError();
                     }
                 });
-        lockWait(2100);
+        lockWait();
         assertEquals(Response.NO_ERROR, error);
         assertTrue(questions.contains(bananaQuestion_en));
     }
@@ -80,7 +81,7 @@ public class MockDBTest {
                     }
                 });
 
-        lockWait(2100);
+        lockWait();
         assertEquals(Response.NO_ERROR, error);
         assertTrue(quiz.getQuestions().contains(bananaQuestion_en));
         assertEquals("Title", quiz.getTitle());
@@ -97,7 +98,7 @@ public class MockDBTest {
                         error = data.getError();
                     }
                 });
-        lockWait(2100);
+        lockWait();
         assertEquals(DatabaseService.WRONG_DOCUMENT, error);
     }
 
@@ -112,7 +113,7 @@ public class MockDBTest {
                         error = data.getError();
                     }
                 });
-        lockWait(2100);
+        lockWait();
         assertEquals(DatabaseService.WRONG_DOCUMENT, error);
     }
 
@@ -127,7 +128,7 @@ public class MockDBTest {
                         error = data.getError();
                     }
                 });
-        lockWait(2100);
+        lockWait();
         assertEquals(DatabaseService.WRONG_DOCUMENT, error);
     }
 }
