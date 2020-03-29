@@ -3,8 +3,12 @@ package ch.epfl.qedit.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class MatrixFormatTest {
     @Test
@@ -45,14 +49,9 @@ public class MatrixFormatTest {
     @Test
     public void answerCanBeCorrectlyVisited() {
         MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3();
-        matrixFormat.accept(
-                new AnswerFormat.Visitor() {
-                    @Override
-                    public void visitMatrixAnswerFormat(MatrixFormat matrixFormat) {
-                        matrixFormat.setId("m1");
-                        assertEquals(matrixFormat.getId(), "m1");
-                    }
-                });
+        AnswerFormat.Visitor visitor = mock(AnswerFormat.Visitor.class);
+        matrixFormat.accept(visitor);
+        verify(visitor).visitMatrixAnswerFormat(matrixFormat);
     }
 
     private void checkAllElements(
