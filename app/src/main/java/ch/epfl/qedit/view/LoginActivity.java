@@ -37,8 +37,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private boolean userHasInteracted = false;
 
-    Context context;
-    Resources resources;
+    private Context context;
+    private Resources resources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,9 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // Get language code from the position of the clicked language in the spinner
         String languageCode = resources.getStringArray(R.array.languages_codes)[pos];
 
-        updateTextsAndMakeToast(languageCode, pos);
+        setLanguage(languageCode);
+        updateTexts();
+        printChangedLanguageToast(pos);
     }
 
     @Override
@@ -105,22 +107,28 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     /**
-     * Set new language, update activity's texts and display a toast to inform the user
+     * Set the new language
      *
      * @param languageCode the universal language code (e.g. "en" for English, "fr" for French)
-     * @param languagePos position of the language in the spinner
      */
-    private void updateTextsAndMakeToast(String languageCode, int languagePos) {
-        // Set new language
+    private void setLanguage(String languageCode) {
         context = LocaleHelper.setLocale(this, languageCode);
-
-        // Update texts
         resources = context.getResources();
+    }
+
+    /** Update activity's texts */
+    private void updateTexts() {
         tokenText.setHint(resources.getString(R.string.token_hint));
         loginButton.setText(resources.getString(R.string.login_button_text));
         setTitle(resources.getString(R.string.title_activity_login));
+    }
 
-        // Display changed language confirmation
+    /**
+     * Display a toast to inform the user that the language was succesfully changed
+     *
+     * @param languagePos position of the language in the spinner
+     */
+    private void printChangedLanguageToast(int languagePos) {
         Toast.makeText(
                         getApplicationContext(),
                         resources.getString(R.string.language_changed)
