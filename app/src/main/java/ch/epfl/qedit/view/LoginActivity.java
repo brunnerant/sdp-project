@@ -1,11 +1,16 @@
 package ch.epfl.qedit.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
@@ -13,18 +18,26 @@ import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Response;
 import ch.epfl.qedit.view.home.HomeActivity;
+import java.util.Arrays;
+import java.util.Locale;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String USER = "ch.epfl.qedit.view.USER";
 
     private EditText tokenText;
+    private Button loginButton;
     private ProgressBar progressBar;
 
     private AuthenticationService authService;
     private Handler handler;
+
+    private boolean userHasInteracted = false;
+
+    Resources resources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +45,87 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         tokenText = findViewById(R.id.login_token);
+        loginButton = findViewById(R.id.login_button);
         progressBar = findViewById(R.id.login_progress_bar);
 
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
+
+        resources = getResources();
+
+        /* Language selection */
+        // Create spinner (language list)
+        Spinner languageSelectionSpinner = findViewById(R.id.language_selection);
+
+        // Find app's current language position in languages list
+        String currentLanguage = Locale.getDefault().getLanguage();
+        String[] languageList = getResources().getStringArray(R.array.languages_codes);
+        int positionInLanguageList = Arrays.asList(languageList).indexOf(currentLanguage);
+
+        // Set current language in spinner at startup
+        languageSelectionSpinner.setSelection(positionInLanguageList, false);
+        // Set listener
+        languageSelectionSpinner.setOnItemSelectedListener(this);
+        // Set page title to display it in the right language
+        setTitle(R.string.title_activity_login);
+    }
+
+    @Override
+    /* This method is needed to apply the desired language at the activity startup */
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    @Override
+    /* This method tells us if the user has interacted with the activity since it was started */
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        userHasInteracted = true;
+    }
+
+    @Override
+    /* This method runs if the user selects another language */
+    public void onItemSelected(AdapterView parent, View view, int pos, long id) {
+        // Do not run if user has not chosen a language
+        if (!userHasInteracted) {
+            return;
+        }
+
+        // Get language code from the position of the clicked language in the spinner
+        String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
+
+        updateTextsAndMakeToast(languageCode, pos);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView parent) {
+        // Not used because there will always be something selected
+    }
+
+    /**
+     * Set new language, update activity's texts and display a toast to inform the user
+     *
+     * @param languageCode the universal language code (e.g. "en" for English, "fr" for French)
+     * @param languagePos position of the language in the spinner
+     */
+    private void updateTextsAndMakeToast(String languageCode, int languagePos) {
+        // Set new language
+        Context context = LocaleHelper.setLocale(this, languageCode);
+
+        // Update texts
+        resources = context.getResources();
+        tokenText.setHint(resources.getString(R.string.token_hint));
+        loginButton.setText(resources.getString(R.string.login_button_text));
+        setTitle(resources.getString(R.string.title_activity_login));
+
+        // Display changed language confirmation
+        Toast.makeText(
+                        getApplicationContext(),
+                        resources.getString(R.string.language_changed)
+                                + " "
+                                + resources.getStringArray(R.array.languages_list)[languagePos],
+                        Toast.LENGTH_SHORT)
+                .show();
     }
 
     public void handleLogin(View view) {
@@ -45,7 +135,10 @@ public class LoginActivity extends AppCompatActivity {
             printShortToast(R.string.empty_token_message);
             return;
         }
-        token = token.trim();
+        token = token.trim(); // Remove leading and trailing spaces in the token
+
+        // This regular expression will accept only strings of length 20
+        // and composed of letters and digits
         if (!token.matches("[a-zA-Z0-9]{20}")) {
             printShortToast(R.string.wrong_token_message);
             return;
@@ -82,9 +175,7 @@ public class LoginActivity extends AppCompatActivity {
     private void printShortToast(int stringId) {
         Toast toast =
                 Toast.makeText(
-                        getApplicationContext(),
-                        getResources().getString(stringId),
-                        Toast.LENGTH_SHORT);
+                        getApplicationContext(), resources.getString(stringId), Toast.LENGTH_SHORT);
         toast.show();
     }
 }

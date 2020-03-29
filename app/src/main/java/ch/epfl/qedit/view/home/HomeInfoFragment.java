@@ -26,7 +26,11 @@ public class HomeInfoFragment extends Fragment {
         // Get user from the bundle created by the parent activity
         User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
 
-        String message = "Bienvenue " + Objects.requireNonNull(user).getFullName() + " !";
+        String message =
+                getResources().getString(R.string.welcome)
+                        + " "
+                        + Objects.requireNonNull(user).getFullName()
+                        + getResources().getString(R.string.exclamation_point);
 
         // Capture the layout's TextView and set the string as its text
         TextView textViewWelcome = view.findViewById(R.id.greeting);
@@ -40,16 +44,16 @@ public class HomeInfoFragment extends Fragment {
     }
 
     private String getRoleText(User.Role role) {
-        String roleText = "Vous êtes un ";
+        String roleText = "";
         switch (role) {
-            case Participant:
-                roleText += "participant.";
-                break;
             case Administrator:
-                roleText += "administrateur.";
+                roleText = getResources().getString(R.string.role_administrator);
                 break;
             case Editor:
-                roleText += "éditeur.";
+                roleText = getResources().getString(R.string.role_editor);
+                break;
+            case Participant:
+                roleText = getResources().getString(R.string.role_participant);
                 break;
             default:
                 break;

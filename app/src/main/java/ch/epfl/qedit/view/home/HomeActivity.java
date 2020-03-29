@@ -1,12 +1,14 @@
 package ch.epfl.qedit.view.home;
 
 import static ch.epfl.qedit.view.LoginActivity.USER;
-
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.view.LoginActivity;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
@@ -35,5 +37,14 @@ public class HomeActivity extends AppCompatActivity {
                 .replace(R.id.home_info_container, homeInfoFragment)
                 .replace(R.id.home_quiz_list_container, homeQuizListFragment)
                 .commit();
+
+        // Set page title to display it in the right language
+        setTitle(R.string.title_activity_home);
+    }
+
+    @Override
+    /* This method is needed to apply the desired language at the activity startup */
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }

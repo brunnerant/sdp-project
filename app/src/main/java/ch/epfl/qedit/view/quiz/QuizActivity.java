@@ -1,5 +1,6 @@
 package ch.epfl.qedit.view.quiz;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.Objects;
@@ -48,6 +50,26 @@ public class QuizActivity extends AppCompatActivity {
                 .replace(R.id.question_details_container, questionFragment)
                 .replace(R.id.quiz_overview_container, overview)
                 .commit();
+    }
+
+
+    @Override
+    /* This method is needed to apply the desired language at the activity startup */
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    /** This handles the loading status of the quiz */
+    private void onStatusChanged(QuizViewModel.Status status) {
+        if (status == QuizViewModel.Status.Loading) progressBar.setVisibility(View.VISIBLE);
+        else progressBar.setVisibility(View.GONE);
+
+        if (status == QuizViewModel.Status.CouldNotLoad)
+            Toast.makeText(
+                            getApplicationContext(),
+                            R.string.connection_error_message,
+                            Toast.LENGTH_SHORT)
+                    .show();
     }
 
     @Override

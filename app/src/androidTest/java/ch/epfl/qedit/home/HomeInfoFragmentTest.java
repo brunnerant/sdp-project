@@ -28,9 +28,21 @@ public class HomeInfoFragmentTest extends HomeFragmentsTestUsingDB {
         super.cleanup();
     }
 
+    private void testUserIsDisplayedCorrectly(String firstName, String lastName, int roleString) {
+        String greetingString =
+                testRule.getActivity().getString(R.string.welcome)
+                        + " "
+                        + firstName
+                        + " "
+                        + lastName
+                        + testRule.getActivity().getString(R.string.exclamation_point);
+        onView(withId(R.id.greeting)).check(matches(withText(greetingString)));
+        onView(withId(R.id.role))
+                .check(matches(withText(testRule.getActivity().getString(roleString))));
+    }
+
     @Test
     public void testParticipantIsDisplayedCorrectly() {
-        onView(withId(R.id.greeting)).check(matches(withText("Bienvenue Jon Snow !")));
-        onView(withId(R.id.role)).check(matches(withText("Vous êtes un participant.")));
+        testUserIsDisplayedCorrectly("Jon", "Snow", R.string.role_participant);
     }
 }

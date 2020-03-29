@@ -18,6 +18,7 @@ public class UserTest {
         assertEquals(user.getFullName(), "John Doe");
         assertEquals(user.getRole(), User.Role.Administrator);
 
+        //noinspection SpellCheckingInspection
         assertNotEquals("salkdjf", user);
         assertEquals(user, user);
         assertNotEquals(user, new User("Bill", "Gates", User.Role.Participant));
