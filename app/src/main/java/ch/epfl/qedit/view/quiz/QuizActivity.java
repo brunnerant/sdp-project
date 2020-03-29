@@ -52,7 +52,6 @@ public class QuizActivity extends AppCompatActivity {
                 .commit();
     }
 
-
     @Override
     /* This method is needed to apply the desired language at the activity startup */
     protected void attachBaseContext(Context base) {
