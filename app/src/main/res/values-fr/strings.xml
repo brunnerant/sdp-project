@@ -20,7 +20,7 @@
     <string name="connection_error_message">Erreur de connexion</string>
 
     <!-- Database -->
-    <string name="wrong_quiz_id_message">Quiz n\'existe pas</string>
+    <string name="wrong_quiz_id_message">Quiz inexistant</string>
     <string name="wrong_document_error_message">Document invalide</string>
 
     <!-- Home -->

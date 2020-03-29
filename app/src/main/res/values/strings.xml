@@ -47,8 +47,8 @@
     <string name="connection_error_message">Connection error</string>
 
     <!-- Database -->
-    <string name="wrong_quiz_id_message">Quiz does not exist</string>
-    <string name="wrong_document_error_message">Document invalid</string>
+    <string name="wrong_quiz_id_message">This quiz does not exist</string>
+    <string name="wrong_document_error_message">Invalid document</string>
 
     <!-- Home -->
     <string name="title_activity_home">Home</string>
