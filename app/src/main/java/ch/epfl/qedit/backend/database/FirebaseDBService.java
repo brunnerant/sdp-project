@@ -13,6 +13,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class FirebaseDBService implements DatabaseService {
 
@@ -39,7 +40,7 @@ public class FirebaseDBService implements DatabaseService {
     public void getQuizQuestions(
             String quizID, final Callback<Response<List<Question>>> responseCallback) {
 
-        String language = "en";
+        String language = Locale.getDefault().getLanguage();
         db.collection("quizzes")
                 .document(quizID)
                 .collection("questions_" + language)
@@ -97,7 +98,7 @@ public class FirebaseDBService implements DatabaseService {
     @Override
     public void getQuizTitle(String quizID, final Callback<Response<String>> responseCallback) {
 
-        final String language = "en";
+        final String language = Locale.getDefault().getLanguage();
 
         db.collection("quizzes")
                 .document(quizID)

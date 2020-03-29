@@ -11,6 +11,7 @@ import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Error;
 import ch.epfl.qedit.util.Response;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.junit.Test;
@@ -23,6 +24,8 @@ public class MockDBTest {
     private List<Question> questions;
     private Error error;
 
+    private Question bananaQuestion_fr =
+            new Question("Banane", "Combien y a-t-il de bananes ?", "matrix1x1");
     private Question bananaQuestion_en =
             new Question("Banana", "How many banana can you count ?", "matrix1x1");
 
@@ -48,7 +51,11 @@ public class MockDBTest {
                 });
         lockWait();
         assertEquals(Response.NO_ERROR, error);
-        assertEquals("I am a Mock Quiz!", title);
+        if (Locale.getDefault().getLanguage().equals("en")) {
+            assertEquals("I am a Mock Quiz!", title);
+        } else {
+            assertEquals("Je suis un Mock Quiz!", title);
+        }
     }
 
     @Test
@@ -65,7 +72,11 @@ public class MockDBTest {
                 });
         lockWait();
         assertEquals(Response.NO_ERROR, error);
-        assertTrue(questions.contains(bananaQuestion_en));
+        if (Locale.getDefault().getLanguage().equals("en")) {
+            assertTrue(questions.contains(bananaQuestion_en));
+        } else {
+            assertTrue(questions.contains(bananaQuestion_fr));
+        }
     }
 
     @Test
@@ -83,8 +94,13 @@ public class MockDBTest {
 
         lockWait();
         assertEquals(Response.NO_ERROR, error);
-        assertTrue(quiz.getQuestions().contains(bananaQuestion_en));
-        assertEquals("Title", quiz.getTitle());
+        if (Locale.getDefault().getLanguage().equals("en")) {
+            assertTrue(quiz.getQuestions().contains(bananaQuestion_en));
+            assertEquals("Title", quiz.getTitle());
+        } else {
+            assertTrue(quiz.getQuestions().contains(bananaQuestion_fr));
+            assertEquals("Titre", quiz.getTitle());
+        }
     }
 
     @Test

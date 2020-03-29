@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class MockDBService implements DatabaseService {
 
@@ -31,20 +32,20 @@ public class MockDBService implements DatabaseService {
             this.questions_en = ImmutableList.copyOf(questions_en);
         }
 
-        public String getTitle_en() {
-            return title_en;
+        public String getTitle(String language) {
+            if (language.equals("en")) {
+                return title_en;
+            } else {
+                return title_fr;
+            }
         }
 
-        public String getTitle_fr() {
-            return title_fr;
-        }
-
-        public ImmutableList<Question> getQuestions_fr() {
-            return questions_fr;
-        }
-
-        public ImmutableList<Question> getQuestions_en() {
-            return questions_en;
+        public ImmutableList<Question> getQuestions(String language) {
+            if (language.equals("en")) {
+                return questions_en;
+            } else {
+                return questions_fr;
+            }
         }
     }
 
@@ -61,41 +62,20 @@ public class MockDBService implements DatabaseService {
                 new Question("Banana", "How many banana can you count ?", "matrix1x1");
         List<Question> q_en =
                 Arrays.asList(
-                        new Question("Banane", "Combien y a-t-il de bananes ?", "matrix1x1"),
-                        bananaQuestion_en,
-                        new Question(
-                                "The matches problem",
-                                "How many matches can fit in a shoe of size 43 ?",
-                                "matrix3x3"),
-                        new Question(
-                                "Pigeons",
-                                "How many pigeons are there on Earth ? (Hint: do not count yourself)",
-                                "matrix1x1"),
-                        new Question("KitchenBu", "Oyster", "matrix1x1"),
-                        new Question(
-                                "Everything",
-                                "What is the answer to life the univere and everything ?",
-                                "matrix3x3"),
-                        new Question("Banane", "Combien y a-t-il de bananes ?", "matrix1x1"),
-                        bananaQuestion_en,
-                        new Question("Pomme", "Combien y a-t-il de pommes ?", "matrix1x1"),
-                        new Question("Abricot", "Combien y a-t-il d'abricots ?", "matrix1x1"),
-                        new Question("Cerise", "Combien y a-t-il de cerises ?", "matrix1x1"),
-                        new Question("Amande", "Combien y a-t-il d'amandes ?", "matrix1x1"),
-                        new Question("Ananas", "Combien y a-t-il d'ananas ?", "matrix1x1"),
-                        new Question("Avocat", "Combien y a-t-il d'avocats ?", "matrix1x1"),
-                        new Question("Citron", "Combien y a-t-il de citrons ?", "matrix1x1"),
-                        new Question(
-                                "Clémentine", "Combien y a-t-il de clémentines ?", "matrix1x1"),
-                        new Question("Figue", "Combien y a-t-il de figues ?", "matrix1x1"),
-                        new Question("Fraise", "Combien y a-t-il de fraises ?", "matrix1x1"),
-                        new Question("Framboise", "Combien y a-t-il de framboises ?", "matrix1x1"),
-                        new Question("Kiwi", "Combien y a-t-il de kiwis ?", "matrix1x1"),
-                        new Question("Mandarine", "Combien y a-t-il de mandarines ?", "matrix1x1"),
-                        new Question("Melon", "Combien y a-t-il de melons ?", "matrix1x1"),
-                        new Question("Noix", "Combien y a-t-il de noix ?", "matrix1x1"));
+                        new Question("Banana", "How many banana is there on earth ?", "matrix1x1"),
+                        new Question("Apple", "How many apple is there on earth ?", "matrix1x1"),
+                        new Question("Vector", "Qive a unit vecor ? ", "matrix1x3"),
+                        new Question("Operation", "What is the results of 1 + 10 ?", "matrix1x1"),
+                        new Question("Matrix", "Fill this matrix ?", "matrix3x3"));
 
-        List<Question> q_fr = new ArrayList<>();
+        List<Question> q_fr =
+                Arrays.asList(
+                        new Question(
+                                "Banane", "Combien y a t'il de banane sur terre ?", "matrix1x1"),
+                        new Question("Pomme", "Combien y a t'il de pomme sur terre ?", "matrix1x1"),
+                        new Question("Vecteur", "Donnez un vecteur unitaire ?", "matrix1x3"),
+                        new Question("Operation", "Quel est le resultat de 1 + 10 ?", "matrix1x1"),
+                        new Question("Matrice", "Remplissez cette matrice ?", "matrix3x3"));
 
         db.put("quiz0", new MockQuiz("I am a Mock Quiz!", "Je suis un Mock Quiz!", q_en, q_fr));
         db.put(
@@ -140,7 +120,11 @@ public class MockDBService implements DatabaseService {
                                     response = Response.error(WRONG_DOCUMENT);
                                 else {
                                     List<Question> questions =
-                                            new ArrayList<>(db.get(quizID).getQuestions_en());
+                                            new ArrayList<>(
+                                                    db.get(quizID)
+                                                            .getQuestions(
+                                                                    Locale.getDefault()
+                                                                            .getLanguage()));
                                     response = Response.ok(questions);
                                 }
                                 idlingResource.decrement();
@@ -168,7 +152,12 @@ public class MockDBService implements DatabaseService {
                                 if (!db.containsKey(quizID))
                                     response = Response.error(WRONG_DOCUMENT);
                                 else {
-                                    response = Response.ok(db.get(quizID).getTitle_en());
+                                    response =
+                                            Response.ok(
+                                                    db.get(quizID)
+                                                            .getTitle(
+                                                                    Locale.getDefault()
+                                                                            .getLanguage()));
                                 }
                                 idlingResource.decrement();
                                 responseCallback.onReceive(response);
@@ -194,11 +183,18 @@ public class MockDBService implements DatabaseService {
                                     response = Response.error(WRONG_DOCUMENT);
                                 else {
                                     List<Question> questions =
-                                            new ArrayList<>(db.get(quizID).getQuestions_en());
+                                            new ArrayList<>(
+                                                    db.get(quizID)
+                                                            .getQuestions(
+                                                                    Locale.getDefault()
+                                                                            .getLanguage()));
                                     response =
                                             Response.ok(
                                                     new Quiz(
-                                                            db.get(quizID).getTitle_en(),
+                                                            db.get(quizID)
+                                                                    .getTitle(
+                                                                            Locale.getDefault()
+                                                                                    .getLanguage()),
                                                             questions));
                                 }
                                 idlingResource.decrement();
