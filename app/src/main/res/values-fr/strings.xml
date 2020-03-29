@@ -8,7 +8,7 @@
     <!-- Language selection -->
     <string name="language_changed">Langue changée en</string>
 
-    <!-- Login -->
+    <!-- Log in -->
     <string name="title_activity_login">Connexion</string>
     <string name="login_button_text">Connexion</string>
     <string name="login_action_label">Connexion</string>
