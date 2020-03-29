@@ -9,7 +9,9 @@ public class QuizViewModel extends ViewModel {
     private Quiz quiz = null;
 
     public void setQuiz(Quiz quiz) {
-        if (this.quiz == null) this.quiz = quiz;
+        if (this.quiz == null) {
+            this.quiz = quiz;
+        }
     }
 
     public Quiz getQuiz() {
