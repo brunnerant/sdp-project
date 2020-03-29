@@ -59,19 +59,6 @@ public class QuizActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
-    /** This handles the loading status of the quiz */
-    private void onStatusChanged(QuizViewModel.Status status) {
-        if (status == QuizViewModel.Status.Loading) progressBar.setVisibility(View.VISIBLE);
-        else progressBar.setVisibility(View.GONE);
-
-        if (status == QuizViewModel.Status.CouldNotLoad)
-            Toast.makeText(
-                            getApplicationContext(),
-                            R.string.connection_error_message,
-                            Toast.LENGTH_SHORT)
-                    .show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
