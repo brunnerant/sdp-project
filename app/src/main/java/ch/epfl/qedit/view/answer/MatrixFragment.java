@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import java.util.ArrayList;
 
 public class MatrixFragment extends Fragment {

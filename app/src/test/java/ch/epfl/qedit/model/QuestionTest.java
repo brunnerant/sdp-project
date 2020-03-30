@@ -3,6 +3,8 @@ package ch.epfl.qedit.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import org.junit.Test;
 
 public class QuestionTest {
