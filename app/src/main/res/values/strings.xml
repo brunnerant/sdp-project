@@ -17,7 +17,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
 
     <!-- App and logo -->
-    <string name="app_name" translatable="false">QEDit</string>
+    <string name="app_name" translatable="false">QED<font color="#FF0000">it</font></string>
     <string name="qedit_logo_description">QEDit Logo</string>
 
     <!-- Language selection -->
@@ -35,14 +35,20 @@
     </string-array>
     <string name="language_changed">Language changed to</string>
 
-    <!-- Login -->
-    <string name="title_activity_login">Login</string>
-    <string name="login_button_text">Login</string>
-    <string name="login_action_label">Login</string>
+    <!-- Log in -->
+    <string name="title_activity_login">Log in</string>
+    <string name="login_button_text">Log in</string>
+    <string name="login_action_label">Log in</string>
     <string name="token_hint">Login token</string>
     <string name="wrong_token_message">Invalid token</string>
     <string name="empty_token_message">Empty token</string>
+
+    <!-- Connection error -->
     <string name="connection_error_message">Connection error</string>
+
+    <!-- Database -->
+    <string name="wrong_quiz_id_message">This quiz does not exist</string>
+    <string name="wrong_document_error_message">Invalid document</string>
 
     <!-- Home -->
     <string name="title_activity_home">Home</string>
@@ -63,5 +69,4 @@
 
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
-
 </resources>

@@ -47,6 +47,6 @@ public class UserTest {
         user.addQuiz("q0", "First Quiz");
         user.addQuiz("q1", "Second Quiz");
         user.removeQuiz("q1");
-        assertFalse(user.getQuizzes().keySet().contains("q1"));
+        assertFalse(user.getQuizzes().containsKey("q1"));
     }
 }

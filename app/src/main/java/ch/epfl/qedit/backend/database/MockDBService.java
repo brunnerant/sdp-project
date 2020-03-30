@@ -2,130 +2,110 @@ package ch.epfl.qedit.backend.database;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.util.BundledData;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
+import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Locale;
 
 public class MockDBService implements DatabaseService {
 
-    private final CountingIdlingResource idlingResource;
-    private final Map<String, BundledData> database;
+    public static class MockQuiz {
+        private String title_en;
+        private String title_fr;
+        private ImmutableList<Question> questions_fr;
+        private ImmutableList<Question> questions_en;
+
+        MockQuiz(
+                String title_en,
+                String title_fr,
+                List<Question> questions_en,
+                List<Question> questions_fr) {
+            this.title_en = title_en;
+            this.title_fr = title_fr;
+            this.questions_fr = ImmutableList.copyOf(questions_fr);
+            this.questions_en = ImmutableList.copyOf(questions_en);
+        }
+
+        public String getTitle(String language) {
+            if (language.equals("en")) {
+                return title_en;
+            } else {
+                return title_fr;
+            }
+        }
+
+        public ImmutableList<Question> getQuestions(String language) {
+            if (language.equals("en")) {
+                return questions_en;
+            } else {
+                return questions_fr;
+            }
+        }
+    }
+
+    private HashMap<String, MockQuiz> db;
+    private CountingIdlingResource idlingResource;
 
     @SuppressWarnings("SpellCheckingInspection")
     public MockDBService() {
         idlingResource = new CountingIdlingResource("MockDBService");
-        database = new HashMap<>();
+        db = new HashMap<>();
+        Question bananaQuestion_fr =
+                new Question("Banane", "Combien y a-t-il de bananes ?", "matrix1x1");
+        Question bananaQuestion_en =
+                new Question("Banana", "How many bananas can you count?", "matrix1x1");
+        List<Question> q_en =
+                Arrays.asList(
+                        new Question("Banana", "How many bananas are there on Earth?", "matrix1x1"),
+                        new Question("Apple", "How many apples are there on Earth?", "matrix1x1"),
+                        new Question("Vector", "Give a unit vector.", "matrix1x3"),
+                        new Question("Operation", "What is the results of 1 + 10?", "matrix1x1"),
+                        new Question("Matrix", "Fill this matrix.", "matrix3x3"));
 
-        Question bananaQuestion =
-                new Question("Banane", "Combien y a-t-il de bananes ?", new MatrixFormat(1, 1));
+        List<Question> q_fr =
+                Arrays.asList(
+                        new Question(
+                                "Banane", "Combien y a-t-il de bananes sur Terre ?", "matrix1x1"),
+                        new Question(
+                                "Pomme", "Combien y a-t-il de pommes sur Terre ?", "matrix1x1"),
+                        new Question("Vecteur", "Donnez un vecteur unitaire.", "matrix1x3"),
+                        new Question("Operation", "Quel est le résultat de 1 + 10 ?", "matrix1x1"),
+                        new Question("Matrice", "Remplissez cette matrice.", "matrix3x3"));
 
-        database.put(
-                "quizzes/quiz0",
-                new Quiz(
-                                Arrays.asList(
-                                        new Question(
-                                                "Banane",
-                                                "Combien y a-t-il de bananes ?",
-                                                new MatrixFormat(1, 1)),
-                                        bananaQuestion,
-                                        new Question(
-                                                "The matches problem",
-                                                "How many matches can fit in a shoe of size 43?",
-                                                new MatrixFormat(3, 3)),
-                                        new Question(
-                                                "Pigeons",
-                                                "How many pigeons are there on Earth? (Hint: do not count yourself)",
-                                                new MatrixFormat(1, 1)),
-                                        new Question("KitchenBu", "Oyster", new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Everything",
-                                                "What is the answer to life the univere and everything ?",
-                                                new MatrixFormat(3, 3)),
-                                        new Question(
-                                                "Banane",
-                                                "Combien y a-t-il de bananes ?",
-                                                new MatrixFormat(1, 1)),
-                                        bananaQuestion,
-                                        new Question(
-                                                "Pomme",
-                                                "Combien y a-t-il de pommes ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Abricot",
-                                                "Combien y a-t-il d'abricots ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Cerise",
-                                                "Combien y a-t-il de cerises ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Amande",
-                                                "Combien y a-t-il d'amandes ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Ananas",
-                                                "Combien y a-t-il d'ananas ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Avocat",
-                                                "Combien y a-t-il d'avocats ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Citron",
-                                                "Combien y a-t-il de citrons ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Clémentine",
-                                                "Combien y a-t-il de clémentines ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Figue",
-                                                "Combien y a-t-il de figues ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Fraise",
-                                                "Combien y a-t-il de fraises ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Framboise",
-                                                "Combien y a-t-il de framboises ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Kiwi",
-                                                "Combien y a-t-il de kiwis ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Mandarine",
-                                                "Combien y a-t-il de mandarines ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Melon",
-                                                "Combien y a-t-il de melons ?",
-                                                new MatrixFormat(1, 1)),
-                                        new Question(
-                                                "Noix",
-                                                "Combien y a-t-il de noix ?",
-                                                new MatrixFormat(1, 1))))
-                        .toBundle());
-
-        database.put("quizzes/quiz1", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
-
-        database.put("quizzes/quiz2", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
-
-        database.put("quizzes/quiz3", new Quiz(Arrays.asList(bananaQuestion)).toBundle());
+        db.put("quiz0", new MockQuiz("I am a Mock Quiz!", "Je suis un Mock Quiz !", q_en, q_fr));
+        db.put(
+                "quiz1",
+                new MockQuiz(
+                        "Title",
+                        "Titre",
+                        Arrays.asList(bananaQuestion_en),
+                        Arrays.asList(bananaQuestion_fr)));
+        db.put(
+                "quiz2",
+                new MockQuiz(
+                        "Title",
+                        "Titre",
+                        Arrays.asList(bananaQuestion_en),
+                        Arrays.asList(bananaQuestion_fr)));
+        db.put(
+                "quiz3",
+                new MockQuiz(
+                        "Title",
+                        "Titre",
+                        Arrays.asList(bananaQuestion_en),
+                        Arrays.asList(bananaQuestion_fr)));
     }
 
     @Override
-    public void getBundle(
-            final String collection,
-            final String document,
-            final Callback<Response<BundledData>> responseCallback) {
+    public void getQuizQuestions(
+            final String quizID, final Callback<Response<List<Question>>> responseCallback) {
+
         idlingResource.increment();
         new Thread(
                         new Runnable() {
@@ -136,13 +116,88 @@ public class MockDBService implements DatabaseService {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-
-                                Response<BundledData> response;
-                                String key = collection + "/" + document;
-                                if (!database.containsKey(key))
+                                Response<List<Question>> response;
+                                if (!db.containsKey(quizID))
                                     response = Response.error(WRONG_DOCUMENT);
-                                else response = Response.ok(database.get(key));
+                                else {
+                                    List<Question> questions =
+                                            new ArrayList<>(
+                                                    db.get(quizID)
+                                                            .getQuestions(
+                                                                    Locale.getDefault()
+                                                                            .getLanguage()));
+                                    response = Response.ok(questions);
+                                }
+                                idlingResource.decrement();
+                                responseCallback.onReceive(response);
+                            }
+                        })
+                .start();
+    }
 
+    @Override
+    public void getQuizTitle(
+            final String quizID, final Callback<Response<String>> responseCallback) {
+
+        idlingResource.increment();
+        new Thread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Response<String> response;
+                                if (!db.containsKey(quizID))
+                                    response = Response.error(WRONG_DOCUMENT);
+                                else {
+                                    response =
+                                            Response.ok(
+                                                    db.get(quizID)
+                                                            .getTitle(
+                                                                    Locale.getDefault()
+                                                                            .getLanguage()));
+                                }
+                                idlingResource.decrement();
+                                responseCallback.onReceive(response);
+                            }
+                        })
+                .start();
+    }
+
+    @Override
+    public void getQuiz(final String quizID, final Callback<Response<Quiz>> responseCallback) {
+        idlingResource.increment();
+        new Thread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Response<Quiz> response;
+                                if (!db.containsKey(quizID))
+                                    response = Response.error(WRONG_DOCUMENT);
+                                else {
+                                    List<Question> questions =
+                                            new ArrayList<>(
+                                                    db.get(quizID)
+                                                            .getQuestions(
+                                                                    Locale.getDefault()
+                                                                            .getLanguage()));
+                                    response =
+                                            Response.ok(
+                                                    new Quiz(
+                                                            db.get(quizID)
+                                                                    .getTitle(
+                                                                            Locale.getDefault()
+                                                                                    .getLanguage()),
+                                                            questions));
+                                }
                                 idlingResource.decrement();
                                 responseCallback.onReceive(response);
                             }

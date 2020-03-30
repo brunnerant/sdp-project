@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.home;
 
+import static ch.epfl.qedit.view.LoginActivity.USER;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +24,7 @@ public class HomeInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home_info, container, false);
 
         // Get user from the bundle created by the parent activity
-        User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
+        User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
 
         String message =
                 getResources().getString(R.string.welcome)

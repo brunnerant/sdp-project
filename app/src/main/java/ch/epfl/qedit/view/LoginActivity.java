@@ -37,7 +37,8 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private boolean userHasInteracted = false;
 
-    Resources resources;
+    private Context context;
+    private Resources resources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
 
+        context = getBaseContext();
         resources = getResources();
 
         /* Language selection */
@@ -59,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         // Find app's current language position in languages list
         String currentLanguage = Locale.getDefault().getLanguage();
-        String[] languageList = getResources().getStringArray(R.array.languages_codes);
+        String[] languageList = resources.getStringArray(R.array.languages_codes);
         int positionInLanguageList = Arrays.asList(languageList).indexOf(currentLanguage);
 
         // Set current language in spinner at startup
@@ -92,9 +94,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         }
 
         // Get language code from the position of the clicked language in the spinner
-        String languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
+        String languageCode = resources.getStringArray(R.array.languages_codes)[pos];
 
-        updateTextsAndMakeToast(languageCode, pos);
+        setLanguage(languageCode);
+        updateTexts();
+        printChangedLanguageToast(pos);
     }
 
     @Override
@@ -103,22 +107,28 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     /**
-     * Set new language, update activity's texts and display a toast to inform the user
+     * Set the new language
      *
      * @param languageCode the universal language code (e.g. "en" for English, "fr" for French)
-     * @param languagePos position of the language in the spinner
      */
-    private void updateTextsAndMakeToast(String languageCode, int languagePos) {
-        // Set new language
-        Context context = LocaleHelper.setLocale(this, languageCode);
-
-        // Update texts
+    private void setLanguage(String languageCode) {
+        context = LocaleHelper.setLocale(this, languageCode);
         resources = context.getResources();
+    }
+
+    /** Update activity's texts */
+    private void updateTexts() {
         tokenText.setHint(resources.getString(R.string.token_hint));
         loginButton.setText(resources.getString(R.string.login_button_text));
         setTitle(resources.getString(R.string.title_activity_login));
+    }
 
-        // Display changed language confirmation
+    /**
+     * Display a toast to inform the user that the language was succesfully changed
+     *
+     * @param languagePos position of the language in the spinner
+     */
+    private void printChangedLanguageToast(int languagePos) {
         Toast.makeText(
                         getApplicationContext(),
                         resources.getString(R.string.language_changed)
@@ -155,9 +165,9 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                                     @Override
                                     public void run() {
                                         progressBar.setVisibility(View.GONE);
-                                        if (response.successful())
+                                        if (response.getError().noError(context)) {
                                             onLoginSuccessful(response.getData());
-                                        else onLoginFailed(response.getError());
+                                        }
                                     }
                                 });
                     }
@@ -170,22 +180,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
         startActivity(intent);
-    }
-
-    private void onLoginFailed(int error) {
-        int stringId = 0;
-        switch (error) {
-            case AuthenticationService.CONNECTION_ERROR:
-                stringId = R.string.connection_error_message;
-                break;
-            case AuthenticationService.WRONG_TOKEN:
-                stringId = R.string.wrong_token_message;
-                break;
-            default:
-                break;
-        }
-
-        printShortToast(stringId);
     }
 
     private void printShortToast(int stringId) {
