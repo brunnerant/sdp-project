@@ -1,3 +1,3 @@
 package ch.epfl.qedit.model;
 
-public class AnswerModel {}
+public abstract class AnswerModel {}

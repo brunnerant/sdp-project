@@ -87,14 +87,16 @@ public class MatrixFragment extends Fragment {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        /*model.getAnswers()
+                        int index = model.getFocusedQuestion().getValue();
+                        //model.getQuiz().getQuestions().get(index).getFormat().updateAnswer(row, col, getId(row, col), editText.getText().toString());
+                        /*model.getAnswers() //TODO
                         .getValue()
                         .put(
                                 model.getFocusedQuestion().getValue(),
                                 model.getAnswers()
                                         .getValue()
                                         .get(model.getFocusedQuestion().getValue()))
-                        .put(getId(row, col), Float.valueOf(editText.getText().toString()));*/
+                        .put());*/
                     }
                 });
     }

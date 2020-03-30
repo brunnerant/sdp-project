@@ -14,7 +14,6 @@ public abstract class AnswerFormat implements Serializable {
     }
 
     public abstract void saveAnswers();
-
     public abstract AnswerModel getAnswers();
 
     /**
