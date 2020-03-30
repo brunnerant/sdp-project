@@ -40,7 +40,8 @@ public class QuizViewModel extends ViewModel {
 
                                         // when Quiz is loaded, create space in Hashmap to store
                                         // answers
-                                        // initializeAnswersMap();
+
+                                        initializeAnswersMap();
 
                                     } else {
                                         status.postValue(Status.CouldNotLoad);
@@ -51,10 +52,11 @@ public class QuizViewModel extends ViewModel {
     }
 
     public void initializeAnswersMap() {
-
+        HashMap<Integer,HashMap<Integer,Float>> map = Answers.getValue();
         for (int i = 0; i < quiz.getValue().getQuestions().size(); i++) {
-            Answers.getValue().put(i, new HashMap<Integer, Float>());
+            map.put(i, new HashMap<Integer, Float>());
         }
+        Answers.postValue(map);
     }
 
     public LiveData<Status> getStatus() {

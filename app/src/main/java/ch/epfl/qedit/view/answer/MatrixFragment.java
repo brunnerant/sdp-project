@@ -21,6 +21,7 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
@@ -84,14 +85,15 @@ public class MatrixFragment extends Fragment {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        model.getAnswers()
-                                .getValue()
-                                .put(
+                        HashMap<Integer, HashMap<Integer, Float>> map =
+                                model.getAnswers().getValue();
+                        map.put(
                                         model.getFocusedQuestion().getValue(),
                                         model.getAnswers()
                                                 .getValue()
                                                 .get(model.getFocusedQuestion().getValue()))
                                 .put(getId(row, col), Float.valueOf(editText.getText().toString()));
+                        model.getAnswers().setValue(map);
                     }
                 });
     }
