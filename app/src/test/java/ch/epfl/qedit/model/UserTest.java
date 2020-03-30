@@ -5,6 +5,7 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
@@ -17,9 +18,10 @@ public class UserTest {
         assertEquals(user.getFullName(), "John Doe");
         assertEquals(user.getRole(), User.Role.Administrator);
 
-        assertFalse(user.equals("salkdjf"));
-        assertTrue(user.equals(user));
-        assertFalse(user.equals(new User("Bill", "Gates", User.Role.Participant)));
+        //noinspection SpellCheckingInspection
+        assertNotEquals("salkdjf", user);
+        assertEquals(user, user);
+        assertNotEquals(user, new User("Bill", "Gates", User.Role.Participant));
     }
 
     @Test
@@ -45,6 +47,6 @@ public class UserTest {
         user.addQuiz("q0", "First Quiz");
         user.addQuiz("q1", "Second Quiz");
         user.removeQuiz("q1");
-        assertFalse(user.getQuizzes().keySet().contains("q1"));
+        assertFalse(user.getQuizzes().containsKey("q1"));
     }
 }

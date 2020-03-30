@@ -1,20 +1,17 @@
 package ch.epfl.qedit.viewmodel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
+
 import ch.epfl.qedit.model.Quiz;
 import java.util.Arrays;
 import java.util.HashMap;
+
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 
 public class QuizViewModelTest {
     @Rule public InstantTaskExecutorRule testRule = new InstantTaskExecutorRule();
