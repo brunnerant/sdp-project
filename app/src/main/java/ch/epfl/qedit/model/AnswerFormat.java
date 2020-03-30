@@ -13,8 +13,7 @@ public abstract class AnswerFormat implements Serializable {
         void visitMatrixAnswerFormat(MatrixFormat matrixFormat);
     }
 
-    public abstract void saveAnswers();
-    public abstract AnswerModel getAnswers();
+    public abstract AnswerModel getAnswer();
 
     /**
      * Parse AnswerFormat from a string answer_format, call the override parse method in child

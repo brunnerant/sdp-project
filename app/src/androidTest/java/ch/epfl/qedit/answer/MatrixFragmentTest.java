@@ -18,7 +18,6 @@ import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.answer.MatrixFragment;
-import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import java.util.concurrent.CountDownLatch;
@@ -44,8 +43,8 @@ public class MatrixFragmentTest {
         MockDBService dbService = new MockDBService();
         DatabaseFactory.setInstance(dbService);
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(QuestionFragment.ANSWER_FORMAT, MatrixFormat.createMatrix3x3());
+        Bundle bundle = new Bundle(); // TODO answerFormat
+        bundle.putSerializable("m0", MatrixFormat.createMatrix3x3());
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
 

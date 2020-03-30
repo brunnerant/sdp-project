@@ -1,7 +1,5 @@
 package ch.epfl.qedit.view.answer;
 
-import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -28,7 +26,7 @@ public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
     private MatrixFormat matrixFormat;
 
-    private QuizViewModel model;
+    private QuizViewModel quizViewModel;
 
     private ArrayList<TableRow> tableRow = new ArrayList<>();
     private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
@@ -37,7 +35,7 @@ public class MatrixFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        matrixFormat = (MatrixFormat) getArguments().getSerializable(ANSWER_FORMAT);
+        matrixFormat = (MatrixFormat) getArguments().getSerializable("m0"); // TODO answer format
     }
 
     @Override
@@ -49,7 +47,7 @@ public class MatrixFragment extends Fragment {
         View view = inflater.inflate(R.layout.answers_table, container, false);
 
         tableLayout = view.findViewById(R.id.answersTable);
-        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         requireActivity()
                 .getWindow()
@@ -87,16 +85,18 @@ public class MatrixFragment extends Fragment {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        int index = model.getFocusedQuestion().getValue();
-                        //model.getQuiz().getQuestions().get(index).getFormat().updateAnswer(row, col, getId(row, col), editText.getText().toString());
-                        /*model.getAnswers() //TODO
-                        .getValue()
-                        .put(
-                                model.getFocusedQuestion().getValue(),
-                                model.getAnswers()
-                                        .getValue()
-                                        .get(model.getFocusedQuestion().getValue()))
-                        .put());*/
+                        //                        int index =
+                        // quizViewModel.getFocusedQuestion().getValue();
+                        //                        MatrixModel answerModel =
+                        //                                (MatrixModel)
+                        //                                        quizViewModel
+                        //                                                .getQuiz()
+                        //                                                .getQuestions()
+                        //                                                .get(index)
+                        //                                                .getFormat()
+                        //                                                .getAnswer();
+                        //                        answerModel.updateAnswer(row, col,
+                        // editText.getText().toString());
                     }
                 });
     }
