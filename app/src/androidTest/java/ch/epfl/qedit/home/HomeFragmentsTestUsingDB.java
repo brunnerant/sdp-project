@@ -5,14 +5,16 @@ import static ch.epfl.qedit.view.LoginActivity.USER;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.User;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 
 class HomeFragmentsTestUsingDB {
+    private IdlingResource idlingResource;
 
-    public static void setup(FragmentTestRule testRule, Fragment fragment) {
+    public void setup(FragmentTestRule testRule, Fragment fragment) {
 
         User user = new User("Jon", "Snow", User.Role.Participant);
         user.addQuiz("quiz0", "Qualification EPFL");
@@ -20,14 +22,17 @@ class HomeFragmentsTestUsingDB {
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         fragment.setArguments(bundle);
-        MockDBService db = new MockDBService();
-        IdlingRegistry.getInstance().register(db.getIdlingResource());
 
-        DatabaseFactory.setInstance(db);
+        MockDBService dbService = new MockDBService();
+        idlingResource = dbService.getIdlingResource();
+        DatabaseFactory.setInstance(dbService);
+        IdlingRegistry.getInstance().register(idlingResource);
+
         testRule.launchFragment(fragment);
     }
 
-    public static void cleanup(FragmentTestRule testRule) {
+    public void cleanup(FragmentTestRule testRule) {
         testRule.finishActivity();
+        IdlingRegistry.getInstance().unregister(idlingResource);
     }
 }

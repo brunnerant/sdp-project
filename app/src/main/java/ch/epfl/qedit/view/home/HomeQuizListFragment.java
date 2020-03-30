@@ -138,7 +138,7 @@ public class HomeQuizListFragment extends Fragment {
             if (view == null) {
                 view = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }
-            TextView text = (TextView) view.findViewById(android.R.id.text1);
+            TextView text = view.findViewById(android.R.id.text1);
             text.setText(entries.get(position).getValue());
             return view;
         }

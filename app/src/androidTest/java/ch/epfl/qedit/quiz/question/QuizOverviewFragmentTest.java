@@ -45,7 +45,6 @@ public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
         onView(withId(R.id.question_list)).check(matches(isDisplayed()));
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void testQuizOverviewIsProperlyShown() {
         onData(anything())

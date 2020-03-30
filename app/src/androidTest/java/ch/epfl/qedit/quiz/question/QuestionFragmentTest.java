@@ -44,7 +44,6 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
         onView(withId(R.id.answersTable)).check(doesNotExist());
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void testFragmentDisplaysQuestionCorrectly() {
         model.getFocusedQuestion().postValue(0);
