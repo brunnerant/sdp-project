@@ -38,7 +38,13 @@ public abstract class AnswerFormat implements Serializable {
         void visitMutliFieldFormat(MultiFieldFormat multiFieldFormat);
     }
 
-    private static AnswerFormat parseNotCompoundFormat(String format, String text) {
+    private static AnswerFormat parseNotCompoundFormat(String field) {
+
+        // Split <format>:<text> into two string
+        String[] formatAndText = field.split(":", 2);
+        String format = formatAndText[0];
+        String text = (formatAndText.length == 2) ? formatAndText[1].trim() : null;
+
         return MatrixFormat.parse(format, text);
     }
 
@@ -55,18 +61,16 @@ public abstract class AnswerFormat implements Serializable {
             return null;
         }
         // Parse answer format:  <format>:<text> ; <format> ; ... ; <format>:<text>
-        ArrayList<AnswerFormat> formatsList = new ArrayList<>();
-        for (String format : answerFormat.split(";")) {
+        ArrayList<AnswerFormat> fields = new ArrayList<>();
+        for (String field : answerFormat.split(";")) {
             // <format>:<text> | <format>
-            String[] formatText = format.split(":", 2);
-            String text = (formatText.length == 2) ? formatText[1].trim() : null;
-            AnswerFormat result = parseNotCompoundFormat(formatText[0], text);
+            AnswerFormat result = parseNotCompoundFormat(field);
             if (result == null) {
                 return null;
             }
-            formatsList.add(result);
+            fields.add(result);
         }
 
-        return (formatsList.size() == 1) ? formatsList.get(0) : new MultiFieldFormat(formatsList);
+        return (fields.size() == 1) ? fields.get(0) : new MultiFieldFormat(fields);
     }
 }
