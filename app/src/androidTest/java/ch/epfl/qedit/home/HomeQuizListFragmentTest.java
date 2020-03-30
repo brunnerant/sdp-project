@@ -8,6 +8,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.equalTo;
@@ -61,6 +62,6 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
         intended(
                 allOf(
                         hasComponent(QuizActivity.class.getName()),
-                        hasExtra(equalTo(HomeQuizListFragment.QUIZID), instanceOf(Quiz.class))));
+                        hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class))));
     }
 }

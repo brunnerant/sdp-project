@@ -8,6 +8,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -20,7 +21,6 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.Arrays;
@@ -48,7 +48,7 @@ public class QuizActivityTest {
                         Arrays.asList(
                                 new Question("Banane", "How many?", "matrix1x1"),
                                 new Question("Vector", "Fill this Vector!", "matrix7x1")));
-        bundle.putSerializable(HomeQuizListFragment.QUIZID, quiz);
+        bundle.putSerializable(QUIZ_ID, quiz);
         intent.putExtras(bundle);
 
         testRule.launchActivity(intent);

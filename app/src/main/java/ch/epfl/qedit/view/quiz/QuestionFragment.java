@@ -18,6 +18,8 @@ import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuestionFragment extends Fragment {
+    public static final String ANSWER_FORMAT = "ch.epfl.qedit.view.ANSWER_FORMAT";
+
     private TextView questionTitle;
     private TextView questionDisplay;
 
@@ -63,7 +65,7 @@ public class QuestionFragment extends Fragment {
         MatrixFragment matrixFragment = new MatrixFragment();
         MatrixFormat matrixFormat = (MatrixFormat) question.getFormat();
         Bundle newB = new Bundle();
-        newB.putSerializable("m0", matrixFormat);
+        newB.putSerializable(ANSWER_FORMAT, matrixFormat);
         matrixFragment.setArguments(newB);
 
         // And dynamically instantiate the answer form

@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.quiz;
 
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.Objects;
 
@@ -31,10 +32,7 @@ public class QuizActivity extends AppCompatActivity {
 
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
-        quiz =
-                (Quiz)
-                        Objects.requireNonNull(intent.getExtras())
-                                .getSerializable(HomeQuizListFragment.QUIZID);
+        quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
 
         model = new ViewModelProvider(this).get(QuizViewModel.class);
         model.setQuiz(quiz);

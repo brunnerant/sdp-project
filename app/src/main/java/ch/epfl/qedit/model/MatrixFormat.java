@@ -12,13 +12,15 @@ public class MatrixFormat extends AnswerFormat {
     private int tableColumnsNumber = 1;
     private int maxCharacters = 5;
     private String hintString;
-    private String id = "m0";
+
+    private MatrixModel answerModel;
 
     public MatrixFormat(int tableColumnsNumber, int tableRowsNumber) {
         super();
         this.tableRowsNumber = tableRowsNumber;
         this.tableColumnsNumber = tableColumnsNumber;
-        this.hintString = hint();
+        hintString = hint();
+        // answerModel = new MatrixModel(tableColumnsNumber, tableRowsNumber);
     }
 
     public MatrixFormat(
@@ -32,7 +34,8 @@ public class MatrixFormat extends AnswerFormat {
         this.hasDecimal = hasDecimal;
         this.hasSign = hasSign;
         this.maxCharacters = maxCharacters;
-        this.hintString = hint();
+        hintString = hint();
+        // answerModel = new MatrixModel(tableColumnsNumber, tableRowsNumber);
     }
 
     public static MatrixFormat parse(String format) {
@@ -59,8 +62,7 @@ public class MatrixFormat extends AnswerFormat {
                     && this.tableRowsNumber == other.tableRowsNumber
                     && this.tableColumnsNumber == other.tableColumnsNumber
                     && this.maxCharacters == other.maxCharacters
-                    && this.hintString.equals(other.hintString)
-                    && this.id.equals(other.id);
+                    && this.hintString.equals(other.hintString);
         }
         return false;
     }
@@ -82,6 +84,14 @@ public class MatrixFormat extends AnswerFormat {
     @Override
     public void accept(Visitor visitor) {
         visitor.visitMatrixAnswerFormat(this);
+    }
+
+    @Override
+    public void saveAnswers() {}
+
+    @Override
+    public AnswerModel getAnswers() {
+        return answerModel;
     }
 
     public int getTableRowsNumber() {
@@ -110,14 +120,6 @@ public class MatrixFormat extends AnswerFormat {
 
     public String getHint() {
         return hintString;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
     }
 
     // Function that allows to be placed as a placeholder for the EditText

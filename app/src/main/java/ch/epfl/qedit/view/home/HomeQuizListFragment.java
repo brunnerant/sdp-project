@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class HomeQuizListFragment extends Fragment {
-    public static final String QUIZID = "ch.epfl.qedit.view.QUIZID";
+    public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
 
     private DatabaseService db;
     private Handler handler;
@@ -103,7 +103,7 @@ public class HomeQuizListFragment extends Fragment {
 
         Intent intent = new Intent(requireActivity(), QuizActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(QUIZID, quiz);
+        bundle.putSerializable(QUIZ_ID, quiz);
         intent.putExtras(bundle);
         startActivity(intent);
     }
