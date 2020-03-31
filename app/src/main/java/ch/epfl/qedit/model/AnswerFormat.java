@@ -14,7 +14,7 @@ public abstract class AnswerFormat implements Visitable<AnswerFormat.Visitor>, S
         void visitTestAnswerFormat(TestAnswerFormat testAnswerFormat);
     }
 
-    // public abstract AnswerModel getAnswer();
+    // public abstract AnswerModel getAnswer(); //TODO
 
     public AnswerModel emptyAnswerModel() {
         final AnswerModel[] answerModel = new AnswerModel[1];
@@ -69,6 +69,13 @@ public abstract class AnswerFormat implements Visitable<AnswerFormat.Visitor>, S
         if (format == null) {
             return null;
         }
-        return MatrixFormat.parse(format);
+
+        AnswerFormat answerFormat = MatrixFormat.parse(format);
+
+        if (answerFormat == null) {
+            answerFormat = TestAnswerFormat.parse(format);
+        }
+
+        return answerFormat;
     }
 }

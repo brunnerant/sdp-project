@@ -6,4 +6,12 @@ public class TestAnswerFormat extends AnswerFormat {
     public void accept(Visitor visitor) {
         visitor.visitTestAnswerFormat(this);
     }
+
+    public static TestAnswerFormat parse(String format) {
+        if (format.trim() == "testAnswerFormat") {
+            return new TestAnswerFormat();
+        } else {
+            return null;
+        }
+    }
 }
