@@ -12,6 +12,7 @@ public class MatrixFormat extends AnswerFormat {
     private int tableColumnsNumber = 1;
     private int maxCharacters = 5;
     private String hintString;
+    private String id = "m0";
 
     public MatrixFormat(int tableColumnsNumber, int tableRowsNumber) {
         super();
@@ -20,7 +21,7 @@ public class MatrixFormat extends AnswerFormat {
         this.hintString = hint();
     }
 
-    private MatrixFormat(
+    public MatrixFormat(
             int tableColumnsNumber,
             int tableRowsNumber,
             boolean hasDecimal,
@@ -58,8 +59,8 @@ public class MatrixFormat extends AnswerFormat {
                     && this.tableRowsNumber == other.tableRowsNumber
                     && this.tableColumnsNumber == other.tableColumnsNumber
                     && this.maxCharacters == other.maxCharacters
-                    && this.hintString.equals(other.hintString);
-            // && this.id.equals(other.id);
+                    && this.hintString.equals(other.hintString)
+                    && this.id.equals(other.id);
         }
         return false;
     }
@@ -111,8 +112,16 @@ public class MatrixFormat extends AnswerFormat {
         return hintString;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     // Function that allows to be placed as a placeholder for the EditText
     private String hint() {
-        return String.format("%0" + maxCharacters + "d", 0);
+        return String.format("%0" + maxCharacters + "d", 0).replace("0", "0");
     }
 }

@@ -30,7 +30,7 @@ public class MatrixFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        matrixFormat = (MatrixFormat) getArguments().getSerializable(MATRIXID);
+        matrixFormat = (MatrixFormat) getArguments().getSerializable("m0");
     }
 
     @Override
