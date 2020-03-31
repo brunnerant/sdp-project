@@ -8,6 +8,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
 
 import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,8 +44,8 @@ public class MatrixFragmentTest {
         MockDBService dbService = new MockDBService();
         DatabaseFactory.setInstance(dbService);
 
-        Bundle bundle = new Bundle(); // TODO answerFormat
-        bundle.putSerializable("m0", MatrixFormat.createMatrix3x3());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ANSWER_FORMAT, MatrixFormat.createMatrix3x3());
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
 

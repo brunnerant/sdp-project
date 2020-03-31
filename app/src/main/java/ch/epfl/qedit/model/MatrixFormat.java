@@ -11,7 +11,6 @@ public class MatrixFormat extends AnswerFormat {
     private int tableRowsNumber = 1;
     private int tableColumnsNumber = 1;
     private int maxCharacters = 5;
-    private String id = "m0"; // TODO remove
     private String hintString;
 
     private MatrixModel answerModel;
@@ -64,7 +63,6 @@ public class MatrixFormat extends AnswerFormat {
                     && this.tableColumnsNumber == other.tableColumnsNumber
                     && this.maxCharacters == other.maxCharacters
                     && this.hintString.equals(other.hintString)
-                    && this.id.equals(other.id)
                     && this.hintString.equals(other.hintString);
         }
         return false;
@@ -112,14 +110,6 @@ public class MatrixFormat extends AnswerFormat {
 
     public int getMaxCharacters() {
         return maxCharacters;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public void setHint(String hint) {

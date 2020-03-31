@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.answer;
 
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -35,7 +37,7 @@ public class MatrixFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        matrixFormat = (MatrixFormat) getArguments().getSerializable("m0"); // TODO answer format
+        matrixFormat = (MatrixFormat) getArguments().getSerializable(ANSWER_FORMAT);
     }
 
     @Override
