@@ -15,9 +15,9 @@ import java.util.List;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
-    private RecyclerView recyclerView;
     private List<Question> questions;
     private int numQuestions;
+    private ListEditView.ListEditAdapter<Question> adapter;
 
     @Override
     public View onCreateView(
@@ -27,7 +27,7 @@ public class EditOverviewFragment extends Fragment {
 
         // Retrieve and configure the recycler view
         ListEditView listEditView = view.findViewById(R.id.question_list);
-        final ListEditView.ListEditAdapter adapter = createAdapter();
+        createAdapter();
         listEditView.setAdapter(adapter);
 
         // Configure the add button
@@ -48,7 +48,7 @@ public class EditOverviewFragment extends Fragment {
         return view;
     }
 
-    private ListEditView.ListEditAdapter createAdapter() {
+    private void createAdapter() {
         // For now, we just add dummy questions to the quiz
         questions = new LinkedList<>();
         for (numQuestions = 0; numQuestions < 5; numQuestions++)
@@ -59,13 +59,13 @@ public class EditOverviewFragment extends Fragment {
                             new MatrixFormat(1, 1)));
 
         // Create an adapter for the question list
-        return new ListEditView.ListEditAdapter<>(
-                questions,
-                new ListEditView.GetItemText<Question>() {
-                    @Override
-                    public String getText(Question item) {
-                        return item.getTitle();
-                    }
-                });
+        adapter = new ListEditView.ListEditAdapter<>(questions, new ListEditView.GetItemText<Question>() {
+            @Override
+            public String getText(Question item) {
+                return item.getTitle();
+            }
+        });
+
+        adapter.selectItem(0);
     }
 }
