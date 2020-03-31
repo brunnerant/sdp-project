@@ -42,7 +42,7 @@ public class RecyclerViewMatcher {
                         idDescription =
                                 String.format(
                                         "%s (resource name not found)",
-                                        new Object[] {Integer.valueOf(recyclerViewId)});
+                                        Integer.valueOf(recyclerViewId));
                     }
                 }
 
@@ -54,8 +54,7 @@ public class RecyclerViewMatcher {
                 this.resources = view.getResources();
 
                 if (childView == null) {
-                    RecyclerView recyclerView =
-                            (RecyclerView) view.getRootView().findViewById(recyclerViewId);
+                    RecyclerView recyclerView = view.getRootView().findViewById(recyclerViewId);
                     if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
                         childView =
                                 recyclerView.findViewHolderForAdapterPosition(position).itemView;

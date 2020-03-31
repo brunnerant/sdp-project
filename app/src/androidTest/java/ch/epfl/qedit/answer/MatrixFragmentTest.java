@@ -1,17 +1,22 @@
 package ch.epfl.qedit.answer;
 
-import android.content.Intent;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import android.os.Bundle;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.view.answer.MatrixFragment;
-import ch.epfl.qedit.view.quiz.QuizActivity;
-import ch.epfl.qedit.viewmodel.QuizViewModel;
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,57 +25,79 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MatrixFragmentTest {
-
-    private IdlingResource idlingResource;
-    private QuizViewModel model;
-    private MatrixFragment matrixFragment;
+    final int MATRIX_DIM = 3;
 
     @Rule
-    public final IntentsTestRule<QuizActivity> testRule =
-            new IntentsTestRule<>(QuizActivity.class, false, false);
+    public final FragmentTestRule<?, MatrixFragment> testRule =
+            FragmentTestRule.create(MatrixFragment.class, false, false);
 
     @Before
     public void init() {
         MockDBService dbService = new MockDBService();
-        idlingResource = dbService.getIdlingResource();
-        IdlingRegistry.getInstance().register(idlingResource);
         DatabaseFactory.setInstance(dbService);
-        // launchFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("m0", MatrixFormat.createMatrix3x3());
+        MatrixFragment matrixFragment = new MatrixFragment();
+        matrixFragment.setArguments(bundle);
+
+        testRule.launchFragment(matrixFragment);
     }
 
     @After
     public void cleanup() {
         testRule.finishActivity();
-        IdlingRegistry.getInstance().unregister(idlingResource);
-    }
-
-    public void launchFragment() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(MatrixFragment.MATRIXID, MatrixFormat.createMatrix3x3());
-        // matrixFragment.setArguments(bundle);
-        Intent intent = new Intent();
-        intent.putExtras(bundle);
-        testRule.launchActivity(intent);
     }
 
     @Test
-    public void testFragmentIsEmptyByDefault() {
-
-        // testRule.getActivity().getSupportFragmentManager().getFragments().get(R.id.answersTable);
-        // onView(withId(R.id.answersTable));
-        // onView(withId(R.id.)).check(matches(withText("000")));
-        // onView(withId(R.id.question_display)).check(matches(withText("")));
-        // onView(withId(R.id.answer_fragment)).check(doesNotExist());
+    public void testTableIsDisplayed() {
+        onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
     }
 
-    //    @Test
-    //    public void testFragmentDisplaysQuestionCorrectly() {
-    //        model.loadQuiz();
-    //        model.getFocusedQuestion().postValue(0);
-    //        onView(withId(R.id.question_title))
-    //                .check(matches(withText("Question 1: The matches problem")));
-    //        onView(withId(R.id.question_display))
-    //                .check(matches(withText("How many matches can fit in a shoe of size 43?")));
-    //        onView(withId(R.id.answer_fragment)).check(matches(isDisplayed()));
-    //    }
+    @Test
+    public void testFieldsAreDisplayed() {
+        for (int i = 0; i < MATRIX_DIM; ++i) {
+            for (int j = 0; j < MATRIX_DIM; ++j) {
+                onView(withId(testRule.getFragment().getId(i, j))).check(matches(isDisplayed()));
+            }
+        }
+    }
+
+    @Test
+    public void testFieldsAreEmptyAtFirst() {
+        for (int i = 0; i < MATRIX_DIM; ++i) {
+            for (int j = 0; j < MATRIX_DIM; ++j) {
+                onView(withId(testRule.getFragment().getId(i, j))).check(matches(withText("")));
+            }
+        }
+    }
+
+    public void type(String input, String expected) {
+        int id = testRule.getFragment().getId(0, 0);
+
+        onView(withId(id)).perform(click());
+        onView(withId(id)).perform((typeText(input))).perform(closeSoftKeyboard());
+        onView(withId(id)).check(matches(withText(expected)));
+    }
+
+    @Test
+    public void testCanEnterNumbersInFields() {
+        type("1232", "1232");
+    }
+
+    @Test
+    public void testCanOnlyHaveOneMinusSign() {
+        type("--12", "-12");
+    }
+
+    @Test
+    public void testCanOnlyHaveOneDecimalPoint() {
+        type("23..2", "23.2");
+    }
+
+    @Test
+    public void testCantEnterMoreDigitsThanMaxCharacters() {
+        // MaxCharacters = 5 for MatrixFormat.createMatrix3x3()
+        type("123456", "12345");
+    }
 }

@@ -1,15 +1,19 @@
 package ch.epfl.qedit.view.home;
 
+import static ch.epfl.qedit.view.LoginActivity.USER;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,7 +22,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.DatabaseService;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.Response;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import java.util.ArrayList;
 import java.util.Map;
@@ -31,17 +40,30 @@ public class HomeQuizListFragment extends Fragment {
     private User user;
 
     private HomePopUp homePopUp;
+    private DatabaseService db;
+    private Handler handler;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home_quiz_list, container, false);
+
         RecyclerView recyclerView = view.findViewById(R.id.home_quiz_list);
 
         // Get user from the bundle created by the parent activity
-        final User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
+        final User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
         this.user = user;
+        // ListView listView = view.findViewById(R.id.home_quiz_list);
+
+        progressBar = view.findViewById(R.id.quiz_loading);
+
+        // Get user from the bundle created by the parent activity
+
+        // Instantiate Handler and the DatabaseService
+        db = DatabaseFactory.getInstance();
+        handler = new Handler();
 
         this.customAdapter = new CustomAdapter(requireActivity());
         recyclerView.setAdapter(customAdapter);
@@ -113,10 +135,39 @@ public class HomeQuizListFragment extends Fragment {
         return true;
     }
 
-    private void startQuizActivity(String quizID) {
-        Intent intent = new Intent(getActivity(), QuizActivity.class);
+    private void loadQuiz(final String quizID) {
+        progressBar.setVisibility(View.VISIBLE);
+        /** Query quiz questions from the database */
+        db.getQuiz(
+                quizID,
+                new Callback<Response<Quiz>>() {
+                    @Override
+                    public void onReceive(final Response<Quiz> response) {
+                        handler.post(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        /** Determine what to do when the quiz is loaded or not */
+                                        progressBar.setVisibility(View.GONE);
+                                        if (response.getError().noError(getContext())) {
+                                            onLoadingSuccessful(response.getData());
+                                        }
+                                    }
+                                });
+                    }
+                });
+    }
+
+    /**
+     * If loading a quiz succeeds, pass the Quiz through a Bundle to the QuizActivity, switch to
+     * QuizActivity
+     */
+    private void onLoadingSuccessful(Quiz quiz) {
+        if (isDetached()) {}
+
+        Intent intent = new Intent(requireActivity(), QuizActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(QUIZID, quizID);
+        bundle.putSerializable(QUIZID, quiz);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -219,7 +270,7 @@ public class HomeQuizListFragment extends Fragment {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            startQuizActivity(entryScrew.getKey());
+                            loadQuiz(entryScrew.getKey());
                         }
                     });
         }

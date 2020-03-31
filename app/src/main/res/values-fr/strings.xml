@@ -8,14 +8,20 @@
     <!-- Language selection -->
     <string name="language_changed">Langue changée en</string>
 
-    <!-- Login -->
+    <!-- Log in -->
     <string name="title_activity_login">Connexion</string>
     <string name="login_button_text">Connexion</string>
     <string name="login_action_label">Connexion</string>
     <string name="token_hint">Token de connexion</string>
     <string name="wrong_token_message">Token invalide</string>
     <string name="empty_token_message">Token vide</string>
+
+    <!-- Connection error -->
     <string name="connection_error_message">Erreur de connexion</string>
+
+    <!-- Database -->
+    <string name="wrong_quiz_id_message">Quiz inexistant</string>
+    <string name="wrong_document_error_message">Document invalide</string>
 
     <!-- Home -->
     <string name="title_activity_home">Accueil</string>
@@ -35,9 +41,9 @@
     <string name="give_answer_here_hint">Votre réponse</string>
 
     <!-- Miscellaneous -->
-    <!-- In French, there is a space before the exclammation point!
-         We cant have leading and trailing spaces in string resources,
-         so we put \u0020 to force a space. -->
+    <!-- In French, there is a space before the exclammation point.
+         Since we cannot have leading and trailing spaces in string resources,
+         we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
 
 

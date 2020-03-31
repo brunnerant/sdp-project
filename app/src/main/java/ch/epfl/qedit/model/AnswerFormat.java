@@ -8,54 +8,23 @@ public abstract class AnswerFormat implements Serializable {
     /** This method is used to implement the visitor pattern */
     public abstract void accept(Visitor visitor);
 
-    public static class NumberField extends AnswerFormat {
-        private final float min;
-        private final float max;
-        private final int digits;
-        private final int row = 1;
-        private final int column = 1;
-
-        public NumberField(float min, float max, int digits, int row, int column) {
-            if (max <= min || digits < 0) throw new IllegalArgumentException();
-
-            this.min = min;
-            this.max = max;
-            this.digits = digits;
-        }
-
-        public NumberField(float min, float max, int digits) {
-            this(min, max, digits, 1, 1);
-        }
-
-        public float getMin() {
-            return min;
-        }
-
-        public float getMax() {
-            return max;
-        }
-
-        public int getDigits() {
-            return digits;
-        }
-
-        public int getRow() {
-            return row;
-        }
-
-        public int getColumn() {
-            return column;
-        }
-
-        @Override
-        public void accept(Visitor visitor) {
-            visitor.visitNumberField(this);
-        }
-    }
-
     public interface Visitor {
-        void visitNumberField(NumberField field);
 
         void visitMatrixAnswerFormat(MatrixFormat matrixFormat);
+    }
+
+    /**
+     * Parse AnswerFormat from a string answer_format, call the override parse method in child
+     * classes
+     *
+     * @param format string to parse into a AnswerFormat
+     * @return AnswerFormat corresponding to the parsed format string, or null if the string is not
+     *     a correct format
+     */
+    public static AnswerFormat parse(String format) {
+        if (format == null) {
+            return null;
+        }
+        return MatrixFormat.parse(format);
     }
 }

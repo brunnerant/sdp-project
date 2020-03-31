@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
@@ -18,6 +17,7 @@ import java.util.List;
 
 /** A simple {@link Fragment} subclass. */
 public class QuizOverviewFragment extends Fragment {
+
     private ListView listView;
 
     @Override
@@ -30,15 +30,7 @@ public class QuizOverviewFragment extends Fragment {
         // Listen to the quiz live data
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
-        model.getQuiz()
-                .observe(
-                        getViewLifecycleOwner(),
-                        new Observer<Quiz>() {
-                            @Override
-                            public void onChanged(Quiz quiz) {
-                                if (quiz != null) onDataArrived(quiz);
-                            }
-                        });
+        setupListView(model.getQuiz());
 
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
@@ -54,8 +46,8 @@ public class QuizOverviewFragment extends Fragment {
         return view;
     }
 
-    /** Handles the arrival of the quiz from the database */
-    private void onDataArrived(Quiz quiz) {
+    /** Handles the initialization of the ListView showing the list of questions */
+    private void setupListView(Quiz quiz) {
         List<Question> questions = quiz.getQuestions();
         String[] overviewItems = new String[questions.size()];
 

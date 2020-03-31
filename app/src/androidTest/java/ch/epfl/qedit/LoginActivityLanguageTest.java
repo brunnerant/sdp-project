@@ -81,7 +81,7 @@ public class LoginActivityLanguageTest {
 
     @Test
     public void testChangeLanguageEnglish() {
-        testChangeLanguage("English", "en", "Login", "Language changed to English");
+        testChangeLanguage("English", "en", "Log in", "Language changed to English");
     }
 
     @Test

@@ -1,6 +1,10 @@
 package ch.epfl.qedit.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MatrixFormat extends AnswerFormat {
+
     private boolean hasDecimal = true;
     private boolean hasSign = true;
 
@@ -28,6 +32,36 @@ public class MatrixFormat extends AnswerFormat {
         this.hasSign = hasSign;
         this.maxCharacters = maxCharacters;
         this.hintString = hint();
+    }
+
+    public static MatrixFormat parse(String format) {
+        /** Match format: 'matrixNxM' where N and M are [0-9]+ */
+        if (Pattern.compile("^(\\s*)matrix(\\d+)x(\\d+)(\\s*)$").matcher(format).find()) {
+            /** Extract the row and column size */
+            Matcher number = Pattern.compile("(\\d+)").matcher(format);
+            number.find();
+            int i = Integer.parseInt(number.group(1));
+            number.find();
+            int j = Integer.parseInt(number.group(1));
+            return new MatrixFormat(i, j);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof MatrixFormat) {
+            MatrixFormat other = (MatrixFormat) o;
+            return this.hasDecimal == other.hasDecimal
+                    && this.hasSign == other.hasSign
+                    && this.tableRowsNumber == other.tableRowsNumber
+                    && this.tableColumnsNumber == other.tableColumnsNumber
+                    && this.maxCharacters == other.maxCharacters
+                    && this.hintString.equals(other.hintString)
+                    && this.id.equals(other.id);
+        }
+        return false;
     }
 
     public static MatrixFormat createMatrix3x3() {
