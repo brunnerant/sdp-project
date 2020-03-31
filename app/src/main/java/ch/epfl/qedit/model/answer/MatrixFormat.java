@@ -55,14 +55,26 @@ public class MatrixFormat extends AnswerFormat {
 
     @Override
     public boolean equals(Object o) {
-        if (super.equals(o) && o instanceof MatrixFormat) {
+        if (super.equals(o)) {
+            return false;
+        }
+        if (o instanceof MatrixFormat) {
             MatrixFormat other = (MatrixFormat) o;
-            return this.hasDecimal == other.hasDecimal
-                    && this.hasSign == other.hasSign
-                    && this.tableRowsNumber == other.tableRowsNumber
-                    && this.tableColumnsNumber == other.tableColumnsNumber
-                    && this.maxCharacters == other.maxCharacters
-                    && this.hintString.equals(other.hintString)
+
+            boolean dimensionEquals =
+                    this.tableRowsNumber == other.tableRowsNumber
+                            && this.tableColumnsNumber == other.tableColumnsNumber;
+
+            boolean stringFormatEquals =
+                    this.maxCharacters == other.maxCharacters
+                            && this.hintString.equals(other.hintString);
+
+            boolean numberFormatEquals =
+                    this.hasDecimal == other.hasDecimal && this.hasSign == other.hasSign;
+
+            return dimensionEquals
+                    && stringFormatEquals
+                    && numberFormatEquals
                     && this.id.equals(other.id);
         }
         return false;
