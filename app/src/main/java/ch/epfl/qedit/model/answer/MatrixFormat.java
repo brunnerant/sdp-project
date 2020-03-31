@@ -55,10 +55,8 @@ public class MatrixFormat extends AnswerFormat {
 
     @Override
     public boolean equals(Object o) {
-        if (super.equals(o)) {
-            return false;
-        }
-        if (o instanceof MatrixFormat) {
+
+        if (super.equals(o) && o instanceof MatrixFormat) {
             MatrixFormat other = (MatrixFormat) o;
             return this.hasDecimal == other.hasDecimal
                     && this.hasSign == other.hasSign
