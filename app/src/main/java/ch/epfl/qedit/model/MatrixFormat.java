@@ -58,8 +58,8 @@ public class MatrixFormat extends AnswerFormat {
                     && this.tableRowsNumber == other.tableRowsNumber
                     && this.tableColumnsNumber == other.tableColumnsNumber
                     && this.maxCharacters == other.maxCharacters
-                    && this.hintString.equals(other.hintString)
-                    && this.id.equals(other.id);
+                    && this.hintString.equals(other.hintString);
+            // && this.id.equals(other.id);
         }
         return false;
     }
