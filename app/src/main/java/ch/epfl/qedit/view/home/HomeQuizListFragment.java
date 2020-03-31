@@ -137,7 +137,7 @@ public class HomeQuizListFragment extends Fragment {
 
     private void loadQuiz(final String quizID) {
         progressBar.setVisibility(View.VISIBLE);
-        /** Query quiz questions from the database */
+        // Query quiz questions from the database
         db.getQuiz(
                 quizID,
                 new Callback<Response<Quiz>>() {
@@ -147,7 +147,7 @@ public class HomeQuizListFragment extends Fragment {
                                 new Runnable() {
                                     @Override
                                     public void run() {
-                                        /** Determine what to do when the quiz is loaded or not */
+                                        // Determine what to do when the quiz is loaded or not
                                         progressBar.setVisibility(View.GONE);
                                         if (response.getError().noError(getContext())) {
                                             onLoadingSuccessful(response.getData());
@@ -158,10 +158,10 @@ public class HomeQuizListFragment extends Fragment {
                 });
     }
 
-    /**
-     * If loading a quiz succeeds, pass the Quiz through a Bundle to the QuizActivity, switch to
-     * QuizActivity
-     */
+    //
+    // If loading a quiz succeeds, pass the Quiz through a Bundle to the QuizActivity, switch to
+    // QuizActivity
+    //
     private void onLoadingSuccessful(Quiz quiz) {
         if (isDetached()) {}
 
@@ -260,7 +260,6 @@ public class HomeQuizListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-            // TODO Find a better way than this...
             final Map.Entry<String, String> entryScrew =
                     new ArrayList<>(user.getQuizzes().entrySet()).get(position);
             holder.name.setText(entryScrew.getValue().trim());
@@ -296,3 +295,120 @@ public class HomeQuizListFragment extends Fragment {
         }
     }
 }
+
+//    public static final String QUIZID = "ch.epfl.qedit.view.QUIZID";
+//
+//    private DatabaseService db;
+//    private Handler handler;
+//    private ProgressBar progressBar;
+//
+//    @Override
+//    public View onCreateView(
+//            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+//        final View view = inflater.inflate(R.layout.fragment_home_quiz_list, container, false);
+//        ListView listView = view.findViewById(R.id.home_quiz_list);
+//
+//        progressBar = view.findViewById(R.id.quiz_loading);
+//
+//        // Get user from the bundle created by the parent activity
+//        final User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
+//
+//        // Instantiate Handler and the DatabaseService
+//        db = DatabaseFactory.getInstance();
+//        handler = new Handler();
+//
+//        ArrayList<Map.Entry<String, String>> entries =
+//                new ArrayList<>(user.getQuizzes().entrySet());
+//
+//        final CustomAdapter adapter = new CustomAdapter(requireActivity(), entries);
+//
+//        listView.setAdapter(adapter);
+//        listView.setOnItemClickListener(
+//                new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(
+//                            AdapterView<?> parent, View view, int position, long id) {
+//                        Map.Entry<String, String> item =
+//                                (Map.Entry<String, String>) adapter.getItem(position);
+//
+//                        loadQuiz(item.getKey());
+//                    }
+//                });
+//
+//        return view;
+//    }
+//
+//    private void loadQuiz(final String quizID) {
+//        progressBar.setVisibility(View.VISIBLE);
+//        /** Query quiz questions from the database */
+//        db.getQuiz(
+//                quizID,
+//                new Callback<Response<Quiz>>() {
+//                    @Override
+//                    public void onReceive(final Response<Quiz> response) {
+//                        handler.post(
+//                                new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        /** Determine what to do when the quiz is loaded or not */
+//                                        progressBar.setVisibility(View.GONE);
+//                                        if (response.getError().noError(getContext())) {
+//                                            onLoadingSuccessful(response.getData());
+//                                        }
+//                                    }
+//                                });
+//                    }
+//                });
+//    }
+//
+//    /**
+//     * If loading a quiz succeeds, pass the Quiz through a Bundle to the QuizActivity, switch to
+//     * QuizActivity
+//     */
+//    private void onLoadingSuccessful(Quiz quiz) {
+//        if (isDetached()) {}
+//
+//        Intent intent = new Intent(requireActivity(), QuizActivity.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable(QUIZID, quiz);
+//        intent.putExtras(bundle);
+//        startActivity(intent);
+//    }
+//
+//    private class CustomAdapter extends BaseAdapter {
+//        private ArrayList<Map.Entry<String, String>> entries;
+//        private LayoutInflater inflater;
+//
+//        public CustomAdapter(Context context, ArrayList<Map.Entry<String, String>> entries) {
+//            this.entries = entries;
+//            inflater = LayoutInflater.from(context);
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return entries.size();
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return entries.get(position);
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            View view = convertView;
+//            if (view == null) {
+//                view = inflater.inflate(android.R.layout.simple_list_item_1, null);
+//            }
+//            TextView text = view.findViewById(android.R.id.text1);
+//            text.setText(entries.get(position).getValue());
+//            return view;
+//        }
+//    }
+// }
