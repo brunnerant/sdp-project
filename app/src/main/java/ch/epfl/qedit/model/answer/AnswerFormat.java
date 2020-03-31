@@ -10,7 +10,7 @@ public abstract class AnswerFormat implements Serializable {
     // Can be null
     private String text;
 
-    // Package Private
+    // Package Private: protected
     AnswerFormat(String text) {
         this.text = text;
     }
@@ -44,7 +44,6 @@ public abstract class AnswerFormat implements Serializable {
         String[] formatAndText = field.split(":", 2);
         String format = formatAndText[0];
         String text = (formatAndText.length == 2) ? formatAndText[1].trim() : null;
-
         return MatrixFormat.parse(format, text);
     }
 
@@ -66,6 +65,7 @@ public abstract class AnswerFormat implements Serializable {
             // <format>:<text> | <format>
             AnswerFormat result = parseNotCompoundFormat(field);
             if (result == null) {
+                // TODO throw new Exception();
                 return null;
             }
             fields.add(result);
