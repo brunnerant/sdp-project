@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view.answer;
 
 import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,12 +22,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.MatrixFormat;
+import ch.epfl.qedit.model.MatrixModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.ArrayList;
 
 public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
     private MatrixFormat matrixFormat;
+    private MatrixModel matrixModel;
 
     private QuizViewModel quizViewModel;
 
@@ -38,6 +41,7 @@ public class MatrixFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         matrixFormat = (MatrixFormat) getArguments().getSerializable(ANSWER_FORMAT);
+        matrixModel = (MatrixModel) getArguments().getSerializable(ANSWER_MODEL);
     }
 
     @Override
@@ -61,6 +65,7 @@ public class MatrixFragment extends Fragment {
             tableRow.add(t);
             for (int j = 0; j < matrixFormat.getTableColumnsNumber(); ++j) {
                 EditText editText = newEditText(i);
+                editText.setText(matrixModel.getAnswer(i, j));
                 addTextWatcher(editText, i, j);
                 arrayButtons.get(i).add(editText);
                 tableRow.get(i).addView(editText);
@@ -87,18 +92,7 @@ public class MatrixFragment extends Fragment {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        //                        int index =
-                        // quizViewModel.getFocusedQuestion().getValue();
-                        //                        MatrixModel answerModel =
-                        //                                (MatrixModel)
-                        //                                        quizViewModel
-                        //                                                .getQuiz()
-                        //                                                .getQuestions()
-                        //                                                .get(index)
-                        //                                                .getFormat()
-                        //                                                .getAnswer();
-                        //                        answerModel.updateAnswer(row, col,
-                        // editText.getText().toString());
+                        matrixModel.updateAnswer(row, col, editText.getText().toString());
                     }
                 });
     }

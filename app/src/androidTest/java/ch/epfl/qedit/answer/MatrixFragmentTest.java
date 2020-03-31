@@ -9,6 +9,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
 
 import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,6 +18,7 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.MatrixFormat;
+import ch.epfl.qedit.model.MatrixModel;
 import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
@@ -45,7 +47,8 @@ public class MatrixFragmentTest {
         DatabaseFactory.setInstance(dbService);
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ANSWER_FORMAT, MatrixFormat.createMatrix3x3());
+        bundle.putSerializable(ANSWER_FORMAT, new MatrixFormat(MATRIX_DIM, MATRIX_DIM));
+        bundle.putSerializable(ANSWER_MODEL, new MatrixModel(MATRIX_DIM, MATRIX_DIM));
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
 
@@ -129,7 +132,7 @@ public class MatrixFragmentTest {
 
     @Test
     public void testCantEnterMoreDigitsThanMaxCharacters() {
-        // MaxCharacters = 5 for MatrixFormat.createMatrix3x3()
+        // MaxCharacters = 5 by default
         type("123456", "12345");
     }
 }
