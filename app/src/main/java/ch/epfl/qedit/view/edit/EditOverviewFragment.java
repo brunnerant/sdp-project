@@ -61,13 +61,14 @@ public class EditOverviewFragment extends Fragment {
                             }
                         });
 
-        adapter.setItemListener(new ListEditView.ItemListener() {
-            @Override
-            public void onItemEvent(int position, ListEditView.EventType type) {
-                if (type == ListEditView.EventType.RemoveRequest)
-                    adapter.removeItem(position);
-            }
-        });
+        adapter.setItemListener(
+                new ListEditView.ItemListener() {
+                    @Override
+                    public void onItemEvent(int position, ListEditView.EventType type) {
+                        if (type == ListEditView.EventType.RemoveRequest)
+                            adapter.removeItem(position);
+                    }
+                });
     }
 
     private void addDumyQuestions() {

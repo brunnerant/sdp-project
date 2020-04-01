@@ -9,40 +9,25 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
-import static ch.epfl.qedit.util.RecyclerViewMatcher.withRecyclerView;
 import static org.hamcrest.Matchers.not;
 
-import androidx.test.espresso.ViewInteraction;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.edit.EditOverviewFragment;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class EditOverviewFragmentTest {
+public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     @Rule
     public final FragmentTestRule<?, EditOverviewFragment> testRule =
             FragmentTestRule.create(EditOverviewFragment.class);
 
-    public static void scrollTo(int position) {
-        onView(withId(R.id.question_list)).perform(scrollToPosition(position));
+    public EditOverviewFragmentTest() {
+        super(R.id.question_list);
     }
 
-    public static ViewInteraction itemView(int position, int id) {
-        scrollTo(position);
-        return onView(withRecyclerView(R.id.question_list).atPositionOnView(position, id));
-    }
-
-    public static ViewInteraction overlay(int position) {
-        return itemView(position, R.id.overlay_buttons);
-    }
-
-    public static ViewInteraction item(int position) {
-        scrollTo(position);
-        return onView(withRecyclerView(R.id.question_list).atPosition(position));
-    }
-
-    public static void checkText(int position, String text) {
+    public void checkText(int position, String text) {
         itemView(position, android.R.id.text1).check(matches(withText(text)));
     }
 

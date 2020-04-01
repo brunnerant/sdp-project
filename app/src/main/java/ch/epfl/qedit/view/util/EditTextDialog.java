@@ -82,6 +82,9 @@ public class EditTextDialog extends DialogFragment {
                     @Override
                     public void afterTextChanged(Editable s) {}
                 });
+
+        // This is for testing
+        editText.setId(R.id.quiz_name_text);
     }
 
     @NonNull
@@ -112,6 +115,14 @@ public class EditTextDialog extends DialogFragment {
                                 })
                         .setView(editText)
                         .create();
+
+        dialog.setOnShowListener(
+                new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        editText.setText("");
+                    }
+                });
 
         return dialog;
     }
