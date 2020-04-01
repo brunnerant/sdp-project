@@ -54,6 +54,7 @@
     <string name="cancel">Annuler</string>
     <string name="done">Ok</string>
     <string name="yes">Oui</string>
+    <string name="no">Non</string>
     <string name="add_pop_up">Entrez un nom de quiz</string>
     <string name="error_blank">Le nom ne peut pas être vide</string>
     <string name="edit_title">Renommer</string>

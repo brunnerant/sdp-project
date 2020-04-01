@@ -46,9 +46,9 @@ public class ListEditView extends RecyclerView {
      * This enumerates the events that can occur on an item
      */
     public enum EventType {
-        ItemSelected,
-        ItemRemoved,
-        ItemEditRequested
+        Select,
+        RemoveRequest,
+        EditRequest
     }
 
     /**
@@ -99,7 +99,7 @@ public class ListEditView extends RecyclerView {
                                 @Override
                                 public void onClick(View v) {
                                     adapter.notifyItem(
-                                            getLayoutPosition(), EventType.ItemEditRequested);
+                                            getLayoutPosition(), EventType.EditRequest);
                                 }
                             });
 
@@ -108,8 +108,7 @@ public class ListEditView extends RecyclerView {
                             new OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    adapter.removeItem(getLayoutPosition());
-                                    adapter.notifyItem(getLayoutPosition(), EventType.ItemRemoved);
+                                    adapter.notifyItem(getLayoutPosition(), EventType.RemoveRequest);
                                 }
                             });
         }
@@ -138,7 +137,7 @@ public class ListEditView extends RecyclerView {
                 adapter.notifyItemChanged(adapter.selectedQuestion);
             }
 
-            adapter.notifyItem(adapter.selectedQuestion, EventType.ItemSelected);
+            adapter.notifyItem(adapter.selectedQuestion, EventType.Select);
         }
     }
 
@@ -222,7 +221,7 @@ public class ListEditView extends RecyclerView {
          *
          * @param listener the listener that wants to be notified
          */
-        public void addItemListener(ItemListener listener) {
+        public void setItemListener(ItemListener listener) {
             this.itemListener = listener;
         }
 
@@ -232,7 +231,7 @@ public class ListEditView extends RecyclerView {
          *
          * @param listener the listener that wants to be notified
          */
-        public void addMoveListener(MoveListener listener) {
+        public void setMoveListener(MoveListener listener) {
             this.moveListener = listener;
         }
 
@@ -253,7 +252,7 @@ public class ListEditView extends RecyclerView {
             } else if (pos != previous) {
                 notifyItemChanged(previous);
                 notifyItemChanged(pos);
-                notifyItem(pos, EventType.ItemSelected);
+                notifyItem(pos, EventType.Select);
             };
         }
 

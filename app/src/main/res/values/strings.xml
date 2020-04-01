@@ -79,6 +79,7 @@
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
     <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="add_pop_up">Enter new quiz name</string>
     <string name="error_blank">Can\'t be blank</string>
     <string name="edit_title">Rename</string>

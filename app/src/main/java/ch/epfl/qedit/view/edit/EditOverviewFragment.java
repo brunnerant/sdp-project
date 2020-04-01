@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
@@ -65,7 +64,5 @@ public class EditOverviewFragment extends Fragment {
                 return item.getTitle();
             }
         });
-
-        adapter.selectItem(0);
     }
 }
