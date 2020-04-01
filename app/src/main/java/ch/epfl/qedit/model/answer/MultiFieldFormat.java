@@ -9,8 +9,8 @@ public class MultiFieldFormat extends AnswerFormat {
     private List<AnswerFormat> fields;
 
     public MultiFieldFormat(List<AnswerFormat> formats) {
-        // For now, MultiFieldFormat don't support a helper text
-        // each field can however have a helper text
+        // For now, MultiFieldFormat does not support a helper text
+        // However, each field can have a helper text
         super(null);
         fields = new ArrayList<>();
         fields.addAll(formats);
@@ -32,6 +32,6 @@ public class MultiFieldFormat extends AnswerFormat {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitMutliFieldFormat(this);
+        visitor.visitMultiFieldFormat(this);
     }
 }

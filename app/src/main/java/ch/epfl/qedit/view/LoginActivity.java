@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     /**
-     * Display a toast to inform the user that the language was succesfully changed
+     * Display a toast to inform the user that the language was successfully changed
      *
      * @param languagePos position of the language in the spinner
      */

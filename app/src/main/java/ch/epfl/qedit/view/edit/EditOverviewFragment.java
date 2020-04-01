@@ -40,7 +40,7 @@ public class EditOverviewFragment extends Fragment {
                                 adapter.addItem(
                                         new Question(
                                                 "Q" + numQuestions,
-                                                "is it " + numQuestions + " ?",
+                                                "is it " + numQuestions + "?",
                                                 new MatrixFormat(1, 1)));
                             }
                         });
@@ -55,7 +55,7 @@ public class EditOverviewFragment extends Fragment {
             questions.add(
                     new Question(
                             "Q" + (numQuestions + 1),
-                            "is it " + (numQuestions + 1) + " ?",
+                            "is it " + (numQuestions + 1) + "?",
                             new MatrixFormat(1, 1)));
 
         // Create an adapter for the question list

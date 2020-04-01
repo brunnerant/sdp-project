@@ -37,7 +37,7 @@ public class MatrixFragmentTest {
         DatabaseFactory.setInstance(dbService);
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(MatrixFragment.MATRIXID, MatrixFormat.createMatrix3x3());
+        bundle.putSerializable(MatrixFragment.MATRIX_ID, MatrixFormat.createMatrix3x3());
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
 

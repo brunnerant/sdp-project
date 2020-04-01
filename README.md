@@ -21,4 +21,4 @@ You can also auto-format your code by running:
 ```
 ./gradlew spotlessApply
 ```
-Voila, have fun developing this android app !!!
+Voila, have fun developing this android app!!!

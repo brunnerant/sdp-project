@@ -32,6 +32,6 @@ public class MultiFieldFormatTest {
     public void answerCanBeCorrectlyVisited() {
         AnswerFormat.Visitor visitor = mock(AnswerFormat.Visitor.class);
         multi.accept(visitor);
-        verify(visitor).visitMutliFieldFormat(multi);
+        verify(visitor).visitMultiFieldFormat(multi);
     }
 }

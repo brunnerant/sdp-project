@@ -13,7 +13,7 @@ public class MatrixFormat extends AnswerFormat {
     private int tableColumnsNumber = 1;
     private int maxCharacters = 5;
     private String hintString;
-    private String id = MatrixFragment.MATRIXID;
+    private String id = MatrixFragment.MATRIX_ID;
 
     public MatrixFormat(int tableColumnsNumber, int tableRowsNumber) {
         this(null, tableColumnsNumber, tableRowsNumber);

@@ -35,7 +35,7 @@ public abstract class AnswerFormat implements Serializable {
 
         void visitMatrixAnswerFormat(MatrixFormat matrixFormat);
 
-        void visitMutliFieldFormat(MultiFieldFormat multiFieldFormat);
+        void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat);
     }
 
     private static AnswerFormat parseNotCompoundFormat(String field) {
@@ -65,7 +65,6 @@ public abstract class AnswerFormat implements Serializable {
             // <format>:<text> | <format>
             AnswerFormat result = parseNotCompoundFormat(field);
             if (result == null) {
-                // TODO throw new Exception();
                 return null;
             }
             fields.add(result);
