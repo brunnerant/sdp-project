@@ -56,7 +56,7 @@
     <string name="done">Ok</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
-    <string name="add_pop_up">Entrez un nom de quiz</string>
+    <string name="add_quiz_message">Entrez le nom de votre quiz</string>
     <string name="edit_title">Renommer</string>
     <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz? Cela va supprimer toutes les questions de ce quiz.</string>
 

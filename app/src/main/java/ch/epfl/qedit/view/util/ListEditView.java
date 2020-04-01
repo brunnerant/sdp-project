@@ -42,18 +42,14 @@ public class ListEditView extends RecyclerView {
         String getText(T item);
     }
 
-    /**
-     * This enumerates the events that can occur on an item
-     */
+    /** This enumerates the events that can occur on an item */
     public enum EventType {
         Select,
         RemoveRequest,
         EditRequest
     }
 
-    /**
-     * This interface is used to react to events that happen on an item.
-     */
+    /** This interface is used to react to events that happen on an item. */
     public interface ItemListener {
         /**
          * This handles an event on a specific item of the list. Note that in case an item is
@@ -66,13 +62,13 @@ public class ListEditView extends RecyclerView {
     }
 
     /**
-     * This interface allows to be notified when items are moved in the list.
-     * Note that it only makes sense to register a MoveListener if the list has
-     * drag and drop implemented.
+     * This interface allows to be notified when items are moved in the list. Note that it only
+     * makes sense to register a MoveListener if the list has drag and drop implemented.
      */
     public interface MoveListener {
         /**
          * This handles the event of an item being moved to another position in the list.
+         *
          * @param from the position from which the item was moved
          * @param to the position to which the item was moved
          */
@@ -98,8 +94,7 @@ public class ListEditView extends RecyclerView {
                             new OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    adapter.notifyItem(
-                                            getLayoutPosition(), EventType.EditRequest);
+                                    adapter.notifyItem(getLayoutPosition(), EventType.EditRequest);
                                 }
                             });
 
@@ -108,7 +103,8 @@ public class ListEditView extends RecyclerView {
                             new OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    adapter.notifyItem(getLayoutPosition(), EventType.RemoveRequest);
+                                    adapter.notifyItem(
+                                            getLayoutPosition(), EventType.RemoveRequest);
                                 }
                             });
         }
@@ -208,8 +204,7 @@ public class ListEditView extends RecyclerView {
          * @param position the item to remove
          */
         public void removeItem(int position) {
-            if (position == selectedQuestion)
-                selectedQuestion = NO_POSITION;
+            if (position == selectedQuestion) selectedQuestion = NO_POSITION;
 
             items.remove(position);
             notifyItemRemoved(position);
@@ -238,11 +233,11 @@ public class ListEditView extends RecyclerView {
         /**
          * Selects the item at the given position. If position is -1, it deselects what was
          * selected.
+         *
          * @param pos the position of the item that must be selected
          */
         public void selectItem(int pos) {
-            if (pos < -1 || pos >= items.size())
-                throw new IllegalArgumentException();
+            if (pos < -1 || pos >= items.size()) throw new IllegalArgumentException();
 
             int previous = selectedQuestion;
             selectedQuestion = pos;
@@ -253,7 +248,8 @@ public class ListEditView extends RecyclerView {
                 notifyItemChanged(previous);
                 notifyItemChanged(pos);
                 notifyItem(pos, EventType.Select);
-            };
+            }
+            ;
         }
 
         @NonNull

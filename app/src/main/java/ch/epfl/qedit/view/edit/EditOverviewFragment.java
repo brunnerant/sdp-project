@@ -48,6 +48,29 @@ public class EditOverviewFragment extends Fragment {
     }
 
     private void createAdapter() {
+        addDumyQuestions();
+
+        // Create an adapter for the question list
+        adapter =
+                new ListEditView.ListEditAdapter<>(
+                        questions,
+                        new ListEditView.GetItemText<Question>() {
+                            @Override
+                            public String getText(Question item) {
+                                return item.getTitle();
+                            }
+                        });
+
+        adapter.setItemListener(new ListEditView.ItemListener() {
+            @Override
+            public void onItemEvent(int position, ListEditView.EventType type) {
+                if (type == ListEditView.EventType.RemoveRequest)
+                    adapter.removeItem(position);
+            }
+        });
+    }
+
+    private void addDumyQuestions() {
         // For now, we just add dummy questions to the quiz
         questions = new LinkedList<>();
         for (numQuestions = 0; numQuestions < 5; numQuestions++)
@@ -56,13 +79,5 @@ public class EditOverviewFragment extends Fragment {
                             "Q" + (numQuestions + 1),
                             "is it " + (numQuestions + 1) + " ?",
                             new MatrixFormat(1, 1)));
-
-        // Create an adapter for the question list
-        adapter = new ListEditView.ListEditAdapter<>(questions, new ListEditView.GetItemText<Question>() {
-            @Override
-            public String getText(Question item) {
-                return item.getTitle();
-            }
-        });
     }
 }

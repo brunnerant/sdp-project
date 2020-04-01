@@ -25,14 +25,14 @@ import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.EditTextDialog;
 import ch.epfl.qedit.view.util.ListEditView;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class HomeQuizListFragment extends Fragment implements ConfirmDialog.ConfirmationListener, EditTextDialog.SubmissionListener {
+public class HomeQuizListFragment extends Fragment
+        implements ConfirmDialog.ConfirmationListener, EditTextDialog.SubmissionListener {
     public static final String QUIZID = "ch.epfl.qedit.view.QUIZID";
 
     private DatabaseService db;
@@ -49,12 +49,14 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialog.Conf
     private List<Map.Entry<String, String>> quizzes;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home_quiz_list, container, false);
 
-        // Tell the android runtime that the custom option menu should be inflated
+        // Build the top bar and the dialogs
         setHasOptionsMenu(true);
+        createDialogs();
 
         // Get user from the bundle created by the parent activity
         user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
@@ -68,24 +70,6 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialog.Conf
         // The progress bar is needed while waiting from the database
         progressBar = view.findViewById(R.id.quiz_loading);
 
-        // This is used to confirm that the user actually wants to delete a quiz
-        deleteDialog = new ConfirmDialog(getString(R.string.warning_delete), this);
-        addDialog = new EditTextDialog("Enter the name of your quiz", this);
-        addDialog.setTextFilter(new EditTextDialog.TextFilter() {
-            @Override
-            public String isAllowed(String text) {
-                if (text.trim().length() == 0)
-                    return getString(R.string.empty_quiz_name_error);
-
-                for (Map.Entry<String, String> entry : quizzes) {
-                    if (entry.getValue().equals(text))
-                        return getString(R.string.dup_quiz_name_error);
-                }
-
-                return null;
-            }
-        });
-
         // Instantiate Handler and the DatabaseService
         db = DatabaseFactory.getInstance();
         handler = new Handler();
@@ -93,34 +77,60 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialog.Conf
         return view;
     }
 
+    // This function is used to create the list of quizzes for the given user
     private void createAdapter(User user) {
         // Retrieve the quizzes from the user
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter
-        listAdapter = new ListEditView.ListEditAdapter<>(quizzes, new ListEditView.GetItemText<Map.Entry<String, String>>() {
-            @Override
-            public String getText(Map.Entry<String, String> item) {
-                return item.getValue();
-            }
-        });
+        listAdapter =
+                new ListEditView.ListEditAdapter<>(
+                        quizzes,
+                        new ListEditView.GetItemText<Map.Entry<String, String>>() {
+                            @Override
+                            public String getText(Map.Entry<String, String> item) {
+                                return item.getValue();
+                            }
+                        });
 
         // Listen to the data changes
-        listAdapter.setItemListener(new ListEditView.ItemListener() {
-            @Override
-            public void onItemEvent(int position, ListEditView.EventType type) {
-                switch (type) {
-                    case RemoveRequest:
-                        deleteConfirmation(position);
-                        break;
-                    case EditRequest:
-                        editQuiz(position);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        listAdapter.setItemListener(
+                new ListEditView.ItemListener() {
+                    @Override
+                    public void onItemEvent(int position, ListEditView.EventType type) {
+                        switch (type) {
+                            case RemoveRequest:
+                                deleteConfirmation(position);
+                                break;
+                            case EditRequest:
+                                editQuiz(position);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+    }
+
+    // This is used to create the warning and add dialog
+    private void createDialogs() {
+        deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete), this);
+        addDialog = EditTextDialog.create(getString(R.string.add_quiz_message), this);
+        addDialog.setTextFilter(
+                new EditTextDialog.TextFilter() {
+                    @Override
+                    public String isAllowed(String text) {
+                        if (text.trim().length() == 0)
+                            return getString(R.string.empty_quiz_name_error);
+
+                        for (Map.Entry<String, String> entry : quizzes) {
+                            if (entry.getValue().equals(text))
+                                return getString(R.string.dup_quiz_name_error);
+                        }
+
+                        return null;
+                    }
+                });
     }
 
     @Override
@@ -129,6 +139,7 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialog.Conf
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    // This method will be called when an item of the topbar is clicked on
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -186,8 +197,7 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialog.Conf
     // This method will be called when the user confirms the deletion by clicking on "yes"
     @Override
     public void onConfirm(ConfirmDialog dialog) {
-        if (dialog != deleteDialog)
-            return;
+        if (dialog != deleteDialog) return;
 
         listAdapter.removeItem(deleteIndex);
     }
