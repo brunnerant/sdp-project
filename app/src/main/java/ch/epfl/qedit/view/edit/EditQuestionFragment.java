@@ -23,12 +23,8 @@ public class EditQuestionFragment extends Fragment {
     private EditText editQuestionDisplay;
     private EditText editQuestionTitle;
 
-    @Nullable
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.edit_fragment_quiz_question, container, false);
         editQuestionDisplay = view.findViewById(R.id.edit_question_display);
