@@ -22,15 +22,17 @@ import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
 import ch.epfl.qedit.view.quiz.QuizActivity;
-import ch.epfl.qedit.view.util.ConfirmDialogFragment;
+import ch.epfl.qedit.view.util.ConfirmDialog;
+import ch.epfl.qedit.view.util.EditTextDialog;
 import ch.epfl.qedit.view.util.ListEditView;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class HomeQuizListFragment extends Fragment implements ConfirmDialogFragment.ConfirmationListener {
+public class HomeQuizListFragment extends Fragment implements ConfirmDialog.ConfirmationListener, EditTextDialog.SubmissionListener {
     public static final String QUIZID = "ch.epfl.qedit.view.QUIZID";
 
     private DatabaseService db;
@@ -39,7 +41,8 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialogFragm
     private ProgressBar progressBar;
     private ListEditView.ListEditAdapter<Map.Entry<String, String>> listAdapter;
 
-    private ConfirmDialogFragment deleteDialog;
+    private ConfirmDialog deleteDialog;
+    private EditTextDialog addDialog;
     private int deleteIndex;
 
     private User user;
@@ -49,6 +52,9 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialogFragm
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home_quiz_list, container, false);
+
+        // Tell the android runtime that the custom option menu should be inflated
+        setHasOptionsMenu(true);
 
         // Get user from the bundle created by the parent activity
         user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
@@ -63,7 +69,22 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialogFragm
         progressBar = view.findViewById(R.id.quiz_loading);
 
         // This is used to confirm that the user actually wants to delete a quiz
-        deleteDialog = new ConfirmDialogFragment(getString(R.string.warning_delete), this);
+        deleteDialog = new ConfirmDialog(getString(R.string.warning_delete), this);
+        addDialog = new EditTextDialog("Enter the name of your quiz", this);
+        addDialog.setTextFilter(new EditTextDialog.TextFilter() {
+            @Override
+            public String isAllowed(String text) {
+                if (text.trim().length() == 0)
+                    return getString(R.string.empty_quiz_name_error);
+
+                for (Map.Entry<String, String> entry : quizzes) {
+                    if (entry.getValue().equals(text))
+                        return getString(R.string.dup_quiz_name_error);
+                }
+
+                return null;
+            }
+        });
 
         // Instantiate Handler and the DatabaseService
         db = DatabaseFactory.getInstance();
@@ -90,7 +111,7 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialogFragm
             public void onItemEvent(int position, ListEditView.EventType type) {
                 switch (type) {
                     case RemoveRequest:
-                        deleteQuiz(position);
+                        deleteConfirmation(position);
                         break;
                     case EditRequest:
                         editQuiz(position);
@@ -112,7 +133,7 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialogFragm
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add:
-                // TODO add edit popup
+                addDialog.show(getParentFragmentManager(), "add_dialog");
                 break;
             case android.R.id.home:
                 requireActivity().onBackPressed();
@@ -123,7 +144,7 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialogFragm
     }
 
     // Handles when a user clicked on the button to remove a quiz
-    private void deleteQuiz(int position) {
+    private void deleteConfirmation(int position) {
         deleteDialog.show(getParentFragmentManager(), "delete_confirmation");
         deleteIndex = position;
     }
@@ -162,11 +183,18 @@ public class HomeQuizListFragment extends Fragment implements ConfirmDialogFragm
         startActivity(intent);
     }
 
+    // This method will be called when the user confirms the deletion by clicking on "yes"
     @Override
-    public void onConfirm(ConfirmDialogFragment dialog) {
+    public void onConfirm(ConfirmDialog dialog) {
         if (dialog != deleteDialog)
             return;
 
         listAdapter.removeItem(deleteIndex);
+    }
+
+    // This method will be called when the user confirms the addition by clicking "yes"
+    @Override
+    public void onSubmit(String text) {
+        listAdapter.addItem(new AbstractMap.SimpleEntry<String, String>("key", text));
     }
 }
