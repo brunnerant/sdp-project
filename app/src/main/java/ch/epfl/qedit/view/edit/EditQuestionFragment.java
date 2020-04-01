@@ -33,6 +33,22 @@ public class EditQuestionFragment extends Fragment {
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
+        observe(model);
+
+//        model.getFocusedQuestion()
+//                .observe(
+//                        getViewLifecycleOwner(),
+//                        new Observer<Integer>() {
+//                            @Override
+//                            public void onChanged(Integer index) {
+//                                editOnQuestionChanged(model.getQuiz(), index);
+//                            }
+//                        });
+
+        return v;
+    }
+
+    private void observe(final QuizViewModel model) {
         model.getFocusedQuestion()
                 .observe(
                         getViewLifecycleOwner(),
@@ -42,8 +58,6 @@ public class EditQuestionFragment extends Fragment {
                                 editOnQuestionChanged(model.getQuiz(), index);
                             }
                         });
-
-        return v;
     }
 
     /** Handles the transition from one question to another */
