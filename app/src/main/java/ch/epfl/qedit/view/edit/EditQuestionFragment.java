@@ -60,9 +60,9 @@ public class EditQuestionFragment extends Fragment {
         editQuestionTitle.setText(questionTitleStr);
 
         MatrixFragment matrixFragment = new MatrixFragment();
-        Bundle newB = new Bundle();
-        newB.putSerializable(MatrixFragment.MATRIXID, question.getFormat());
-        matrixFragment.setArguments(newB);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(MatrixFragment.MATRIXID, question.getFormat());
+        matrixFragment.setArguments(bundle);
 
         // And dynamically instantiate the answer form
         requireActivity()

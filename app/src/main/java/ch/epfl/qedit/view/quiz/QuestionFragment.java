@@ -21,12 +21,8 @@ public class QuestionFragment extends Fragment {
     private TextView questionTitle;
     private TextView questionDisplay;
 
-    @Nullable
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_quiz_question, container, false);
         questionTitle = view.findViewById(R.id.question_title);
