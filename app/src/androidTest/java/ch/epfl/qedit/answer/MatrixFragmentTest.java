@@ -25,7 +25,6 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MatrixFragmentTest {
-
     final int MATRIX_DIM = 3;
 
     @Rule
@@ -38,7 +37,7 @@ public class MatrixFragmentTest {
         DatabaseFactory.setInstance(dbService);
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("m0", MatrixFormat.createMatrix3x3());
+        bundle.putSerializable(MatrixFragment.MATRIXID, MatrixFormat.createMatrix3x3());
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
 

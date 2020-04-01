@@ -1,5 +1,6 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,7 +13,7 @@ public class MatrixFormat extends AnswerFormat {
     private int tableColumnsNumber = 1;
     private int maxCharacters = 5;
     private String hintString;
-    private String id = "m0";
+    private String id = MatrixFragment.MATRIXID;
 
     public MatrixFormat(int tableColumnsNumber, int tableRowsNumber) {
         this(null, tableColumnsNumber, tableRowsNumber);

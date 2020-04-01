@@ -46,4 +46,18 @@
          we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
 
+
+    <string name="textview">TextView</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Editer</string>
+    <string name="no_duplicate">Ce nom de quiz est déjà utilisé</string>
+    <string name="cancel">Annuler</string>
+    <string name="done">Ok</string>
+    <string name="yes">Oui</string>
+    <string name="add_pop_up">Entrez un nom de quiz</string>
+    <string name="error_blank">Le nom ne peut pas être vide</string>
+    <string name="edit_title">Renommer</string>
+    <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz? Cela va supprimer toutes les questions de ce quiz.</string>
+
+
 </resources>
