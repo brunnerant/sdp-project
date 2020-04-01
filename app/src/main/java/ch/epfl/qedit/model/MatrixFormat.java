@@ -1,6 +1,10 @@
 package ch.epfl.qedit.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MatrixFormat extends AnswerFormat {
+
     private boolean hasDecimal = true;
     private boolean hasSign = true;
 
@@ -8,13 +12,15 @@ public class MatrixFormat extends AnswerFormat {
     private int tableColumnsNumber = 1;
     private int maxCharacters = 5;
     private String hintString;
-    private String id = "m0";
+
+    private MatrixModel answerModel;
 
     public MatrixFormat(int tableColumnsNumber, int tableRowsNumber) {
         super();
         this.tableRowsNumber = tableRowsNumber;
         this.tableColumnsNumber = tableColumnsNumber;
-        this.hintString = hint();
+        hintString = hint();
+        // answerModel = new MatrixModel(tableColumnsNumber, tableRowsNumber);
     }
 
     public MatrixFormat(
@@ -28,7 +34,37 @@ public class MatrixFormat extends AnswerFormat {
         this.hasDecimal = hasDecimal;
         this.hasSign = hasSign;
         this.maxCharacters = maxCharacters;
-        this.hintString = hint();
+        hintString = hint();
+        // answerModel = new MatrixModel(tableColumnsNumber, tableRowsNumber);
+    }
+
+    public static MatrixFormat parse(String format) {
+        /** Match format: 'matrixNxM' where N and M are [0-9]+ */
+        if (Pattern.compile("^(\\s*)matrix(\\d+)x(\\d+)(\\s*)$").matcher(format).find()) {
+            /** Extract the row and column size */
+            Matcher number = Pattern.compile("(\\d+)").matcher(format);
+            number.find();
+            int i = Integer.parseInt(number.group(1));
+            number.find();
+            int j = Integer.parseInt(number.group(1));
+            return new MatrixFormat(i, j);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof MatrixFormat) {
+            MatrixFormat other = (MatrixFormat) o;
+            return this.hasDecimal == other.hasDecimal
+                    && this.hasSign == other.hasSign
+                    && this.tableRowsNumber == other.tableRowsNumber
+                    && this.tableColumnsNumber == other.tableColumnsNumber
+                    && this.maxCharacters == other.maxCharacters
+                    && this.hintString.equals(other.hintString);
+        }
+        return false;
     }
 
     public static MatrixFormat createMatrix3x3() {
@@ -48,6 +84,14 @@ public class MatrixFormat extends AnswerFormat {
     @Override
     public void accept(Visitor visitor) {
         visitor.visitMatrixAnswerFormat(this);
+    }
+
+    @Override
+    public void saveAnswers() {}
+
+    @Override
+    public AnswerModel getAnswers() {
+        return answerModel;
     }
 
     public int getTableRowsNumber() {
@@ -76,14 +120,6 @@ public class MatrixFormat extends AnswerFormat {
 
     public String getHint() {
         return hintString;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
     }
 
     // Function that allows to be placed as a placeholder for the EditText

@@ -18,6 +18,8 @@ import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuestionFragment extends Fragment {
+    public static final String ANSWER_FORMAT = "ch.epfl.qedit.view.ANSWER_FORMAT";
+
     private TextView questionTitle;
     private TextView questionDisplay;
 
@@ -31,6 +33,7 @@ public class QuestionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_quiz_question, container, false);
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
+
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
@@ -40,21 +43,10 @@ public class QuestionFragment extends Fragment {
                         new Observer<Integer>() {
                             @Override
                             public void onChanged(Integer index) {
-                                onQuestionChanged(model.getQuiz().getValue(), index);
+                                onQuestionChanged(model.getQuiz(), index);
                             }
                         });
 
-        model.getStatus()
-                .observe(
-                        getViewLifecycleOwner(),
-                        new Observer<QuizViewModel.Status>() {
-                            @Override
-                            public void onChanged(QuizViewModel.Status status) {
-                                onQuestionChanged(
-                                        model.getQuiz().getValue(),
-                                        model.getFocusedQuestion().getValue());
-                            }
-                        });
         return view;
     }
 
@@ -73,10 +65,10 @@ public class QuestionFragment extends Fragment {
         MatrixFragment matrixFragment = new MatrixFragment();
         MatrixFormat matrixFormat = (MatrixFormat) question.getFormat();
         Bundle newB = new Bundle();
-        newB.putSerializable("m0", matrixFormat);
+        newB.putSerializable(ANSWER_FORMAT, matrixFormat);
         matrixFragment.setArguments(newB);
 
-        // And dynamically instatiate the answer form
+        // And dynamically instantiate the answer form
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()

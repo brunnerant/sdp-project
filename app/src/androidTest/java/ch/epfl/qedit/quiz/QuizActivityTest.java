@@ -1,10 +1,16 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.quiz;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
 import android.content.Intent;
@@ -12,9 +18,13 @@ import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import ch.epfl.qedit.view.home.HomeQuizListFragment;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.Arrays;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,7 +33,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class QuizActivityTest {
     private QuizViewModel model;
-    private Integer zero = 0;
+    private final Integer zero = 0;
 
     @Rule
     public final IntentsTestRule<QuizActivity> testRule =
@@ -32,12 +42,19 @@ public class QuizActivityTest {
     public void launchActivity() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(HomeQuizListFragment.QUIZID, "quiz0");
+        Quiz quiz =
+                new Quiz(
+                        "Title",
+                        Arrays.asList(
+                                new Question("Banane", "How many?", "matrix1x1"),
+                                new Question("Vector", "Fill this Vector!", "matrix7x1")));
+        bundle.putSerializable(QUIZ_ID, quiz);
         intent.putExtras(bundle);
-        testRule.launchActivity(intent);
-        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
 
-        while (!model.getStatus().getValue().equals(QuizViewModel.Status.Loaded)) {}
+        testRule.launchActivity(intent);
+
+        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+        model.setQuiz(quiz);
     }
 
     public void finishActivity() {
@@ -48,7 +65,7 @@ public class QuizActivityTest {
     public void testOnCreateState() {
         launchActivity();
         Integer question = model.getFocusedQuestion().getValue();
-        Assert.assertEquals(question, null);
+        Assert.assertNull(question);
         finishActivity();
     }
 
@@ -73,19 +90,40 @@ public class QuizActivityTest {
     public void cantGoAboveQuizSize() {
         launchActivity();
 
-        for (int i = 0; i < model.getQuiz().getValue().getQuestions().size(); ++i) {
+        for (int i = 0; i < model.getQuiz().getQuestions().size(); ++i) {
             onView(withId(R.id.next)).perform(click());
         }
 
         onView(withId(R.id.next)).perform(click());
-        Integer index = model.getQuiz().getValue().getQuestions().size() - 1;
+        Integer index = model.getQuiz().getQuestions().size() - 1;
         Assert.assertEquals(model.getFocusedQuestion().getValue(), index);
 
         finishActivity();
     }
 
     @Test
-    public void quizOverviewDisplayed() {
+    public void testUpArrowIsClicked() {
+        launchActivity();
+        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
+        assertTrue(testRule.getActivity().isFinishing());
+        finishActivity();
+    }
+
+    @Test
+    public void testTimeIsClicked() {
+        launchActivity();
+        onView(withId(R.id.time)).perform(click());
+        onView(withText("Unimplemented Feature"))
+                .inRoot(
+                        withDecorView(
+                                Matchers.not(
+                                        is(testRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        finishActivity();
+    }
+
+    @Test
+    public void quizOverviewIsDisplayed() {
         launchActivity();
         onView(withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
         finishActivity();
@@ -96,6 +134,21 @@ public class QuizActivityTest {
         launchActivity();
         onView(withId(R.id.overview)).perform(click());
         onView(withId(R.id.quiz_overview_container)).check(matches(not(isDisplayed())));
+        finishActivity();
+    }
+
+    @Test
+    public void testQuestionIsNotDisplayed() {
+        launchActivity();
+        onView(withId(R.id.question)).check(matches(isDisplayed()));
+        finishActivity();
+    }
+
+    @Test
+    public void testQuizOverviewOnClickDisplayedAgain() {
+        launchActivity();
+        onView(withId(R.id.quiz_overview_container)).perform(click()).perform(click());
+        onView(withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
         finishActivity();
     }
 }

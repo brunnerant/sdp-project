@@ -13,16 +13,16 @@ public class QuizTest {
 
     private List<Question> initQuestionList() {
         List<Question> questions = new ArrayList<>();
-        questions.add(new Question("q1", "text", new AnswerFormat.NumberField(10, 20, 17)));
-        questions.add(new Question("q2", "text", new AnswerFormat.NumberField(1, 20, 16)));
-        questions.add(new Question("q3", "text", new AnswerFormat.NumberField(10, 20, 18)));
+        questions.add(new Question("q1", "text", new MatrixFormat(1, 1)));
+        questions.add(new Question("q2", "text", new MatrixFormat(1, 1)));
+        questions.add(new Question("q3", "text", new MatrixFormat(1, 1)));
 
         return questions;
     }
 
     @Test
     public void quizConstructorTest() {
-        Quiz quiz = new Quiz(initQuestionList());
+        Quiz quiz = new Quiz("Title", initQuestionList());
         assertNotNull(quiz);
         assertEquals(3, quiz.getQuestions().size());
         assertEquals("q1", quiz.getQuestions().get(0).getTitle());
@@ -31,7 +31,7 @@ public class QuizTest {
 
     @Test
     public void getQuestionIsImmutableTest() {
-        Quiz quiz = new Quiz(initQuestionList());
+        Quiz quiz = new Quiz("Title", initQuestionList());
         final List<Question> questions = quiz.getQuestions();
         assertThrows(
                 UnsupportedOperationException.class,
@@ -45,9 +45,7 @@ public class QuizTest {
 
     @Test
     public void getTitleTest() {
-        Quiz quiz = new Quiz(initQuestionList());
-        Quiz quiz1 = new Quiz("About Math and Spider", initQuestionList());
-        assertEquals(quiz.getTitle(), "Untitled Quiz");
-        assertEquals(quiz1.getTitle(), "About Math and Spider");
+        Quiz quiz = new Quiz("About Math and Spider", initQuestionList());
+        assertEquals(quiz.getTitle(), "About Math and Spider");
     }
 }

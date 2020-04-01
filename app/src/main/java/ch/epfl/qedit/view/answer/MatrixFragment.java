@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.answer;
 
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -25,7 +27,7 @@ import java.util.HashMap;
 
 public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
-    public MatrixFormat matrixFormat;
+    private MatrixFormat matrixFormat;
 
     private QuizViewModel model;
 
@@ -36,7 +38,7 @@ public class MatrixFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        matrixFormat = (MatrixFormat) getArguments().getSerializable("m0");
+        matrixFormat = (MatrixFormat) getArguments().getSerializable(ANSWER_FORMAT);
     }
 
     @Override
@@ -49,11 +51,12 @@ public class MatrixFragment extends Fragment {
 
         tableLayout = view.findViewById(R.id.answersTable);
         model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
-        getActivity()
+
+        requireActivity()
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         for (int i = 0; i < matrixFormat.getTableRowsNumber(); ++i) {
-            TableRow t = new TableRow(getActivity());
+            TableRow t = new TableRow(requireActivity());
             arrayButtons.add(new ArrayList<EditText>());
             arrayIds.add(new ArrayList<Integer>());
             tableRow.add(t);
@@ -85,21 +88,13 @@ public class MatrixFragment extends Fragment {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        HashMap<Integer, HashMap<Integer, Float>> map =
-                                model.getAnswers().getValue();
-                        map.put(
-                                        model.getFocusedQuestion().getValue(),
-                                        model.getAnswers()
-                                                .getValue()
-                                                .get(model.getFocusedQuestion().getValue()))
-                                .put(getId(row, col), Float.valueOf(editText.getText().toString()));
-                        model.getAnswers().setValue(map);
+
                     }
                 });
     }
 
     private EditText newEditText(int row) {
-        EditText editText = new EditText(getActivity());
+        EditText editText = new EditText(requireActivity());
         editText.setRawInputType(
                 InputType.TYPE_CLASS_NUMBER
                         | InputType.TYPE_NUMBER_FLAG_DECIMAL

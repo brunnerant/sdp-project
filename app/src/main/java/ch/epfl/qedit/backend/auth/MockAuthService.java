@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class MockAuthService implements AuthenticationService {
 
-    private CountingIdlingResource idlingResource;
+    private final CountingIdlingResource idlingResource;
 
     public MockAuthService() {
         idlingResource = new CountingIdlingResource("MockAuthService");
@@ -18,10 +18,13 @@ public class MockAuthService implements AuthenticationService {
     private final HashMap<String, Response<User>> userResponses =
             new HashMap<String, Response<User>>() {
                 {
+                    //noinspection SpellCheckingInspection
                     put("fjd4ywnzcCcLHaVb7oKg", Response.<User>error(CONNECTION_ERROR));
+                    //noinspection SpellCheckingInspection
                     put(
                             "fjd4ywnzXCXLHaVb7oKg",
                             Response.ok(new User("Marcel", "Doe", User.Role.Participant)));
+                    //noinspection SpellCheckingInspection
                     put("R4rXRVU3EMkgm5YEW52Q", Response.ok(createCosme()));
                     put("v5ns9OMqV4hH7jwD8S5w", Response.ok(createAnthony()));
                 }

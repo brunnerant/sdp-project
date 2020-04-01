@@ -6,12 +6,12 @@ package ch.epfl.qedit.util;
  * @param <T> the type of the data when the response is successful
  */
 public class Response<T> {
-    public static final int NO_ERROR = 0;
+    public static final Error NO_ERROR = new Error(0);
 
     private final T data;
-    private final int error;
+    private final Error error;
 
-    private Response(T data, int error) {
+    private Response(T data, Error error) {
         this.data = data;
         this.error = error;
     }
@@ -20,19 +20,15 @@ public class Response<T> {
         return new Response<>(data, NO_ERROR);
     }
 
-    public static <T> Response<T> error(int error) {
+    public static <T> Response<T> error(Error error) {
         return new Response<>(null, error);
-    }
-
-    public boolean successful() {
-        return error == NO_ERROR;
     }
 
     public T getData() {
         return data;
     }
 
-    public int getError() {
+    public Error getError() {
         return error;
     }
 }

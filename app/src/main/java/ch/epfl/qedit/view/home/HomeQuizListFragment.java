@@ -1,45 +1,59 @@
 package ch.epfl.qedit.view.home;
 
+import static ch.epfl.qedit.view.LoginActivity.USER;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.DatabaseService;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.Response;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
 public class HomeQuizListFragment extends Fragment {
-    public static final String QUIZID = "ch.epfl.qedit.view.QUIZID";
+    public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
 
-    private ListView listView;
+    private DatabaseService db;
+    private Handler handler;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home_quiz_list, container, false);
-        listView = view.findViewById(R.id.home_quiz_list);
+        ListView listView = view.findViewById(R.id.home_quiz_list);
+
+        progressBar = view.findViewById(R.id.quiz_loading);
 
         // Get user from the bundle created by the parent activity
-        final User user = (User) Objects.requireNonNull(getArguments()).getSerializable("user");
+        final User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
+
+        // Instantiate Handler and the DatabaseService
+        db = DatabaseFactory.getInstance();
+        handler = new Handler();
 
         ArrayList<Map.Entry<String, String>> entries =
                 new ArrayList<>(user.getQuizzes().entrySet());
 
-        final CustomAdapter adapter =
-                new CustomAdapter(
-                        requireActivity(),
-                        entries); // TODO order does change as it comes from a set
+        final CustomAdapter adapter = new CustomAdapter(requireActivity(), entries);
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(
@@ -50,17 +64,46 @@ public class HomeQuizListFragment extends Fragment {
                         Map.Entry<String, String> item =
                                 (Map.Entry<String, String>) adapter.getItem(position);
 
-                        startQuizActivity(item.getKey());
+                        loadQuiz(item.getKey());
                     }
                 });
 
         return view;
     }
 
-    private void startQuizActivity(String quizID) {
-        Intent intent = new Intent(getActivity(), QuizActivity.class);
+    private void loadQuiz(final String quizID) {
+        progressBar.setVisibility(View.VISIBLE);
+        /** Query quiz questions from the database */
+        db.getQuiz(
+                quizID,
+                new Callback<Response<Quiz>>() {
+                    @Override
+                    public void onReceive(final Response<Quiz> response) {
+                        handler.post(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        /** Determine what to do when the quiz is loaded or not */
+                                        progressBar.setVisibility(View.GONE);
+                                        if (response.getError().noError(getContext())) {
+                                            onLoadingSuccessful(response.getData());
+                                        }
+                                    }
+                                });
+                    }
+                });
+    }
+
+    /**
+     * If loading a quiz succeeds, pass the Quiz through a Bundle to the QuizActivity, switch to
+     * QuizActivity
+     */
+    private void onLoadingSuccessful(Quiz quiz) {
+        if (isDetached()) {}
+
+        Intent intent = new Intent(requireActivity(), QuizActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(QUIZID, quizID);
+        bundle.putSerializable(QUIZ_ID, quiz);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -95,7 +138,7 @@ public class HomeQuizListFragment extends Fragment {
             if (view == null) {
                 view = inflater.inflate(android.R.layout.simple_list_item_1, null);
             }
-            TextView text = (TextView) view.findViewById(android.R.id.text1);
+            TextView text = view.findViewById(android.R.id.text1);
             text.setText(entries.get(position).getValue());
             return view;
         }

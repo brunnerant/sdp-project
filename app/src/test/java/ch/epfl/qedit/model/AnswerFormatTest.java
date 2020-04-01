@@ -1,34 +1,23 @@
 package ch.epfl.qedit.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 public class AnswerFormatTest {
+
     @Test
-    public void answerCanBeCorrectlyVisited() {
-        final AnswerFormat.NumberField format = new AnswerFormat.NumberField(0, 1, 0);
-        format.accept(
-                new AnswerFormat.Visitor() {
-                    @Override
-                    public void visitNumberField(AnswerFormat.NumberField field) {
-                        assertEquals(field.getMin(), format.getMin(), 0);
-                        assertEquals(field.getMax(), format.getMax(), 0);
-                        assertEquals(field.getDigits(), format.getDigits());
-                    }
-
-                    @Override
-                    public void visitMatrixAnswerFormat(MatrixFormat matrixFormat) {}
-                });
+    public void parseWrong() {
+        //noinspection SpellCheckingInspection
+        assertNull(AnswerFormat.parse("iufbziub"));
+        assertNull(AnswerFormat.parse("matrix45x8x6"));
+        assertNull(AnswerFormat.parse(""));
+        assertNull(AnswerFormat.parse(null));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void invalidNumberFieldCannotBeBuilt1() {
-        new AnswerFormat.NumberField(0, -1, 0);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void invalidNumberFieldCannotBeBuilt2() {
-        new AnswerFormat.NumberField(0, 1, -1);
+    @Test
+    public void parseMatrix() {
+        assertEquals(new MatrixFormat(1, 1), AnswerFormat.parse("matrix1x1"));
     }
 }
