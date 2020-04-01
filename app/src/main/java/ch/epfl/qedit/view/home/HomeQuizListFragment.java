@@ -39,7 +39,7 @@ public class HomeQuizListFragment extends Fragment
     private Handler handler;
 
     private ProgressBar progressBar;
-    private ListEditView.ListEditAdapter<Map.Entry<String, String>> listAdapter;
+    private ListEditView.Adapter<Map.Entry<String, String>> listAdapter;
 
     private ConfirmDialog deleteDialog;
     private EditTextDialog addDialog;
@@ -84,7 +84,7 @@ public class HomeQuizListFragment extends Fragment
 
         // Create the list adapter
         listAdapter =
-                new ListEditView.ListEditAdapter<>(
+                new ListEditView.Adapter<>(
                         quizzes,
                         new ListEditView.GetItemText<Map.Entry<String, String>>() {
                             @Override

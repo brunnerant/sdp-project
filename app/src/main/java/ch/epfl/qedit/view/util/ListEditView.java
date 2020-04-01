@@ -75,7 +75,7 @@ public class ListEditView extends RecyclerView {
         void onItemMoved(int from, int to);
     }
 
-    private ListEditAdapter adapter;
+    private Adapter adapter;
     private boolean dragAndDrop = false;
 
     // This class is holding the view and data for one item
@@ -144,7 +144,7 @@ public class ListEditView extends RecyclerView {
      *
      * @param <T> the type of the underlying items
      */
-    public static class ListEditAdapter<T> extends RecyclerView.Adapter<ItemHolder> {
+    public static class Adapter<T> extends RecyclerView.Adapter<ItemHolder> {
 
         private final List<T> items;
         private int selectedQuestion = NO_POSITION;
@@ -183,7 +183,7 @@ public class ListEditView extends RecyclerView {
          * @param items the list of items to display
          * @param getText a function to retrieve the text from one item
          */
-        public ListEditAdapter(List<T> items, GetItemText<T> getText) {
+        public Adapter(List<T> items, GetItemText<T> getText) {
             this.items = Objects.requireNonNull(items);
             this.getText = Objects.requireNonNull(getText);
         }
@@ -321,7 +321,7 @@ public class ListEditView extends RecyclerView {
      *
      * @param adapter the ListEditAdapter to bind with the ListEditView
      */
-    public void setAdapter(ListEditAdapter adapter) {
+    public void setAdapter(Adapter adapter) {
         this.adapter = Objects.requireNonNull(adapter);
         adapter.setListEditView(this);
         super.setAdapter(adapter);

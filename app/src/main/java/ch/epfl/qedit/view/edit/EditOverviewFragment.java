@@ -16,7 +16,7 @@ import java.util.List;
 public class EditOverviewFragment extends Fragment {
     private List<Question> questions;
     private int numQuestions;
-    private ListEditView.ListEditAdapter<Question> adapter;
+    private ListEditView.Adapter<Question> adapter;
 
     @Override
     public View onCreateView(
@@ -52,7 +52,7 @@ public class EditOverviewFragment extends Fragment {
 
         // Create an adapter for the question list
         adapter =
-                new ListEditView.ListEditAdapter<>(
+                new ListEditView.Adapter<>(
                         questions,
                         new ListEditView.GetItemText<Question>() {
                             @Override
