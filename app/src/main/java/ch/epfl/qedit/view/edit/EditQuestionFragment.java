@@ -35,16 +35,6 @@ public class EditQuestionFragment extends Fragment {
 
         observe(model);
 
-//        model.getFocusedQuestion()
-//                .observe(
-//                        getViewLifecycleOwner(),
-//                        new Observer<Integer>() {
-//                            @Override
-//                            public void onChanged(Integer index) {
-//                                editOnQuestionChanged(model.getQuiz(), index);
-//                            }
-//                        });
-
         return v;
     }
 
