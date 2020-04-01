@@ -34,8 +34,6 @@ public class EditQuestionFragment extends Fragment {
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         observeModelOnEdit(model);
-        
-
         return v;
     }
 
