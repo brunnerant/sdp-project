@@ -33,12 +33,12 @@ public class EditQuestionFragment extends Fragment {
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
-        observe(model);
+        observeModelOnEdit(model);
 
         return v;
     }
 
-    private void observe(final QuizViewModel model) {
+    private void observeModelOnEdit(final QuizViewModel model) {
         model.getFocusedQuestion()
                 .observe(
                         getViewLifecycleOwner(),
