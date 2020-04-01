@@ -26,9 +26,9 @@ public class EditQuestionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.edit_fragment_quiz_question, container, false);
-        editQuestionDisplay = view.findViewById(R.id.edit_question_display);
-        editQuestionTitle = view.findViewById(R.id.edit_question_title);
+        View v = inflater.inflate(R.layout.edit_fragment_quiz_question, container, false);
+        editQuestionDisplay = v.findViewById(R.id.edit_question_display);
+        editQuestionTitle = v.findViewById(R.id.edit_question_title);
 
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
@@ -43,7 +43,7 @@ public class EditQuestionFragment extends Fragment {
                             }
                         });
 
-        return view;
+        return v;
     }
 
     /** Handles the transition from one question to another */
