@@ -1,6 +1,7 @@
 package ch.epfl.qedit.edit;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -43,7 +44,8 @@ public class EditQuestionFragmentTest extends QuizFragmentsTestUsingDB {
         model.getFocusedQuestion().postValue(0);
         onView(withId(R.id.edit_question_title))
                 .check(matches(withText("Question 1 - The matches problem")));
+        onView(withId(R.id.edit_question_display)).perform(typeText("help"));
         onView(withId(R.id.edit_question_display))
-                .check(matches(withText("How many matches can fit in a shoe of size 43 ?")));
+                .check(matches(withText("How many matches canhelp fit in a shoe of size 43?")));
     }
 }

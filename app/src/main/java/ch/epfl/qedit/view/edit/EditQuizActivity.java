@@ -35,13 +35,13 @@ public class EditQuizActivity extends AppCompatActivity {
     // TODO: Delete when we connect the rest of the app
     private void tempQuiz() {
         Question question1 =
-                new Question("Bananas", "How many bananas are there on Earth?!", "matrix1x1");
+                new Question("Bananas", "How many bananas are there on Earth.", "matrix1x1");
         Question question2 =
-                new Question("Apples", "How many apples are there on Earth?!", "matrix1x1");
+                new Question("Apples", "How many apples are there on Earth.", "matrix1x1");
         Question question4 = new Question("Vectors", "Give a unit vector.", "matrix1x3");
         Question question5 =
-                new Question("Operations", "What is the results of 1 + 10?!", "matrix1x1");
-        Question question6 = new Question("Matrices", "Fill those matrix !", "matrix3x3");
+                new Question("Operations", "What is the results of 1 + 10.", "matrix1x1");
+        Question question6 = new Question("Matrices", "Fill those matrix.", "matrix3x3");
         List<Question> quizzes =
                 Arrays.asList(question2, question1, question4, question5, question6);
 

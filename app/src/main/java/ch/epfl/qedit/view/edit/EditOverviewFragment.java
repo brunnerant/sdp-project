@@ -74,17 +74,14 @@ public class EditOverviewFragment extends Fragment {
                     public void onItemEvent(int position, ListEditView.EventType type) {
                         switch (type) {
                             case Select:
-                                setFragment(
-                                        R.id.question_details_container, new QuestionFragment());
+                                setFragment(new QuestionFragment());
                                 model.getFocusedQuestion().postValue(position);
                                 break;
                             case RemoveRequest:
                                 adapter.removeItem(position);
                                 break;
                             case EditRequest:
-                                setFragment(
-                                        R.id.question_details_container,
-                                        new EditQuestionFragment());
+                                setFragment(new EditQuestionFragment());
                                 break;
                             default:
                                 break;
@@ -93,8 +90,12 @@ public class EditOverviewFragment extends Fragment {
                 });
     }
 
-    private void setFragment(int id, Fragment fragment) {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(id, fragment).commit();
+    private void setFragment(Fragment fragment) {
+        getActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.question_details_container, fragment)
+                .commit();
     }
 
     private void addDummyQuestions() {
