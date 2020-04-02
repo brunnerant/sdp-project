@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view.answer;
 
 import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,7 +21,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.AnswerModel;
 import ch.epfl.qedit.model.MatrixFormat;
+import ch.epfl.qedit.model.MatrixModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,8 +31,9 @@ import java.util.HashMap;
 public class MatrixFragment extends Fragment {
     private TableLayout tableLayout;
     private MatrixFormat matrixFormat;
+    private MatrixModel matrixModel;
 
-    private QuizViewModel model;
+    private QuizViewModel quizViewModel;
 
     private ArrayList<TableRow> tableRow = new ArrayList<>();
     private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
@@ -39,6 +43,7 @@ public class MatrixFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         matrixFormat = (MatrixFormat) getArguments().getSerializable(ANSWER_FORMAT);
+        matrixModel = (MatrixModel) getArguments().getSerializable(ANSWER_MODEL);
     }
 
     @Override
@@ -50,7 +55,7 @@ public class MatrixFragment extends Fragment {
         View view = inflater.inflate(R.layout.answers_table, container, false);
 
         tableLayout = view.findViewById(R.id.answersTable);
-        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         requireActivity()
                 .getWindow()
@@ -62,6 +67,7 @@ public class MatrixFragment extends Fragment {
             tableRow.add(t);
             for (int j = 0; j < matrixFormat.getTableColumnsNumber(); ++j) {
                 EditText editText = newEditText(i);
+                editText.setText(matrixModel.getAnswer(i, j));
                 addTextWatcher(editText, i, j);
                 arrayButtons.get(i).add(editText);
                 tableRow.get(i).addView(editText);
@@ -89,6 +95,10 @@ public class MatrixFragment extends Fragment {
                     @Override
                     public void afterTextChanged(Editable s) {
 
+                        matrixModel.updateAnswer(row, col, editText.getText().toString());
+                        HashMap<Integer, AnswerModel> map = quizViewModel.getAnswers().getValue();
+                        map.remove(quizViewModel.getFocusedQuestion().getValue());
+                        map.put(quizViewModel.getFocusedQuestion().getValue(), matrixModel);
                     }
                 });
     }

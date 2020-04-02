@@ -69,4 +69,5 @@
 
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
+    <string name="this_is_just_a_test">This is just a test!</string>
 </resources>

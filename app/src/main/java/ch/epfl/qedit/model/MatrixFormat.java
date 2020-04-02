@@ -13,14 +13,11 @@ public class MatrixFormat extends AnswerFormat {
     private int maxCharacters = 5;
     private String hintString;
 
-    private MatrixModel answerModel;
-
     public MatrixFormat(int tableColumnsNumber, int tableRowsNumber) {
         super();
         this.tableRowsNumber = tableRowsNumber;
         this.tableColumnsNumber = tableColumnsNumber;
         hintString = hint();
-        // answerModel = new MatrixModel(tableColumnsNumber, tableRowsNumber);
     }
 
     public MatrixFormat(
@@ -35,7 +32,6 @@ public class MatrixFormat extends AnswerFormat {
         this.hasSign = hasSign;
         this.maxCharacters = maxCharacters;
         hintString = hint();
-        // answerModel = new MatrixModel(tableColumnsNumber, tableRowsNumber);
     }
 
     public static MatrixFormat parse(String format) {
@@ -83,15 +79,7 @@ public class MatrixFormat extends AnswerFormat {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitMatrixAnswerFormat(this);
-    }
-
-    @Override
-    public void saveAnswers() {}
-
-    @Override
-    public AnswerModel getAnswers() {
-        return answerModel;
+        visitor.visitMatrixFormat(this);
     }
 
     public int getTableRowsNumber() {

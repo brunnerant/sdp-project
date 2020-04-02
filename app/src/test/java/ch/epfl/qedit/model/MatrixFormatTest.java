@@ -42,7 +42,7 @@ public class MatrixFormatTest {
         MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3();
         AnswerFormat.Visitor visitor = mock(AnswerFormat.Visitor.class);
         matrixFormat.accept(visitor);
-        verify(visitor).visitMatrixAnswerFormat(matrixFormat);
+        verify(visitor).visitMatrixFormat(matrixFormat);
     }
 
     private void checkAllElements(
