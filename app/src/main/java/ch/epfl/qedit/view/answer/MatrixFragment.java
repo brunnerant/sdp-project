@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MatrixFragment extends Fragment {
-    public static final String MATRIX_ID = "ch.epfl.qedit.view.answer.MATRIX_ID";
-    private TableLayout tableLayout;
     private MatrixFormat matrixFormat;
     private MatrixModel matrixModel;
 
@@ -55,7 +53,7 @@ public class MatrixFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.answers_table, container, false);
 
-        tableLayout = view.findViewById(R.id.answersTable);
+        TableLayout tableLayout = view.findViewById(R.id.answersTable);
         quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         requireActivity()

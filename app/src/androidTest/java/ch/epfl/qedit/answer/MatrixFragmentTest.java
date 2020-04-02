@@ -33,9 +33,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MatrixFragmentTest {
-    private QuizViewModel model;
     private CountDownLatch lock = new CountDownLatch(1);
-    final int MATRIX_DIM = 3;
+    private final int MATRIX_DIM = 3;
 
     @Rule
     public final FragmentTestRule<?, MatrixFragment> testRule =
@@ -53,7 +52,8 @@ public class MatrixFragmentTest {
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
 
-        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+        QuizViewModel model =
+                new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
         model.setQuiz(Util.createMockQuiz("Title"));
 
         testRule.launchFragment(matrixFragment);

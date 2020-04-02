@@ -1,8 +1,7 @@
 package ch.epfl.qedit.model.answer;
 
 public class TestAnswerFormat extends AnswerFormat {
-
-    TestAnswerFormat(String text) {
+    public TestAnswerFormat(String text) {
         super(text);
     }
 
@@ -12,7 +11,7 @@ public class TestAnswerFormat extends AnswerFormat {
     }
 
     public static TestAnswerFormat parse(String format, String text) {
-        if (format.trim() == "testAnswerFormat") {
+        if (format.trim().equals("testAnswerFormat")) {
             return new TestAnswerFormat(null);
         } else {
             return null;

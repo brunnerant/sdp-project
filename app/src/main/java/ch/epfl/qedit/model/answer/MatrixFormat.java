@@ -8,8 +8,8 @@ public class MatrixFormat extends AnswerFormat {
     private boolean hasDecimal = true;
     private boolean hasSign = true;
 
-    private int tableRowsNumber = 1;
-    private int tableColumnsNumber = 1;
+    private int tableRowsNumber;
+    private int tableColumnsNumber;
     private int maxCharacters = 5;
     private String hintString;
 
@@ -116,6 +116,6 @@ public class MatrixFormat extends AnswerFormat {
 
     // Function that allows to be placed as a placeholder for the EditText
     private String hint() {
-        return String.format("%0" + maxCharacters + "d", 0).replace("0", "0");
+        return String.format("%0" + maxCharacters + "d", 0).replace("0", "0"); // TODO
     }
 }
