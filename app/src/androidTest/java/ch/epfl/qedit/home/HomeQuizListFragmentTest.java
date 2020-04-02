@@ -11,6 +11,7 @@ import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -84,6 +85,6 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
         intended(
                 allOf(
                         hasComponent(QuizActivity.class.getName()),
-                        hasExtra(equalTo(HomeQuizListFragment.QUIZ_ID), instanceOf(Quiz.class))));
+                        hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class))));
     }
 }

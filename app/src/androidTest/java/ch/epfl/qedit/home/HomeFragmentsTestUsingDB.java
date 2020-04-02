@@ -35,11 +35,7 @@ class HomeFragmentsTestUsingDB extends RecyclerViewHelpers {
         testRule.launchFragment(fragment);
     }
 
-    public void cleanup(
-            FragmentTestRule<
-                            ? extends androidx.fragment.app.FragmentActivity,
-                            ch.epfl.qedit.view.home.HomeInfoFragment>
-                    testRule) {
+    public void cleanup(FragmentTestRule testRule) {
         testRule.finishActivity();
         IdlingRegistry.getInstance().unregister(idlingResource);
     }
