@@ -9,13 +9,17 @@ import androidx.test.espresso.IdlingResource;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.util.RecyclerViewHelpers;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 
-class HomeFragmentsTestUsingDB {
+class HomeFragmentsTestUsingDB extends RecyclerViewHelpers {
     private IdlingResource idlingResource;
 
-    public void setup(FragmentTestRule testRule, Fragment fragment) {
+    public HomeFragmentsTestUsingDB(int recyclerViewId) {
+        super(recyclerViewId);
+    }
 
+    public void setup(FragmentTestRule testRule, Fragment fragment) {
         User user = new User("Jon", "Snow", User.Role.Participant);
         user.addQuiz("quiz0", "Qualification EPFL");
 

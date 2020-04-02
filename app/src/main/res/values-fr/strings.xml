@@ -42,12 +42,13 @@
     <!-- Edit -->
     <string name="delete">Supprimer</string>
     <string name="edit">Éditer</string>
-    <string name="no_duplicate">Ce nom de quiz est déjà utilisé</string>
+    <string name="dup_quiz_name_error">Un quiz du même nom existe déjà</string>
+    <string name="empty_quiz_name_error">Veuillez entrer le nom du quiz</string>
     <string name="cancel">Annuler</string>
     <string name="done">Ok</string>
     <string name="yes">Oui</string>
-    <string name="add_pop_up">Entrez un nom de quiz</string>
-    <string name="error_blank">Le nom ne peut pas être vide</string>
+    <string name="no">Non</string>
+    <string name="add_quiz_message">Entrez le nom de votre quiz</string>
     <string name="edit_title">Renommer</string>
     <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
     <string name="add_quiz">Ajouter</string>
