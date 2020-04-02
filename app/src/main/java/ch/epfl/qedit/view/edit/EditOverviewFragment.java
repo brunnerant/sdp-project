@@ -74,32 +74,30 @@ public class EditOverviewFragment extends Fragment {
                     public void onItemEvent(int position, ListEditView.EventType type) {
                         switch (type) {
                             case Select:
-                                getActivity()
-                                        .getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .replace(
-                                                R.id.question_details_container,
-                                                new QuestionFragment())
-                                        .commit();
+                                setFragment(R.id.question_details_container);
                                 model.getFocusedQuestion().postValue(position);
                                 break;
                             case RemoveRequest:
                                 adapter.removeItem(position);
                                 break;
                             case EditRequest:
-                                getActivity()
-                                        .getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .replace(
-                                                R.id.question_details_container,
-                                                new EditQuestionFragment())
-                                        .commit();
+                                setFragment(R.id.question_details_container);
                                 break;
                             default:
                                 break;
                         }
                     }
                 });
+    }
+
+    private void setFragment(int id) {
+        getActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(
+                        id,
+                        new EditQuestionFragment())
+                .commit();
     }
 
     private void addDummyQuestions() {
