@@ -63,8 +63,6 @@ public class QuizActivityTest {
         bundle.putSerializable(QUIZ_ID, quiz);
         intent.putExtras(bundle);
 
-        // TODO here launch
-
         model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
         model.setQuiz(quiz);
 
@@ -156,7 +154,7 @@ public class QuizActivityTest {
     }
 
     // @Test TODO
-    public void testAnswersAreRestored() throws InterruptedException {
+    public void testAnswersAreRestored() {
         onView(withId(R.id.next)).perform(click());
         onView(withId(R.id.next)).perform(click());
 
