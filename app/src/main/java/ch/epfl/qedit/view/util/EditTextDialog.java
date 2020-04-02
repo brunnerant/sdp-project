@@ -17,11 +17,22 @@ import ch.epfl.qedit.R;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * This class is used to create a edit text dialog, that is, a dialog that allows the user to enter
+ * some text. To create the dialog, use ConfirmDialog.create(message, listener), and to show it use
+ * dialog.show(fragmentManager, tag).
+ */
 public class EditTextDialog extends DialogFragment {
+    /** This interface is used to be notified when the user entered the text. */
     public interface SubmissionListener extends Serializable {
         void onSubmit(String text);
     }
 
+    /**
+     * This interface is used to filter the allowed text inputs. To allow a string in the dialog, it
+     * should return null. To indicate an error, it simply returns the string containing the error
+     * message, which will be displayed next to the edit text.
+     */
     public interface TextFilter {
         String isAllowed(String text);
     }
@@ -40,6 +51,16 @@ public class EditTextDialog extends DialogFragment {
     private EditText editText;
     private AlertDialog dialog;
 
+    private EditTextDialog() {}
+
+    /**
+     * The edit text dialogs should be created through this method, because Fragments cannot have
+     * constructors that take arguments.
+     *
+     * @param message the message to display above the edit text view
+     * @param listener the listener that gets notified once the text was entered
+     * @return a new dialog
+     */
     public static EditTextDialog create(String message, SubmissionListener listener) {
         EditTextDialog dialog = new EditTextDialog();
 
@@ -51,6 +72,13 @@ public class EditTextDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * This method allows to validate the text that the user enters in the dialog. The text filter
+     * can return an error to display, or null to indicate that the text is valid. The constant
+     * NO_FILTER can be used to validate everything.
+     *
+     * @param textFilter the text filter, non null.
+     */
     public void setTextFilter(TextFilter textFilter) {
         this.textFilter = Objects.requireNonNull(textFilter);
     }
@@ -83,7 +111,7 @@ public class EditTextDialog extends DialogFragment {
                     public void afterTextChanged(Editable s) {}
                 });
 
-        // This is for testing
+        // This is for testing, so that the text can be retrieved by id
         editText.setId(R.id.quiz_name_text);
     }
 
@@ -116,6 +144,8 @@ public class EditTextDialog extends DialogFragment {
                         .setView(editText)
                         .create();
 
+        // This is used to trigger the text watcher. Otherwise, it is not triggered
+        // until the user enters something
         dialog.setOnShowListener(
                 new DialogInterface.OnShowListener() {
                     @Override

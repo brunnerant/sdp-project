@@ -10,7 +10,13 @@ import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
 import java.io.Serializable;
 
+/**
+ * This class is used to create a confirmation dialog, that is, a dialog with a yes and a no button.
+ * To create the dialog, use ConfirmDialog.create(message, listener), and to show it use
+ * dialog.show(fragmentManager, tag).
+ */
 public class ConfirmDialog extends DialogFragment {
+    /** This interface is used to be notified when the user confirmed the dialog. */
     public interface ConfirmationListener extends Serializable {
         void onConfirm(ConfirmDialog dialog);
     }
@@ -18,6 +24,16 @@ public class ConfirmDialog extends DialogFragment {
     private ConfirmationListener listener;
     private String message;
 
+    private ConfirmDialog() {}
+
+    /**
+     * The confirmation dialogs should be created through this method, because Fragments cannot have
+     * constructors that take arguments.
+     *
+     * @param message the confirmation message to display
+     * @param listener the listener that gets notified once confirmation occured
+     * @return a new dialog
+     */
     public static ConfirmDialog create(String message, ConfirmationListener listener) {
         ConfirmDialog dialog = new ConfirmDialog();
 
