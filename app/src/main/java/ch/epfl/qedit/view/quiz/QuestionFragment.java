@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.AnswerFormat;
-import ch.epfl.qedit.model.AnswerModel;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class QuestionFragment extends Fragment {

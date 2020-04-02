@@ -66,7 +66,8 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
         model.getFocusedQuestion().postValue(1);
         onView(withId(R.id.question_title)).check(matches(withText("Question 2 - Title 2")));
         onView(withId(R.id.question_display)).check(matches(withText("Test answer format")));
-        onView(withId(R.id.testTextView)).check(matches(isDisplayed()));
-        onView(withId(R.id.testTextView)).check(matches(withText("This is just a test!")));
+        onView(withId(R.id.testAnswerFormatTextView)).check(matches(isDisplayed()));
+        onView(withId(R.id.testAnswerFormatTextView))
+                .check(matches(withText("This is just a test!")));
     }
 }

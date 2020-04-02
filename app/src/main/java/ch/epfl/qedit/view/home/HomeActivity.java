@@ -30,7 +30,6 @@ public class HomeActivity extends AppCompatActivity {
         // Create a new HomeQuizListFragment with the user in its Arguments
         HomeQuizListFragment homeQuizListFragment = new HomeQuizListFragment();
         homeQuizListFragment.setArguments(bundle);
-
         // Start the two fragments that are contained in this activity
         getSupportFragmentManager()
                 .beginTransaction()

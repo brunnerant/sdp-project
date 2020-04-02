@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import org.junit.Test;
 
 public class MatrixFormatTest {

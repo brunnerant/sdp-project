@@ -2,8 +2,8 @@ package ch.epfl.qedit.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import ch.epfl.qedit.model.AnswerModel;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.answer.AnswerModel;
 import java.util.HashMap;
 
 public class QuizViewModel extends ViewModel {

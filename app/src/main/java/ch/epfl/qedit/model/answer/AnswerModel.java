@@ -1,4 +1,4 @@
-package ch.epfl.qedit.model;
+package ch.epfl.qedit.model.answer;
 
 import ch.epfl.qedit.util.Visitable;
 import java.io.Serializable;

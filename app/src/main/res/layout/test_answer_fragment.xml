@@ -8,10 +8,10 @@
     tools:context=".view.answer.TestAnswerFragment">
 
     <TextView
-        android:id="@+id/testTextView"
+        android:id="@+id/testAnswerFormatTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/this_is_just_a_test"
+        android:text="@string/test_answer_format_message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

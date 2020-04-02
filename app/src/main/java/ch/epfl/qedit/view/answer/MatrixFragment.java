@@ -21,23 +21,24 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.AnswerModel;
-import ch.epfl.qedit.model.MatrixFormat;
-import ch.epfl.qedit.model.MatrixModel;
+import ch.epfl.qedit.model.answer.AnswerModel;
+import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MatrixFragment extends Fragment {
+    public static final String MATRIX_ID = "ch.epfl.qedit.view.answer.MATRIX_ID";
     private TableLayout tableLayout;
     private MatrixFormat matrixFormat;
     private MatrixModel matrixModel;
 
     private QuizViewModel quizViewModel;
 
-    private ArrayList<TableRow> tableRow = new ArrayList<>();
-    private ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
-    private ArrayList<ArrayList<Integer>> arrayIds = new ArrayList<>();
+    private final ArrayList<TableRow> tableRow = new ArrayList<>();
+    private final ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
+    private final ArrayList<ArrayList<Integer>> arrayIds = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;

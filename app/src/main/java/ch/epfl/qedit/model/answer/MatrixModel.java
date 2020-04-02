@@ -1,4 +1,4 @@
-package ch.epfl.qedit.model;
+package ch.epfl.qedit.model.answer;
 
 public class MatrixModel extends AnswerModel {
     private String[][] matrix;

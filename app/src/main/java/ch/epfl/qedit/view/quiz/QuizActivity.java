@@ -30,7 +30,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        // Get the Intent that started this activity and extract the string
+        // Get the Intent that started this activity and extract the quiz
         Intent intent = getIntent();
         quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
 

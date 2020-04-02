@@ -11,11 +11,10 @@ import org.hamcrest.TypeSafeMatcher;
  * Created by dannyroa on 5/10/15. Taken from
  * https://github.com/dannyroa/espresso-samples/blob/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview/RecyclerViewMatcher.java.
  */
-@SuppressWarnings("SpellCheckingInspection")
 public class RecyclerViewMatcher {
     private final int recyclerViewId;
 
-    public RecyclerViewMatcher(int recyclerViewId) {
+    private RecyclerViewMatcher(int recyclerViewId) {
         this.recyclerViewId = recyclerViewId;
     }
 

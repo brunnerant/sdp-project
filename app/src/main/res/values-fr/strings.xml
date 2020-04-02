@@ -38,12 +38,25 @@
 
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Édition</string>
-    <string name="give_answer_here_hint">Votre réponse</string>
+
+    <!-- Edit -->
+    <string name="delete">Supprimer</string>
+    <string name="edit">Éditer</string>
+    <string name="no_duplicate">Ce nom de quiz est déjà utilisé</string>
+    <string name="cancel">Annuler</string>
+    <string name="done">Ok</string>
+    <string name="yes">Oui</string>
+    <string name="add_pop_up">Entrez un nom de quiz</string>
+    <string name="error_blank">Le nom ne peut pas être vide</string>
+    <string name="edit_title">Renommer</string>
+    <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
+    <string name="add_quiz">Ajouter</string>
 
     <!-- Miscellaneous -->
     <!-- In French, there is a space before the exclammation point.
          Since we cannot have leading and trailing spaces in string resources,
          we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
+    <string name="test_answer_format_message">Ceci est juste un test !</string>
 
 </resources>
