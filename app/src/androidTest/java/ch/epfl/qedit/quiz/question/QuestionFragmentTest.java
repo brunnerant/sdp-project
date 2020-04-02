@@ -31,7 +31,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
 
     @Test
     public void testFragmentIsEmptyByDefault() {
-        super.setup(testRule, new QuestionFragment(), null);
+        super.setup(testRule, new QuestionFragment());
         onView(withId(R.id.question_title)).check(matches(withText("")));
         onView(withId(R.id.question_display)).check(matches(withText("")));
         onView(withId(R.id.answersTable)).check(doesNotExist());
@@ -39,7 +39,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
 
     @Test
     public void testFragmentDisplaysQuestionCorrectly() {
-        QuizViewModel model = super.setup(testRule, new QuestionFragment(), null);
+        QuizViewModel model = super.setup(testRule, new QuestionFragment());
         model.getFocusedQuestion().postValue(0);
         onView(withId(R.id.question_title))
                 .check(matches(withText("Question 1 - The matches problem")));
@@ -50,7 +50,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
 
     @Test
     public void testAnswerFormatDispatch() {
-        QuizViewModel model = super.setup(testRule, new QuestionFragment(), null);
+        QuizViewModel model = super.setup(testRule, new QuestionFragment());
         model.getFocusedQuestion().postValue(0);
 
         onView(withId(R.id.question_title))
@@ -66,19 +66,5 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
         onView(withId(R.id.testAnswerFormatTextView)).check(matches(isDisplayed()));
         onView(withId(R.id.testAnswerFormatTextView))
                 .check(matches(withText("This is just a test!")));
-    }
-
-    @Test
-    public void testAnswerIsLoadedFromQuizViewModel() { // TODO
-        String answer = "1234";
-        QuizViewModel model = super.setup(testRule, new QuestionFragment(), answer);
-        model.getFocusedQuestion().postValue(0);
-
-        //        MatrixFragment matrixFragment = (MatrixFragment)
-        // testRule.getActivity().getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
-        //
-        //        int id = matrixFragment.getId(0,0);
-        //
-        //        onView(withId(id)).check(matches(withText(answer)));
     }
 }

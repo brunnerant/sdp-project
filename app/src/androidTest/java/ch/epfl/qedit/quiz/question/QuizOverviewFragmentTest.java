@@ -28,11 +28,11 @@ public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
 
     @Rule
     public final FragmentTestRule<?, QuizOverviewFragment> testRule =
-            FragmentTestRule.create(QuizOverviewFragment.class, false, false);
+            FragmentTestRule.create(QuizOverviewFragment.class, false);
 
     @Before
     public void setup() {
-        model = super.setup(testRule, new QuizOverviewFragment(), null);
+        model = super.setup(testRule, new QuizOverviewFragment());
     }
 
     @After

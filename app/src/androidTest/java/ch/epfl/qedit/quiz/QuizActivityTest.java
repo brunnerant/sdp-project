@@ -24,10 +24,13 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.answer.AnswerModel;
+import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.Arrays;
+import java.util.HashMap;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Assert;
@@ -40,6 +43,8 @@ import org.junit.runner.RunWith;
 public class QuizActivityTest {
     private QuizViewModel model;
     private final Integer zero = 0;
+    private String answer1 = "1234";
+    private String answer2 = "5678";
 
     @Rule
     public final IntentsTestRule<QuizActivity> testRule =
@@ -62,6 +67,16 @@ public class QuizActivityTest {
 
         model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
         model.setQuiz(quiz);
+
+        final MatrixModel matrixModel = new MatrixModel(1, 1);
+        matrixModel.updateAnswer(0, 0, answer1);
+        model.getAnswers()
+                .postValue(
+                        new HashMap<Integer, AnswerModel>() {
+                            {
+                                put(0, matrixModel);
+                            }
+                        });
     }
 
     @After
@@ -139,7 +154,8 @@ public class QuizActivityTest {
     }
 
     @Test
-    public void testAnswersAreRestored() { // TODO
+    public void testAnswersAreRestored() throws InterruptedException {
+        onView(withId(R.id.next)).perform(click());
         onView(withId(R.id.next)).perform(click());
 
         MatrixFragment matrixFragment =
@@ -149,10 +165,30 @@ public class QuizActivityTest {
                                 .findFragmentByTag(FRAGMENT_TAG);
         int id = matrixFragment.getId(0, 0);
 
-        String answer = "1234";
-        onView(withId(id)).perform((typeText(answer))).perform(closeSoftKeyboard());
-        onView(withId(R.id.next)).perform(click());
+        onView(withId(id)).perform((typeText(answer2))).perform(closeSoftKeyboard());
         onView(withId(R.id.previous)).perform(click());
-        // onView(withId(id)).check(matches(withText(answer)));
+        onView(withId(R.id.next)).perform(click());
+
+        matrixFragment =
+                (MatrixFragment)
+                        testRule.getActivity()
+                                .getSupportFragmentManager()
+                                .findFragmentByTag(FRAGMENT_TAG);
+        id = matrixFragment.getId(0, 0);
+
+        onView(withId(id)).check(matches(withText(answer2)));
+    }
+
+    @Test
+    public void testAnswerIsLoadedFromQuizViewModel() {
+        onView(withId(R.id.next)).perform(click());
+
+        MatrixFragment matrixFragment =
+                (MatrixFragment)
+                        testRule.getActivity()
+                                .getSupportFragmentManager()
+                                .findFragmentByTag(FRAGMENT_TAG);
+        int id = matrixFragment.getId(0, 0);
+        onView(withId(id)).check(matches(withText(answer1)));
     }
 }

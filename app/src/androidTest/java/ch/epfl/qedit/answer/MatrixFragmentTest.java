@@ -25,6 +25,7 @@ import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,21 +34,26 @@ import org.junit.runner.RunWith;
 public class MatrixFragmentTest {
     private final int MATRIX_DIM = 3;
     private QuizViewModel quizViewModel;
+    private String answer = "1234";
 
     @Rule
     public final FragmentTestRule<?, MatrixFragment> testRule =
             FragmentTestRule.create(MatrixFragment.class, false, false);
 
+    @Before
     public void init() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_FORMAT, new MatrixFormat(MATRIX_DIM, MATRIX_DIM));
-        bundle.putSerializable(ANSWER_MODEL, new MatrixModel(MATRIX_DIM, MATRIX_DIM));
+        final MatrixModel matrixModel = new MatrixModel(MATRIX_DIM, MATRIX_DIM);
+        matrixModel.updateAnswer(MATRIX_DIM - 1, MATRIX_DIM - 1, answer);
+        bundle.putSerializable(ANSWER_MODEL, matrixModel);
 
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
 
         quizViewModel = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
         quizViewModel.setQuiz(Util.createMockQuiz("Title"));
+        quizViewModel.getFocusedQuestion().postValue(0);
 
         testRule.launchFragment(matrixFragment);
     }
@@ -59,13 +65,11 @@ public class MatrixFragmentTest {
 
     @Test
     public void testTableIsDisplayed() {
-        init();
         onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testFieldsAreDisplayed() {
-        init();
         for (int i = 0; i < MATRIX_DIM; ++i) {
             for (int j = 0; j < MATRIX_DIM; ++j) {
                 onView(withId(testRule.getFragment().getId(i, j))).check(matches(isDisplayed()));
@@ -75,10 +79,11 @@ public class MatrixFragmentTest {
 
     @Test
     public void testFieldsAreEmptyAtFirst() {
-        init();
         for (int i = 0; i < MATRIX_DIM; ++i) {
             for (int j = 0; j < MATRIX_DIM; ++j) {
-                onView(withId(testRule.getFragment().getId(i, j))).check(matches(withText("")));
+                if (i != MATRIX_DIM - 1 || j != MATRIX_DIM - 1) {
+                    onView(withId(testRule.getFragment().getId(i, j))).check(matches(withText("")));
+                }
             }
         }
     }
@@ -93,65 +98,43 @@ public class MatrixFragmentTest {
 
     @Test
     public void testCanEnterNumbersInFields() {
-        init();
-        type("1232", "1232");
+        type(answer, answer);
     }
 
     @Test
     public void testCanOnlyHaveOneMinusSign() {
-        init();
         type("--12", "-12");
     }
 
     @Test
     public void testCanOnlyHaveOneDecimalPoint() {
-        init();
         type("23..2", "23.2");
     }
 
     @Test
     public void testCantEnterMoreDigitsThanMaxCharacters() {
         // MaxCharacters = 5 by default
-        init();
         type("123456", "12345");
     }
 
     @Test
     public void testAnswerIsSavedInQuizViewModel() {
-        init();
-        quizViewModel.getFocusedQuestion().postValue(0);
         assertNull(quizViewModel.getAnswers().getValue().get(0));
 
         int id = testRule.getFragment().getId(0, 0);
         onView(withId(id)).perform(click());
-        onView(withId(id)).perform((typeText("1232"))).perform(closeSoftKeyboard());
+
+        onView(withId(id)).perform((typeText(answer))).perform(closeSoftKeyboard());
 
         assertNotNull(quizViewModel.getAnswers().getValue().get(0));
         assertEquals(
-                "1232",
+                answer,
                 ((MatrixModel) quizViewModel.getAnswers().getValue().get(0)).getAnswer(0, 0));
     }
 
     @Test
     public void testAnswerIsLoadedFromModel() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ANSWER_FORMAT, new MatrixFormat(MATRIX_DIM, MATRIX_DIM));
-        final MatrixModel matrixModel = new MatrixModel(MATRIX_DIM, MATRIX_DIM);
-        matrixModel.updateAnswer(0, 0, "1232");
-        bundle.putSerializable(ANSWER_MODEL, matrixModel);
-
-        MatrixFragment matrixFragment = new MatrixFragment();
-        matrixFragment.setArguments(bundle);
-
-        quizViewModel = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
-        quizViewModel.setQuiz(Util.createMockQuiz("Title"));
-
-        testRule.launchFragment(matrixFragment);
-
-        quizViewModel.getFocusedQuestion().postValue(0);
-
-        int id = testRule.getFragment().getId(0, 0);
-
-        onView(withId(id)).check(matches(withText("1232")));
+        int id = testRule.getFragment().getId(MATRIX_DIM - 1, MATRIX_DIM - 1);
+        onView(withId(id)).check(matches(withText(answer)));
     }
 }
