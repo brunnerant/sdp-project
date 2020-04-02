@@ -22,6 +22,7 @@
         android:imeOptions="actionDone"
         android:inputType="text"
         android:maxLines="1"
+        android:backgroundTint="@color/colorLoginBar"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toStartOf="@+id/login_button"
         app:layout_constraintHorizontal_bias="1.0"
@@ -29,7 +30,6 @@
         app:layout_constraintTop_toBottomOf="@+id/qedit_logo" />
 
     <Button style="@style/Widget.AppCompat.Button.Colored"
-        android:background="@color/colorButton"
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

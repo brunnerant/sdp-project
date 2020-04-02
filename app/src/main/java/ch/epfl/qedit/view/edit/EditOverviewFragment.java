@@ -4,15 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
-import ch.epfl.qedit.view.quiz.QuestionFragment;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.util.ListEditView;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
@@ -21,9 +18,9 @@ import java.util.List;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
-    private RecyclerView recyclerView;
     private List<Question> questions;
     private int numQuestions;
+    private ListEditView.Adapter<Question> adapter;
 
     @Override
     public View onCreateView(
@@ -32,8 +29,8 @@ public class EditOverviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
 
         // Retrieve and configure the recycler view
-        final ListEditView listEditView = view.findViewById(R.id.question_list);
-        final ListEditView.ListEditAdapter adapter = createAdapter();
+        ListEditView listEditView = view.findViewById(R.id.question_list);
+        createAdapter();
         listEditView.setAdapter(adapter);
 
         final QuizViewModel model =
@@ -50,7 +47,7 @@ public class EditOverviewFragment extends Fragment {
                                 adapter.addItem(
                                         new Question(
                                                 "Q" + numQuestions,
-                                                "is it " + numQuestions + " ?",
+                                                "is it " + numQuestions + "?",
                                                 new MatrixFormat(1, 1)));
                             }
                         });
@@ -68,24 +65,38 @@ public class EditOverviewFragment extends Fragment {
         return view;
     }
 
-    private ListEditView.ListEditAdapter createAdapter() {
+    private void createAdapter() {
+        addDummyQuestions();
+
+        // Create an adapter for the question list
+        adapter =
+                new ListEditView.Adapter<>(
+                        questions,
+                        new ListEditView.GetItemText<Question>() {
+                            @Override
+                            public String getText(Question item) {
+                                return item.getTitle();
+                            }
+                        });
+
+        adapter.setItemListener(
+                new ListEditView.ItemListener() {
+                    @Override
+                    public void onItemEvent(int position, ListEditView.EventType type) {
+                        if (type == ListEditView.EventType.RemoveRequest)
+                            adapter.removeItem(position);
+                    }
+                });
+    }
+
+    private void addDummyQuestions() {
         // For now, we just add dummy questions to the quiz
         questions = new LinkedList<>();
         for (numQuestions = 0; numQuestions < 5; numQuestions++)
             questions.add(
                     new Question(
                             "Q" + (numQuestions + 1),
-                            "is it " + (numQuestions + 1) + " ?",
+                            "is it " + (numQuestions + 1) + "?",
                             new MatrixFormat(1, 1)));
-
-        // Create an adapter for the question list
-        return new ListEditView.ListEditAdapter<>(
-                questions,
-                new ListEditView.GetItemText<Question>() {
-                    @Override
-                    public String getText(Question item) {
-                        return item.getTitle();
-                    }
-                });
     }
 }

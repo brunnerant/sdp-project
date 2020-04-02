@@ -86,7 +86,6 @@ public class LoginActivityLanguageTest {
 
     @Test
     public void testChangeLanguageFrench() {
-        //noinspection SpellCheckingInspection
         testChangeLanguage("Français", "fr", "Connexion", "Langue changée en Français");
     }
 }

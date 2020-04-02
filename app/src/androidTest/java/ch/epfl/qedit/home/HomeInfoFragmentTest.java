@@ -18,6 +18,10 @@ public class HomeInfoFragmentTest extends HomeFragmentsTestUsingDB {
     public final FragmentTestRule<?, HomeInfoFragment> testRule =
             FragmentTestRule.create(HomeInfoFragment.class, false, false);
 
+    public HomeInfoFragmentTest() {
+        super(0);
+    }
+
     @Before
     public void setup() {
         setup(testRule, new HomeInfoFragment());

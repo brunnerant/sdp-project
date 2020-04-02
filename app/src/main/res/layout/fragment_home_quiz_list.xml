@@ -6,16 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".view.quiz.QuizOverviewFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ch.epfl.qedit.view.util.ListEditView
         android:id="@+id/home_quiz_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
-<!--    <ListView-->
-<!--        android:id="@+id/home_quiz_list"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-<!--    </ListView>-->
     <ProgressBar
         android:id="@+id/quiz_loading"
         style="?android:attr/progressBarStyle"

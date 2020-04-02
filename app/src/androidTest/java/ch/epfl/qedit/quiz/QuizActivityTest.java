@@ -48,7 +48,7 @@ public class QuizActivityTest {
                         Arrays.asList(
                                 new Question("Banane", "How many?", "matrix1x1"),
                                 new Question("Vector", "Fill this Vector!", "matrix7x1")));
-        bundle.putSerializable(HomeQuizListFragment.QUIZID, quiz);
+        bundle.putSerializable(HomeQuizListFragment.QUIZ_ID, quiz);
         intent.putExtras(bundle);
 
         testRule.launchActivity(intent);
