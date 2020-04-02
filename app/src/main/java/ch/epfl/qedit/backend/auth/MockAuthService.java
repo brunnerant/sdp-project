@@ -21,9 +21,7 @@ public class MockAuthService implements AuthenticationService {
                     //noinspection SpellCheckingInspection
                     put("fjd4ywnzcCcLHaVb7oKg", Response.<User>error(CONNECTION_ERROR));
                     //noinspection SpellCheckingInspection
-                    put(
-                            "fjd4ywnzXCXLHaVb7oKg",
-                            Response.ok(new User("Marcel", "Doe", User.Role.Participant)));
+                    put("fjd4ywnzXCXLHaVb7oKg", Response.ok(createMarcel()));
                     //noinspection SpellCheckingInspection
                     put("R4rXRVU3EMkgm5YEW52Q", Response.ok(createCosme()));
                     put("v5ns9OMqV4hH7jwD8S5w", Response.ok(createAnthony()));
@@ -57,6 +55,13 @@ public class MockAuthService implements AuthenticationService {
 
     public IdlingResource getIdlingResource() {
         return idlingResource;
+    }
+
+    private User createMarcel() {
+        User marcel = new User("Marcel", "Doe", User.Role.Participant);
+        marcel.addQuiz("quiz0", "Qualification EPFL");
+
+        return marcel;
     }
 
     private User createCosme() {
