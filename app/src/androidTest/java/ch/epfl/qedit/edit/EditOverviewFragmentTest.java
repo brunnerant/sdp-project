@@ -4,7 +4,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.*;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -27,11 +26,11 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         super(R.id.question_list);
     }
 
-    public void checkText(int position, String text) {
+    private void checkText(int position, String text) {
         itemView(position, android.R.id.text1).check(matches(withText(text)));
     }
 
-    public void assertOverlayAt(int position, int size) {
+    private void assertOverlayAt(int position, int size) {
         for (int i = 0; i < size; i++) {
             if (i == position) overlay(i).check(matches(isDisplayed()));
             else overlay(i).check(matches(not(isDisplayed())));

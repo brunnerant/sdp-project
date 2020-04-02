@@ -11,24 +11,24 @@ import ch.epfl.qedit.R;
 public class RecyclerViewHelpers {
     private int recyclerViewId;
 
-    public RecyclerViewHelpers(int recyclerViewId) {
+    protected RecyclerViewHelpers(int recyclerViewId) {
         this.recyclerViewId = recyclerViewId;
     }
 
-    public void scrollTo(int position) {
+    protected void scrollTo(int position) {
         onView(withId(recyclerViewId)).perform(scrollToPosition(position));
     }
 
-    public ViewInteraction itemView(int position, int id) {
+    protected ViewInteraction itemView(int position, int id) {
         scrollTo(position);
         return onView(withRecyclerView(recyclerViewId).atPositionOnView(position, id));
     }
 
-    public ViewInteraction overlay(int position) {
+    protected ViewInteraction overlay(int position) {
         return itemView(position, R.id.overlay_buttons);
     }
 
-    public ViewInteraction item(int position) {
+    protected ViewInteraction item(int position) {
         scrollTo(position);
         return onView(withRecyclerView(recyclerViewId).atPosition(position));
     }

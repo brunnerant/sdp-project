@@ -47,7 +47,6 @@ public class EditTextDialog extends DialogFragment {
 
     private SubmissionListener listener;
     private TextFilter textFilter = NO_FILTER;
-    private String message;
     private EditText editText;
     private AlertDialog dialog;
 
@@ -119,7 +118,7 @@ public class EditTextDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
-        message = args.getString("message");
+        String message = args.getString("message");
         listener = (SubmissionListener) args.getSerializable("listener");
 
         dialog =

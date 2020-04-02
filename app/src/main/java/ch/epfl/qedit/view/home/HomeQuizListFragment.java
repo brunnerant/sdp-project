@@ -205,6 +205,6 @@ public class HomeQuizListFragment extends Fragment
     // This method will be called when the user confirms the addition by clicking "yes"
     @Override
     public void onSubmit(String text) {
-        listAdapter.addItem(new AbstractMap.SimpleEntry<String, String>("key", text));
+        listAdapter.addItem(new AbstractMap.SimpleEntry<>("key", text));
     }
 }

@@ -84,6 +84,6 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
         intended(
                 allOf(
                         hasComponent(QuizActivity.class.getName()),
-                        hasExtra(equalTo(HomeQuizListFragment.QUIZID), instanceOf(Quiz.class))));
+                        hasExtra(equalTo(HomeQuizListFragment.QUIZ_ID), instanceOf(Quiz.class))));
     }
 }

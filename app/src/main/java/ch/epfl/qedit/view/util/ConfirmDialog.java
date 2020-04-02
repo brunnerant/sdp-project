@@ -22,7 +22,6 @@ public class ConfirmDialog extends DialogFragment {
     }
 
     private ConfirmationListener listener;
-    private String message;
 
     private ConfirmDialog() {}
 
@@ -49,7 +48,7 @@ public class ConfirmDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
-        message = args.getString("message");
+        String message = args.getString("message");
         listener = (ConfirmationListener) args.getSerializable("listener");
 
         return new AlertDialog.Builder(getActivity())

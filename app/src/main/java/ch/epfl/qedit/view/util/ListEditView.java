@@ -249,7 +249,6 @@ public class ListEditView extends RecyclerView {
                 notifyItemChanged(pos);
                 notifyItem(pos, EventType.Select);
             }
-            ;
         }
 
         @NonNull
