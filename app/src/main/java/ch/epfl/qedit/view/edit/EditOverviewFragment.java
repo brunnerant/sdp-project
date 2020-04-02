@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.answer.MatrixFormat;
-import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ListEditView;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.LinkedList;
@@ -94,9 +93,7 @@ public class EditOverviewFragment extends Fragment {
         getActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(
-                        id,
-                        new EditQuestionFragment())
+                .replace(id, new EditQuestionFragment())
                 .commit();
     }
 
