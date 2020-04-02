@@ -15,11 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import java.util.ArrayList;
 
 public class MatrixFragment extends Fragment {
-    public static final String MATRIXID = "ch.epfl.qedit.view.answer.MATRIXID";
+    public static final String MATRIX_ID = "ch.epfl.qedit.view.answer.MATRIX_ID";
     private TableLayout tableLayout;
     private MatrixFormat matrixFormat;
 
@@ -30,7 +30,7 @@ public class MatrixFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        matrixFormat = (MatrixFormat) getArguments().getSerializable(MATRIXID);
+        matrixFormat = (MatrixFormat) getArguments().getSerializable(MATRIX_ID);
     }
 
     @Override

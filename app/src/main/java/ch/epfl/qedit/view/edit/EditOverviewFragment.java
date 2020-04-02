@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.util.ListEditView;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class EditOverviewFragment extends Fragment {
                                 adapter.addItem(
                                         new Question(
                                                 "Q" + numQuestions,
-                                                "is it " + numQuestions + " ?",
+                                                "is it " + numQuestions + "?",
                                                 new MatrixFormat(1, 1)));
                             }
                         });
@@ -78,7 +78,7 @@ public class EditOverviewFragment extends Fragment {
             questions.add(
                     new Question(
                             "Q" + (numQuestions + 1),
-                            "is it " + (numQuestions + 1) + " ?",
+                            "is it " + (numQuestions + 1) + "?",
                             new MatrixFormat(1, 1)));
     }
 }

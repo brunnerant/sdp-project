@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
@@ -63,7 +63,7 @@ public class QuestionFragment extends Fragment {
         MatrixFragment matrixFragment = new MatrixFragment();
         MatrixFormat matrixFormat = (MatrixFormat) question.getFormat();
         Bundle newB = new Bundle();
-        newB.putSerializable(MatrixFragment.MATRIXID, matrixFormat);
+        newB.putSerializable(MatrixFragment.MATRIX_ID, matrixFormat);
         matrixFragment.setArguments(newB);
 
         // And dynamically instantiate the answer form

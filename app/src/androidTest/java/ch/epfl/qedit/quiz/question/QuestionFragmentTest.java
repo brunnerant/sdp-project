@@ -50,7 +50,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
         onView(withId(R.id.question_title))
                 .check(matches(withText("Question 1 - The matches problem")));
         onView(withId(R.id.question_display))
-                .check(matches(withText("How many matches can fit in a shoe of size 43 ?")));
+                .check(matches(withText("How many matches can fit in a shoe of size 43?")));
         onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
     }
 }

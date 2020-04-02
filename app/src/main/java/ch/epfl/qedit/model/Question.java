@@ -1,5 +1,6 @@
 package ch.epfl.qedit.model;
 
+import ch.epfl.qedit.model.answer.AnswerFormat;
 import java.io.Serializable;
 import java.util.Objects;
 
