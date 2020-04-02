@@ -34,6 +34,7 @@ public class EditQuestionFragment extends Fragment {
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         observeModelOnEdit(model);
+
         return v;
     }
 
@@ -51,6 +52,9 @@ public class EditQuestionFragment extends Fragment {
 
     /** Handles the transition from one question to another */
     private void editOnQuestionChanged(Quiz quiz, Integer index) {
+        if (index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size()) {
+            return;
+        }
         Question question = quiz.getQuestions().get(index);
 
         // We have to change the question title and text

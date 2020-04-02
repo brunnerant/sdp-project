@@ -4,12 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.MatrixFormat;
 import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ListEditView;
+import ch.epfl.qedit.viewmodel.QuizViewModel;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,9 +32,13 @@ public class EditOverviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
 
         // Retrieve and configure the recycler view
-        ListEditView listEditView = view.findViewById(R.id.question_list);
+        final ListEditView listEditView = view.findViewById(R.id.question_list);
         final ListEditView.ListEditAdapter adapter = createAdapter();
         listEditView.setAdapter(adapter);
+
+        final QuizViewModel model =
+                new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        //setupListView(model.getQuiz());
 
         // Configure the add button
         view.findViewById(R.id.add_question_button)
@@ -44,6 +54,16 @@ public class EditOverviewFragment extends Fragment {
                                                 new MatrixFormat(1, 1)));
                             }
                         });
+
+//        view.findViewById(R.id.edit_button).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getActivity().getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.question_details_container, new EditQuestionFragment())
+//                        .commit();
+//            }
+//        });
 
         return view;
     }

@@ -80,6 +80,7 @@ public class ListEditView extends RecyclerView {
             int previousQuestion = selectedQuestion;
             selectedQuestion = getLayoutPosition();
 
+            System.out.println("Here");
             if (previousQuestion == selectedQuestion) {
                 selectedQuestion = NO_POSITION;
                 adapter.notifyItemChanged(previousQuestion);
