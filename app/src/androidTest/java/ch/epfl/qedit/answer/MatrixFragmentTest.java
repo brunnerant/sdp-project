@@ -24,7 +24,6 @@ import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -62,14 +61,6 @@ public class MatrixFragmentTest {
     @After
     public void cleanup() {
         testRule.finishActivity();
-    }
-
-    private void lockWait(long time) { // TODO
-        try {
-            lock.await(time, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test

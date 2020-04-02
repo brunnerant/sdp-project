@@ -28,7 +28,7 @@ public class QuizFragmentsTestUsingDB {
         QuizViewModel model =
                 new ViewModelProvider((ViewModelStoreOwner) testRule.getActivity())
                         .get(QuizViewModel.class);
-        // model.setQuiz(Util.createMockQuiz("Test")); TODO
+
         model.setQuiz(
                 new Quiz(
                         "Test",

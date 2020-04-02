@@ -55,7 +55,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
     }
 
     @Test
-    public void testAnswerFormatDispatch() { // TODO
+    public void testAnswerFormatDispatch() {
         model.getFocusedQuestion().postValue(0);
         onView(withId(R.id.question_title))
                 .check(matches(withText("Question 1 - The matches problem")));

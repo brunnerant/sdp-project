@@ -29,17 +29,4 @@ public class QuizViewModel extends ViewModel {
     public MutableLiveData<HashMap<Integer, AnswerModel>> getAnswers() {
         return Answers;
     }
-
-    /*private final MutableLiveData<HashMap<Integer, HashMap<Integer, Float>>> Answers =
-            new MutableLiveData<>(new HashMap<Integer, HashMap<Integer, Float>>()); //TODO
-
-    public void initializeAnswersMap() {
-        for (int i = 0; i < quiz.getValue().getQuestions().size(); i++) {
-            Answers.getValue().put(i, new HashMap<Integer, Float>());
-        }
-    }
-
-    public MutableLiveData<HashMap<Integer, HashMap<Integer, Float>>> getAnswers() {
-        return Answers;
-    }*/
 }
