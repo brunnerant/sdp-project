@@ -48,7 +48,7 @@ public class EditOverviewFragment extends Fragment {
     }
 
     private void createAdapter() {
-        addDumyQuestions();
+        addDummyQuestions();
 
         // Create an adapter for the question list
         adapter =
@@ -71,7 +71,7 @@ public class EditOverviewFragment extends Fragment {
                 });
     }
 
-    private void addDumyQuestions() {
+    private void addDummyQuestions() {
         // For now, we just add dummy questions to the quiz
         questions = new LinkedList<>();
         for (numQuestions = 0; numQuestions < 5; numQuestions++)

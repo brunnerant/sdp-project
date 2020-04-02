@@ -30,7 +30,7 @@ public class ConfirmDialog extends DialogFragment {
      * constructors that take arguments.
      *
      * @param message the confirmation message to display
-     * @param listener the listener that gets notified once confirmation occured
+     * @param listener the listener that gets notified once confirmation occurred
      * @return a new dialog
      */
     public static ConfirmDialog create(String message, ConfirmationListener listener) {

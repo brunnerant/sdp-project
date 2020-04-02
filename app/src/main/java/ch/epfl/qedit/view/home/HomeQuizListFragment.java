@@ -139,7 +139,7 @@ public class HomeQuizListFragment extends Fragment
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    // This method will be called when an item of the topbar is clicked on
+    // This method will be called when an item of the top bar is clicked on
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {

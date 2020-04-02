@@ -55,8 +55,8 @@ public class ListEditView extends RecyclerView {
          * This handles an event on a specific item of the list. Note that in case an item is
          * deselected, position will be -1.
          *
-         * @param position the position of the item on which the event occured
-         * @param type the type of event that occured
+         * @param position the position of the item on which the event occurred
+         * @param type the type of event that occurred
          */
         void onItemEvent(int position, EventType type);
     }
