@@ -68,6 +68,7 @@ public class MockAuthService implements AuthenticationService {
 
     private User createAnthony() {
         User anthony = new User("Anthony", "Iozzia", User.Role.Administrator);
+        anthony.addQuiz("quiz0", "Quiz 0");
         anthony.addQuiz("quiz1", "Quiz 1");
         anthony.addQuiz("quiz2", "Quiz 2");
         anthony.addQuiz("quiz3", "Quiz 3");

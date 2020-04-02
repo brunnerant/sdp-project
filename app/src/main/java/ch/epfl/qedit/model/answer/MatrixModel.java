@@ -7,14 +7,14 @@ public class MatrixModel extends AnswerModel {
     public MatrixModel(int numberOfColumns, int numberOfRows) {
         matrix = new String[numberOfRows][numberOfColumns];
 
-        for (String[] row : matrix) {
-            for (String elem : row) {
-                elem = "";
+        for (int i = 0; i < numberOfRows; ++i) {
+            for (int j = 0; j < numberOfColumns; ++j) {
+                matrix[i][j] = "";
             }
         }
     }
 
-    public void updateAnswer(int row, int col, String newValue) {
+    public void updateAnswer(int row, int col, String newValue) throws IndexOutOfBoundsException {
         if (row < matrix.length && col < matrix[row].length) {
             matrix[row][col] = newValue;
         } else {
@@ -22,7 +22,7 @@ public class MatrixModel extends AnswerModel {
         }
     }
 
-    public String getAnswer(int row, int col) {
+    public String getAnswer(int row, int col) throws IndexOutOfBoundsException {
         if (row < matrix.length && col < matrix[row].length) {
             return matrix[row][col];
         } else {

@@ -93,7 +93,10 @@ public class MatrixFragment extends Fragment {
                             CharSequence s, int start, int count, int after) {}
 
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
                         // Update the value in the model
                         matrixModel.updateAnswer(row, col, editText.getText().toString());
 
@@ -102,9 +105,6 @@ public class MatrixFragment extends Fragment {
                         map.remove(quizViewModel.getFocusedQuestion().getValue());
                         map.put(quizViewModel.getFocusedQuestion().getValue(), matrixModel);
                     }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {}
                 });
     }
 

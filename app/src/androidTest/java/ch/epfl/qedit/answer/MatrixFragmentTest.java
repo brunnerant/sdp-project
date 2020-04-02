@@ -10,6 +10,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
 import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
 
 import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +35,7 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MatrixFragmentTest {
     private final int MATRIX_DIM = 3;
+    private QuizViewModel quizViewModel;
 
     @Rule
     public final FragmentTestRule<?, MatrixFragment> testRule =
@@ -49,9 +53,8 @@ public class MatrixFragmentTest {
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
 
-        QuizViewModel model =
-                new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
-        model.setQuiz(Util.createMockQuiz("Title"));
+        quizViewModel = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+        quizViewModel.setQuiz(Util.createMockQuiz("Title"));
 
         testRule.launchFragment(matrixFragment);
     }
@@ -111,5 +114,20 @@ public class MatrixFragmentTest {
     public void testCantEnterMoreDigitsThanMaxCharacters() {
         // MaxCharacters = 5 by default
         type("123456", "12345");
+    }
+
+    @Test
+    public void testAnswerIsSavedInQuizViewModel() {
+        quizViewModel.getFocusedQuestion().postValue(0);
+        assertNull(quizViewModel.getAnswers().getValue().get(0));
+
+        int id = testRule.getFragment().getId(0, 0);
+        onView(withId(id)).perform(click());
+        onView(withId(id)).perform((typeText("1232"))).perform(closeSoftKeyboard());
+
+        assertNotNull(quizViewModel.getAnswers().getValue().get(0));
+        assertEquals(
+                "1232",
+                ((MatrixModel) quizViewModel.getAnswers().getValue().get(0)).getAnswer(0, 0));
     }
 }

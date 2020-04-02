@@ -40,8 +40,6 @@ public abstract class AnswerFormat implements Visitable<AnswerFormat.Visitor>, S
         void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat);
     }
 
-    // public abstract AnswerModel getModel(); //TODO
-
     /**
      * Uses the visitor pattern for dispatching between the different AnswerModels and returns a new
      * one which goes with the concrete type of the AnswerFormat
