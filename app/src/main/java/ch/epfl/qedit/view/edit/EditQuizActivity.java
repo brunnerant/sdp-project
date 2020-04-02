@@ -36,11 +36,12 @@ public class EditQuizActivity extends AppCompatActivity {
     private void tempQuiz() {
         List<Question> q_en =
                 Arrays.asList(
-                        new Question("Banana", "How many bananas are there on Earth?", "matrix1x1"),
-                        new Question("Apple", "How many apples are there on Earth?", "matrix1x1"),
-                        new Question("Vector", "Give a unit vector.", "matrix1x3"),
-                        new Question("Operation", "What is the results of 1 + 10?", "matrix1x1"),
-                        new Question("Matrix", "Fill this matrix.", "matrix3x3"));
+                        new Question(
+                                "Bananas", "How many bananas are there on Earth?!", "matrix1x1"),
+                        new Question("Apples", "How many apples are there on Earth?!", "matrix1x1"),
+                        new Question("Vectors", "Give a unit vector.", "matrix1x3"),
+                        new Question("Operations", "What is the results of 1 + 10?!", "matrix1x1"),
+                        new Question("Matrices", "Fill those matrix !", "matrix3x3"));
 
         quiz = new Quiz("I am a Mock Quiz!", q_en);
     }
