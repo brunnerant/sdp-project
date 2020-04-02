@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ListEditView;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.LinkedList;
@@ -73,14 +74,17 @@ public class EditOverviewFragment extends Fragment {
                     public void onItemEvent(int position, ListEditView.EventType type) {
                         switch (type) {
                             case Select:
-                                setFragment(R.id.question_details_container);
+                                setFragment(
+                                        R.id.question_details_container, new QuestionFragment());
                                 model.getFocusedQuestion().postValue(position);
                                 break;
                             case RemoveRequest:
                                 adapter.removeItem(position);
                                 break;
                             case EditRequest:
-                                setFragment(R.id.question_details_container);
+                                setFragment(
+                                        R.id.question_details_container,
+                                        new EditQuestionFragment());
                                 break;
                             default:
                                 break;
@@ -89,12 +93,8 @@ public class EditOverviewFragment extends Fragment {
                 });
     }
 
-    private void setFragment(int id) {
-        getActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .replace(id, new EditQuestionFragment())
-                .commit();
+    private void setFragment(int id, Fragment fragment) {
+        getActivity().getSupportFragmentManager().beginTransaction().replace(id, fragment).commit();
     }
 
     private void addDummyQuestions() {
