@@ -34,7 +34,7 @@ public class QuizActivity extends AppCompatActivity {
         quiz =
                 (Quiz)
                         Objects.requireNonNull(intent.getExtras())
-                                .getSerializable(HomeQuizListFragment.QUIZID);
+                                .getSerializable(HomeQuizListFragment.QUIZ_ID);
 
         model = new ViewModelProvider(this).get(QuizViewModel.class);
         model.setQuiz(quiz);

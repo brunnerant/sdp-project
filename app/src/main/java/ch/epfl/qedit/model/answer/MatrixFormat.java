@@ -1,4 +1,4 @@
-package ch.epfl.qedit.model;
+package ch.epfl.qedit.model.answer;
 
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.util.regex.Matcher;
@@ -13,10 +13,15 @@ public class MatrixFormat extends AnswerFormat {
     private int tableColumnsNumber = 1;
     private int maxCharacters = 5;
     private String hintString;
-    private String id = MatrixFragment.MATRIXID;
+    private String id = MatrixFragment.MATRIX_ID;
 
     public MatrixFormat(int tableColumnsNumber, int tableRowsNumber) {
-        super();
+        this(null, tableColumnsNumber, tableRowsNumber);
+    }
+
+    /** Allow to set a text to the matrix answer format */
+    public MatrixFormat(String text, int tableColumnsNumber, int tableRowsNumber) {
+        super(text);
         this.tableRowsNumber = tableRowsNumber;
         this.tableColumnsNumber = tableColumnsNumber;
         this.hintString = hint();
@@ -28,15 +33,13 @@ public class MatrixFormat extends AnswerFormat {
             boolean hasDecimal,
             boolean hasSign,
             int maxCharacters) {
-        this.tableColumnsNumber = tableColumnsNumber;
-        this.tableRowsNumber = tableRowsNumber;
+        this(tableColumnsNumber, tableRowsNumber);
         this.hasDecimal = hasDecimal;
         this.hasSign = hasSign;
         this.maxCharacters = maxCharacters;
-        this.hintString = hint();
     }
 
-    public static MatrixFormat parse(String format) {
+    public static MatrixFormat parse(String format, String text) {
         /** Match format: 'matrixNxM' where N and M are [0-9]+ */
         if (Pattern.compile("^(\\s*)matrix(\\d+)x(\\d+)(\\s*)$").matcher(format).find()) {
             /** Extract the row and column size */
@@ -45,7 +48,7 @@ public class MatrixFormat extends AnswerFormat {
             int i = Integer.parseInt(number.group(1));
             number.find();
             int j = Integer.parseInt(number.group(1));
-            return new MatrixFormat(i, j);
+            return new MatrixFormat(text, i, j);
         } else {
             return null;
         }
@@ -53,7 +56,8 @@ public class MatrixFormat extends AnswerFormat {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof MatrixFormat) {
+
+        if (super.equals(o) && o instanceof MatrixFormat) {
             MatrixFormat other = (MatrixFormat) o;
             return this.hasDecimal == other.hasDecimal
                     && this.hasSign == other.hasSign

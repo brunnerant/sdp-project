@@ -39,7 +39,7 @@ public class HomeQuizListFragmentTest { // extends HomeFragmentsTestUsingDB {
     //        intended(
     //                allOf(
     //                        hasComponent(QuizActivity.class.getName()),
-    //                        hasExtra(equalTo(HomeQuizListFragment.QUIZID),
+    //                        hasExtra(equalTo(HomeQuizListFragment.QUIZ_ID),
     // instanceOf(Quiz.class))));
     //    }
 }

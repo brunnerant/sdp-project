@@ -1,4 +1,5 @@
-/*package ch.epfl.qedit;
+/*
+package ch.epfl.qedit;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -111,7 +112,7 @@ public class HomePopUpTest {
     private User createUser() {
         User user = new User("Role", "Editor", User.Role.Editor);
         user.addQuiz("quiz0", "Qualification EPFL");
-        user.addQuiz("quiz1", "qual EPFL");
+        user.addQuiz("quiz1", "Qualification EPFL 2");
         return user;
     }
 }
