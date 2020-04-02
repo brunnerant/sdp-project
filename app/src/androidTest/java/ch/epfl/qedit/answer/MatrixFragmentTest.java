@@ -23,7 +23,6 @@ import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
-import java.util.concurrent.CountDownLatch;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,7 +31,6 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MatrixFragmentTest {
-    private CountDownLatch lock = new CountDownLatch(1);
     private final int MATRIX_DIM = 3;
 
     @Rule

@@ -63,17 +63,22 @@ public class QuestionFragment extends Fragment {
         questionTitle.setText(questionTitleStr);
         questionDisplay.setText(question.getText());
 
+        // Get the AnswerFormat of the question
         AnswerFormat answerFormat = quiz.getQuestions().get(index).getFormat();
+
+        // Check if the model already holds an AnswerModel for this question and create a new using
+        // if there is none
         AnswerModel answerModel =
                 model.getAnswers().getValue().containsKey(index)
                         ? model.getAnswers().getValue().get(index)
-                        : answerFormat.emptyAnswerModel();
+                        : answerFormat.getNewAnswerModel();
 
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_FORMAT, answerFormat);
         bundle.putSerializable(ANSWER_MODEL, answerModel);
 
-        Fragment fragment = answerFormat.getFragment();
+        // Get the fragment that matches the concrete type of AnswerFormat
+        Fragment fragment = answerFormat.getNewFragment();
         fragment.setArguments(bundle);
 
         // And dynamically instantiate the answer form

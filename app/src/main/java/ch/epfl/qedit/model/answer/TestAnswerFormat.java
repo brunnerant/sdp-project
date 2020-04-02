@@ -1,5 +1,6 @@
 package ch.epfl.qedit.model.answer;
 
+/** Only for test purposes */
 public class TestAnswerFormat extends AnswerFormat {
     public TestAnswerFormat(String text) {
         super(text);

@@ -59,6 +59,8 @@ public class MatrixFragment extends Fragment {
         requireActivity()
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        // Initialize EditTexts
         for (int i = 0; i < matrixFormat.getTableRowsNumber(); ++i) {
             TableRow t = new TableRow(requireActivity());
             arrayButtons.add(new ArrayList<EditText>());
@@ -66,6 +68,8 @@ public class MatrixFragment extends Fragment {
             tableRow.add(t);
             for (int j = 0; j < matrixFormat.getTableColumnsNumber(); ++j) {
                 EditText editText = newEditText(i);
+
+                // Get the entries stored in the model
                 editText.setText(matrixModel.getAnswer(i, j));
                 addTextWatcher(editText, i, j);
                 arrayButtons.get(i).add(editText);
@@ -89,16 +93,18 @@ public class MatrixFragment extends Fragment {
                             CharSequence s, int start, int count, int after) {}
 
                     @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        // Update the value in the model
                         matrixModel.updateAnswer(row, col, editText.getText().toString());
+
+                        // and update the AnswerModel stored in the QuizViewModel
                         HashMap<Integer, AnswerModel> map = quizViewModel.getAnswers().getValue();
                         map.remove(quizViewModel.getFocusedQuestion().getValue());
                         map.put(quizViewModel.getFocusedQuestion().getValue(), matrixModel);
                     }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {}
                 });
     }
 

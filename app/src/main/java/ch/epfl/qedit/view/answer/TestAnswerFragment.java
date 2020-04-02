@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
 
-/** This is a test answer fragment */
+/** Only for test purposes */
 public class TestAnswerFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -151,4 +151,14 @@ public class QuizActivityTest {
         onView(withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
         finishActivity();
     }
+
+    @Test
+    public void testAnswersAreRestored() {
+        launchActivity();
+        onView(withId(R.id.next)).perform(click());
+        onView(withId(R.id.answer_fragment)); /*TODO
+        onView(withId(id)).perform(click());
+        onView(withId(id)).perform((typeText("111"))).perform(closeSoftKeyboard());
+        onView(withId(R.id.next)).perform(click());*/
+    }
 }

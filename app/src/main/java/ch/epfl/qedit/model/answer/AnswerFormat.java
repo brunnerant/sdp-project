@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /** This class represents all the answer formats that are available in the app. */
-public abstract class AnswerFormat
-        implements Visitable<ch.epfl.qedit.model.answer.AnswerFormat.Visitor>, Serializable {
+public abstract class AnswerFormat implements Visitable<AnswerFormat.Visitor>, Serializable {
 
     // Can be null
     private String text;
@@ -43,7 +42,13 @@ public abstract class AnswerFormat
 
     // public abstract AnswerModel getModel(); //TODO
 
-    public AnswerModel emptyAnswerModel() {
+    /**
+     * Uses the visitor pattern for dispatching between the different AnswerModels and returns a new
+     * one which goes with the concrete type of the AnswerFormat
+     *
+     * @return A new instance of the matching AnswerModel
+     */
+    public AnswerModel getNewAnswerModel() {
         final AnswerModel[] answerModel = new AnswerModel[1];
 
         accept(
@@ -63,14 +68,20 @@ public abstract class AnswerFormat
 
                     @Override
                     public void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat) {
-                        // TODO
+                        // Nothing for now
                     }
                 });
 
         return answerModel[0];
     }
 
-    public Fragment getFragment() {
+    /**
+     * Uses the visitor pattern for dispatching between the different fragments and returns a new
+     * one which goes with the concrete type of the AnswerFormat
+     *
+     * @return A new instance of the matching Fragment
+     */
+    public Fragment getNewFragment() {
         final Fragment[] fragment = new Fragment[1];
 
         accept(
@@ -87,7 +98,7 @@ public abstract class AnswerFormat
 
                     @Override
                     public void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat) {
-                        // TODO
+                        // Nothing for now
                     }
                 });
 
