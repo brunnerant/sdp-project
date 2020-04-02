@@ -21,8 +21,6 @@ import org.hamcrest.Matcher;
  */
 public class DragAndDropAction implements ViewAction {
 
-    private final int SWIPE_EVENT_COUNT = 10;
-
     private final int from;
     private final int to;
 
@@ -85,6 +83,7 @@ public class DragAndDropAction implements ViewAction {
     }
 
     private float[][] interpolate(float[] start, float[] end) {
+        int SWIPE_EVENT_COUNT = 10;
         final float[][] result = new float[SWIPE_EVENT_COUNT][2];
 
         for (int j = 0; j < 2; j++) {
