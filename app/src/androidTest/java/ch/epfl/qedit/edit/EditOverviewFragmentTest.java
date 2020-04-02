@@ -16,6 +16,8 @@ import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.edit.EditOverviewFragment;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,6 +34,11 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     @Before
     public void setUp() throws Exception {
         fRule.getActivity().getSupportFragmentManager().beginTransaction();
+    }
+
+    @After
+    public void commit() {
+        fRule.getActivity().finish();
     }
 
     public EditOverviewFragmentTest() {
