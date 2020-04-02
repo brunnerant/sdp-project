@@ -46,11 +46,16 @@ public class EditQuestionFragment extends Fragment {
                         });
     }
 
+    private boolean testOnQuiz(Quiz quiz, Integer index) {
+        return index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size();
+    }
+
     /** Handles the transition from one question to another */
     private void editOnQuestionChanged(Quiz quiz, Integer index) {
-        if (index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size()) {
+        if (testOnQuiz(quiz, index)) {
             return;
         }
+
         Question question = quiz.getQuestions().get(index);
 
         // We have to change the question title and text

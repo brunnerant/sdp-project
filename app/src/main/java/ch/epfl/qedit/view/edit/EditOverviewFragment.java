@@ -31,6 +31,7 @@ public class EditOverviewFragment extends Fragment {
         // Retrieve and configure the recycler view
         ListEditView listEditView = view.findViewById(R.id.question_list);
         createAdapter();
+        setListener();
         listEditView.setAdapter(adapter);
 
         // Configure the add button
@@ -64,7 +65,9 @@ public class EditOverviewFragment extends Fragment {
                                 return item.getTitle();
                             }
                         });
+    }
 
+    private void setListener() {
         adapter.setItemListener(
                 new ListEditView.ItemListener() {
                     @Override
