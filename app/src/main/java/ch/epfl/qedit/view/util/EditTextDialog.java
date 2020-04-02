@@ -122,7 +122,7 @@ public class EditTextDialog extends DialogFragment {
         listener = (SubmissionListener) args.getSerializable("listener");
 
         dialog =
-                new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(requireActivity())
                         .setMessage(message)
                         .setPositiveButton(
                                 R.string.done,

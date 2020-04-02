@@ -51,7 +51,7 @@ public class ConfirmDialog extends DialogFragment {
         String message = args.getString("message");
         listener = (ConfirmationListener) args.getSerializable("listener");
 
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(requireActivity())
                 .setMessage(message)
                 .setPositiveButton(
                         R.string.yes,
