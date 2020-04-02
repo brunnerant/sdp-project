@@ -1,24 +1,19 @@
 package ch.epfl.qedit.edit;
 
-import com.android21buttons.fragmenttestrule.FragmentTestRule;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
 import ch.epfl.qedit.view.edit.EditQuestionFragment;
-import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 public class EditQuestionFragmentTest extends QuizFragmentsTestUsingDB {
     private QuizViewModel model;

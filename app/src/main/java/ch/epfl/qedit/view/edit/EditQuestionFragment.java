@@ -5,17 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import ch.epfl.qedit.model.MatrixFormat;
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
@@ -24,7 +19,8 @@ public class EditQuestionFragment extends Fragment {
     private EditText editQuestionTitle;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.edit_fragment_quiz_question, container, false);
         editQuestionDisplay = v.findViewById(R.id.edit_question_display);
@@ -64,7 +60,7 @@ public class EditQuestionFragment extends Fragment {
 
         MatrixFragment matrixFragment = new MatrixFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(MatrixFragment.MATRIXID, question.getFormat());
+        bundle.putSerializable(MatrixFragment.MATRIX_ID, question.getFormat());
         matrixFragment.setArguments(bundle);
 
         // And dynamically instantiate the answer form

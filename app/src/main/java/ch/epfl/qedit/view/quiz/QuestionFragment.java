@@ -34,7 +34,14 @@ public class QuestionFragment extends Fragment {
 
         final QuizViewModel model =
                 new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
-
+        System.out.println("=====================================");
+        System.out.println("=====================================");
+        System.out.println("=====================================");
+        System.out.println(model);
+        System.out.println("=====================================");
+        System.out.println("=====================================");
+        System.out.println("=====================================");
+        System.out.println("=====================================");
         model.getFocusedQuestion()
                 .observe(
                         getViewLifecycleOwner(),
@@ -50,9 +57,14 @@ public class QuestionFragment extends Fragment {
 
     /** Handles the transition from one question to another */
     private void onQuestionChanged(Quiz quiz, Integer index) {
-        if (index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size())
-            return;
+        System.out.println("Heanvounsoinrvoirnv ori novi iorn eoin voinr oiren ");
+        System.out.println(quiz);
+        System.out.println(index);
 
+        if (index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size()) {
+            return;
+        }
+        System.out.println("Question question = quiz.getQuestions().get(index);");
         Question question = quiz.getQuestions().get(index);
 
         // We have to change the question title and text
