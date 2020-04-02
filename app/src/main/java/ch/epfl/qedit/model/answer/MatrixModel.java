@@ -15,7 +15,7 @@ public class MatrixModel extends AnswerModel {
     }
 
     public void updateAnswer(int row, int col, String newValue) throws IndexOutOfBoundsException {
-        if (row < matrix.length && col < matrix[row].length) {
+        if (0 <= row && row < matrix.length && 0 <= col && col < matrix[row].length) {
             matrix[row][col] = newValue;
         } else {
             throw new IndexOutOfBoundsException();
@@ -23,7 +23,7 @@ public class MatrixModel extends AnswerModel {
     }
 
     public String getAnswer(int row, int col) throws IndexOutOfBoundsException {
-        if (row < matrix.length && col < matrix[row].length) {
+        if (0 <= row && row < matrix.length && 0 <= col && col < matrix[row].length) {
             return matrix[row][col];
         } else {
             throw new IndexOutOfBoundsException();

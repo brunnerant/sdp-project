@@ -18,16 +18,12 @@ import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.database.DatabaseFactory;
-import ch.epfl.qedit.backend.database.MockDBService;
-import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
-import java.util.HashMap;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,9 +39,6 @@ public class MatrixFragmentTest {
             FragmentTestRule.create(MatrixFragment.class, false, false);
 
     public void init() {
-        MockDBService dbService = new MockDBService();
-        DatabaseFactory.setInstance(dbService);
-
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_FORMAT, new MatrixFormat(MATRIX_DIM, MATRIX_DIM));
         bundle.putSerializable(ANSWER_MODEL, new MatrixModel(MATRIX_DIM, MATRIX_DIM));
@@ -139,14 +132,13 @@ public class MatrixFragmentTest {
                 ((MatrixModel) quizViewModel.getAnswers().getValue().get(0)).getAnswer(0, 0));
     }
 
-    // @Test TODO
-    public void testAnswerIsLoadedFromQuizViewModel() {
-        MockDBService dbService = new MockDBService();
-        DatabaseFactory.setInstance(dbService);
-
+    @Test
+    public void testAnswerIsLoadedFromModel() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_FORMAT, new MatrixFormat(MATRIX_DIM, MATRIX_DIM));
-        bundle.putSerializable(ANSWER_MODEL, new MatrixModel(MATRIX_DIM, MATRIX_DIM));
+        final MatrixModel matrixModel = new MatrixModel(MATRIX_DIM, MATRIX_DIM);
+        matrixModel.updateAnswer(0, 0, "1232");
+        bundle.putSerializable(ANSWER_MODEL, matrixModel);
 
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
@@ -154,20 +146,9 @@ public class MatrixFragmentTest {
         quizViewModel = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
         quizViewModel.setQuiz(Util.createMockQuiz("Title"));
 
-        final MatrixModel matrixModel = new MatrixModel(MATRIX_DIM, MATRIX_DIM);
-        matrixModel.updateAnswer(0, 0, "1232");
+        testRule.launchFragment(matrixFragment);
 
         quizViewModel.getFocusedQuestion().postValue(0);
-        quizViewModel
-                .getAnswers()
-                .postValue(
-                        new HashMap<Integer, AnswerModel>() {
-                            {
-                                put(0, matrixModel);
-                            }
-                        });
-
-        testRule.launchFragment(matrixFragment);
 
         int id = testRule.getFragment().getId(0, 0);
 

@@ -9,15 +9,18 @@ import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.answer.AnswerModel;
+import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class QuizFragmentsTestUsingDB {
     private IdlingResource idlingResource;
     private FragmentTestRule testRule;
 
-    public QuizViewModel setup(FragmentTestRule testRule, Fragment fragment) {
+    public QuizViewModel setup(FragmentTestRule testRule, Fragment fragment, String answer) {
         this.testRule = testRule;
 
         MockDBService dbService = new MockDBService();
@@ -39,6 +42,18 @@ public class QuizFragmentsTestUsingDB {
                                         "matrix3x3"),
                                 new Question(
                                         "Title 2", "Test answer format", "testAnswerFormat"))));
+
+        if (answer != null) {
+            final MatrixModel matrixModel = new MatrixModel(3, 3);
+            matrixModel.updateAnswer(0, 0, answer);
+            model.getAnswers()
+                    .postValue(
+                            new HashMap<Integer, AnswerModel>() {
+                                {
+                                    put(0, matrixModel);
+                                }
+                            });
+        }
 
         testRule.launchFragment(fragment);
 

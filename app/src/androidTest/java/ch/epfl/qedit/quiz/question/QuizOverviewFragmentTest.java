@@ -32,7 +32,7 @@ public class QuizOverviewFragmentTest extends QuizFragmentsTestUsingDB {
 
     @Before
     public void setup() {
-        model = super.setup(testRule, new QuizOverviewFragment());
+        model = super.setup(testRule, new QuizOverviewFragment(), null);
     }
 
     @After

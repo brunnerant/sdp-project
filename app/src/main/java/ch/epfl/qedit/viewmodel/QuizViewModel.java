@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class QuizViewModel extends ViewModel {
     private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);
-    private final MutableLiveData<HashMap<Integer, AnswerModel>> Answers =
+    private final MutableLiveData<HashMap<Integer, AnswerModel>> answers =
             new MutableLiveData<>(new HashMap<Integer, AnswerModel>());
     private Quiz quiz = null;
 
@@ -27,6 +27,6 @@ public class QuizViewModel extends ViewModel {
     }
 
     public MutableLiveData<HashMap<Integer, AnswerModel>> getAnswers() {
-        return Answers;
+        return answers;
     }
 }

@@ -16,14 +16,16 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.HashMap;
 
 public class QuestionFragment extends Fragment {
     public static final String ANSWER_FORMAT = "ch.epfl.qedit.view.ANSWER_FORMAT";
     public static final String ANSWER_MODEL = "ch.epfl.qedit.view.ANSWER_MODEL";
+    public static final String FRAGMENT_TAG = "ch.epfl.qedit.view.FRAGMENT_TAG";
 
     private TextView questionTitle;
     private TextView questionDisplay;
-    private QuizViewModel model;
+    private QuizViewModel quizViewModel;
 
     @Nullable
     @Override
@@ -36,15 +38,16 @@ public class QuestionFragment extends Fragment {
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
 
-        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
-        model.getFocusedQuestion()
+        quizViewModel
+                .getFocusedQuestion()
                 .observe(
                         getViewLifecycleOwner(),
                         new Observer<Integer>() {
                             @Override
                             public void onChanged(Integer index) {
-                                onQuestionChanged(model.getQuiz(), index);
+                                onQuestionChanged(quizViewModel.getQuiz(), index);
                             }
                         });
 
@@ -66,13 +69,19 @@ public class QuestionFragment extends Fragment {
         // Get the AnswerFormat of the question
         AnswerFormat answerFormat = quiz.getQuestions().get(index).getFormat();
 
-        // Check if the model already holds an AnswerModel for this question and create a new using
-        // if there is none
-        AnswerModel answerModel =
-                model.getAnswers().getValue().containsKey(index)
-                        ? model.getAnswers().getValue().get(index)
-                        : answerFormat.getNewAnswerModel();
+        AnswerModel answerModel;
+        HashMap<Integer, AnswerModel> answers = quizViewModel.getAnswers().getValue();
 
+        // Check if the model already holds an AnswerModel for this question
+        if (answers.containsKey(index)) {
+            answerModel = answers.get(index);
+        } else { // and otherwise create a new one and add it to the QuizViewModel
+            answerModel = answerFormat.getNewAnswerModel();
+            answers.put(index, answerModel);
+            quizViewModel.getAnswers().postValue(answers);
+        }
+
+        // Prepare the bundle for the Fragment
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_FORMAT, answerFormat);
         bundle.putSerializable(ANSWER_MODEL, answerModel);
@@ -85,7 +94,7 @@ public class QuestionFragment extends Fragment {
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.answer_fragment_container, fragment)
+                .replace(R.id.answer_fragment_container, fragment, FRAGMENT_TAG)
                 .commit();
     }
 }
