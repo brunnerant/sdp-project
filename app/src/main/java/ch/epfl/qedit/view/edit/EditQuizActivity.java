@@ -34,7 +34,7 @@ public class EditQuizActivity extends AppCompatActivity {
 
     // TODO: Delete when we connect the rest of the app
     private void tempQuiz() {
-        List<Question> q_en =
+        List<Question> quizzes =
                 Arrays.asList(
                         new Question(
                                 "Bananas", "How many bananas are there on Earth?!", "matrix1x1"),
@@ -43,6 +43,6 @@ public class EditQuizActivity extends AppCompatActivity {
                         new Question("Operations", "What is the results of 1 + 10?!", "matrix1x1"),
                         new Question("Matrices", "Fill those matrix !", "matrix3x3"));
 
-        quiz = new Quiz("I am a Mock Quiz!", q_en);
+        quiz = new Quiz("I am a Quiz!", quizzes);
     }
 }
