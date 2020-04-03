@@ -1,5 +1,8 @@
 package ch.epfl.qedit.view.edit;
 
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +14,19 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.view.answer.MatrixFragment;
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.HashMap;
 
 public class EditQuestionFragment extends Fragment {
+    public static final String EDIT_ANSWER_FORMAT = "ch.epfl.qedit.view.edit.EDIT_ANSWER_FORMAT";
+    public static final String EDIT_ANSWER_MODEL = "ch.epfl.qedit.view.edit.EDIT_ANSWER_MODEL";
+    public static final String EDIT_FRAGMENT_TAG = "ch.epfl.qedit.view.edit.EDIT_FRAGMENT_TAG";
+
     private EditText editQuestionDisplay;
     private EditText editQuestionTitle;
+    private QuizViewModel model;
 
     @Override
     public View onCreateView(
@@ -26,8 +36,7 @@ public class EditQuestionFragment extends Fragment {
         editQuestionDisplay = v.findViewById(R.id.edit_question_display);
         editQuestionTitle = v.findViewById(R.id.edit_question_title);
 
-        final QuizViewModel model =
-                new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         observeModelOnEdit(model);
 
@@ -63,16 +72,39 @@ public class EditQuestionFragment extends Fragment {
         editQuestionDisplay.setText(question.getText());
         editQuestionTitle.setText(questionTitleStr);
 
-        MatrixFragment matrixFragment = new MatrixFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(MatrixFragment.MATRIX_ID, question.getFormat());
-        matrixFragment.setArguments(bundle);
+        prepareEditAnswerFormatFragment(question, index);
+    }
 
-        // And dynamically instantiate the answer form
+    private AnswerModel getNewAnswerModel(AnswerFormat answerFormat, int index) {
+        AnswerModel answerModel;
+        HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
+        if (answers.containsKey(index)) {
+            answerModel = answers.get(index);
+        } else {
+            answerModel = answerFormat.getNewAnswerModel();
+            answers.put(index, answerModel);
+            model.getAnswers().postValue(answers);
+        }
+
+        return answerModel;
+    }
+
+    private void prepareEditAnswerFormatFragment(Question question, Integer index) {
+        AnswerFormat answerFormat = question.getFormat();
+
+        AnswerModel answerModel = getNewAnswerModel(answerFormat, index);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ANSWER_FORMAT, answerFormat);
+        bundle.putSerializable(ANSWER_MODEL, answerModel);
+
+        Fragment editFragment = answerFormat.getNewFragment();
+        editFragment.setArguments(bundle);
+
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.edit_answer_fragment_container, matrixFragment)
+                .replace(R.id.edit_answer_fragment_container, editFragment, EDIT_FRAGMENT_TAG)
                 .commit();
     }
 }
