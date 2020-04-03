@@ -157,24 +157,24 @@ public class QuizActivityTest {
         onView(withId(R.id.next)).perform(click());
         onView(withId(R.id.next)).perform(click());
 
-        MatrixFragment matrixFragment =
-                (MatrixFragment)
-                        testRule.getActivity()
-                                .getSupportFragmentManager()
-                                .findFragmentByTag(FRAGMENT_TAG);
-        int id = matrixFragment.getId(0, 0);
+        int id =
+                ((MatrixFragment)
+                                testRule.getActivity()
+                                        .getSupportFragmentManager()
+                                        .findFragmentByTag(FRAGMENT_TAG))
+                        .getId(0, 0);
 
         String answer2 = "5678";
         onView(withId(id)).perform((typeText(answer2))).perform(closeSoftKeyboard());
         onView(withId(R.id.previous)).perform(click());
         onView(withId(R.id.next)).perform(click());
 
-        matrixFragment =
-                (MatrixFragment)
-                        testRule.getActivity()
-                                .getSupportFragmentManager()
-                                .findFragmentByTag(FRAGMENT_TAG);
-        id = matrixFragment.getId(0, 0);
+        id =
+                ((MatrixFragment)
+                                testRule.getActivity()
+                                        .getSupportFragmentManager()
+                                        .findFragmentByTag(FRAGMENT_TAG))
+                        .getId(0, 0);
 
         onView(withId(id)).check(matches(withText(answer2)));
     }
