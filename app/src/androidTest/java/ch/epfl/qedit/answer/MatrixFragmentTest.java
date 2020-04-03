@@ -16,7 +16,6 @@ import static junit.framework.TestCase.assertNull;
 
 import android.os.Bundle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.MatrixFormat;
@@ -33,10 +32,9 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MatrixFragmentTest {
-    private IdlingResource idlingResource;
     private final int MATRIX_DIM = 3;
     private QuizViewModel quizViewModel;
-    private String answer = "1234";
+    private final String answer = "1234";
 
     @Rule
     public final FragmentTestRule<?, MatrixFragment> testRule =
@@ -119,7 +117,7 @@ public class MatrixFragmentTest {
         type("123456", "12345");
     }
 
-    // @Test TODO
+    @Test
     public void testAnswerIsSavedInQuizViewModel() {
         assertNull(quizViewModel.getAnswers().getValue().get(0));
 
@@ -134,7 +132,7 @@ public class MatrixFragmentTest {
                 ((MatrixModel) quizViewModel.getAnswers().getValue().get(0)).getAnswer(0, 0));
     }
 
-    // @Test TODO
+    @Test
     public void testAnswerIsLoadedFromModel() {
         int id = testRule.getFragment().getId(MATRIX_DIM - 1, MATRIX_DIM - 1);
         onView(withId(id)).check(matches(withText(answer)));

@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 public class MockDBTest {
-    MockDBService db = new MockDBService();
+    private MockDBService db = new MockDBService();
     private CountDownLatch lock = new CountDownLatch(1);
     private String title;
     private Quiz quiz;

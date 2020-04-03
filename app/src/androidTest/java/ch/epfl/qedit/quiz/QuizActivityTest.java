@@ -43,8 +43,7 @@ import org.junit.runner.RunWith;
 public class QuizActivityTest {
     private QuizViewModel model;
     private final Integer zero = 0;
-    private String answer1 = "1234";
-    private String answer2 = "5678";
+    private final String answer1 = "1234";
 
     @Rule
     public final IntentsTestRule<QuizActivity> testRule =
@@ -63,6 +62,8 @@ public class QuizActivityTest {
         bundle.putSerializable(QUIZ_ID, quiz);
         intent.putExtras(bundle);
 
+        testRule.launchActivity(intent);
+
         model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
         model.setQuiz(quiz);
 
@@ -75,8 +76,6 @@ public class QuizActivityTest {
                                 put(0, matrixModel);
                             }
                         });
-
-        testRule.launchActivity(intent);
     }
 
     @After
@@ -153,7 +152,7 @@ public class QuizActivityTest {
         onView(withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
     }
 
-    // @Test TODO
+    @Test
     public void testAnswersAreRestored() {
         onView(withId(R.id.next)).perform(click());
         onView(withId(R.id.next)).perform(click());
@@ -165,6 +164,7 @@ public class QuizActivityTest {
                                 .findFragmentByTag(FRAGMENT_TAG);
         int id = matrixFragment.getId(0, 0);
 
+        String answer2 = "5678";
         onView(withId(id)).perform((typeText(answer2))).perform(closeSoftKeyboard());
         onView(withId(R.id.previous)).perform(click());
         onView(withId(R.id.next)).perform(click());
@@ -179,7 +179,7 @@ public class QuizActivityTest {
         onView(withId(id)).check(matches(withText(answer2)));
     }
 
-    // @Test TODO
+    @Test
     public void testAnswerIsLoadedFromQuizViewModel() {
         onView(withId(R.id.next)).perform(click());
 

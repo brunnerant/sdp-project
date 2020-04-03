@@ -2,7 +2,7 @@ package ch.epfl.qedit.model.answer;
 
 /** This class is used to store answer given by the user via MatrixFormats */
 public class MatrixModel extends AnswerModel {
-    private String[][] matrix;
+    private final String[][] matrix;
 
     public MatrixModel(int numberOfColumns, int numberOfRows) {
         matrix = new String[numberOfRows][numberOfColumns];

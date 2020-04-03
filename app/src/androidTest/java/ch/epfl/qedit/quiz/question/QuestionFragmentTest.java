@@ -55,7 +55,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
         onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
     }
 
-    // @Test TODO
+    @Test
     public void testAnswerFormatDispatch() {
         model.getFocusedQuestion().postValue(0);
 
