@@ -78,12 +78,12 @@ public class EditQuestionFragment extends Fragment {
     private AnswerModel getNewAnswerModel(AnswerFormat answerFormat, int index) {
         AnswerModel answerModel;
         HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
-        if (answers.containsKey(index)) {
-            answerModel = answers.get(index);
-        } else {
+        if (!answers.containsKey(index)) {
             answerModel = answerFormat.getNewAnswerModel();
             answers.put(index, answerModel);
             model.getAnswers().postValue(answers);
+        } else {
+            answerModel = answers.get(index);
         }
 
         return answerModel;
