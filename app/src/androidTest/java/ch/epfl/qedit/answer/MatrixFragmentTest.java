@@ -34,7 +34,9 @@ import org.junit.runner.RunWith;
 public class MatrixFragmentTest {
     private final int MATRIX_DIM = 3;
     private QuizViewModel quizViewModel;
-    private final String answer = "1234";
+    private final String answer0 = "01234";
+    private final String answer1 = "56789";
+    private final String answer2 = "13579";
 
     @Rule
     public final FragmentTestRule<?, MatrixFragment> testRule =
@@ -45,7 +47,9 @@ public class MatrixFragmentTest {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_FORMAT, new MatrixFormat(MATRIX_DIM, MATRIX_DIM));
         final MatrixModel matrixModel = new MatrixModel(MATRIX_DIM, MATRIX_DIM);
-        matrixModel.updateAnswer(MATRIX_DIM - 1, MATRIX_DIM - 1, answer);
+        matrixModel.updateAnswer(MATRIX_DIM - 1, 0, answer0);
+        matrixModel.updateAnswer(MATRIX_DIM - 1, 1, answer1);
+        matrixModel.updateAnswer(MATRIX_DIM - 1, 2, answer2);
         bundle.putSerializable(ANSWER_MODEL, matrixModel);
 
         MatrixFragment matrixFragment = new MatrixFragment();
@@ -79,11 +83,9 @@ public class MatrixFragmentTest {
 
     @Test
     public void testFieldsAreEmptyAtFirst() {
-        for (int i = 0; i < MATRIX_DIM; ++i) {
+        for (int i = 0; i < MATRIX_DIM - 1; ++i) {
             for (int j = 0; j < MATRIX_DIM; ++j) {
-                if (i != MATRIX_DIM - 1 || j != MATRIX_DIM - 1) {
-                    onView(withId(testRule.getFragment().getId(i, j))).check(matches(withText("")));
-                }
+                onView(withId(testRule.getFragment().getId(i, j))).check(matches(withText("")));
             }
         }
     }
@@ -98,7 +100,7 @@ public class MatrixFragmentTest {
 
     @Test
     public void testCanEnterNumbersInFields() {
-        type(answer, answer);
+        type(answer0, answer0);
     }
 
     @Test
@@ -123,18 +125,21 @@ public class MatrixFragmentTest {
 
         int id = testRule.getFragment().getId(0, 0);
         onView(withId(id)).perform(click());
-
-        onView(withId(id)).perform((typeText(answer))).perform(closeSoftKeyboard());
+        onView(withId(id)).perform((typeText(answer0))).perform(closeSoftKeyboard());
 
         assertNotNull(quizViewModel.getAnswers().getValue().get(0));
         assertEquals(
-                answer,
+                answer0,
                 ((MatrixModel) quizViewModel.getAnswers().getValue().get(0)).getAnswer(0, 0));
     }
 
     @Test
     public void testAnswerIsLoadedFromModel() {
-        int id = testRule.getFragment().getId(MATRIX_DIM - 1, MATRIX_DIM - 1);
-        onView(withId(id)).check(matches(withText(answer)));
+        onView(withId(testRule.getFragment().getId(MATRIX_DIM - 1, 0)))
+                .check(matches(withText(answer0)));
+        onView(withId(testRule.getFragment().getId(MATRIX_DIM - 1, 1)))
+                .check(matches(withText(answer1)));
+        onView(withId(testRule.getFragment().getId(MATRIX_DIM - 1, 2)))
+                .check(matches(withText(answer2)));
     }
 }

@@ -66,8 +66,22 @@ public class QuestionFragment extends Fragment {
         questionTitle.setText(questionTitleStr);
         questionDisplay.setText(question.getText());
 
+        // Set everything up for the concrete AnswerFragment and launch it
+        prepareAnswerFormatFragment(question, index);
+    }
+
+    /**
+     * This method gets the concrete AnswerFormat, checks if the QuizViewModel contains already a
+     * matching AnswerModel and otherwise creates a new one and adds it to the QuizViewModel.
+     * Further a bundle is prepared, then it dispatches the correct Fragment class and finally
+     * starts it.
+     *
+     * @param question The question that is going to be shown
+     * @param index The index of that Question in the Quiz, the question list
+     */
+    private void prepareAnswerFormatFragment(Question question, Integer index) {
         // Get the AnswerFormat of the question
-        AnswerFormat answerFormat = quiz.getQuestions().get(index).getFormat();
+        AnswerFormat answerFormat = question.getFormat();
 
         AnswerModel answerModel;
         HashMap<Integer, AnswerModel> answers = quizViewModel.getAnswers().getValue();
