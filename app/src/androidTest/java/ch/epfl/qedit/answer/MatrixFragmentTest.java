@@ -8,14 +8,21 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
 
 import android.os.Bundle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.database.DatabaseFactory;
-import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixModel;
+import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.answer.MatrixFragment;
+import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +32,11 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MatrixFragmentTest {
-    final int MATRIX_DIM = 3;
+    private final int MATRIX_DIM = 3;
+    private QuizViewModel quizViewModel;
+    private final String answer0 = "01234";
+    private final String answer1 = "56789";
+    private final String answer2 = "13579";
 
     @Rule
     public final FragmentTestRule<?, MatrixFragment> testRule =
@@ -33,13 +44,20 @@ public class MatrixFragmentTest {
 
     @Before
     public void init() {
-        MockDBService dbService = new MockDBService();
-        DatabaseFactory.setInstance(dbService);
-
         Bundle bundle = new Bundle();
-        bundle.putSerializable(MatrixFragment.MATRIX_ID, MatrixFormat.createMatrix3x3());
+        bundle.putSerializable(ANSWER_FORMAT, new MatrixFormat(MATRIX_DIM, MATRIX_DIM));
+        final MatrixModel matrixModel = new MatrixModel(MATRIX_DIM, MATRIX_DIM);
+        matrixModel.updateAnswer(MATRIX_DIM - 1, 0, answer0);
+        matrixModel.updateAnswer(MATRIX_DIM - 1, 1, answer1);
+        matrixModel.updateAnswer(MATRIX_DIM - 1, 2, answer2);
+        bundle.putSerializable(ANSWER_MODEL, matrixModel);
+
         MatrixFragment matrixFragment = new MatrixFragment();
         matrixFragment.setArguments(bundle);
+
+        quizViewModel = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+        quizViewModel.setQuiz(Util.createMockQuiz("Title"));
+        quizViewModel.getFocusedQuestion().postValue(0);
 
         testRule.launchFragment(matrixFragment);
     }
@@ -65,7 +83,7 @@ public class MatrixFragmentTest {
 
     @Test
     public void testFieldsAreEmptyAtFirst() {
-        for (int i = 0; i < MATRIX_DIM; ++i) {
+        for (int i = 0; i < MATRIX_DIM - 1; ++i) {
             for (int j = 0; j < MATRIX_DIM; ++j) {
                 onView(withId(testRule.getFragment().getId(i, j))).check(matches(withText("")));
             }
@@ -82,7 +100,7 @@ public class MatrixFragmentTest {
 
     @Test
     public void testCanEnterNumbersInFields() {
-        type("1232", "1232");
+        type(answer0, answer0);
     }
 
     @Test
@@ -97,7 +115,31 @@ public class MatrixFragmentTest {
 
     @Test
     public void testCantEnterMoreDigitsThanMaxCharacters() {
-        // MaxCharacters = 5 for MatrixFormat.createMatrix3x3()
+        // MaxCharacters = 5 by default
         type("123456", "12345");
+    }
+
+    @Test
+    public void testAnswerIsSavedInQuizViewModel() {
+        assertNull(quizViewModel.getAnswers().getValue().get(0));
+
+        int id = testRule.getFragment().getId(0, 0);
+        onView(withId(id)).perform(click());
+        onView(withId(id)).perform((typeText(answer0))).perform(closeSoftKeyboard());
+
+        assertNotNull(quizViewModel.getAnswers().getValue().get(0));
+        assertEquals(
+                answer0,
+                ((MatrixModel) quizViewModel.getAnswers().getValue().get(0)).getAnswer(0, 0));
+    }
+
+    @Test
+    public void testAnswerIsLoadedFromModel() {
+        onView(withId(testRule.getFragment().getId(MATRIX_DIM - 1, 0)))
+                .check(matches(withText(answer0)));
+        onView(withId(testRule.getFragment().getId(MATRIX_DIM - 1, 1)))
+                .check(matches(withText(answer1)));
+        onView(withId(testRule.getFragment().getId(MATRIX_DIM - 1, 2)))
+                .check(matches(withText(answer2)));
     }
 }

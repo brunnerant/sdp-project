@@ -7,9 +7,11 @@ import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.MockDBService;
-import ch.epfl.qedit.util.Util;
+import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import java.util.Arrays;
 
 public class QuizFragmentsTestUsingDB {
     private IdlingResource idlingResource;
@@ -26,7 +28,17 @@ public class QuizFragmentsTestUsingDB {
         QuizViewModel model =
                 new ViewModelProvider((ViewModelStoreOwner) testRule.getActivity())
                         .get(QuizViewModel.class);
-        model.setQuiz(Util.createMockQuiz("Test"));
+
+        model.setQuiz(
+                new Quiz(
+                        "Test",
+                        Arrays.asList(
+                                new Question(
+                                        "The matches problem",
+                                        "How many matches can fit in a shoe of size 43 ?",
+                                        "matrix3x3"),
+                                new Question(
+                                        "Title 2", "Test answer format", "testAnswerFormat"))));
 
         testRule.launchFragment(fragment);
 

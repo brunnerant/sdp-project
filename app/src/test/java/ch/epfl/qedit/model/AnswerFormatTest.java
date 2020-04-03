@@ -3,9 +3,13 @@ package ch.epfl.qedit.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.util.Arrays;
 import org.junit.Test;
 
@@ -56,5 +60,19 @@ public class AnswerFormatTest {
         AnswerFormat mat1x1 = new MatrixFormat("Enter number of solution here:", 1, 1);
         assertEquals(
                 mat1x1, AnswerFormat.parse("matrix1x1 :     Enter number of solution here:  "));
+    }
+
+    @Test
+    public void testVisitorDispatchForFragment() {
+        MatrixFormat matrixFormat = new MatrixFormat(2, 2);
+        Fragment fragment = matrixFormat.getNewFragment();
+        assertEquals(MatrixFragment.class, fragment.getClass());
+    }
+
+    @Test
+    public void testVisitorDispatchForAnswerModel() {
+        MatrixFormat matrixFormat = new MatrixFormat(2, 2);
+        AnswerModel answerModel = matrixFormat.getNewAnswerModel();
+        assertEquals(MatrixModel.class, answerModel.getClass());
     }
 }

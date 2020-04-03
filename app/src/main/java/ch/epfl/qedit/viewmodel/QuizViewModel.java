@@ -3,9 +3,13 @@ package ch.epfl.qedit.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.answer.AnswerModel;
+import java.util.HashMap;
 
 public class QuizViewModel extends ViewModel {
-
+    private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);
+    private final MutableLiveData<HashMap<Integer, AnswerModel>> answers =
+            new MutableLiveData<>(new HashMap<Integer, AnswerModel>());
     private Quiz quiz = null;
 
     public void setQuiz(Quiz quiz) {
@@ -18,9 +22,11 @@ public class QuizViewModel extends ViewModel {
         return quiz;
     }
 
-    private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);
-
     public MutableLiveData<Integer> getFocusedQuestion() {
         return focusedQuestion;
+    }
+
+    public MutableLiveData<HashMap<Integer, AnswerModel>> getAnswers() {
+        return answers;
     }
 }

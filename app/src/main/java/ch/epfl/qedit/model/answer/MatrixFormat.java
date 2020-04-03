@@ -1,6 +1,5 @@
 package ch.epfl.qedit.model.answer;
 
-import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,11 +8,10 @@ public class MatrixFormat extends AnswerFormat {
     private boolean hasDecimal = true;
     private boolean hasSign = true;
 
-    private int tableRowsNumber = 1;
-    private int tableColumnsNumber = 1;
+    private int tableRowsNumber;
+    private int tableColumnsNumber;
     private int maxCharacters = 5;
     private String hintString;
-    private String id = MatrixFragment.MATRIX_ID;
 
     public MatrixFormat(int tableColumnsNumber, int tableRowsNumber) {
         this(null, tableColumnsNumber, tableRowsNumber);
@@ -24,7 +22,7 @@ public class MatrixFormat extends AnswerFormat {
         super(text);
         this.tableRowsNumber = tableRowsNumber;
         this.tableColumnsNumber = tableColumnsNumber;
-        this.hintString = hint();
+        hintString = hint();
     }
 
     public MatrixFormat(
@@ -64,8 +62,7 @@ public class MatrixFormat extends AnswerFormat {
                     && this.tableRowsNumber == other.tableRowsNumber
                     && this.tableColumnsNumber == other.tableColumnsNumber
                     && this.maxCharacters == other.maxCharacters
-                    && this.hintString.equals(other.hintString)
-                    && this.id.equals(other.id);
+                    && this.hintString.equals(other.hintString);
         }
         return false;
     }
@@ -86,7 +83,7 @@ public class MatrixFormat extends AnswerFormat {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitMatrixAnswerFormat(this);
+        visitor.visitMatrixFormat(this);
     }
 
     public int getTableRowsNumber() {
@@ -117,16 +114,8 @@ public class MatrixFormat extends AnswerFormat {
         return hintString;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
     // Function that allows to be placed as a placeholder for the EditText
     private String hint() {
-        return String.format("%0" + maxCharacters + "d", 0).replace("0", "0");
+        return String.format("%0" + maxCharacters + "d", 0);
     }
 }
