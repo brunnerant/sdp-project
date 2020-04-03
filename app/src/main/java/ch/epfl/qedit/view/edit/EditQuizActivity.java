@@ -37,7 +37,7 @@ public class EditQuizActivity extends AppCompatActivity {
         Question question1 =
                 new Question("Bananas", "How many bananas are there on Earth.", "matrix1x1");
         Question question2 =
-                new Question("Apples", "How many apples are there on Earth.", "matrix1x1");
+                new Question("Apple", "How many apples are there on Earth.", "matrix1x1");
         Question question4 = new Question("Vectors", "Give a unit vector.", "matrix1x3");
         Question question5 =
                 new Question("Operations", "What is the results of 1 + 10.", "matrix1x1");
