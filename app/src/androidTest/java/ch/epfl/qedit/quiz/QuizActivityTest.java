@@ -32,9 +32,7 @@ import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.Arrays;
 import java.util.HashMap;
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +47,6 @@ public class QuizActivityTest {
     public final IntentsTestRule<QuizActivity> testRule =
             new IntentsTestRule<>(QuizActivity.class, false, false);
 
-    @Before
     public void launchActivity() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -78,32 +75,38 @@ public class QuizActivityTest {
                         });
     }
 
-    @After
     public void finishActivity() {
         testRule.finishActivity();
     }
 
     @Test
     public void testOnCreateState() {
+        launchActivity();
         Integer question = model.getFocusedQuestion().getValue();
         Assert.assertNull(question);
+        finishActivity();
     }
 
     @Test
     public void clickPreviousNull() {
+        launchActivity();
         onView(withId(R.id.previous)).perform(click());
         Assert.assertEquals(model.getFocusedQuestion().getValue(), zero);
+        finishActivity();
     }
 
     @Test
     public void cantGoUnder0() {
+        launchActivity();
         onView(withId(R.id.previous)).perform(click());
         onView(withId(R.id.previous)).perform(click());
         Assert.assertEquals(model.getFocusedQuestion().getValue(), zero);
+        finishActivity();
     }
 
     @Test
     public void cantGoAboveQuizSize() {
+        launchActivity();
         for (int i = 0; i < model.getQuiz().getQuestions().size(); ++i) {
             onView(withId(R.id.next)).perform(click());
         }
@@ -111,16 +114,20 @@ public class QuizActivityTest {
         onView(withId(R.id.next)).perform(click());
         Integer index = model.getQuiz().getQuestions().size() - 1;
         Assert.assertEquals(model.getFocusedQuestion().getValue(), index);
+        finishActivity();
     }
 
     @Test
     public void testUpArrowIsClicked() {
+        launchActivity();
         onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click());
         assertTrue(testRule.getActivity().isFinishing());
+        finishActivity();
     }
 
     @Test
     public void testTimeIsClicked() {
+        launchActivity();
         onView(withId(R.id.time)).perform(click());
         onView(withText("Unimplemented Feature"))
                 .inRoot(
@@ -128,32 +135,42 @@ public class QuizActivityTest {
                                 Matchers.not(
                                         is(testRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        finishActivity();
     }
 
     @Test
     public void quizOverviewIsDisplayed() {
+        launchActivity();
         onView(withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
+        finishActivity();
     }
 
     @Test
     public void quizOverviewDisappears() {
+        launchActivity();
         onView(withId(R.id.overview)).perform(click());
         onView(withId(R.id.quiz_overview_container)).check(matches(not(isDisplayed())));
+        finishActivity();
     }
 
     @Test
     public void testQuestionIsNotDisplayed() {
+        launchActivity();
         onView(withId(R.id.question)).check(matches(isDisplayed()));
+        finishActivity();
     }
 
     @Test
     public void testQuizOverviewOnClickDisplayedAgain() {
+        launchActivity();
         onView(withId(R.id.quiz_overview_container)).perform(click()).perform(click());
         onView(withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
+        finishActivity();
     }
 
     @Test
     public void testAnswersAreRestored() {
+        launchActivity();
         onView(withId(R.id.next)).perform(click());
         onView(withId(R.id.next)).perform(click());
 
@@ -177,10 +194,12 @@ public class QuizActivityTest {
                         .getId(0, 0);
 
         onView(withId(id)).check(matches(withText(answer2)));
+        finishActivity();
     }
 
     @Test
     public void testAnswerIsLoadedFromQuizViewModel() {
+        launchActivity();
         onView(withId(R.id.next)).perform(click());
 
         MatrixFragment matrixFragment =
@@ -190,5 +209,6 @@ public class QuizActivityTest {
                                 .findFragmentByTag(FRAGMENT_TAG);
         int id = matrixFragment.getId(0, 0);
         onView(withId(id)).check(matches(withText(answer1)));
+        finishActivity();
     }
 }
