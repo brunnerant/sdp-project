@@ -182,7 +182,7 @@ public class QuizActivityTest {
                         .getId(0, 0);
 
         String answer2 = "5678";
-        onView(withId(id)).perform(typeText(answer2)).perform(closeSoftKeyboard());
+        onView(withId(id)).perform((typeText(answer2))).perform(closeSoftKeyboard());
         onView(withId(R.id.previous)).perform(click());
         onView(withId(R.id.next)).perform(click());
 
