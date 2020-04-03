@@ -38,6 +38,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     @After
     public void commit() {
         fRule.getActivity().finish();
+        testRule.finishActivity();
     }
 
     public EditOverviewFragmentTest() {
