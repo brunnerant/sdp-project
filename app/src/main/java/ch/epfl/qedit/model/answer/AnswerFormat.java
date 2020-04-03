@@ -1,11 +1,15 @@
 package ch.epfl.qedit.model.answer;
 
+import androidx.fragment.app.Fragment;
+import ch.epfl.qedit.util.Visitable;
+import ch.epfl.qedit.view.answer.MatrixFragment;
+import ch.epfl.qedit.view.answer.TestAnswerFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 /** This class represents all the answer formats that are available in the app. */
-public abstract class AnswerFormat implements Serializable {
+public abstract class AnswerFormat implements Visitable<AnswerFormat.Visitor>, Serializable {
 
     // Can be null
     private String text;
@@ -28,14 +32,75 @@ public abstract class AnswerFormat implements Serializable {
         return false;
     }
 
-    /** This method is used to implement the visitor pattern */
-    public abstract void accept(Visitor visitor);
-
     public interface Visitor {
+        void visitMatrixFormat(MatrixFormat matrixFormat);
 
-        void visitMatrixAnswerFormat(MatrixFormat matrixFormat);
+        void visitTestAnswerFormat(TestAnswerFormat testAnswerFormat);
 
         void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat);
+    }
+
+    /**
+     * Uses the visitor pattern for dispatching between the different AnswerModels and returns a new
+     * one which goes with the concrete type of the AnswerFormat
+     *
+     * @return A new instance of the matching AnswerModel
+     */
+    public AnswerModel getNewAnswerModel() {
+        final AnswerModel[] answerModel = new AnswerModel[1];
+
+        accept(
+                new Visitor() {
+                    @Override
+                    public void visitMatrixFormat(MatrixFormat matrixFormat) {
+                        answerModel[0] =
+                                new MatrixModel(
+                                        matrixFormat.getTableColumnsNumber(),
+                                        matrixFormat.getTableRowsNumber());
+                    }
+
+                    @Override
+                    public void visitTestAnswerFormat(TestAnswerFormat testAnswerFormat) {
+                        answerModel[0] = new TestAnswerModel();
+                    }
+
+                    @Override
+                    public void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat) {
+                        // Nothing for now
+                    }
+                });
+
+        return answerModel[0];
+    }
+
+    /**
+     * Uses the visitor pattern for dispatching between the different fragments and returns a new
+     * one which goes with the concrete type of the AnswerFormat
+     *
+     * @return A new instance of the matching Fragment
+     */
+    public Fragment getNewFragment() {
+        final Fragment[] fragment = new Fragment[1];
+
+        accept(
+                new Visitor() {
+                    @Override
+                    public void visitMatrixFormat(MatrixFormat matrixFormat) {
+                        fragment[0] = new MatrixFragment();
+                    }
+
+                    @Override
+                    public void visitTestAnswerFormat(TestAnswerFormat testAnswerFormat) {
+                        fragment[0] = new TestAnswerFragment();
+                    }
+
+                    @Override
+                    public void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat) {
+                        // Nothing for now
+                    }
+                });
+
+        return fragment[0];
     }
 
     private static AnswerFormat parseNotCompoundFormat(String field) {
@@ -44,7 +109,14 @@ public abstract class AnswerFormat implements Serializable {
         String[] formatAndText = field.split(":", 2);
         String format = formatAndText[0];
         String text = (formatAndText.length == 2) ? formatAndText[1].trim() : null;
-        return MatrixFormat.parse(format, text);
+
+        AnswerFormat answerFormat = MatrixFormat.parse(format, text);
+
+        if (answerFormat == null) {
+            answerFormat = TestAnswerFormat.parse(format, text);
+        }
+
+        return answerFormat;
     }
 
     /**

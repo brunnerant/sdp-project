@@ -13,13 +13,19 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.answer.MatrixFormat;
-import ch.epfl.qedit.view.answer.MatrixFragment;
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.HashMap;
 
 public class QuestionFragment extends Fragment {
+    public static final String ANSWER_FORMAT = "ch.epfl.qedit.view.ANSWER_FORMAT";
+    public static final String ANSWER_MODEL = "ch.epfl.qedit.view.ANSWER_MODEL";
+    public static final String FRAGMENT_TAG = "ch.epfl.qedit.view.FRAGMENT_TAG";
+
     private TextView questionTitle;
     private TextView questionDisplay;
+    private QuizViewModel quizViewModel;
 
     @Nullable
     @Override
@@ -32,16 +38,16 @@ public class QuestionFragment extends Fragment {
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
 
-        final QuizViewModel model =
-                new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
-        model.getFocusedQuestion()
+        quizViewModel
+                .getFocusedQuestion()
                 .observe(
                         getViewLifecycleOwner(),
                         new Observer<Integer>() {
                             @Override
                             public void onChanged(Integer index) {
-                                onQuestionChanged(model.getQuiz(), index);
+                                onQuestionChanged(quizViewModel.getQuiz(), index);
                             }
                         });
 
@@ -60,17 +66,49 @@ public class QuestionFragment extends Fragment {
         questionTitle.setText(questionTitleStr);
         questionDisplay.setText(question.getText());
 
-        MatrixFragment matrixFragment = new MatrixFragment();
-        MatrixFormat matrixFormat = (MatrixFormat) question.getFormat();
-        Bundle newB = new Bundle();
-        newB.putSerializable(MatrixFragment.MATRIX_ID, matrixFormat);
-        matrixFragment.setArguments(newB);
+        // Set everything up for the concrete AnswerFragment and launch it
+        prepareAnswerFormatFragment(question, index);
+    }
+
+    /**
+     * This method gets the concrete AnswerFormat, checks if the QuizViewModel contains already a
+     * matching AnswerModel and otherwise creates a new one and adds it to the QuizViewModel.
+     * Further a bundle is prepared, then it dispatches the correct Fragment class and finally
+     * starts it.
+     *
+     * @param question The question that is going to be shown
+     * @param index The index of that Question in the Quiz, the question list
+     */
+    private void prepareAnswerFormatFragment(Question question, Integer index) {
+        // Get the AnswerFormat of the question
+        AnswerFormat answerFormat = question.getFormat();
+
+        AnswerModel answerModel;
+        HashMap<Integer, AnswerModel> answers = quizViewModel.getAnswers().getValue();
+
+        // Check if the model already holds an AnswerModel for this question
+        if (answers.containsKey(index)) {
+            answerModel = answers.get(index);
+        } else { // and otherwise create a new one and add it to the QuizViewModel
+            answerModel = answerFormat.getNewAnswerModel();
+            answers.put(index, answerModel);
+            quizViewModel.getAnswers().postValue(answers);
+        }
+
+        // Prepare the bundle for the Fragment
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ANSWER_FORMAT, answerFormat);
+        bundle.putSerializable(ANSWER_MODEL, answerModel);
+
+        // Get the fragment that matches the concrete type of AnswerFormat
+        Fragment fragment = answerFormat.getNewFragment();
+        fragment.setArguments(bundle);
 
         // And dynamically instantiate the answer form
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.answer_fragment_container, matrixFragment)
+                .replace(R.id.answer_fragment_container, fragment, FRAGMENT_TAG)
                 .commit();
     }
 }

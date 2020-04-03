@@ -47,10 +47,30 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
     @Test
     public void testFragmentDisplaysQuestionCorrectly() {
         model.getFocusedQuestion().postValue(0);
+
         onView(withId(R.id.question_title))
                 .check(matches(withText("Question 1 - The matches problem")));
         onView(withId(R.id.question_display))
-                .check(matches(withText("How many matches can fit in a shoe of size 43?")));
+                .check(matches(withText("How many matches can fit in a shoe of size 43 ?")));
         onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testAnswerFormatDispatch() {
+        model.getFocusedQuestion().postValue(0);
+
+        onView(withId(R.id.question_title))
+                .check(matches(withText("Question 1 - The matches problem")));
+        onView(withId(R.id.question_display))
+                .check(matches(withText("How many matches can fit in a shoe of size 43 ?")));
+        onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
+
+        model.getFocusedQuestion().postValue(1);
+
+        onView(withId(R.id.question_title)).check(matches(withText("Question 2 - Title 2")));
+        onView(withId(R.id.question_display)).check(matches(withText("Test answer format")));
+        onView(withId(R.id.testAnswerFormatTextView)).check(matches(isDisplayed()));
+        onView(withId(R.id.testAnswerFormatTextView))
+                .check(matches(withText("This is just a test!")));
     }
 }
