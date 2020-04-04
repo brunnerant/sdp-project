@@ -55,13 +55,13 @@ public class EditQuestionFragment extends Fragment {
                         });
     }
 
-    private boolean testOnQuiz(Quiz quiz, Integer index) {
+    private boolean quizAndIndexAreValid(Quiz quiz, Integer index) {
         return index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size();
     }
 
     /** Handles the transition from one question to another */
     private void editOnQuestionChanged(Quiz quiz, Integer index) {
-        if (testOnQuiz(quiz, index)) {
+        if (quizAndIndexAreValid(quiz, index)) {
             return;
         }
 
@@ -75,7 +75,7 @@ public class EditQuestionFragment extends Fragment {
         prepareEditAnswerFormatFragment(question, index);
     }
 
-    private AnswerModel getNewAnswerModel(AnswerFormat answerFormat, int index) {
+    private AnswerModel getAnswerModel(AnswerFormat answerFormat, int index) {
         AnswerModel answerModel;
         HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
         if (!answers.containsKey(index)) {
@@ -92,7 +92,7 @@ public class EditQuestionFragment extends Fragment {
     private void prepareEditAnswerFormatFragment(Question question, Integer index) {
         AnswerFormat answerFormat = question.getFormat();
 
-        AnswerModel answerModel = getNewAnswerModel(answerFormat, index);
+        AnswerModel answerModel = getAnswerModel(answerFormat, index);
 
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_FORMAT, answerFormat);

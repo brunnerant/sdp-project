@@ -79,6 +79,8 @@ public class EditOverviewFragment extends Fragment {
                                 break;
                             case RemoveRequest:
                                 adapter.removeItem(position);
+                                model.getQuiz().removeQuestionOnIndex(position);
+                                model.getAnswers().getValue().remove(position);
                                 break;
                             case EditRequest:
                                 setFragment(new EditQuestionFragment());
@@ -91,7 +93,7 @@ public class EditOverviewFragment extends Fragment {
     }
 
     private void setFragment(Fragment fragment) {
-        getActivity()
+        requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.question_details_container, fragment)
