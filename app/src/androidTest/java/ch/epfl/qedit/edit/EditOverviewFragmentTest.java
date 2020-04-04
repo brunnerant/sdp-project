@@ -10,10 +10,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
 import static org.hamcrest.Matchers.not;
 
+import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.edit.EditOverviewFragment;
+import ch.epfl.qedit.view.edit.EditQuizActivity;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -21,6 +25,21 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     @Rule
     public final FragmentTestRule<?, EditOverviewFragment> testRule =
             FragmentTestRule.create(EditOverviewFragment.class);
+
+    @Rule
+    public ActivityTestRule<EditQuizActivity> fRule =
+            new ActivityTestRule<>(EditQuizActivity.class);
+
+    @Before
+    public void setUp() throws Exception {
+        fRule.getActivity().getSupportFragmentManager().beginTransaction();
+    }
+
+    @After
+    public void commit() {
+        fRule.getActivity().finish();
+        testRule.finishActivity();
+    }
 
     public EditOverviewFragmentTest() {
         super(R.id.question_list);

@@ -56,8 +56,9 @@ public class QuestionFragment extends Fragment {
 
     /** Handles the transition from one question to another */
     private void onQuestionChanged(Quiz quiz, Integer index) {
-        if (index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size())
+        if (index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size()) {
             return;
+        }
 
         Question question = quiz.getQuestions().get(index);
 

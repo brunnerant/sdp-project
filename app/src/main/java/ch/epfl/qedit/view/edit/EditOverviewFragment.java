@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ListEditView;
+import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,16 +20,18 @@ public class EditOverviewFragment extends Fragment {
     private List<Question> questions;
     private int numQuestions;
     private ListEditView.Adapter<Question> adapter;
+    private QuizViewModel model;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
-
+        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
         // Retrieve and configure the recycler view
         ListEditView listEditView = view.findViewById(R.id.question_list);
         createAdapter();
+        setListener();
         listEditView.setAdapter(adapter);
 
         // Configure the add button
@@ -60,15 +65,39 @@ public class EditOverviewFragment extends Fragment {
                                 return item.getTitle();
                             }
                         });
+    }
 
+    private void setListener() {
         adapter.setItemListener(
                 new ListEditView.ItemListener() {
                     @Override
                     public void onItemEvent(int position, ListEditView.EventType type) {
-                        if (type == ListEditView.EventType.RemoveRequest)
-                            adapter.removeItem(position);
+                        switch (type) {
+                            case Select:
+                                setFragment(new QuestionFragment());
+                                model.getFocusedQuestion().postValue(position);
+                                break;
+                            case RemoveRequest:
+                                adapter.removeItem(position);
+                                model.getQuiz().removeQuestionOnIndex(position);
+                                model.getAnswers().getValue().remove(position);
+                                break;
+                            case EditRequest:
+                                setFragment(new EditQuestionFragment());
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 });
+    }
+
+    private void setFragment(Fragment fragment) {
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.question_details_container, fragment)
+                .commit();
     }
 
     private void addDummyQuestions() {
