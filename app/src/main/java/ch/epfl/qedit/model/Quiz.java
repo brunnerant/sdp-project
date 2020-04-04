@@ -27,6 +27,7 @@ public class Quiz implements Serializable {
     public ImmutableList<Question> getQuestions() {
         return ImmutableList.copyOf(questions);
     }
+
     public void removeQuestionOnIndex(int index) {
         questions.remove(index);
     }
