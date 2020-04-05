@@ -1,11 +1,9 @@
 package ch.epfl.qedit.model.answer;
 
-import androidx.fragment.app.Fragment;
-
+import ch.epfl.qedit.view.answer.AnswerFragment;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import ch.epfl.qedit.view.answer.MatrixFragment;
 
 public class MatrixFormat extends AnswerFormat {
 
@@ -47,7 +45,7 @@ public class MatrixFormat extends AnswerFormat {
     }
 
     @Override
-    public Fragment getAnswerFragment() {
+    public AnswerFragment<MatrixFormat, MatrixModel> getAnswerFragment() {
         return new MatrixFragment();
     }
 
@@ -93,11 +91,6 @@ public class MatrixFormat extends AnswerFormat {
     public static MatrixFormat createSingleField(
             boolean hasDecimal, boolean hasSign, int maxCharacters) {
         return new MatrixFormat(1, 1, hasDecimal, hasSign, maxCharacters);
-    }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMatrixFormat(this);
     }
 
     public int getTableRowsNumber() {

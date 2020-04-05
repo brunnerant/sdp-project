@@ -5,21 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.HashMap;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.HashMap;
 
 public class QuestionFragment extends Fragment {
     public static final String ANSWER_FORMAT = "ch.epfl.qedit.view.ANSWER_FORMAT";

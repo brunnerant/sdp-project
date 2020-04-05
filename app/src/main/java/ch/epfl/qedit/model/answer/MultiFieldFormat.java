@@ -1,7 +1,6 @@
 package ch.epfl.qedit.model.answer;
 
-import androidx.fragment.app.Fragment;
-
+import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +28,7 @@ public class MultiFieldFormat extends AnswerFormat {
     }
 
     @Override
-    public Fragment getAnswerFragment() {
+    public AnswerFragment getAnswerFragment() {
         return null;
     }
 
@@ -40,10 +39,5 @@ public class MultiFieldFormat extends AnswerFormat {
             return fields.equals(other.fields);
         }
         return false;
-    }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMultiFieldFormat(this);
     }
 }

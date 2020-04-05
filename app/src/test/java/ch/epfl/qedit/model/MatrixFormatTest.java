@@ -1,13 +1,12 @@
 package ch.epfl.qedit.model;
 
-import org.junit.Test;
-
-import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.MatrixFormat;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
+
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat;
+import org.junit.Test;
 
 public class MatrixFormatTest {
     @Test

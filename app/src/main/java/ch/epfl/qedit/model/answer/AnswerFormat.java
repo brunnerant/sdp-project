@@ -1,10 +1,9 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
-
-import ch.epfl.qedit.view.answer.AnswerFragment;
 
 /**
  * This class represents all the answer formats that are available in the app. The purpose of this
@@ -14,8 +13,8 @@ import ch.epfl.qedit.view.answer.AnswerFragment;
 public abstract class AnswerFormat implements Serializable {
 
     /**
-     * This is the title of the answer, to help the user know what he needs to fill.
-     * It can be null if it is not needed.
+     * This is the title of the answer, to help the user know what he needs to fill. It can be null
+     * if it is not needed.
      */
     private String text;
 
@@ -30,15 +29,17 @@ public abstract class AnswerFormat implements Serializable {
     }
 
     /**
-     * This function should return an empty answer model corresponding to its type, so that
-     * answers can be stored for this answer format.
+     * This function should return an empty answer model corresponding to its type, so that answers
+     * can be stored for this answer format.
+     *
      * @return the corresponding answer model, empty
      */
     public abstract AnswerModel getEmptyAnswerModel();
 
     /**
-     * This function should return the android fragment corresponding to its type, so that the
-     * quiz activity can dynamically instantiate the corresponding user interface.
+     * This function should return the android fragment corresponding to its type, so that the quiz
+     * activity can dynamically instantiate the corresponding user interface.
+     *
      * @return the corresponding answer fragment
      */
     public abstract AnswerFragment getAnswerFragment();

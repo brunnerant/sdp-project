@@ -13,19 +13,16 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
     private QuizViewModel quizViewModel;

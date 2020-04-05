@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.TestAnswerFormat;
 import ch.epfl.qedit.model.answer.TestAnswerModel;

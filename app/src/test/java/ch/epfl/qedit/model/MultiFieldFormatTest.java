@@ -1,11 +1,10 @@
 package ch.epfl.qedit.model;
 
-import org.junit.Test;
+import static org.junit.Assert.assertNotEquals;
 
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
-
-import static org.junit.Assert.assertNotEquals;
+import org.junit.Test;
 
 public class MultiFieldFormatTest {
 

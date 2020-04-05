@@ -1,26 +1,23 @@
 package ch.epfl.qedit.view.edit;
 
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
+import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.HashMap;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-
-import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
-import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
+import java.util.HashMap;
 
 public class EditQuestionFragment extends Fragment {
     public static final String EDIT_ANSWER_FORMAT = "ch.epfl.qedit.view.edit.EDIT_ANSWER_FORMAT";

@@ -1,20 +1,17 @@
 package ch.epfl.qedit.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import androidx.fragment.app.Fragment;
-
-import org.junit.Test;
-
-import java.util.Arrays;
-
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
 import ch.epfl.qedit.view.answer.MatrixFragment;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import java.util.Arrays;
+import org.junit.Test;
 
 public class AnswerFormatTest {
 
