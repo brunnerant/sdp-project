@@ -41,7 +41,7 @@ public class MatrixFormat extends AnswerFormat {
 
     @Override
     public AnswerModel getEmptyAnswerModel() {
-        return new MatrixModel(tableRowsNumber, tableColumnsNumber);
+        return new MatrixModel(tableColumnsNumber, tableRowsNumber);
     }
 
     @Override
