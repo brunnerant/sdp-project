@@ -1,17 +1,20 @@
 package ch.epfl.qedit.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import androidx.fragment.app.Fragment;
+
+import org.junit.Test;
+
+import java.util.Arrays;
+
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
 import ch.epfl.qedit.view.answer.MatrixFragment;
-import java.util.Arrays;
-import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class AnswerFormatTest {
 
@@ -63,16 +66,16 @@ public class AnswerFormatTest {
     }
 
     @Test
-    public void testVisitorDispatchForFragment() {
+    public void testFragmentIsCorrectlyDispatched() {
         MatrixFormat matrixFormat = new MatrixFormat(2, 2);
-        Fragment fragment = matrixFormat.getNewFragment();
+        Fragment fragment = matrixFormat.getAnswerFragment();
         assertEquals(MatrixFragment.class, fragment.getClass());
     }
 
     @Test
-    public void testVisitorDispatchForAnswerModel() {
+    public void testModelIsCorrectlyDispatched() {
         MatrixFormat matrixFormat = new MatrixFormat(2, 2);
-        AnswerModel answerModel = matrixFormat.getNewAnswerModel();
+        AnswerModel answerModel = matrixFormat.getEmptyAnswerModel();
         assertEquals(MatrixModel.class, answerModel.getClass());
     }
 }

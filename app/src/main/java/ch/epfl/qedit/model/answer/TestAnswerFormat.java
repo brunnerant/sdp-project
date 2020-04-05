@@ -1,9 +1,23 @@
 package ch.epfl.qedit.model.answer;
 
+import androidx.fragment.app.Fragment;
+
+import ch.epfl.qedit.view.answer.TestAnswerFragment;
+
 /** Only for test purposes */
 public class TestAnswerFormat extends AnswerFormat {
     public TestAnswerFormat(String text) {
         super(text);
+    }
+
+    @Override
+    public AnswerModel getEmptyAnswerModel() {
+        return new TestAnswerModel();
+    }
+
+    @Override
+    public Fragment getAnswerFragment() {
+        return new TestAnswerFragment();
     }
 
     @Override

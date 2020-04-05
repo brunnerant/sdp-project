@@ -1,7 +1,11 @@
 package ch.epfl.qedit.model.answer;
 
+import androidx.fragment.app.Fragment;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ch.epfl.qedit.view.answer.MatrixFragment;
 
 public class MatrixFormat extends AnswerFormat {
 
@@ -35,6 +39,16 @@ public class MatrixFormat extends AnswerFormat {
         this.hasDecimal = hasDecimal;
         this.hasSign = hasSign;
         this.maxCharacters = maxCharacters;
+    }
+
+    @Override
+    public AnswerModel getEmptyAnswerModel() {
+        return new MatrixModel(tableRowsNumber, tableColumnsNumber);
+    }
+
+    @Override
+    public Fragment getAnswerFragment() {
+        return new MatrixFragment();
     }
 
     public static MatrixFormat parse(String format, String text) {

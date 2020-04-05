@@ -1,14 +1,13 @@
 package ch.epfl.qedit.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import org.junit.Test;
 
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
-import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 
 public class MatrixFormatTest {
     @Test
@@ -37,14 +36,6 @@ public class MatrixFormatTest {
         MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3(true, true, 5);
 
         checkAllElements(matrixFormat, true, true, 3, 3, 5, "00000");
-    }
-
-    @Test
-    public void answerCanBeCorrectlyVisited() {
-        MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3();
-        AnswerFormat.Visitor visitor = mock(AnswerFormat.Visitor.class);
-        matrixFormat.accept(visitor);
-        verify(visitor).visitMatrixFormat(matrixFormat);
     }
 
     private void checkAllElements(
