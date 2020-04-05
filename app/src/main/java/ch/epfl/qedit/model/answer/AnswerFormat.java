@@ -18,7 +18,7 @@ public abstract class AnswerFormat implements Serializable {
      */
     private String text;
 
-    // Package private constructor, to be used by subclasses
+    // Package-private constructor, to be used by subclasses
     AnswerFormat(String text) {
         this.text = text;
     }
