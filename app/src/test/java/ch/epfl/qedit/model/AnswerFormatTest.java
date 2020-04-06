@@ -63,16 +63,16 @@ public class AnswerFormatTest {
     }
 
     @Test
-    public void testVisitorDispatchForFragment() {
+    public void testFragmentIsCorrectlyDispatched() {
         MatrixFormat matrixFormat = new MatrixFormat(2, 2);
-        Fragment fragment = matrixFormat.getNewFragment();
+        Fragment fragment = matrixFormat.getAnswerFragment();
         assertEquals(MatrixFragment.class, fragment.getClass());
     }
 
     @Test
-    public void testVisitorDispatchForAnswerModel() {
+    public void testModelIsCorrectlyDispatched() {
         MatrixFormat matrixFormat = new MatrixFormat(2, 2);
-        AnswerModel answerModel = matrixFormat.getNewAnswerModel();
+        AnswerModel answerModel = matrixFormat.getEmptyAnswerModel();
         assertEquals(MatrixModel.class, answerModel.getClass());
     }
 }

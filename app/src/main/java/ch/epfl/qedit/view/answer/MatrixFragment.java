@@ -1,8 +1,5 @@
 package ch.epfl.qedit.view.answer;
 
-import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
-import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -18,7 +15,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.AnswerModel;
@@ -28,22 +24,12 @@ import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MatrixFragment extends Fragment {
-    private MatrixFormat matrixFormat;
-    private MatrixModel matrixModel;
-
+public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
     private QuizViewModel quizViewModel;
 
     private final ArrayList<TableRow> tableRow = new ArrayList<>();
     private final ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
     private final ArrayList<ArrayList<Integer>> arrayIds = new ArrayList<>();
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        matrixFormat = (MatrixFormat) getArguments().getSerializable(ANSWER_FORMAT);
-        matrixModel = (MatrixModel) getArguments().getSerializable(ANSWER_MODEL);
-    }
 
     @Override
     public View onCreateView(
@@ -61,16 +47,16 @@ public class MatrixFragment extends Fragment {
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // Initialize EditTexts
-        for (int i = 0; i < matrixFormat.getTableRowsNumber(); ++i) {
+        for (int i = 0; i < answerFormat.getTableRowsNumber(); ++i) {
             TableRow t = new TableRow(requireActivity());
             arrayButtons.add(new ArrayList<EditText>());
             arrayIds.add(new ArrayList<Integer>());
             tableRow.add(t);
-            for (int j = 0; j < matrixFormat.getTableColumnsNumber(); ++j) {
+            for (int j = 0; j < answerFormat.getTableColumnsNumber(); ++j) {
                 EditText editText = newEditText(i);
 
                 // Get the entries stored in the model
-                editText.setText(matrixModel.getAnswer(i, j));
+                editText.setText(answerModel.getAnswer(i, j));
                 addTextWatcher(editText, i, j);
                 arrayButtons.get(i).add(editText);
                 tableRow.get(i).addView(editText);
@@ -98,12 +84,12 @@ public class MatrixFragment extends Fragment {
                     @Override
                     public void afterTextChanged(Editable s) {
                         // Update the value in the model
-                        matrixModel.updateAnswer(row, col, editText.getText().toString());
+                        answerModel.updateAnswer(row, col, editText.getText().toString());
 
                         // and update the AnswerModel stored in the QuizViewModel
                         HashMap<Integer, AnswerModel> map = quizViewModel.getAnswers().getValue();
                         map.remove(quizViewModel.getFocusedQuestion().getValue());
-                        map.put(quizViewModel.getFocusedQuestion().getValue(), matrixModel);
+                        map.put(quizViewModel.getFocusedQuestion().getValue(), answerModel);
                     }
                 });
     }
@@ -115,11 +101,11 @@ public class MatrixFragment extends Fragment {
                         | InputType.TYPE_NUMBER_FLAG_DECIMAL
                         | InputType.TYPE_NUMBER_FLAG_SIGNED);
         editText.setKeyListener(
-                DigitsKeyListener.getInstance(matrixFormat.hasSign(), matrixFormat.hasDecimal()));
-        editText.setHint(matrixFormat.getHint());
+                DigitsKeyListener.getInstance(answerFormat.hasSign(), answerFormat.hasDecimal()));
+        editText.setHint(answerFormat.getHint());
 
         editText.setFilters(
-                new InputFilter[] {new InputFilter.LengthFilter(matrixFormat.getMaxCharacters())});
+                new InputFilter[] {new InputFilter.LengthFilter(answerFormat.getMaxCharacters())});
 
         int id = View.generateViewId();
         arrayIds.get(row).add(id);

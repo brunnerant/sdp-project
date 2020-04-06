@@ -1,5 +1,7 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.view.answer.AnswerFragment;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +37,16 @@ public class MatrixFormat extends AnswerFormat {
         this.hasDecimal = hasDecimal;
         this.hasSign = hasSign;
         this.maxCharacters = maxCharacters;
+    }
+
+    @Override
+    public AnswerModel getEmptyAnswerModel() {
+        return new MatrixModel(tableColumnsNumber, tableRowsNumber);
+    }
+
+    @Override
+    public AnswerFragment<MatrixFormat, MatrixModel> getAnswerFragment() {
+        return new MatrixFragment();
     }
 
     public static MatrixFormat parse(String format, String text) {
@@ -79,11 +91,6 @@ public class MatrixFormat extends AnswerFormat {
     public static MatrixFormat createSingleField(
             boolean hasDecimal, boolean hasSign, int maxCharacters) {
         return new MatrixFormat(1, 1, hasDecimal, hasSign, maxCharacters);
-    }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMatrixFormat(this);
     }
 
     public int getTableRowsNumber() {

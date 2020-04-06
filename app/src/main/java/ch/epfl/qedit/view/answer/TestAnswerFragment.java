@@ -6,16 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.answer.TestAnswerFormat;
+import ch.epfl.qedit.model.answer.TestAnswerModel;
 
 /** Only for test purposes */
-public class TestAnswerFragment extends Fragment {
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+public class TestAnswerFragment extends AnswerFragment<TestAnswerFormat, TestAnswerModel> {
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater,

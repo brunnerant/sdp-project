@@ -29,9 +29,4 @@ public class MatrixModel extends AnswerModel {
             throw new IndexOutOfBoundsException();
         }
     }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMatrixModel(this);
-    }
 }

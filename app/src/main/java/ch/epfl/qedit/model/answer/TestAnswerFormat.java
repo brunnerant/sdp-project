@@ -1,5 +1,8 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.view.answer.AnswerFragment;
+import ch.epfl.qedit.view.answer.TestAnswerFragment;
+
 /** Only for test purposes */
 public class TestAnswerFormat extends AnswerFormat {
     public TestAnswerFormat(String text) {
@@ -7,8 +10,13 @@ public class TestAnswerFormat extends AnswerFormat {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitTestAnswerFormat(this);
+    public AnswerModel getEmptyAnswerModel() {
+        return new TestAnswerModel();
+    }
+
+    @Override
+    public AnswerFragment<TestAnswerFormat, TestAnswerModel> getAnswerFragment() {
+        return new TestAnswerFragment();
     }
 
     public static TestAnswerFormat parse(String format, String text) {

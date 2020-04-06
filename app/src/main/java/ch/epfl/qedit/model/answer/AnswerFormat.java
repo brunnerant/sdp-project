@@ -1,27 +1,48 @@
 package ch.epfl.qedit.model.answer;
 
-import androidx.fragment.app.Fragment;
-import ch.epfl.qedit.util.Visitable;
-import ch.epfl.qedit.view.answer.MatrixFragment;
-import ch.epfl.qedit.view.answer.TestAnswerFragment;
+import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-/** This class represents all the answer formats that are available in the app. */
-public abstract class AnswerFormat implements Visitable<AnswerFormat.Visitor>, Serializable {
+/**
+ * This class represents all the answer formats that are available in the app. The purpose of this
+ * class is merely to represents how the answer fields look like, and not to store what the user
+ * entered. To store what the user entered, see AnswerModel.
+ */
+public abstract class AnswerFormat implements Serializable {
 
-    // Can be null
+    /**
+     * This is the title of the answer, to help the user know what he needs to fill. It can be null
+     * if it is not needed.
+     */
     private String text;
 
-    // Package Private: protected
+    // Package-private constructor, to be used by subclasses
     AnswerFormat(String text) {
         this.text = text;
     }
 
+    /** Returns the text of the answer */
     public String getText() {
         return text;
     }
+
+    /**
+     * This function should return an empty answer model corresponding to its type, so that answers
+     * can be stored for this answer format.
+     *
+     * @return the corresponding answer model, empty
+     */
+    public abstract AnswerModel getEmptyAnswerModel();
+
+    /**
+     * This function should return the android fragment corresponding to its type, so that the quiz
+     * activity can dynamically instantiate the corresponding user interface.
+     *
+     * @return the corresponding answer fragment
+     */
+    public abstract AnswerFragment getAnswerFragment();
 
     @Override
     public boolean equals(Object o) {
@@ -32,78 +53,8 @@ public abstract class AnswerFormat implements Visitable<AnswerFormat.Visitor>, S
         return false;
     }
 
-    public interface Visitor {
-        void visitMatrixFormat(MatrixFormat matrixFormat);
-
-        void visitTestAnswerFormat(TestAnswerFormat testAnswerFormat);
-
-        void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat);
-    }
-
-    /**
-     * Uses the visitor pattern for dispatching between the different AnswerModels and returns a new
-     * one which goes with the concrete type of the AnswerFormat
-     *
-     * @return A new instance of the matching AnswerModel
-     */
-    public AnswerModel getNewAnswerModel() {
-        final AnswerModel[] answerModel = new AnswerModel[1];
-
-        accept(
-                new Visitor() {
-                    @Override
-                    public void visitMatrixFormat(MatrixFormat matrixFormat) {
-                        answerModel[0] =
-                                new MatrixModel(
-                                        matrixFormat.getTableColumnsNumber(),
-                                        matrixFormat.getTableRowsNumber());
-                    }
-
-                    @Override
-                    public void visitTestAnswerFormat(TestAnswerFormat testAnswerFormat) {
-                        answerModel[0] = new TestAnswerModel();
-                    }
-
-                    @Override
-                    public void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat) {
-                        // Nothing for now
-                    }
-                });
-
-        return answerModel[0];
-    }
-
-    /**
-     * Uses the visitor pattern for dispatching between the different fragments and returns a new
-     * one which goes with the concrete type of the AnswerFormat
-     *
-     * @return A new instance of the matching Fragment
-     */
-    public Fragment getNewFragment() {
-        final Fragment[] fragment = new Fragment[1];
-
-        accept(
-                new Visitor() {
-                    @Override
-                    public void visitMatrixFormat(MatrixFormat matrixFormat) {
-                        fragment[0] = new MatrixFragment();
-                    }
-
-                    @Override
-                    public void visitTestAnswerFormat(TestAnswerFormat testAnswerFormat) {
-                        fragment[0] = new TestAnswerFragment();
-                    }
-
-                    @Override
-                    public void visitMultiFieldFormat(MultiFieldFormat multiFieldFormat) {
-                        // Nothing for now
-                    }
-                });
-
-        return fragment[0];
-    }
-
-    private static AnswerFormat parseNotCompoundFormat(String field) {
+    /** Parses a simple answer format, that is not recursive */
+    private static AnswerFormat parseSimpleFormat(String field) {
 
         // Split <format>:<text> into two string
         String[] formatAndText = field.split(":", 2);
@@ -135,7 +86,7 @@ public abstract class AnswerFormat implements Visitable<AnswerFormat.Visitor>, S
         ArrayList<AnswerFormat> fields = new ArrayList<>();
         for (String field : answerFormat.split(";")) {
             // <format>:<text> | <format>
-            AnswerFormat result = parseNotCompoundFormat(field);
+            AnswerFormat result = parseSimpleFormat(field);
             if (result == null) {
                 return null;
             }

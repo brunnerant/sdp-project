@@ -79,7 +79,7 @@ public class EditQuestionFragment extends Fragment {
         AnswerModel answerModel;
         HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
         if (!answers.containsKey(index)) {
-            answerModel = answerFormat.getNewAnswerModel();
+            answerModel = answerFormat.getEmptyAnswerModel();
             answers.put(index, answerModel);
             model.getAnswers().postValue(answers);
         } else {
@@ -98,7 +98,7 @@ public class EditQuestionFragment extends Fragment {
         bundle.putSerializable(ANSWER_FORMAT, answerFormat);
         bundle.putSerializable(ANSWER_MODEL, answerModel);
 
-        Fragment editFragment = answerFormat.getNewFragment();
+        Fragment editFragment = answerFormat.getAnswerFragment();
         editFragment.setArguments(bundle);
 
         requireActivity()

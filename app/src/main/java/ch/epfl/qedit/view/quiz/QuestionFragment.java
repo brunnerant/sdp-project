@@ -91,7 +91,7 @@ public class QuestionFragment extends Fragment {
         if (answers.containsKey(index)) {
             answerModel = answers.get(index);
         } else { // and otherwise create a new one and add it to the QuizViewModel
-            answerModel = answerFormat.getNewAnswerModel();
+            answerModel = answerFormat.getEmptyAnswerModel();
             answers.put(index, answerModel);
             quizViewModel.getAnswers().postValue(answers);
         }
@@ -102,7 +102,7 @@ public class QuestionFragment extends Fragment {
         bundle.putSerializable(ANSWER_MODEL, answerModel);
 
         // Get the fragment that matches the concrete type of AnswerFormat
-        Fragment fragment = answerFormat.getNewFragment();
+        Fragment fragment = answerFormat.getAnswerFragment();
         fragment.setArguments(bundle);
 
         // And dynamically instantiate the answer form

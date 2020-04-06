@@ -1,5 +1,6 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,16 +23,21 @@ public class MultiFieldFormat extends AnswerFormat {
     }
 
     @Override
+    public AnswerModel getEmptyAnswerModel() {
+        return null;
+    }
+
+    @Override
+    public AnswerFragment getAnswerFragment() {
+        return null;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (super.equals(o) && o instanceof MultiFieldFormat) {
             MultiFieldFormat other = (MultiFieldFormat) o;
             return fields.equals(other.fields);
         }
         return false;
-    }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMultiFieldFormat(this);
     }
 }
