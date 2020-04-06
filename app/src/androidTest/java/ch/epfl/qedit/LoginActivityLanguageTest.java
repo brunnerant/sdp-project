@@ -36,6 +36,12 @@ public class LoginActivityLanguageTest {
     public void launchActivity() {
         Intent intent = new Intent();
         testRule.launchActivity(intent);
+
+        String startupLanguage = Locale.getDefault().getLanguage();
+
+        onView(withId(R.id.login_button)).perform(closeSoftKeyboard());
+        onView(withId(R.id.language_selection)).perform(click());
+        onData(anything()).atPosition(getIndexOfLanguage(startupLanguage)).perform(click());
     }
 
     @After
@@ -53,15 +59,7 @@ public class LoginActivityLanguageTest {
         @SuppressWarnings("unused")
         String lang = LocaleHelper.getLanguage(testRule.getActivity());
 
-        // Language position
-        int pos = -1;
-        if (languageCode.equals("en")) {
-            pos = 0;
-        } else if (languageCode.equals("fr")) {
-            pos = 1;
-        } else {
-            pos = 0;
-        }
+        int pos = getIndexOfLanguage(languageCode);
 
         onView(withId(R.id.login_button)).perform(closeSoftKeyboard());
         onView(withId(R.id.language_selection)).perform(click());
@@ -77,6 +75,22 @@ public class LoginActivityLanguageTest {
                                     not(is(testRule.getActivity().getWindow().getDecorView()))))
                     .check(matches(isDisplayed()));
         }
+    }
+
+    public int getIndexOfLanguage(String languageCode) {
+        String[] languagesCodes =
+                testRule.getActivity().getResources().getStringArray(R.array.languages_codes);
+
+        int pos = -1;
+
+        // Language position
+        for (int i = 0; i < languagesCodes.length && pos < 0; ++i) {
+            if (languageCode.equals(languagesCodes[i])) {
+                pos = i;
+            }
+        }
+
+        return pos;
     }
 
     @Test
