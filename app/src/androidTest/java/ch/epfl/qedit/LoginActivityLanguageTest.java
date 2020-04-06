@@ -92,9 +92,7 @@ public class LoginActivityLanguageTest {
     @Test
     public void testChangeLanguageToEnglish() {
         setLanguage("fr");
-
         testChangeLanguage("English", "en", "Log in", "Language changed to English");
-
         assertEquals("en", Locale.getDefault().getLanguage());
     }
 

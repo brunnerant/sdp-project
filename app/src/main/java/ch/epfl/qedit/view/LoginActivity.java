@@ -1,5 +1,6 @@
 package ch.epfl.qedit.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     private Resources resources;
     private Toast toast;
 
+    @SuppressLint("ShowToast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
