@@ -13,6 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 
 import android.content.Intent;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -36,12 +37,6 @@ public class LoginActivityLanguageTest {
     public void launchActivity() {
         Intent intent = new Intent();
         testRule.launchActivity(intent);
-
-        String startupLanguage = Locale.getDefault().getLanguage();
-
-        onView(withId(R.id.login_button)).perform(closeSoftKeyboard());
-        onView(withId(R.id.language_selection)).perform(click());
-        onData(anything()).atPosition(getIndexOfLanguage(startupLanguage)).perform(click());
     }
 
     @After
@@ -54,21 +49,16 @@ public class LoginActivityLanguageTest {
             String languageCode,
             String loginString,
             String languageChangedString) {
-        String startupLanguage = Locale.getDefault().getLanguage();
-        // We don't use this variable but the call increases the coverage ;)
-        @SuppressWarnings("unused")
-        String lang = LocaleHelper.getLanguage(testRule.getActivity());
 
-        int pos = getIndexOfLanguage(languageCode);
+        String currentLanguage = LocaleHelper.getLanguage(testRule.getActivity());
 
-        onView(withId(R.id.login_button)).perform(closeSoftKeyboard());
-        onView(withId(R.id.language_selection)).perform(click());
-        onData(anything()).atPosition(pos).perform(click());
+        setLanguage(languageCode);
+
         onView(withId(R.id.language_selection)).check(matches(withSpinnerText(language)));
         onView(withId(R.id.login_button)).check(matches(withText(loginString)));
 
         // Test toast
-        if (!startupLanguage.equals(languageCode)) {
+        if (!currentLanguage.equals(languageCode)) {
             onView(withText(languageChangedString))
                     .inRoot(
                             withDecorView(
@@ -93,13 +83,39 @@ public class LoginActivityLanguageTest {
         return pos;
     }
 
-    @Test
-    public void testChangeLanguageEnglish() {
-        testChangeLanguage("English", "en", "Log in", "Language changed to English");
+    public void setLanguage(String languageCode) {
+        onView(withId(R.id.login_button)).perform(closeSoftKeyboard());
+        onView(withId(R.id.language_selection)).perform(click());
+        onData(anything()).atPosition(getIndexOfLanguage(languageCode)).perform(click());
     }
 
     @Test
-    public void testChangeLanguageFrench() {
+    public void testChangeLanguageToEnglish() {
+        setLanguage("fr");
+
+        testChangeLanguage("English", "en", "Log in", "Language changed to English");
+
+        assertEquals("en", Locale.getDefault().getLanguage());
+    }
+
+    @Test
+    public void testChangeLanguageToFrench() {
+        setLanguage("en");
         testChangeLanguage("Français", "fr", "Connexion", "Langue changée en Français");
+        assertEquals("fr", Locale.getDefault().getLanguage());
+    }
+
+    @Test
+    public void testStayOnEnglish() {
+        setLanguage("en");
+        testChangeLanguage("English", "en", "Log in", null);
+        assertEquals("en", Locale.getDefault().getLanguage());
+    }
+
+    @Test
+    public void testStayOnFrench() {
+        setLanguage("fr");
+        testChangeLanguage("Français", "fr", "Connexion", null);
+        assertEquals("fr", Locale.getDefault().getLanguage());
     }
 }

@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private Context context;
     private Resources resources;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         context = getBaseContext();
         resources = getResources();
+        toast = Toast.makeText(getApplicationContext(), null, Toast.LENGTH_SHORT);
 
         /* Language selection */
         // Create spinner (language list)
@@ -129,13 +131,12 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
      * @param languagePos position of the language in the spinner
      */
     private void printChangedLanguageToast(int languagePos) {
-        Toast.makeText(
-                        getApplicationContext(),
-                        resources.getString(R.string.language_changed)
-                                + " "
-                                + resources.getStringArray(R.array.languages_list)[languagePos],
-                        Toast.LENGTH_SHORT)
-                .show();
+        toast.setText(
+                resources.getString(R.string.language_changed)
+                        + " "
+                        + resources.getStringArray(R.array.languages_list)[languagePos]);
+
+        toast.show();
     }
 
     public void handleLogin(View view) {
@@ -183,9 +184,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void printShortToast(int stringId) {
-        Toast toast =
-                Toast.makeText(
-                        getApplicationContext(), resources.getString(stringId), Toast.LENGTH_SHORT);
+        toast.setText(resources.getString(stringId));
         toast.show();
     }
 }
