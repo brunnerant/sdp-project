@@ -7,6 +7,7 @@ import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Error;
 import ch.epfl.qedit.util.Response;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This interface represents a database from which data can be retrieved or modified. For now, only
@@ -44,4 +45,5 @@ public interface DatabaseService {
      * @param responseCallback the callback that will be triggered when the data arrives
      */
     void getQuiz(String quizID, Callback<Response<Quiz>> responseCallback);
+
 }
