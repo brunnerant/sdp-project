@@ -85,17 +85,17 @@ public final class MatrixFormat extends AnswerFormat {
      * consists of the same fields, use the helper method `uniform` instead.
      */
     public static class Builder {
-        private int numColumns;
         private int numRows;
+        private int numColumns;
         private List<List<Field>> fields;
 
         /**
          * Creates a builder for a matrix format. By default, all the fields are empty and
          * cannot be edited.
          */
-        public Builder(int numColumns, int numRows) {
-            this.numColumns = numColumns;
+        public Builder(int numRows, int numColumns) {
             this.numRows = numRows;
+            this.numColumns = numColumns;
 
             // By default, all the cells are empty and cannot be edited
             this.fields = new ArrayList<>(numRows);
@@ -116,47 +116,47 @@ public final class MatrixFormat extends AnswerFormat {
         /**
          * Adds the given field at the given position in the matrix.
          */
-        public Builder withField(int col, int row, Field field) {
+        public Builder withField(int row, int col, Field field) {
             fields.get(row).set(col, field);
             return this;
         }
     }
 
-    private int numColumns;
     private int numRows;
+    private int numColumns;
     private List<List<Field>> fields;
 
     // This constructor is private because the builder or the static factory methods should
     // be used instead. This guarantees that this constructor will be called with valid
     // arguments.
-    private MatrixFormat(String text, int numColumns, int numRows, List<List<Field>> fields) {
+    private MatrixFormat(String text, int numRows, int numColumns, List<List<Field>> fields) {
         super(text);
-        this.numColumns = numColumns;
         this.numRows = numRows;
+        this.numColumns = numColumns;
         this.fields = fields;
     }
 
     /** Returns a matrix format that is uniformly filled with the same field. */
-    public static MatrixFormat uniform(int numColumns, int numRows, Field field) {
-        Builder builder = new Builder(numColumns, numRows);
+    public static MatrixFormat uniform(int numRows, int numColumns, Field field) {
+        Builder builder = new Builder(numRows, numColumns);
 
-        for (int j = 0; j < numRows; j++) {
-            for (int i = 0; i < numColumns; i++)
-                builder.withField(j, i, field);
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++)
+                builder.withField(i, j, field);
         }
 
         return builder.build();
-    }
-
-    public int getNumColumns() {
-        return numColumns;
     }
 
     public int getNumRows() {
         return numRows;
     }
 
-    public Field getField(int col, int row) {
+    public int getNumColumns() {
+        return numColumns;
+    }
+
+    public Field getField(int row, int col) {
         return fields.get(row).get(col);
     }
 
@@ -176,10 +176,10 @@ public final class MatrixFormat extends AnswerFormat {
             /** Extract the row and column size */
             Matcher number = Pattern.compile("(\\d+)").matcher(format);
             number.find();
-            int i = Integer.parseInt(number.group(1));
+            int numRows = Integer.parseInt(number.group(1));
             number.find();
-            int j = Integer.parseInt(number.group(1));
-            return uniform(i, j, Field.textField("hint", 3));
+            int numCollumns = Integer.parseInt(number.group(1));
+            return uniform(numRows, numCollumns, Field.textField("hint", 3));
         } else {
             return null;
         }
@@ -189,8 +189,8 @@ public final class MatrixFormat extends AnswerFormat {
     public boolean equals(Object o) {
         if (super.equals(o)) {
             MatrixFormat that = (MatrixFormat) o;
-            return numColumns == that.numColumns &&
-                    numRows == that.numRows &&
+            return numRows == that.numRows &&
+                    numColumns == that.numColumns &&
                     Objects.equals(fields, that.fields);
         }
         return false;

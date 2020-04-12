@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.method.DigitsKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,23 +12,25 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
     private QuizViewModel quizViewModel;
 
-    private final ArrayList<TableRow> tableRow = new ArrayList<>();
-    private final ArrayList<ArrayList<EditText>> arrayButtons = new ArrayList<>();
-    private final ArrayList<ArrayList<Integer>> arrayIds = new ArrayList<>();
+    private ArrayList<ArrayList<Integer>> arrayIds;
 
     @Override
     public View onCreateView(
@@ -38,30 +39,30 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
             @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.answer_table, container, false);
-
         TableLayout tableLayout = view.findViewById(R.id.answer_table);
+
         quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         requireActivity()
                 .getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        // Initialize EditTexts
-        for (int i = 0; i < answerFormat.getTableRowsNumber(); ++i) {
-            TableRow t = new TableRow(requireActivity());
-            arrayButtons.add(new ArrayList<EditText>());
+        arrayIds = new ArrayList<>();
+        for (int i = 0; i < answerFormat.getNumRows(); i++) {
+            TableRow row = new TableRow(requireActivity());
             arrayIds.add(new ArrayList<Integer>());
-            tableRow.add(t);
-            for (int j = 0; j < answerFormat.getTableColumnsNumber(); ++j) {
-                EditText editText = newEditText(i);
 
-                // Get the entries stored in the model
-                editText.setText(answerModel.getAnswer(i, j));
-                addTextWatcher(editText, i, j);
-                arrayButtons.get(i).add(editText);
-                tableRow.get(i).addView(editText);
+            for (int j = 0; j < answerFormat.getNumColumns(); j++) {
+                View fieldView = createView(answerFormat.getField(j, i), answerModel.getAnswer(i, j), i, j);
+
+                int id = View.generateViewId();
+                arrayIds.get(i).add(id);
+                fieldView.setId(id);
+
+                row.addView(fieldView);
             }
-            tableLayout.addView(tableRow.get(i));
+
+            tableLayout.addView(row);
         }
 
         return view;
@@ -94,22 +95,30 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
                 });
     }
 
-    private EditText newEditText(int row) {
+    private View createView(MatrixFormat.Field field, String answer, int row, int col) {
+        MatrixFormat.Field.Type type = field.getType();
+
+        if (type == MatrixFormat.Field.Type.PreFilled) {
+            TextView view = new TextView(requireActivity());
+            view.setText(field.getText());
+            return view;
+        }
+
         EditText editText = new EditText(requireActivity());
-        editText.setRawInputType(
-                InputType.TYPE_CLASS_NUMBER
-                        | InputType.TYPE_NUMBER_FLAG_DECIMAL
-                        | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        editText.setKeyListener(
-                DigitsKeyListener.getInstance(answerFormat.hasSign(), answerFormat.hasDecimal()));
-        editText.setHint(answerFormat.getHint());
+        int inputType = InputType.TYPE_CLASS_NUMBER;
 
-        editText.setFilters(
-                new InputFilter[] {new InputFilter.LengthFilter(answerFormat.getMaxCharacters())});
+        if (type == MatrixFormat.Field.Type.SignedFloat || type == MatrixFormat.Field.Type.UnsignedFloat)
+            inputType |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
 
-        int id = View.generateViewId();
-        arrayIds.get(row).add(id);
-        editText.setId(id);
+        if (type == MatrixFormat.Field.Type.SignedFloat || type == MatrixFormat.Field.Type.SignedInt)
+            inputType |= InputType.TYPE_NUMBER_FLAG_SIGNED;
+
+        editText.setInputType(inputType);
+        editText.setText(answer);
+        editText.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(field.getMaxCharacters())
+        });
+        addTextWatcher(editText, row, col);
 
         return editText;
     }
