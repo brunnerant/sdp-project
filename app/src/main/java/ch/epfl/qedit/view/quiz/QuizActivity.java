@@ -1,7 +1,5 @@
 package ch.epfl.qedit.view.quiz;
 
-import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,15 +7,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.Objects;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.Objects;
+
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 
 public class QuizActivity extends AppCompatActivity {
     private QuizViewModel model;

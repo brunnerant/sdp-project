@@ -69,7 +69,7 @@ public class MatrixFragmentTest {
 
     @Test
     public void testTableIsDisplayed() {
-        onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
+        onView(withId(R.id.answer_table)).check(matches(isDisplayed()));
     }
 
     @Test

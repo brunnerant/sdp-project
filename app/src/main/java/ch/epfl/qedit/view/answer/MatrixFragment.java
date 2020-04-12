@@ -37,9 +37,9 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.answers_table, container, false);
+        View view = inflater.inflate(R.layout.answer_table, container, false);
 
-        TableLayout tableLayout = view.findViewById(R.id.answersTable);
+        TableLayout tableLayout = view.findViewById(R.id.answer_table);
         quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         requireActivity()
