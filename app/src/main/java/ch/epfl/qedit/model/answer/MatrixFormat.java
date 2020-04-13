@@ -1,32 +1,54 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.view.answer.AnswerFragment;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ch.epfl.qedit.view.answer.AnswerFragment;
-import ch.epfl.qedit.view.answer.MatrixFragment;
-
 /**
- * This class represents matrices where the user can enter his answers. Fields of the matrices
- * can be used to enter numbers (signed and unsigned, integer or decimal), text, or can be
- * pre-filled with some text.
+ * This class represents matrices where the user can enter his answers. Fields of the matrices can
+ * be used to enter numbers (signed and unsigned, integer or decimal), text, or can be pre-filled
+ * with some text.
  */
 public final class MatrixFormat extends AnswerFormat {
     /**
-     * This class represents a field of a matrix. It can be pre-filled with text (meaning the
-     * user cannot enter something in it), it can be a text input, or a number input.
+     * This class represents a field of a matrix. It can be pre-filled with text (meaning the user
+     * cannot enter something in it), it can be a text input, or a number input.
      */
     public static class Field {
         /** Those are the types of fields of a matrix format */
         public enum Type {
             PreFilled,
             Text,
-            UnsignedInt, SignedInt,
-            UnsignedFloat, SignedFloat
+            UnsignedInt,
+            SignedInt,
+            UnsignedFloat,
+            SignedFloat;
+
+            /** Returns true iff minus sign is allowed in this field type */
+            public boolean isSigned() {
+                switch (this) {
+                    case SignedInt:
+                    case SignedFloat:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            /** Returns true iff decimal dot is allowed in this field type */
+            public boolean isDecimal() {
+                switch (this) {
+                    case SignedFloat:
+                    case UnsignedFloat:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
 
         private Type type;
@@ -53,7 +75,8 @@ public final class MatrixFormat extends AnswerFormat {
         }
 
         /** Returns a numeric field with the giben characteristics */
-        public static Field numericField(boolean decimal, boolean signed, String hint, int maxCharacters) {
+        public static Field numericField(
+                boolean decimal, boolean signed, String hint, int maxCharacters) {
             Type type;
 
             if (decimal) {
@@ -90,17 +113,20 @@ public final class MatrixFormat extends AnswerFormat {
         private List<List<Field>> fields;
 
         /**
-         * Creates a builder for a matrix format. By default, all the fields are empty and
-         * cannot be edited.
+         * Creates a builder for a matrix format. By default, all the fields are empty and cannot be
+         * edited.
          */
         public Builder(int numRows, int numColumns) {
             this.numRows = numRows;
             this.numColumns = numColumns;
 
             // By default, all the cells are empty and cannot be edited
+            Field field = Field.preFilledField("");
             this.fields = new ArrayList<>(numRows);
-            for (int i = 0; i < numRows; i++)
-                fields.add(Collections.nCopies(numColumns, new Field(Field.Type.PreFilled, 0, "")));
+            for (int i = 0; i < numRows; i++) {
+                fields.add(new ArrayList<Field>(numColumns));
+                for (int j = 0; j < numColumns; j++) fields.get(i).add(field);
+            }
         }
 
         /**
@@ -113,9 +139,7 @@ public final class MatrixFormat extends AnswerFormat {
             return result;
         }
 
-        /**
-         * Adds the given field at the given position in the matrix.
-         */
+        /** Adds the given field at the given position in the matrix. */
         public Builder withField(int row, int col, Field field) {
             fields.get(row).set(col, field);
             return this;
@@ -141,11 +165,15 @@ public final class MatrixFormat extends AnswerFormat {
         Builder builder = new Builder(numRows, numColumns);
 
         for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < numColumns; j++)
-                builder.withField(i, j, field);
+            for (int j = 0; j < numColumns; j++) builder.withField(i, j, field);
         }
 
         return builder.build();
+    }
+
+    /** Returns a single-field matrix format */
+    public static MatrixFormat singleField(Field field) {
+        return uniform(1, 1, field);
     }
 
     public int getNumRows() {
@@ -178,8 +206,8 @@ public final class MatrixFormat extends AnswerFormat {
             number.find();
             int numRows = Integer.parseInt(number.group(1));
             number.find();
-            int numCollumns = Integer.parseInt(number.group(1));
-            return uniform(numRows, numCollumns, Field.textField("hint", 3));
+            int numColumns = Integer.parseInt(number.group(1));
+            return uniform(numRows, numColumns, Field.textField("hint", 3));
         } else {
             return null;
         }
@@ -189,9 +217,9 @@ public final class MatrixFormat extends AnswerFormat {
     public boolean equals(Object o) {
         if (super.equals(o)) {
             MatrixFormat that = (MatrixFormat) o;
-            return numRows == that.numRows &&
-                    numColumns == that.numColumns &&
-                    Objects.equals(fields, that.fields);
+            return numRows == that.numRows
+                    && numColumns == that.numColumns
+                    && Objects.equals(fields, that.fields);
         }
         return false;
     }
