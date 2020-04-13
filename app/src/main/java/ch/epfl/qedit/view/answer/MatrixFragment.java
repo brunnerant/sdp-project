@@ -14,16 +14,19 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
     private QuizViewModel quizViewModel;
@@ -113,14 +116,15 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
                         : InputType.TYPE_CLASS_NUMBER;
 
         if (type.isDecimal()) inputType |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
-
         if (type.isSigned()) inputType |= InputType.TYPE_NUMBER_FLAG_SIGNED;
 
         editText.setInputType(inputType);
         editText.setText(answer);
         editText.setHint(field.getText());
-        editText.setFilters(
-                new InputFilter[] {new InputFilter.LengthFilter(field.getMaxCharacters())});
+
+        if (field.getMaxCharacters() != MatrixFormat.Field.NO_LIMIT)
+            editText.setFilters(
+                    new InputFilter[] {new InputFilter.LengthFilter(field.getMaxCharacters())});
 
         return editText;
     }

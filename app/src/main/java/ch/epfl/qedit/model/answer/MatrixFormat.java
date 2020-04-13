@@ -1,12 +1,13 @@
 package ch.epfl.qedit.model.answer;
 
-import ch.epfl.qedit.view.answer.AnswerFragment;
-import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ch.epfl.qedit.view.answer.AnswerFragment;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 
 /**
  * This class represents matrices where the user can enter his answers. Fields of the matrices can
@@ -19,6 +20,9 @@ public final class MatrixFormat extends AnswerFormat {
      * cannot enter something in it), it can be a text input, or a number input.
      */
     public static class Field {
+        /** This is used to represent unlimited length for fields */
+        public static final int NO_LIMIT = -1;
+
         /** Those are the types of fields of a matrix format */
         public enum Type {
             PreFilled,
@@ -66,7 +70,7 @@ public final class MatrixFormat extends AnswerFormat {
 
         /** Returns a field pre-filled with the given text */
         public static Field preFilledField(String text) {
-            return new Field(Type.PreFilled, 0, text);
+            return new Field(Type.PreFilled, NO_LIMIT, text);
         }
 
         /** Returns a text field with the given hint and maximum characters */
@@ -101,6 +105,22 @@ public final class MatrixFormat extends AnswerFormat {
         public String getText() {
             return text;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof Field) {
+                Field that = (Field) o;
+                return maxCharacters == that.maxCharacters
+                        && type == that.type
+                        && text.equals(that.text);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(type, maxCharacters, text);
+        }
     }
 
     /**
@@ -115,8 +135,12 @@ public final class MatrixFormat extends AnswerFormat {
         /**
          * Creates a builder for a matrix format. By default, all the fields are empty and cannot be
          * edited.
+         * @throws IllegalArgumentException if the number of rows or columns is less than 1
          */
         public Builder(int numRows, int numColumns) {
+            if (numRows < 1 || numColumns < 1)
+                throw new IllegalArgumentException();
+
             this.numRows = numRows;
             this.numColumns = numColumns;
 
@@ -132,8 +156,12 @@ public final class MatrixFormat extends AnswerFormat {
         /**
          * Builds the matrix format that was incrementally constructed. Note that this invalidates
          * the builder.
+         *
+         * @throws IllegalStateException if the method was already called before
          */
         public MatrixFormat build() {
+            if (fields == null) throw new IllegalStateException();
+
             MatrixFormat result = new MatrixFormat(null, numRows, numColumns, fields);
             fields = null;
             return result;
@@ -207,7 +235,7 @@ public final class MatrixFormat extends AnswerFormat {
             int numRows = Integer.parseInt(number.group(1));
             number.find();
             int numColumns = Integer.parseInt(number.group(1));
-            return uniform(numRows, numColumns, Field.textField("hint", 3));
+            return uniform(numRows, numColumns, Field.textField("", Field.NO_LIMIT));
         } else {
             return null;
         }
@@ -215,7 +243,7 @@ public final class MatrixFormat extends AnswerFormat {
 
     @Override
     public boolean equals(Object o) {
-        if (super.equals(o)) {
+        if (super.equals(o) && o instanceof MatrixFormat) {
             MatrixFormat that = (MatrixFormat) o;
             return numRows == that.numRows
                     && numColumns == that.numColumns
