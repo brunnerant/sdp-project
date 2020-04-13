@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 /** This class contains static methods useful to implements database interface */
-public class Util {
+public final class Util {
+
+    private Util() {};
 
     // CONVERSION METHODS FROM FIRESTORE TO SPECIALIZE OBJECTS
 
@@ -53,7 +55,7 @@ public class Util {
      * @param docs a list of documents retrieve from firestore
      * @return a AnswerFormat or null if docs contains invalid description of AnswerFormat
      */
-    private static AnswerFormat convertToAnswerFormat(List<Map<String, Object>> docs) {
+    public static AnswerFormat convertToAnswerFormat(List<Map<String, Object>> docs) {
         if (docs == null || docs.isEmpty()) {
             return null;
         } else if (docs.size() == 1) {
@@ -61,7 +63,11 @@ public class Util {
         }
         ArrayList<AnswerFormat> answers = new ArrayList<>();
         for (Map<String, Object> doc : docs) {
-            answers.add(convertToAnswerFormat(doc));
+            AnswerFormat answerFormat = convertToAnswerFormat(doc);
+            if (answerFormat == null) {
+                return null;
+            }
+            answers.add(answerFormat);
         }
 
         return new MultiFieldFormat(answers);

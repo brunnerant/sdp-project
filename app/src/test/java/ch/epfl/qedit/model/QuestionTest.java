@@ -33,7 +33,6 @@ public class QuestionTest {
         AnswerFormat f = new MatrixFormat(1, 1);
         Question q1 = new Question("Question 1", "How old are you?", f);
         Question q2 = new Question("Question 1", "How old are you?", "matrix1x1");
-        Question q3 = new Question("Question 1", "How old are you?", "matrix7x1");
         Question q4 = new Question("Question 2", "How old are you?", "matrix1x1");
 
         assertEquals(q1, q2);
