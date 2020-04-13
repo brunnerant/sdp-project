@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.quiz;
 
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.Arrays;
+import java.util.Objects;
 
 public class QuizActivity extends AppCompatActivity {
     private QuizViewModel model;
@@ -32,18 +32,7 @@ public class QuizActivity extends AppCompatActivity {
 
         // Get the Intent that started this activity and extract the quiz
         Intent intent = getIntent();
-        //        quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
-        MatrixFormat format =
-                new MatrixFormat.Builder(2, 3)
-                        .withField(0, 0, MatrixFormat.Field.textField("a  ", 3))
-                        .withField(0, 1, MatrixFormat.Field.preFilledField("b"))
-                        .withField(0, 2, MatrixFormat.Field.preFilledField("c"))
-                        .withField(1, 0, MatrixFormat.Field.preFilledField("10"))
-                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "   ", 3))
-                        .withField(1, 2, MatrixFormat.Field.numericField(false, true, "   ", 3))
-                        .build();
-
-        quiz = new Quiz("title", Arrays.asList(new Question("how ?", "many", format)));
+        quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
 
         model = new ViewModelProvider(this).get(QuizViewModel.class);
         model.setQuiz(quiz);
