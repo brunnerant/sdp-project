@@ -12,14 +12,20 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MockDBService implements DatabaseService {
 
     public static class MockQuiz {
+        // TODO delete ============================
         private String title_en;
         private String title_fr;
         private ImmutableList<Question> questions_fr;
         private ImmutableList<Question> questions_en;
+        // ===========================================
+        private ImmutableList<Question> questions;
+        private ArrayList<String> supportedLanguage;
+        private HashMap<String, HashMap<String, String>> stringPool;
 
         MockQuiz(
                 String title_en,
@@ -30,6 +36,18 @@ public class MockDBService implements DatabaseService {
             this.title_fr = title_fr;
             this.questions_fr = ImmutableList.copyOf(questions_fr);
             this.questions_en = ImmutableList.copyOf(questions_en);
+        }
+
+        public List<Question> getQuestions(){
+            return new ArrayList<>(questions);
+        }
+
+        public ArrayList<String> getSupportedLanguage(){
+            return supportedLanguage;
+        }
+
+        public HashMap<String, String> getStringPool(String language){
+            return stringPool.get(language);
         }
 
         public String getTitle(String language) {
@@ -101,6 +119,72 @@ public class MockDBService implements DatabaseService {
                         Arrays.asList(bananaQuestion_fr)));
     }
 
+    private void wait2second(){
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getSupportedLanguage(final String quizID, final Callback<Response<List<String>>> responseCallback) {
+        idlingResource.increment();
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        wait2second();
+                        if(Util.require(db.get(quizID) != null, responseCallback, WRONG_DOCUMENT)) {
+                            List<String> supportedLanguage = db.get(quizID).getSupportedLanguage();
+                            responseCallback.onReceive(Response.ok(supportedLanguage));
+                        }
+                        idlingResource.decrement();
+                    }
+                })
+                .start();
+
+    }
+
+    @Override
+    public void getStringPool(final String quizID, final String language, final Callback<Response<Map<String, String>>> responseCallback) {
+        idlingResource.increment();
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        wait2second();
+                        if(Util.require(db.get(quizID) != null, responseCallback, WRONG_DOCUMENT)) {
+                            Map<String, String> stringPool = db.get(quizID).getStringPool(language);
+                            responseCallback.onReceive(Response.ok(stringPool));
+                        }
+                        idlingResource.decrement();
+                    }
+                })
+                .start();
+    }
+
+    @Override
+    public void getQuizStructure(final String quizID, final Callback<Response<Quiz>> responseCallback) {
+
+        idlingResource.increment();
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        wait2second();
+                        if(Util.require(db.get(quizID) != null, responseCallback, WRONG_DOCUMENT)) {
+                            Quiz stringPool = new Quiz("main_title", db.get(quizID).getQuestions());
+                            responseCallback.onReceive(Response.ok(stringPool));
+                        }
+                        idlingResource.decrement();
+                    }
+                })
+                .start();
+
+    }
+
+    // ========================================================================================
     @Override
     public void getQuizQuestions(
             final String quizID, final Callback<Response<List<Question>>> responseCallback) {

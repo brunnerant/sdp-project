@@ -14,7 +14,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -28,20 +27,6 @@ public class FirebaseDBService implements DatabaseService {
         db = FirebaseFirestore.getInstance();
     }
 
-    private Map<String, String> toStringPool(DocumentSnapshot doc){
-        HashMap<String, String> map = new HashMap<>();
-        Map<String, Object> data = doc.getData();
-        if(data == null){
-            return map;
-        }
-        for(Map.Entry<String, Object> entry: data.entrySet()){
-            if(entry.getValue() instanceof String) {
-                map.put(entry.getKey(), (String) entry.getValue());
-            }
-        }
-        return map;
-    }
-
     /**
      *
      * @param quizID String ID of the quiz in Firestore
@@ -49,39 +34,6 @@ public class FirebaseDBService implements DatabaseService {
      */
     private DocumentReference getQuizRef(String quizID){
         return db.collection("quizzes").document(quizID);
-    }
-
-    private String getField(String field, QueryDocumentSnapshot doc) throws Exception {
-        String string = doc.get(field, String.class);
-        if (string == null) {
-            throw new Exception(field + " not found in firestore document");
-        }
-        return string;
-    }
-
-    private Question getQuestionFromDoc(QueryDocumentSnapshot doc) throws Exception {
-        return new Question(
-                getField("title", doc), getField("text", doc), getField("answer_format", doc));
-    }
-
-    /**
-     * Check if the condition pass as argument is true. If not, the response callback is triggered with an error.
-     * This function is an helper function.
-     *
-     * @param condition boolean that need to be true, otherwise the responseCallback is triggered with an error
-     * @param responseCallback Callback function triggered with an error if the condition is not respected
-     * @param error Error with which we triggered the responseCallback if needed
-     * @param <T> This function is generic because we don't really need to know the type of response
-     * @return condition
-     */
-    private <T> boolean require(boolean condition, Callback<Response<T>> responseCallback, Error error){
-        if(condition){
-            return true;
-        }else {
-            Response<T> response = Response.error(error);
-            responseCallback.onReceive(response);
-            return false;
-        }
     }
 
     /**
@@ -93,7 +45,7 @@ public class FirebaseDBService implements DatabaseService {
      * @return true if doc exist, false otherwise, and response a WRONG_DOCUMENT error to the callback response.
      */
     private <T> boolean exists(DocumentSnapshot doc, Callback<Response<T>> responseCallback){
-        return require(doc != null && doc.exists(), responseCallback, WRONG_DOCUMENT);
+        return Util.require(doc != null && doc.exists(), responseCallback, WRONG_DOCUMENT);
     }
 
     /**
@@ -105,7 +57,7 @@ public class FirebaseDBService implements DatabaseService {
      * @return true if collection exist, false otherwise, and response a WRONG_COLLECTION error to the callback response
      */
     private <T> boolean exists(QuerySnapshot collection, Callback<Response<T>> responseCallback){
-        return require(collection != null && !collection.isEmpty(), responseCallback, WRONG_COLLECTION);
+        return Util.require(collection != null && !collection.isEmpty(), responseCallback, WRONG_COLLECTION);
     }
 
     /**
@@ -117,10 +69,11 @@ public class FirebaseDBService implements DatabaseService {
      * @return true if the task is successful, false otherwise, and response a CONNECTION_ERROR error to the callback response
      */
     private <T> boolean isSuccessful(Task task, Callback<Response<T>> responseCallback){
-        return require(task.isSuccessful(), responseCallback, CONNECTION_ERROR);
+        return Util.require(task.isSuccessful(), responseCallback, CONNECTION_ERROR);
     }
 
-    public void getSupportedLanguage(String quizID, final Callback<Response<ArrayList<String>>> responseCallback){
+    @Override
+    public void getSupportedLanguage(String quizID, final Callback<Response<List<String>>> responseCallback){
 
         getQuizRef(quizID).get().addOnCompleteListener(
                 new OnCompleteListener<DocumentSnapshot>() {
@@ -129,8 +82,10 @@ public class FirebaseDBService implements DatabaseService {
                         if (isSuccessful(task, responseCallback)) {
                             DocumentSnapshot doc = task.getResult();
                             if (exists(doc, responseCallback)) {
-                                ArrayList<String> languages = doc.get("supported_languages", ArrayList.class);
-                                responseCallback.onReceive(Response.ok(languages));
+                                List<String> languages = Util.cast(doc.get("supported_languages"));
+                                if(Util.require(languages != null, responseCallback, WRONG_DOCUMENT)){
+                                    responseCallback.onReceive(Response.ok(languages));
+                                }
                             }
                         }
                     }
@@ -139,6 +94,7 @@ public class FirebaseDBService implements DatabaseService {
     }
 
 
+    @Override
     public void getStringPool(String quizID, String language, final Callback<Response<Map<String, String>>> responseCallback){
 
         getQuizRef(quizID).collection("string_pools").document(language).get().addOnCompleteListener(
@@ -148,13 +104,36 @@ public class FirebaseDBService implements DatabaseService {
                         if(isSuccessful(task, responseCallback)) {
                             DocumentSnapshot doc = task.getResult();
                             if (exists(doc, responseCallback)) {
-                                responseCallback.onReceive(Response.ok(toStringPool(doc)));
+                                Map<String, String> stringPool = Util.convertToStringPool(doc);
+                                responseCallback.onReceive(Response.ok(stringPool));
                             }
                         }
                     }
                 }
         );
     }
+
+    @Override
+    public void getQuizStructure(String quizID, final Callback<Response<Quiz>> responseCallback){
+
+        getQuizRef(quizID).collection("questions").orderBy("index").get().addOnCompleteListener(
+                new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(isSuccessful(task, responseCallback)){
+                            QuerySnapshot docs = task.getResult();
+                            if(exists(docs, responseCallback)){
+                                Quiz quiz = Util.convertToQuiz(docs);
+                                responseCallback.onReceive(Response.ok(quiz));
+                            }
+                        }
+                    }
+                }
+        );
+
+    }
+
+    //===========================================================================================================================
 
     @Override
     public void getQuizQuestions(
@@ -173,21 +152,21 @@ public class FirebaseDBService implements DatabaseService {
                                 if (isSuccessful(task, responseCallback)) {
                                     QuerySnapshot docs = task.getResult();
                                     if (exists(docs, responseCallback)) {
-                                        /**
-                                         * We get all questions store as document in firestore and
-                                         * translate them as Question object
-                                         */
+
+                                        // We get all questions store as document in firestore and
+                                        // translate them as Question object
+
                                         List<Question> questions = new ArrayList<>();
                                         for (QueryDocumentSnapshot doc : docs) {
                                             try {
-                                                questions.add(getQuestionFromDoc(doc));
+                                                questions.add(Util.convertToQuestion(doc));
                                             } catch (Exception e) {
-                                                /**
-                                                 * If the translation raise an exception then the
-                                                 * format of the document is wrong, we print the
-                                                 * stack trace for debug purpose, and respond an
-                                                 * error
-                                                 */
+
+                                                // If the translation raise an exception then the
+                                                // format of the document is wrong, we print the
+                                                // stack trace for debug purpose, and respond an
+                                                // error
+
                                                 e.printStackTrace();
                                                 response = Response.error(WRONG_DOCUMENT);
                                                 responseCallback.onReceive(response);
@@ -200,36 +179,6 @@ public class FirebaseDBService implements DatabaseService {
                                 }
                             }
                         });
-    }
-
-    private Quiz queryToQuiz(QuerySnapshot docs){
-        ArrayList<Question> questions = new ArrayList<>();
-        for(QueryDocumentSnapshot doc : docs){
-
-        }
-        return new Quiz("main_title", questions);
-    }
-
-    /**
-     * @param quizID
-     * @param responseCallback
-     */
-    public void getQuizStructure(String quizID, final Callback<Response<Quiz>> responseCallback){
-        getQuizRef(quizID).collection("questions").orderBy("index").get().addOnCompleteListener(
-                new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(isSuccessful(task, responseCallback)){
-                            QuerySnapshot docs = task.getResult();
-                            if(exists(docs, responseCallback)){
-                                Response<Quiz> response = Response.ok(queryToQuiz(docs));
-                                responseCallback.onReceive(response);
-                            }
-                        }
-                    }
-                }
-        );
-
     }
 
     @Override
@@ -256,17 +205,23 @@ public class FirebaseDBService implements DatabaseService {
                         });
     }
 
-    public void getQuiz(final String quizID, int unuseful, final Callback<Response<Quiz>> responseCallback) {
-        /** First we load the title from the database */
+    @Override
+    public void getQuiz(final String quizID, final Callback<Response<Quiz>> responseCallback) {
+
+        // First we load the title from the database
+
         getQuizTitle(
                 quizID,
                 new Callback<Response<String>>() {
                     @Override
                     public void onReceive(final Response<String> titleResponse) {
-                        /** If we manage to extract the title */
+
+                        // If we manage to extract the title
+
                         if (titleResponse.getError() == Response.NO_ERROR) {
                             final String title = titleResponse.getData();
-                            /** We try to extract the list of Questions */
+
+                            // We try to extract the list of Questions
                             getQuizQuestions(
                                     quizID,
                                     new Callback<Response<List<Question>>>() {
@@ -279,10 +234,10 @@ public class FirebaseDBService implements DatabaseService {
                                                                 title, questionsResponse.getData());
                                                 responseCallback.onReceive(Response.ok(quiz));
                                             } else {
-                                                /**
-                                                 * If we cannot load the questions, we respond the
-                                                 * error we get from getQuizTitle
-                                                 */
+
+                                                // If we cannot load the questions, we respond the
+                                                // error we get from getQuizTitle
+
                                                 responseCallback.onReceive(
                                                         Response.<Quiz>error(
                                                                 questionsResponse.getError()));
@@ -290,10 +245,9 @@ public class FirebaseDBService implements DatabaseService {
                                         }
                                     });
                         } else {
-                            /**
-                             * If we cannot load the title, we respond the error we get from
-                             * getQuizTitle
-                             */
+
+                            // If we cannot load the title, we respond the error we get from getQuizTitle
+
                             responseCallback.onReceive(
                                     Response.<Quiz>error(titleResponse.getError()));
                         }
