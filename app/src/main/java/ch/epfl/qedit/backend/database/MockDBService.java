@@ -171,7 +171,7 @@ public class MockDBService implements DatabaseService {
             stringPool_en.put("q1_text", "How many bananas are there on Earth?");
 
             HashMap<String, String> stringPool_fr = new HashMap<>();
-            stringPool_en.put("main_title", "Titre");
+            stringPool_fr.put("main_title", "Titre");
             stringPool_fr.put("q1_title", "Banane");
             stringPool_fr.put("q1_text", "Combien y a-t-il de bananes sur Terre ?");
 
