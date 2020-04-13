@@ -155,7 +155,11 @@ public class FirebaseDBService implements DatabaseService {
                         });
     }
 
-    // ===========================================================================================================================
+    // FOR NOW, WE KEEP getQuiz(...), getQuestions(...), getQuizTitle(...)
+    // THIS WILL BE DELETED IN A FURTHER PR
+
+    // TODO DELETE IN FURTHER PR
+    // ========================================================================================
 
     @Override
     public void getQuizQuestions(
@@ -276,4 +280,5 @@ public class FirebaseDBService implements DatabaseService {
                     }
                 });
     }
+    // ========================================================================================
 }

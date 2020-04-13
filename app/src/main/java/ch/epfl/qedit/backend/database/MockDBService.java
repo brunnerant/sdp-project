@@ -16,7 +16,13 @@ import java.util.Map;
 
 public class MockDBService implements DatabaseService {
 
-    public static class MockQuizV1 {
+    // FOR NOW, WE KEEP VERSION 1 (V1) AND getQuiz(...), getQuestions(...), getQuizTitle(...)
+    // THIS WILL BE DELETED IN A FURTHER PR, AND ALL 'V2' OCCURRENCE NEED TO BE DELETED
+
+    // TODO DELETE IN FURTHER PR
+    // ========================================================================================
+    /** Simulate a Quiz store in firestore database */
+    private static class MockQuizV1 {
         private String title_en;
         private String title_fr;
         private ImmutableList<Question> questions_fr;
@@ -90,15 +96,15 @@ public class MockDBService implements DatabaseService {
                     Arrays.asList(bananaQuestion_fr));
         }
     }
-
-    public static class MockQuizV2 {
+    // ========================================================================================
+    /** Simulate a Quiz store in firestore database */
+    private static class MockQuizV2 {
 
         private ImmutableList<Question> questions;
         private HashMap<String, HashMap<String, String>> stringPools;
 
-        public MockQuizV2(
-                List<Question> questions, HashMap<String, HashMap<String, String>> stringPools) {
-            this.questions = new ImmutableList.Builder<Question>().addAll(questions).build();
+        MockQuizV2(List<Question> questions, HashMap<String, HashMap<String, String>> stringPools) {
+            this.questions = ImmutableList.copyOf(questions);
             this.stringPools = stringPools;
         }
 
@@ -106,15 +112,15 @@ public class MockDBService implements DatabaseService {
             return new ArrayList<>(questions);
         }
 
-        public List<String> getSupportedLanguage() {
+        List<String> getSupportedLanguage() {
             return new ArrayList<>(stringPools.keySet());
         }
 
-        public HashMap<String, String> getStringPool(String language) {
+        HashMap<String, String> getStringPool(String language) {
             return stringPools.get(language);
         }
 
-        public static MockQuizV2 createTestMockQuiz1() {
+        static MockQuizV2 createTestMockQuiz1() {
 
             HashMap<String, String> stringPool_en = new HashMap<>();
             stringPool_en.put("main_title", "I am a Mock Quiz!");
@@ -157,7 +163,7 @@ public class MockDBService implements DatabaseService {
             return new MockQuizV2(questions, stringPools);
         }
 
-        public static MockQuizV2 createTestMockQuiz2() {
+        static MockQuizV2 createTestMockQuiz2() {
 
             HashMap<String, String> stringPool_en = new HashMap<>();
             stringPool_en.put("main_title", "Title");
@@ -180,12 +186,18 @@ public class MockDBService implements DatabaseService {
         }
     }
 
+    // TODO DELETE IN FURTHER PR
+    // ========================================================================================
     private HashMap<String, MockQuizV1> dbV1;
+    // ========================================================================================
+
     private HashMap<String, MockQuizV2> dbV2;
     private CountingIdlingResource idlingResource;
 
     public MockDBService() {
         idlingResource = new CountingIdlingResource("MockDBService");
+
+        // TODO DELETE IN FURTHER PR
         dbV1 = new HashMap<>();
         dbV1.put("quiz0", MockQuizV1.createTestMockQuiz1());
         dbV1.put("quiz1", MockQuizV1.createTestMockQuiz2());
@@ -199,12 +211,26 @@ public class MockDBService implements DatabaseService {
         dbV2.put("quiz3", MockQuizV2.createTestMockQuiz2());
     }
 
+    /** Simply make the current thread wait 2 second */
     private void wait2second() {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Check if the database contains the quiz identify by quizID
+     *
+     * @param quizID the unique identifier of the quiz we are searching
+     * @param responseCallback Callback function triggered with an error if the quiz does not exist
+     * @param <T> This function is generic because we don't really need to know the type of response
+     * @return true if the quiz exists, return false otherwise and triggered responseCallback with a
+     *     WRONG_DOCUMENT error
+     */
+    private <T> boolean exists(String quizID, Callback<Response<T>> responseCallback) {
+        return Util.require(dbV2.get(quizID) != null, responseCallback, WRONG_DOCUMENT);
     }
 
     @Override
@@ -215,11 +241,10 @@ public class MockDBService implements DatabaseService {
                         new Runnable() {
                             @Override
                             public void run() {
+
                                 wait2second();
-                                if (Util.require(
-                                        dbV1.get(quizID) != null,
-                                        responseCallback,
-                                        WRONG_DOCUMENT)) {
+
+                                if (exists(quizID, responseCallback)) {
                                     List<String> supportedLanguage =
                                             dbV2.get(quizID).getSupportedLanguage();
                                     responseCallback.onReceive(Response.ok(supportedLanguage));
@@ -240,11 +265,10 @@ public class MockDBService implements DatabaseService {
                         new Runnable() {
                             @Override
                             public void run() {
+
                                 wait2second();
-                                if (Util.require(
-                                        dbV1.get(quizID) != null,
-                                        responseCallback,
-                                        WRONG_DOCUMENT)) {
+
+                                if (exists(quizID, responseCallback)) {
                                     Map<String, String> stringPool =
                                             dbV2.get(quizID).getStringPool(language);
                                     responseCallback.onReceive(Response.ok(stringPool));
@@ -264,11 +288,10 @@ public class MockDBService implements DatabaseService {
                         new Runnable() {
                             @Override
                             public void run() {
+
                                 wait2second();
-                                if (Util.require(
-                                        dbV1.get(quizID) != null,
-                                        responseCallback,
-                                        WRONG_DOCUMENT)) {
+
+                                if (exists(quizID, responseCallback)) {
                                     Quiz stringPool =
                                             new Quiz("main_title", dbV2.get(quizID).getQuestions());
                                     responseCallback.onReceive(Response.ok(stringPool));
@@ -279,6 +302,7 @@ public class MockDBService implements DatabaseService {
                 .start();
     }
 
+    // TODO DELETE IN FURTHER PR
     // ========================================================================================
     @Override
     public void getQuizQuestions(
@@ -386,4 +410,5 @@ public class MockDBService implements DatabaseService {
     public IdlingResource getIdlingResource() {
         return idlingResource;
     }
+    // ========================================================================================
 }

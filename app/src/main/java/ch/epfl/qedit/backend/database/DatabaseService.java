@@ -19,15 +19,46 @@ public interface DatabaseService {
     Error WRONG_COLLECTION = new Error(R.string.wrong_quiz_id_message);
     Error WRONG_DOCUMENT = new Error(R.string.wrong_document_error_message);
 
+    /**
+     * Asynchronously retrieves a supported language table of a quiz from the database. Note that we
+     * assume for convenience that that database model is key-based, because it is the case for
+     * Firestore.
+     *
+     * @param quizID the id of the quiz in the database from which we retrieve the supported
+     *     language table
+     * @param responseCallback the callback that will be triggered when the data arrives
+     */
     void getSupportedLanguage(
             String quizID, final Callback<Response<List<String>>> responseCallback);
 
+    /**
+     * Asynchronously retrieves a string pool of a quiz from the database. Note that we assume for
+     * convenience that that database model is key-based, because it is the case for Firestore.
+     *
+     * @param quizID the id of the quiz in the database from which we retrieve the string pool
+     * @param language language code ("en", "fr", "de" ...) corresponding to which string pool we
+     *     want to retrieve
+     * @param responseCallback the callback that will be triggered when the data arrives
+     */
     void getStringPool(
             String quizID,
             String language,
             final Callback<Response<Map<String, String>>> responseCallback);
 
+    /**
+     * Asynchronously retrieves the structure of a quiz from the database. Note that we assume for
+     * convenience that that database model is key-based, because it is the case for Firestore.
+     *
+     * @param quizID the id of the quiz in the database from which we retrieve the quiz structure
+     * @param responseCallback the callback that will be triggered when the data arrives
+     */
     void getQuizStructure(String quizID, final Callback<Response<Quiz>> responseCallback);
+
+    // FOR NOW, WE KEEP getQuiz(...), getQuestions(...), getQuizTitle(...)
+    // THIS WILL BE DELETED IN A FURTHER PR
+
+    // TODO DELETE IN FURTHER PR
+    // ========================================================================================
 
     /**
      * Asynchronously retrieves a list of question of a quiz from the database. Note that we assume
@@ -55,4 +86,6 @@ public interface DatabaseService {
      * @param responseCallback the callback that will be triggered when the data arrives
      */
     void getQuiz(String quizID, Callback<Response<Quiz>> responseCallback);
+
+    // ========================================================================================
 }

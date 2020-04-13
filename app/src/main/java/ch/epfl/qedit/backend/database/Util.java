@@ -16,7 +16,104 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/** This class contains static methods useful to implements database interface */
 public class Util {
+
+    // CONVERSION METHODS FROM FIRESTORE TO SPECIALIZE OBJECTS
+
+    /**
+     * Convert a document to a MatrixFormat
+     *
+     * @param doc a map containing the parameter useful for a initialize a MatrixFormat
+     * @return a MatrixFormat or null if doc is not a valid description of a MatrixFormat
+     */
+    private static MatrixFormat matrixConvert(Map<String, Object> doc) {
+        // TODO fill correctly this function in a later PR, MatrixFormat is currently changing
+        return new MatrixFormat(1, 1);
+    }
+
+    /**
+     * Convert a document to an AnswerFormat
+     *
+     * @param doc a map containing the parameter useful for a initialize an AnswerFormat
+     * @return a AnswerFormat or null if doc is not a valid description of any AnswerFormat
+     */
+    private static AnswerFormat convertToAnswerFormat(Map<String, Object> doc) {
+        if (doc.containsKey("matrix")) {
+            return matrixConvert(doc);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Convert a document to an AnswerFormat, if there is more than one element in the docs list,
+     * return a MultiFieldAnswerFormat
+     *
+     * @param docs a list of documents retrieve from firestore
+     * @return a AnswerFormat or null if docs contains invalid description of AnswerFormat
+     */
+    private static AnswerFormat convertToAnswerFormat(List<Map<String, Object>> docs) {
+        if (docs == null || docs.isEmpty()) {
+            return null;
+        } else if (docs.size() == 1) {
+            return convertToAnswerFormat(docs.get(0));
+        }
+        ArrayList<AnswerFormat> answers = new ArrayList<>();
+        for (Map<String, Object> doc : docs) {
+            answers.add(convertToAnswerFormat(doc));
+        }
+
+        return new MultiFieldFormat(answers);
+    }
+
+    /**
+     * Convert a document snapshot from firestore to a Question object
+     *
+     * @param doc document retrieve from firestore database
+     * @return a Question object, convert from doc
+     */
+    public static Question convertToQuestion(QueryDocumentSnapshot doc) {
+        ArrayList<Map<String, Object>> answers = cast(doc.get("answers"));
+        return new Question(
+                doc.getString("title"), doc.getString("text"), convertToAnswerFormat(answers));
+    }
+
+    /**
+     * Convert a query snapshot from firestore to a Quiz object
+     *
+     * @param docs list of documents retrieve from firestore database
+     * @return a Quiz object, convert from docs
+     */
+    public static Quiz convertToQuiz(QuerySnapshot docs) {
+        ArrayList<Question> questions = new ArrayList<>();
+        for (QueryDocumentSnapshot doc : docs) {
+            questions.add(convertToQuestion(doc));
+        }
+        return new Quiz("main_title", questions);
+    }
+
+    /**
+     * Convert a document snapshot from firestore to a Map<String, String>
+     *
+     * @param doc document retrieve from firestore database
+     * @return a string pool in a form of map Map<String, String>
+     */
+    public static Map<String, String> convertToStringPool(DocumentSnapshot doc) {
+        HashMap<String, String> map = new HashMap<>();
+        Map<String, Object> data = doc.getData();
+        if (data == null) {
+            return map;
+        }
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            if (entry.getValue() instanceof String) {
+                map.put(entry.getKey(), (String) entry.getValue());
+            }
+        }
+        return map;
+    }
+
+    // SOME OTHER USEFUL METHODS TO IMPLEMENT THE BACKEND INTERFACE
 
     /**
      * Check if the condition pass as argument is true. If not, the response callback is triggered
@@ -41,73 +138,8 @@ public class Util {
         }
     }
 
-    // ANSWER //
-
-    private static MatrixFormat matrixConvert(Map<String, Object> doc) {
-        // TODO fill this function
-        return null;
-    }
-
-    private static AnswerFormat convertToAnswerFormat(Map<String, Object> doc) {
-        if (doc.containsKey("matrix")) {
-            return matrixConvert(doc);
-        } else {
-            return null;
-        }
-    }
-
-    private static AnswerFormat convertToAnswerFormat(List<Map<String, Object>> docs) {
-        if (docs == null || docs.isEmpty()) {
-            return null;
-        } else if (docs.size() == 1) {
-            return convertToAnswerFormat(docs.get(0));
-        }
-        ArrayList<AnswerFormat> answers = new ArrayList<>();
-        for (Map<String, Object> doc : docs) {
-            answers.add(convertToAnswerFormat(doc));
-        }
-
-        return new MultiFieldFormat(answers);
-    }
-
-    // CAST // TODO check if that s a good idea
-
     @SuppressWarnings("unchecked")
     public static <T> T cast(Object object) {
         return (T) object;
-    }
-
-    // QUESTION //
-
-    public static Question convertToQuestion(QueryDocumentSnapshot doc) {
-        ArrayList<Map<String, Object>> answers = cast(doc.get("answers"));
-        return new Question(
-                doc.getString("title"), doc.getString("text"), convertToAnswerFormat(answers));
-    }
-
-    // QUIZ //
-
-    public static Quiz convertToQuiz(QuerySnapshot docs) {
-        ArrayList<Question> questions = new ArrayList<>();
-        for (QueryDocumentSnapshot doc : docs) {
-            questions.add(convertToQuestion(doc));
-        }
-        return new Quiz("main_title", questions);
-    }
-
-    // STRING POOL //
-
-    public static Map<String, String> convertToStringPool(DocumentSnapshot doc) {
-        HashMap<String, String> map = new HashMap<>();
-        Map<String, Object> data = doc.getData();
-        if (data == null) {
-            return map;
-        }
-        for (Map.Entry<String, Object> entry : data.entrySet()) {
-            if (entry.getValue() instanceof String) {
-                map.put(entry.getKey(), (String) entry.getValue());
-            }
-        }
-        return map;
     }
 }
