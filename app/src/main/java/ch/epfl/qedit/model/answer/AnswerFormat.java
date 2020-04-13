@@ -3,7 +3,6 @@ package ch.epfl.qedit.model.answer;
 import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -96,5 +95,4 @@ public abstract class AnswerFormat implements Serializable {
 
         return (fields.size() == 1) ? fields.get(0) : new MultiFieldFormat(fields);
     }
-
 }

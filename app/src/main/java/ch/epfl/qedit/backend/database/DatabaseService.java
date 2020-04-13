@@ -19,9 +19,14 @@ public interface DatabaseService {
     Error WRONG_COLLECTION = new Error(R.string.wrong_quiz_id_message);
     Error WRONG_DOCUMENT = new Error(R.string.wrong_document_error_message);
 
+    void getSupportedLanguage(
+            String quizID, final Callback<Response<List<String>>> responseCallback);
 
-    void getSupportedLanguage(String quizID, final Callback<Response<List<String>>> responseCallback);
-    void getStringPool(String quizID, String language, final Callback<Response<Map<String, String>>> responseCallback);
+    void getStringPool(
+            String quizID,
+            String language,
+            final Callback<Response<Map<String, String>>> responseCallback);
+
     void getQuizStructure(String quizID, final Callback<Response<Quiz>> responseCallback);
 
     /**
@@ -50,5 +55,4 @@ public interface DatabaseService {
      * @param responseCallback the callback that will be triggered when the data arrives
      */
     void getQuiz(String quizID, Callback<Response<Quiz>> responseCallback);
-
 }
