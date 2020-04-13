@@ -1,13 +1,12 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.view.answer.AnswerFragment;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import ch.epfl.qedit.view.answer.AnswerFragment;
-import ch.epfl.qedit.view.answer.MatrixFragment;
 
 /**
  * This class represents matrices where the user can enter his answers. Fields of the matrices can
@@ -135,11 +134,11 @@ public final class MatrixFormat extends AnswerFormat {
         /**
          * Creates a builder for a matrix format. By default, all the fields are empty and cannot be
          * edited.
+         *
          * @throws IllegalArgumentException if the number of rows or columns is less than 1
          */
         public Builder(int numRows, int numColumns) {
-            if (numRows < 1 || numColumns < 1)
-                throw new IllegalArgumentException();
+            if (numRows < 1 || numColumns < 1) throw new IllegalArgumentException();
 
             this.numRows = numRows;
             this.numColumns = numColumns;
@@ -218,7 +217,7 @@ public final class MatrixFormat extends AnswerFormat {
 
     @Override
     public AnswerModel getEmptyAnswerModel() {
-        return new MatrixModel(numColumns, numRows);
+        return new MatrixModel(numRows, numColumns);
     }
 
     @Override

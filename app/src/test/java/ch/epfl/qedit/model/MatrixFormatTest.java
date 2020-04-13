@@ -1,18 +1,16 @@
 package ch.epfl.qedit.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThrows;
+
 import androidx.fragment.app.Fragment;
-
-import org.junit.Test;
-import org.junit.function.ThrowingRunnable;
-
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.view.answer.MatrixFragment;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThrows;
+import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 
 public class MatrixFormatTest {
 
@@ -45,21 +43,25 @@ public class MatrixFormatTest {
 
     @Test
     public void testMatrixFormatBuilderCrashes() {
-        assertThrows(IllegalArgumentException.class, new ThrowingRunnable() {
-            @Override
-            public void run() throws Throwable {
-                new MatrixFormat.Builder(-1, 1);
-            }
-        });
+        assertThrows(
+                IllegalArgumentException.class,
+                new ThrowingRunnable() {
+                    @Override
+                    public void run() throws Throwable {
+                        new MatrixFormat.Builder(-1, 1);
+                    }
+                });
 
-        assertThrows(IllegalStateException.class, new ThrowingRunnable() {
-            @Override
-            public void run() throws Throwable {
-                MatrixFormat.Builder b = new MatrixFormat.Builder(1, 1);
-                b.build();
-                b.build();
-            }
-        });
+        assertThrows(
+                IllegalStateException.class,
+                new ThrowingRunnable() {
+                    @Override
+                    public void run() throws Throwable {
+                        MatrixFormat.Builder b = new MatrixFormat.Builder(1, 1);
+                        b.build();
+                        b.build();
+                    }
+                });
     }
 
     @Test

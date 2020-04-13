@@ -4,11 +4,11 @@ package ch.epfl.qedit.model.answer;
 public class MatrixModel extends AnswerModel {
     private final String[][] matrix;
 
-    public MatrixModel(int numberOfColumns, int numberOfRows) {
-        matrix = new String[numberOfRows][numberOfColumns];
+    public MatrixModel(int numRows, int numColumns) {
+        matrix = new String[numRows][numColumns];
 
-        for (int i = 0; i < numberOfRows; ++i) {
-            for (int j = 0; j < numberOfColumns; ++j) {
+        for (int i = 0; i < numRows; ++i) {
+            for (int j = 0; j < numColumns; ++j) {
                 matrix[i][j] = "";
             }
         }

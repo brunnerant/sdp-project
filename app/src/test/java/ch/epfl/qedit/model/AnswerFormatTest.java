@@ -1,21 +1,19 @@
 package ch.epfl.qedit.model;
 
-
-import org.junit.Test;
-
-import java.util.Arrays;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import java.util.Arrays;
+import org.junit.Test;
 
 public class AnswerFormatTest {
 
     private static MatrixFormat defaultFormat(int numRows, int numColumns) {
-        return MatrixFormat.uniform(numRows, numColumns, MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
+        return MatrixFormat.uniform(
+                numRows, numColumns, MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
     }
 
     private final AnswerFormat mat1x1 = defaultFormat(1, 1);

@@ -1,16 +1,16 @@
 package ch.epfl.qedit.model;
 
-import org.junit.Test;
-
-import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.MatrixFormat;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat;
+import org.junit.Test;
+
 public class QuestionTest {
 
-    private MatrixFormat format = MatrixFormat.singleField(MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
+    private MatrixFormat format =
+            MatrixFormat.singleField(MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
 
     @Test
     public void questionConstructorIsCorrect() {

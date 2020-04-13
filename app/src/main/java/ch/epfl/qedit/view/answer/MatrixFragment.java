@@ -14,19 +14,14 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.ArrayList;
 
 public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
     private QuizViewModel quizViewModel;
@@ -144,11 +139,6 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
                     public void afterTextChanged(Editable s) {
                         // Update the value in the model
                         answerModel.updateAnswer(row, col, editText.getText().toString());
-
-                        // and update the AnswerModel stored in the QuizViewModel
-                        HashMap<Integer, AnswerModel> map = quizViewModel.getAnswers().getValue();
-                        map.remove(quizViewModel.getFocusedQuestion().getValue());
-                        map.put(quizViewModel.getFocusedQuestion().getValue(), answerModel);
                     }
                 });
     }
