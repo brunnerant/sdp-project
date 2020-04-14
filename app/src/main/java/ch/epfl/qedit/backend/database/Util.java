@@ -59,8 +59,8 @@ public final class Util {
 
         if (docs == null || docs.isEmpty()) {
             return null;
-        } else if (docs.size()
-                == 1) { // If there is only one document in the list, then we don't return a
+        } else if (docs.size() == 1) {
+            // If there is only one document in the list, then we don't return a
             // multiField
             return convertToAnswerFormat(docs.get(0));
         }
