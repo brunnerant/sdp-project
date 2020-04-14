@@ -28,7 +28,7 @@ public interface DatabaseService {
      *     language table
      * @param responseCallback the callback that will be triggered when the data arrives
      */
-    void getSupportedLanguage(
+    void getSupportedLanguages(
             String quizID, final Callback<Response<List<String>>> responseCallback);
 
     /**

@@ -234,7 +234,7 @@ public class MockDBService implements DatabaseService {
     }
 
     @Override
-    public void getSupportedLanguage(
+    public void getSupportedLanguages(
             final String quizID, final Callback<Response<List<String>>> responseCallback) {
         idlingResource.increment();
         new Thread(

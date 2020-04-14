@@ -81,7 +81,7 @@ public class FirebaseDBService implements DatabaseService {
     }
 
     @Override
-    public void getSupportedLanguage(
+    public void getSupportedLanguages(
             String quizID, final Callback<Response<List<String>>> responseCallback) {
 
         getQuizRef(quizID)

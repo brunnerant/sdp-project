@@ -2,7 +2,8 @@ package ch.epfl.qedit.backend;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertNull;
 
 import ch.epfl.qedit.backend.database.DatabaseService;
@@ -122,8 +123,8 @@ public class MockDBTest {
     }
 
     @Test
-    public void testSupportedLanguageError() {
-        db.getSupportedLanguage(
+    public void testSupportedLanguagesError() {
+        db.getSupportedLanguages(
                 "error",
                 new Callback<Response<List<String>>>() {
                     @Override
@@ -138,8 +139,8 @@ public class MockDBTest {
     }
 
     @Test
-    public void testSupportedLanguage() {
-        db.getSupportedLanguage(
+    public void testSupportedLanguages() {
+        db.getSupportedLanguages(
                 "quiz1",
                 new Callback<Response<List<String>>>() {
                     @Override
@@ -150,8 +151,7 @@ public class MockDBTest {
                 });
         lockWait();
         assertEquals(Response.NO_ERROR, error);
-        assertTrue(languages.containsAll(Arrays.asList("en", "fr")));
-        assertFalse(languages.contains("de"));
+        assertThat(languages, containsInAnyOrder("en", "fr"));
     }
 
     @Test
