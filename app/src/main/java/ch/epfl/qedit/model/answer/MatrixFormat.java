@@ -2,6 +2,7 @@ package ch.epfl.qedit.model.answer;
 
 import ch.epfl.qedit.view.answer.AnswerFragment;
 import ch.epfl.qedit.view.answer.MatrixFragment;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +19,7 @@ public final class MatrixFormat extends AnswerFormat {
      * This class represents a field of a matrix. It can be pre-filled with text (meaning the user
      * cannot enter something in it), it can be a text input, or a number input.
      */
-    public static class Field {
+    public static class Field implements Serializable {
         /** This is used to represent unlimited length for fields */
         public static final int NO_LIMIT = -1;
 
