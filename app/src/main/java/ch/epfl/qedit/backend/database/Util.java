@@ -56,14 +56,22 @@ public final class Util {
      * @return a AnswerFormat or null if docs contains invalid description of AnswerFormat
      */
     public static AnswerFormat convertToAnswerFormat(List<Map<String, Object>> docs) {
+
         if (docs == null || docs.isEmpty()) {
             return null;
-        } else if (docs.size() == 1) {
+        } else if (docs.size()
+                == 1) { // If there is only one document in the list, then we don't return a
+            // multiField
             return convertToAnswerFormat(docs.get(0));
         }
+
         ArrayList<AnswerFormat> answers = new ArrayList<>();
+
+        // Convert each document into a AnswerFormat
         for (Map<String, Object> doc : docs) {
             AnswerFormat answerFormat = convertToAnswerFormat(doc);
+
+            // If a conversion has failed, the conversion of the entire list fails
             if (answerFormat == null) {
                 return null;
             }
