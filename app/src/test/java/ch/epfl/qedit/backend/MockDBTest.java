@@ -72,8 +72,8 @@ public class MockDBTest {
     }
 
     @Test
-    public void testGetStringPool_en() {
-        db.getStringPool(
+    public void testGetQuizStringPool_en() {
+        db.getQuizStringPool(
                 "quiz1",
                 "en",
                 new Callback<Response<Map<String, String>>>() {
@@ -89,8 +89,8 @@ public class MockDBTest {
     }
 
     @Test
-    public void testGetStringPool_fr() {
-        db.getStringPool(
+    public void testGetQuizStringPool_fr() {
+        db.getQuizStringPool(
                 "quiz1",
                 "fr",
                 new Callback<Response<Map<String, String>>>() {
@@ -106,8 +106,8 @@ public class MockDBTest {
     }
 
     @Test
-    public void testGetStringPoolError() {
-        db.getStringPool(
+    public void testGetQuizStringPoolError() {
+        db.getQuizStringPool(
                 "error",
                 "en",
                 new Callback<Response<Map<String, String>>>() {
@@ -123,8 +123,8 @@ public class MockDBTest {
     }
 
     @Test
-    public void testSupportedLanguagesError() {
-        db.getSupportedLanguages(
+    public void testQuizLanguagesError() {
+        db.getQuizLanguages(
                 "error",
                 new Callback<Response<List<String>>>() {
                     @Override
@@ -139,8 +139,8 @@ public class MockDBTest {
     }
 
     @Test
-    public void testSupportedLanguages() {
-        db.getSupportedLanguages(
+    public void testQuizLanguages() {
+        db.getQuizLanguages(
                 "quiz1",
                 new Callback<Response<List<String>>>() {
                     @Override

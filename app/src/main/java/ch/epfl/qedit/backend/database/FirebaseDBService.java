@@ -81,7 +81,7 @@ public class FirebaseDBService implements DatabaseService {
     }
 
     @Override
-    public void getSupportedLanguages(
+    public void getQuizLanguages(
             String quizID, final Callback<Response<List<String>>> responseCallback) {
 
         getQuizRef(quizID)
@@ -93,8 +93,7 @@ public class FirebaseDBService implements DatabaseService {
                                 if (isSuccessful(task, responseCallback)) {
                                     DocumentSnapshot doc = task.getResult();
                                     if (exists(doc, responseCallback)) {
-                                        List<String> languages =
-                                                Util.cast(doc.get("supported_languages"));
+                                        List<String> languages = Util.cast(doc.get("languages"));
                                         if (Util.require(
                                                 languages != null,
                                                 responseCallback,
@@ -108,7 +107,7 @@ public class FirebaseDBService implements DatabaseService {
     }
 
     @Override
-    public void getStringPool(
+    public void getQuizStringPool(
             String quizID,
             String language,
             final Callback<Response<Map<String, String>>> responseCallback) {

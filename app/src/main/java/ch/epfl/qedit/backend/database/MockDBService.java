@@ -112,7 +112,7 @@ public class MockDBService implements DatabaseService {
             return new ArrayList<>(questions);
         }
 
-        List<String> getSupportedLanguage() {
+        List<String> getLanguages() {
             return new ArrayList<>(stringPools.keySet());
         }
 
@@ -234,7 +234,7 @@ public class MockDBService implements DatabaseService {
     }
 
     @Override
-    public void getSupportedLanguages(
+    public void getQuizLanguages(
             final String quizID, final Callback<Response<List<String>>> responseCallback) {
         idlingResource.increment();
         new Thread(
@@ -246,7 +246,7 @@ public class MockDBService implements DatabaseService {
 
                                 if (exists(quizID, responseCallback)) {
                                     List<String> supportedLanguage =
-                                            dbV2.get(quizID).getSupportedLanguage();
+                                            dbV2.get(quizID).getLanguages();
                                     responseCallback.onReceive(Response.ok(supportedLanguage));
                                 }
                                 idlingResource.decrement();
@@ -256,7 +256,7 @@ public class MockDBService implements DatabaseService {
     }
 
     @Override
-    public void getStringPool(
+    public void getQuizStringPool(
             final String quizID,
             final String language,
             final Callback<Response<Map<String, String>>> responseCallback) {

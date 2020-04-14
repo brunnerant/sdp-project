@@ -28,8 +28,7 @@ public interface DatabaseService {
      *     language table
      * @param responseCallback the callback that will be triggered when the data arrives
      */
-    void getSupportedLanguages(
-            String quizID, final Callback<Response<List<String>>> responseCallback);
+    void getQuizLanguages(String quizID, final Callback<Response<List<String>>> responseCallback);
 
     /**
      * Asynchronously retrieves a string pool of a quiz from the database. Note that we assume for
@@ -40,7 +39,7 @@ public interface DatabaseService {
      *     want to retrieve
      * @param responseCallback the callback that will be triggered when the data arrives
      */
-    void getStringPool(
+    void getQuizStringPool(
             String quizID,
             String language,
             final Callback<Response<Map<String, String>>> responseCallback);
