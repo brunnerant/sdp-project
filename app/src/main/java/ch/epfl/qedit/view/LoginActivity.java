@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         context = getBaseContext();
         resources = getResources();
-        toast = Toast.makeText(getApplicationContext(), null, Toast.LENGTH_SHORT);
+        toast = Toast.makeText(this.getApplicationContext(), null, Toast.LENGTH_SHORT);
 
         /* Language selection */
         // Create spinner (language list)
