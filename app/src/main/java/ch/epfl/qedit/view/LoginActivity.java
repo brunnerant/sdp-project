@@ -1,6 +1,5 @@
 package ch.epfl.qedit.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -42,7 +41,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     private Resources resources;
     private Toast toast;
 
-    @SuppressLint("ShowToast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         context = getBaseContext();
         resources = getResources();
-        toast = Toast.makeText(this.getApplicationContext(), null, Toast.LENGTH_SHORT);
 
         /* Language selection */
         // Create spinner (language list)
@@ -133,11 +130,14 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
      * @param languagePos position of the language in the spinner
      */
     private void printChangedLanguageToast(int languagePos) {
-        toast.setText(
-                resources.getString(R.string.language_changed)
-                        + " "
-                        + resources.getStringArray(R.array.languages_list)[languagePos]);
-
+        if (toast != null) toast.cancel();
+        toast =
+                Toast.makeText(
+                        getApplicationContext(),
+                        resources.getString(R.string.language_changed)
+                                + " "
+                                + resources.getStringArray(R.array.languages_list)[languagePos],
+                        Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -186,7 +186,10 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void printShortToast(int stringId) {
-        toast.setText(resources.getString(stringId));
+        if (toast != null) toast.cancel();
+        toast =
+                Toast.makeText(
+                        getApplicationContext(), resources.getString(stringId), Toast.LENGTH_SHORT);
         toast.show();
     }
 }

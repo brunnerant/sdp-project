@@ -33,7 +33,6 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class LoginActivityTest {
-
     private IdlingResource idlingResource;
 
     @Rule
@@ -70,9 +69,8 @@ public class LoginActivityTest {
 
     private void testLoginFailed(String token, int toastStringId) {
         performLogin(token);
-        LoginActivity activity = testRule.getActivity();
         onView(withText(toastStringId))
-                .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
+                .inRoot(withDecorView(not(is(testRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
     }
 
