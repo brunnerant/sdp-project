@@ -41,7 +41,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
     public void testFragmentIsEmptyByDefault() {
         onView(withId(R.id.question_title)).check(matches(withText("")));
         onView(withId(R.id.question_display)).check(matches(withText("")));
-        onView(withId(R.id.answersTable)).check(doesNotExist());
+        onView(withId(R.id.answer_table)).check(doesNotExist());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
                 .check(matches(withText("Question 1 - The matches problem")));
         onView(withId(R.id.question_display))
                 .check(matches(withText("How many matches can fit in a shoe of size 43 ?")));
-        onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
+        onView(withId(R.id.answer_table)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
                 .check(matches(withText("Question 1 - The matches problem")));
         onView(withId(R.id.question_display))
                 .check(matches(withText("How many matches can fit in a shoe of size 43 ?")));
-        onView(withId(R.id.answersTable)).check(matches(isDisplayed()));
+        onView(withId(R.id.answer_table)).check(matches(isDisplayed()));
 
         model.getFocusedQuestion().postValue(1);
 
