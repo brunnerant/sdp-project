@@ -2,6 +2,7 @@ package ch.epfl.qedit.model;
 
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
@@ -49,7 +50,6 @@ public final class Question implements Serializable {
         }
         return false;
     }
-
     public static class Builder {
 
         private String titleID;

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /** Represents a quiz. For now, it is simply a immutable list of question. */
 public final class Quiz implements Serializable {
@@ -86,5 +87,28 @@ public final class Quiz implements Serializable {
                 throw new IllegalStateException("Builder already build once.");
             }
         }
+    }
+
+    public static class Builder{
+
+        private List<Question> questions;
+
+        public Builder(){
+            questions = new ArrayList<>();
+        }
+
+        public ImmutableList<Question> getQuestions(){
+            return ImmutableList.copyOf(questions);
+        }
+
+        public Quiz build(){
+            if(questions == null){
+                throw new IllegalStateException();
+            }
+            List<Question> quizQuestion = questions;
+            questions = null;
+            return new Quiz(null, quizQuestion);
+        }
+
     }
 }
