@@ -9,18 +9,22 @@ import org.junit.Test;
 public class MultiFieldFormatTest {
 
     private final MultiFieldFormat multi =
-            new MultiFieldFormat(MatrixFormat.createMatrix3x3(), new MatrixFormat(1, 1));
+            new MultiFieldFormat(
+                    MatrixFormat.uniform(3, 3, MatrixFormat.Field.textField("", 1)),
+                    MatrixFormat.singleField(MatrixFormat.Field.numericField(false, false, "", 3)));
 
     @Test
     public void notEqualsTest1() {
         assertNotEquals(multi, "Not me");
-        assertNotEquals(new MatrixFormat(1, 45), multi);
+        assertNotEquals(MatrixFormat.uniform(45, 1, MatrixFormat.Field.textField("", 42)), multi);
     }
 
     @Test
     public void notEqualsTest2() {
         MultiFieldFormat multi1 =
-                new MultiFieldFormat(MatrixFormat.createMatrix3x3(), new MatrixFormat(2, 1));
+                new MultiFieldFormat(
+                        MatrixFormat.uniform(3, 3, MatrixFormat.Field.textField("", 1)),
+                        MatrixFormat.uniform(2, 1, MatrixFormat.Field.preFilledField("a")));
         assertNotEquals(multi1, multi);
         assertNotEquals(multi, multi1);
     }
