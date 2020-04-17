@@ -2,10 +2,11 @@ package ch.epfl.qedit.model;
 
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
-public class Question implements Serializable {
+public final class Question implements Serializable {
     /** For now, a question consists of a number, a title, and a text */
     private final String title;
 
@@ -48,5 +49,13 @@ public class Question implements Serializable {
                     && this.format.equals(other.format);
         }
         return false;
+    }
+
+
+    public static class Builder{
+
+        public Question build(){
+            return new Question("untitled", "no text", "no answer format");
+        }
     }
 }
