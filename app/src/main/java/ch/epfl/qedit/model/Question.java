@@ -2,7 +2,6 @@ package ch.epfl.qedit.model;
 
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
@@ -65,33 +64,35 @@ public final class Question implements Serializable {
         }
 
         public Builder setTitleID(String id){
-            checkArgumentState();
+            checkState();
             titleID = id;
             return this;
         }
 
         public Builder setTextID(String id){
-            checkArgumentState();
+            checkState();
             textID = id;
             return this;
         }
 
         public Builder setAnswer(AnswerFormat answer){
-            checkArgumentState();
+            checkState();
             this.answer = answer;
             return this;
         }
 
         public Question build(){
-            checkArgumentState();
-            if( answer == null || titleID.isEmpty() || textID.isEmpty()){
+            checkState();
+            if( answer == null || textID == null || titleID.isEmpty() || textID.isEmpty()){
                 throw new IllegalStateException();
             }
-            return new Question(titleID, textID, answer);
+            String resultTitleID = titleID;
+            titleID = null;
+            return new Question(resultTitleID, textID, answer);
         }
 
-        private void checkArgumentState(){
-            if( titleID == null || textID == null){
+        private void checkState(){
+            if(titleID == null){
                 throw new IllegalStateException();
             }
         }
