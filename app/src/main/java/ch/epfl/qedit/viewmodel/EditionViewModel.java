@@ -6,16 +6,19 @@ import androidx.lifecycle.ViewModel;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 
 public class EditionViewModel extends ViewModel {
 
     private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);
     private Quiz.Builder quizBuilder = new Quiz.Builder();
     private Question.Builder questionBuilder = null;
-    private ImmutableMap.Builder<String, String> stringPoolBuilder = new ImmutableMap.Builder<>();
+    private StringPool strPool = new StringPool();
+
 
     public Quiz.Builder getQuizBuilder() {
         return quizBuilder;

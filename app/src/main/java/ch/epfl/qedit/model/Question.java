@@ -54,8 +54,46 @@ public final class Question implements Serializable {
 
     public static class Builder{
 
+        private String titleID;
+        private String textID ;
+        private AnswerFormat answer;
+
+        public Builder() {
+            titleID = "";
+            textID  = "";
+            answer  = null;
+        }
+
+        public Builder setTitleID(String id){
+            checkArgumentState();
+            titleID = id;
+            return this;
+        }
+
+        public Builder setTextID(String id){
+            checkArgumentState();
+            textID = id;
+            return this;
+        }
+
+        public Builder setAnswer(AnswerFormat answer){
+            checkArgumentState();
+            this.answer = answer;
+            return this;
+        }
+
         public Question build(){
-            return new Question("untitled", "no text", "no answer format");
+            checkArgumentState();
+            if( answer == null || titleID.isEmpty() || textID.isEmpty()){
+                throw new IllegalStateException();
+            }
+            return new Question(titleID, textID, answer);
+        }
+
+        private void checkArgumentState(){
+            if( titleID == null || textID == null){
+                throw new IllegalStateException();
+            }
         }
     }
 }
