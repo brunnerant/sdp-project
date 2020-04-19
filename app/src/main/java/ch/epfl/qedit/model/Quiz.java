@@ -98,11 +98,13 @@ public final class Quiz implements Serializable {
         }
 
         public Builder add(Question question){
+            checkState();
             questions.add(question);
             return this;
         }
 
         public Builder swap(int index1, int index2){
+            checkState();
             Question tmp = questions.get(index1);
             questions.set(index1, questions.get(index2));
             questions.set(index2, tmp);
@@ -110,22 +112,27 @@ public final class Quiz implements Serializable {
         }
 
         public Builder add(int index, Question question){
+            checkState();
             questions.add(index, question);
             return this;
         }
 
         public ImmutableList<Question> getQuestions(){
+            checkState();
             return ImmutableList.copyOf(questions);
         }
 
         public Quiz build(){
-            if(questions == null){
-                throw new IllegalStateException();
-            }
+            checkState();
             List<Question> quizQuestion = questions;
             questions = null;
             return new Quiz(StringPool.TITLE_ID, quizQuestion);
         }
 
+        private void checkState(){
+            if(questions == null){
+                throw new IllegalStateException();
+            }
+        }
     }
 }
