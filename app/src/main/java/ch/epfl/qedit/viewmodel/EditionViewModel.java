@@ -19,6 +19,13 @@ public class EditionViewModel extends ViewModel {
     private Question.Builder questionBuilder = null;
     private StringPool strPool = new StringPool();
 
+    public void setQuizTitle(String title){
+        strPool.put(StringPool.TITLE_ID, title);
+    }
+
+    public void setQuestionTitle(String title){
+        questionBuilder.setTitleID(strPool.put(title));
+    }
 
     public Quiz.Builder getQuizBuilder() {
         return quizBuilder;
