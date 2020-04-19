@@ -110,11 +110,11 @@ public final class Question implements Serializable {
                 throw new IllegalStateException(strError);
             }
         }
-
         private void checkState() {
             if (titleID == null) {
                 throw new IllegalStateException("Builder already build once.");
             }
         }
+
     }
 }
