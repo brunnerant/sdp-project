@@ -55,12 +55,18 @@ public final class Question implements Serializable {
 
         private String titleID;
         private String textID ;
-        private AnswerFormat answer;
+        private AnswerFormat format;
 
         public Builder() {
             titleID = "";
             textID  = "";
-            answer  = null;
+            format = null;
+        }
+
+        public Builder(Question question){
+            titleID = question.title;
+            textID  = question.text;
+            format = question.format;
         }
 
         public Builder setTitleID(String id){
@@ -75,25 +81,41 @@ public final class Question implements Serializable {
             return this;
         }
 
-        public Builder setAnswer(AnswerFormat answer){
+        public Builder setFormat(AnswerFormat format){
             checkState();
-            this.answer = answer;
+            this.format = format;
             return this;
         }
 
         public Question build(){
             checkState();
-            if( answer == null || textID == null || titleID.isEmpty() || textID.isEmpty()){
-                throw new IllegalStateException();
-            }
+            checkAttributesValidity();
+
             String resultTitleID = titleID;
             titleID = null;
-            return new Question(resultTitleID, textID, answer);
+            return new Question(resultTitleID, textID, format);
+        }
+
+        private void checkAttributesValidity(){
+            String strError = "";
+            if(format == null){
+                strError += "AnswerFormat not specified i.e. answer format is null.";
+            }
+            if(titleID == null || titleID.isEmpty()){
+                strError += " ID of title not specified.";
+            }
+            if(textID == null || textID.isEmpty()){
+                strError += " ID of text not specified.";
+            }
+            if(!strError.isEmpty()){
+                throw new IllegalStateException(strError);
+            }
+
         }
 
         private void checkState(){
             if(titleID == null){
-                throw new IllegalStateException();
+                throw new IllegalStateException("Builder already build once.");
             }
         }
     }
