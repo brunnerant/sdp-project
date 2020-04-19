@@ -41,6 +41,23 @@ public final class Quiz implements Serializable {
             questions = new ArrayList<>();
         }
 
+        public Builder add(Question question){
+            questions.add(question);
+            return this;
+        }
+
+        public Builder swap(int index1, int index2){
+            Question tmp = questions.get(index1);
+            questions.set(index1, questions.get(index2));
+            questions.set(index2, tmp);
+            return this;
+        }
+
+        public Builder add(int index, Question question){
+            questions.add(index, question);
+            return this;
+        }
+
         public ImmutableList<Question> getQuestions(){
             return ImmutableList.copyOf(questions);
         }
@@ -51,7 +68,7 @@ public final class Quiz implements Serializable {
             }
             List<Question> quizQuestion = questions;
             questions = null;
-            return new Quiz(null, quizQuestion);
+            return new Quiz(StringPool.TITLE_ID, quizQuestion);
         }
 
     }
