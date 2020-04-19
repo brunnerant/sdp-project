@@ -131,7 +131,7 @@ public final class Quiz implements Serializable {
 
         private void checkState(){
             if(questions == null){
-                throw new IllegalStateException();
+                throw new IllegalStateException("Builder already build once.");
             }
         }
     }
