@@ -53,6 +53,10 @@
     <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
     <string name="add_quiz">Ajouter</string>
 
+    <!-- Edit Question -->
+    <string name="edit_question_title">Entrer le titre de la question ici.</string>
+    <string name="edit_question_text">Entrer le texte de la question ici.</string>
+
     <!-- Miscellaneous -->
     <!-- In French, there is a space before the exclammation point.
          Since we cannot have leading and trailing spaces in string resources,
