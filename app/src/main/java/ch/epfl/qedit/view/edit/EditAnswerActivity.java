@@ -1,7 +1,6 @@
 package ch.epfl.qedit.view.edit;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.os.Bundle;
 
@@ -22,3 +21,4 @@ public class EditAnswerActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }
+
