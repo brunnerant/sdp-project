@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /** Represents a quiz. For now, it is simply a immutable list of question. */
 public final class Quiz implements Serializable {
@@ -29,25 +28,27 @@ public final class Quiz implements Serializable {
         return ImmutableList.copyOf(questions);
     }
 
-    public void removeQuestionOnIndex(int index) {
-        questions.remove(index);
-    }
-
-    public static class Builder{
+    public static class Builder {
 
         private List<Question> questions;
 
-        public Builder(){
+        public Builder() {
             questions = new ArrayList<>();
         }
 
-        public Builder add(Question question){
+        public Builder add(Question question) {
             checkState();
             questions.add(question);
             return this;
         }
 
-        public Builder swap(int index1, int index2){
+        public Builder add(int index, Question question) {
+            checkState();
+            questions.add(index, question);
+            return this;
+        }
+
+        public Builder swap(int index1, int index2) {
             checkState();
             Question tmp = questions.get(index1);
             questions.set(index1, questions.get(index2));
@@ -55,26 +56,33 @@ public final class Quiz implements Serializable {
             return this;
         }
 
-        public Builder add(int index, Question question){
+        public Builder remove(int index) {
             checkState();
-            questions.add(index, question);
+            if (index >= 0 && index < questions.size()) {
+                questions.remove(index);
+            }
             return this;
         }
 
-        public ImmutableList<Question> getQuestions(){
+        public ImmutableList<Question> getQuestions() {
             checkState();
             return ImmutableList.copyOf(questions);
         }
 
-        public Quiz build(){
+        public int numberOfQuestions() {
+            checkState();
+            return questions.size();
+        }
+
+        public Quiz build() {
             checkState();
             List<Question> quizQuestion = questions;
             questions = null;
             return new Quiz(StringPool.TITLE_ID, quizQuestion);
         }
 
-        private void checkState(){
-            if(questions == null){
+        private void checkState() {
+            if (questions == null) {
                 throw new IllegalStateException("Builder already build once.");
             }
         }
