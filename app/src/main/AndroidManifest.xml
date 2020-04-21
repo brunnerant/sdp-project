@@ -12,17 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".view.edit.EditNewQuizSettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".view.edit.EditAnswerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".view.edit.EditQuestionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -32,7 +36,6 @@
             android:parentActivityName=".view.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -41,7 +44,6 @@
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -52,7 +54,6 @@
             android:parentActivityName=".view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW_ROLE" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -61,7 +62,6 @@
             android:parentActivityName=".view.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

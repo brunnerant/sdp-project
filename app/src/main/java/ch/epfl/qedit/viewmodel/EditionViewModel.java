@@ -2,12 +2,6 @@ package ch.epfl.qedit.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.google.common.collect.ImmutableMap;
-
-import java.util.HashMap;
-import java.util.UUID;
-
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
@@ -19,11 +13,11 @@ public class EditionViewModel extends ViewModel {
     private Question.Builder questionBuilder = null;
     private StringPool strPool = new StringPool();
 
-    public void setQuizTitle(String title){
+    public void setQuizTitle(String title) {
         strPool.put(StringPool.TITLE_ID, title);
     }
 
-    public void setQuestionTitle(String title){
+    public void setQuestionTitle(String title) {
         questionBuilder.setTitleID(strPool.put(title));
     }
 
@@ -35,7 +29,7 @@ public class EditionViewModel extends ViewModel {
         return questionBuilder;
     }
 
-    public void initQuestionBuilder(){
+    public void initQuestionBuilder() {
         questionBuilder = new Question.Builder();
     }
 

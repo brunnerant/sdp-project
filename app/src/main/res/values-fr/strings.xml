@@ -39,6 +39,9 @@
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Édition</string>
 
+    <!-- Edit New Quiz Settings -->
+    <string name="button_start_editing_message">Démarrer l\'édition</string>
+
     <!-- Edit -->
     <string name="delete">Supprimer</string>
     <string name="edit">Éditer</string>
@@ -56,6 +59,10 @@
     <!-- Edit Question -->
     <string name="edit_question_title">Entrer le titre de la question ici.</string>
     <string name="edit_question_text">Entrer le texte de la question ici.</string>
+    <string name="add_answer_helper_text">Ajouter un champ de réponse en pressant sur le button \'+\'.</string>
+
+    <!-- Edit Answer -->
+    <string name="choose_answer_format">Choisir un type de réponse tel que TEXTE, NOMBRE, MATRICE et ANNOTATION DE GRAPHE.</string>
 
     <!-- Miscellaneous -->
     <!-- In French, there is a space before the exclammation point.
