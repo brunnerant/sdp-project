@@ -50,44 +50,43 @@ public final class Question implements Serializable {
         return false;
     }
 
-
-    public static class Builder{
+    public static class Builder {
 
         private String titleID;
-        private String textID ;
+        private String textID;
         private AnswerFormat format;
 
         public Builder() {
             titleID = "";
-            textID  = "";
+            textID = "";
             format = null;
         }
 
-        public Builder(Question question){
+        public Builder(Question question) {
             titleID = question.title;
-            textID  = question.text;
+            textID = question.text;
             format = question.format;
         }
 
-        public Builder setTitleID(String id){
+        public Builder setTitleID(String id) {
             checkState();
             titleID = id;
             return this;
         }
 
-        public Builder setTextID(String id){
+        public Builder setTextID(String id) {
             checkState();
             textID = id;
             return this;
         }
 
-        public Builder setFormat(AnswerFormat format){
+        public Builder setFormat(AnswerFormat format) {
             checkState();
             this.format = format;
             return this;
         }
 
-        public Question build(){
+        public Question build() {
             checkState();
             checkAttributesValidity();
 
@@ -96,25 +95,24 @@ public final class Question implements Serializable {
             return new Question(resultTitleID, textID, format);
         }
 
-        private void checkAttributesValidity(){
+        private void checkAttributesValidity() {
             String strError = "";
-            if(format == null){
+            if (format == null) {
                 strError += "AnswerFormat not specified i.e. answer format is null.";
             }
-            if(titleID == null || titleID.isEmpty()){
+            if (titleID == null || titleID.isEmpty()) {
                 strError += " ID of title not specified.";
             }
-            if(textID == null || textID.isEmpty()){
+            if (textID == null || textID.isEmpty()) {
                 strError += " ID of text not specified.";
             }
-            if(!strError.isEmpty()){
+            if (!strError.isEmpty()) {
                 throw new IllegalStateException(strError);
             }
-
         }
 
-        private void checkState(){
-            if(titleID == null){
+        private void checkState() {
+            if (titleID == null) {
                 throw new IllegalStateException("Builder already build once.");
             }
         }

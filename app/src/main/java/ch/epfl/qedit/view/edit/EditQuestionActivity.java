@@ -54,6 +54,4 @@ public class EditQuestionActivity extends AppCompatActivity {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
-
-
 }

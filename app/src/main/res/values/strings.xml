@@ -65,6 +65,9 @@
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Edit</string>
 
+    <!-- Edit New Quiz Settings -->
+    <string name="button_start_editing_message">Start editing</string>
+
     <!-- Edit -->
     <string name="text_view" translatable="false">TextView</string>
     <string name="delete">Delete</string>

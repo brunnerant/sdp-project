@@ -28,6 +28,8 @@ public class EditQuestionFragment extends Fragment {
     private EditText editQuestionTitle;
     private QuizViewModel model;
 
+    // TODO remove
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

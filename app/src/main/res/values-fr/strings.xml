@@ -39,6 +39,9 @@
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Édition</string>
 
+    <!-- Edit New Quiz Settings -->
+    <string name="button_start_editing_message">Démarrer l\'édition</string>
+
     <!-- Edit -->
     <string name="delete">Supprimer</string>
     <string name="edit">Éditer</string>
