@@ -21,7 +21,6 @@
                 android:textSize="@dimen/helper_text_size"
                 android:text="@string/choose_answer_format" />
 
-
             <TableLayout
                 android:id="@+id/types_table"
                 android:layout_width="wrap_content"

@@ -8,6 +8,7 @@ import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
 public class EditQuizActivity extends AppCompatActivity {
+
     public final static String QUESTION_BUILDER= "ch.epfl.qedit.view.edit.QUESTION_BUILDER";
 
     private QuizViewModel model;
