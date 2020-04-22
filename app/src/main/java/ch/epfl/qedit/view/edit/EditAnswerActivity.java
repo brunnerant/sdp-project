@@ -21,6 +21,4 @@ public class EditAnswerActivity extends AppCompatActivity {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
-
-
 }

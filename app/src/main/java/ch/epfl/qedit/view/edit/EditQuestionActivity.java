@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -50,6 +51,4 @@ public class EditQuestionActivity extends AppCompatActivity {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
-
-
 }
