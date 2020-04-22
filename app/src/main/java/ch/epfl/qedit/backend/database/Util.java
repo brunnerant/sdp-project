@@ -31,7 +31,8 @@ public final class Util {
      */
     private static MatrixFormat matrixConvert(Map<String, Object> doc) {
         // TODO fill correctly this function in a later PR, MatrixFormat is currently changing
-        return new MatrixFormat(1, 1);
+        return MatrixFormat.singleField(
+                MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
     }
 
     /**
