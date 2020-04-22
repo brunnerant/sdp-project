@@ -1,16 +1,18 @@
 package ch.epfl.qedit.model.answer;
 
-import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import ch.epfl.qedit.model.MultiLanguage;
+import ch.epfl.qedit.view.answer.AnswerFragment;
 
 /**
  * This class represents all the answer formats that are available in the app. The purpose of this
  * class is merely to represents how the answer fields look like, and not to store what the user
  * entered. To store what the user entered, see AnswerModel.
  */
-public abstract class AnswerFormat implements Serializable {
+public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Serializable {
 
     /**
      * This is the title of the answer, to help the user know what he needs to fill. It can be null

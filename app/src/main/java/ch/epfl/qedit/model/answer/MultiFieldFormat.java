@@ -1,9 +1,11 @@
 package ch.epfl.qedit.model.answer;
 
-import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.view.answer.AnswerFragment;
 
 public class MultiFieldFormat extends AnswerFormat {
 
@@ -39,5 +41,15 @@ public class MultiFieldFormat extends AnswerFormat {
             return fields.equals(other.fields);
         }
         return false;
+    }
+
+    @Override
+    public AnswerFormat instantiateLanguage(StringPool pool) {
+        List<AnswerFormat> newFields = new ArrayList<>(fields.size());
+
+        for (AnswerFormat f : fields)
+            newFields.add(f.instantiateLanguage(pool));
+
+        return new MultiFieldFormat(newFields);
     }
 }

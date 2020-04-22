@@ -1,11 +1,12 @@
 package ch.epfl.qedit.model;
 
-import ch.epfl.qedit.model.answer.AnswerFormat;
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.epfl.qedit.model.answer.AnswerFormat;
+
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
-public class Question implements Serializable {
+public class Question implements MultiLanguage<Question>, Serializable {
     /** For now, a question consists of a number, a title, and a text */
     private final String title;
 
@@ -48,5 +49,14 @@ public class Question implements Serializable {
                     && this.format.equals(other.format);
         }
         return false;
+    }
+
+    @Override
+    public Question instantiateLanguage(StringPool pool) {
+        String newTitle = pool.get(title);
+        String newText = pool.get(text);
+        AnswerFormat newFormat = format.instantiateLanguage(pool);
+
+        return new Question(newTitle, newText, newFormat);
     }
 }

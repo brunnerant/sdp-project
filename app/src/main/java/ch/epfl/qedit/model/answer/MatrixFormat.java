@@ -1,13 +1,15 @@
 package ch.epfl.qedit.model.answer;
 
-import ch.epfl.qedit.view.answer.AnswerFragment;
-import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.view.answer.AnswerFragment;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 
 /**
  * This class represents matrices where the user can enter his answers. Fields of the matrices can
@@ -250,5 +252,21 @@ public final class MatrixFormat extends AnswerFormat {
                     && Objects.equals(fields, that.fields);
         }
         return false;
+    }
+
+    @Override
+    public AnswerFormat instantiateLanguage(StringPool pool) {
+        Builder b = new Builder(numRows, numColumns);
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++) {
+                Field f = getField(i, j);
+                String newText = pool.get(f.getText());
+                Field newField = new Field(f.getType(), f.getMaxCharacters(), newText);
+                b.withField(i, j, newField);
+            }
+        }
+
+        return b.build();
     }
 }
