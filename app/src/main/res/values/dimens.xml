@@ -7,4 +7,8 @@
     <dimen name="answer_text_helper_padding">30dp</dimen>
 
     <dimen name="helper_text_size">20sp</dimen>
+<<<<<<< HEAD
 </resources>
+=======
+</resources>
+>>>>>>> layouts updated
