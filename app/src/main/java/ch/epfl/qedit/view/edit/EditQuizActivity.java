@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class EditQuizActivity extends AppCompatActivity {
+
+    public final static String QUESTION_BUILDER= "ch.epfl.qedit.view.edit.QUESTION_BUILDER";
+
     private QuizViewModel model;
     private Quiz quiz;
 
