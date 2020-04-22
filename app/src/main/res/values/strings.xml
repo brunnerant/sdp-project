@@ -86,6 +86,10 @@
     <!-- Edit Question -->
     <string name="edit_question_title">Enter the title of the question here.</string>
     <string name="edit_question_text">Enter the text of the question here.</string>
+    <string name="add_answer_helper_text">Add a type of answer field by pressing the \'+\' button.</string>
+
+    <!-- Edit Answer -->
+    <string name="choose_answer_format">Choose a type of answer among TEXT, NUMBER, MATRIX and ANNOTATED GRAPH.</string>
 
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
