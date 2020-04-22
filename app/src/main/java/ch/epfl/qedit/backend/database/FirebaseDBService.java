@@ -7,6 +7,7 @@ import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Response;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class FirebaseDBService implements DatabaseService {
 
@@ -24,18 +26,139 @@ public class FirebaseDBService implements DatabaseService {
         db = FirebaseFirestore.getInstance();
     }
 
-    private String getField(String field, QueryDocumentSnapshot doc) throws Exception {
-        String string = doc.get(field, String.class);
-        if (string == null) {
-            throw new Exception(field + " not found in firestore document");
-        }
-        return string;
+    /**
+     * @param quizID String ID of the quiz in Firestore
+     * @return a DocumentReference of the corresponding quiz in Firestore
+     */
+    private DocumentReference getQuizRef(String quizID) {
+        return db.collection("quizzes").document(quizID);
     }
 
-    private Question getQuestionFromDoc(QueryDocumentSnapshot doc) throws Exception {
-        return new Question(
-                getField("title", doc), getField("text", doc), getField("answer_format", doc));
+    /**
+     * If a doc does not exist then its id does not describe an existing document in the database
+     *
+     * @param doc DocumentSnapshot of which we test the existence
+     * @param responseCallback Callback function triggered with an error if the document does not
+     *     exist
+     * @param <T> This function is generic because we don't really need to know the type of response
+     * @return true if doc exist, false otherwise, and response a WRONG_DOCUMENT error to the
+     *     callback response.
+     */
+    private <T> boolean exists(DocumentSnapshot doc, Callback<Response<T>> responseCallback) {
+        return Util.require(doc != null && doc.exists(), responseCallback, WRONG_DOCUMENT);
     }
+
+    /**
+     * If a collection does not exist then its id does not describe an existing collection in the
+     * database
+     *
+     * @param collection QuerySnapshot of which we test its emptiness, in case of a collection, its
+     *     existence
+     * @param responseCallback Callback function triggered with an error if the collection does not
+     *     exist
+     * @param <T> This function is generic because we don't really need to know the type of response
+     * @return true if collection exist, false otherwise, and response a WRONG_COLLECTION error to
+     *     the callback response
+     */
+    private <T> boolean exists(QuerySnapshot collection, Callback<Response<T>> responseCallback) {
+        return Util.require(
+                collection != null && !collection.isEmpty(), responseCallback, WRONG_COLLECTION);
+    }
+
+    /**
+     * If task is not successful, we don't retrieve any information with this query from the
+     * database
+     *
+     * @param task Task of which we test if it is successful or not
+     * @param responseCallback Callback function triggered with an error if the task is not
+     *     successful
+     * @param <T> This function is generic because we don't really need to know the type of response
+     * @return true if the task is successful, false otherwise, and response a CONNECTION_ERROR
+     *     error to the callback response
+     */
+    private <T> boolean isSuccessful(Task task, Callback<Response<T>> responseCallback) {
+        return Util.require(task.isSuccessful(), responseCallback, CONNECTION_ERROR);
+    }
+
+    @Override
+    public void getQuizLanguages(
+            String quizID, final Callback<Response<List<String>>> responseCallback) {
+
+        getQuizRef(quizID)
+                .get()
+                .addOnCompleteListener(
+                        new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (isSuccessful(task, responseCallback)) {
+                                    DocumentSnapshot doc = task.getResult();
+                                    if (exists(doc, responseCallback)) {
+                                        List<String> languages = Util.cast(doc.get("languages"));
+                                        if (Util.require(
+                                                languages != null,
+                                                responseCallback,
+                                                WRONG_DOCUMENT)) {
+                                            responseCallback.onReceive(Response.ok(languages));
+                                        }
+                                    }
+                                }
+                            }
+                        });
+    }
+
+    @Override
+    public void getQuizStringPool(
+            String quizID,
+            String language,
+            final Callback<Response<Map<String, String>>> responseCallback) {
+
+        getQuizRef(quizID)
+                .collection("string_pools")
+                .document(language)
+                .get()
+                .addOnCompleteListener(
+                        new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (isSuccessful(task, responseCallback)) {
+                                    DocumentSnapshot doc = task.getResult();
+                                    if (exists(doc, responseCallback)) {
+                                        Map<String, String> stringPool =
+                                                Util.convertToStringPool(doc);
+                                        responseCallback.onReceive(Response.ok(stringPool));
+                                    }
+                                }
+                            }
+                        });
+    }
+
+    @Override
+    public void getQuizStructure(String quizID, final Callback<Response<Quiz>> responseCallback) {
+
+        getQuizRef(quizID)
+                .collection("questions")
+                .orderBy("index")
+                .get()
+                .addOnCompleteListener(
+                        new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (isSuccessful(task, responseCallback)) {
+                                    QuerySnapshot docs = task.getResult();
+                                    if (exists(docs, responseCallback)) {
+                                        Quiz quiz = Util.convertToQuiz(docs);
+                                        responseCallback.onReceive(Response.ok(quiz));
+                                    }
+                                }
+                            }
+                        });
+    }
+
+    // FOR NOW, WE KEEP getQuiz(...), getQuestions(...), getQuizTitle(...)
+    // THIS WILL BE DELETED IN A FURTHER PR
+
+    // TODO DELETE IN FURTHER PR
+    // ========================================================================================
 
     @Override
     public void getQuizQuestions(
@@ -51,24 +174,24 @@ public class FirebaseDBService implements DatabaseService {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 Response<List<Question>> response;
-                                if (task.isSuccessful()) {
+                                if (isSuccessful(task, responseCallback)) {
                                     QuerySnapshot docs = task.getResult();
-                                    if (docs != null && !docs.isEmpty()) {
-                                        /**
-                                         * We get all questions store as document in firestore and
-                                         * translate them as Question object
-                                         */
+                                    if (exists(docs, responseCallback)) {
+
+                                        // We get all questions store as document in firestore and
+                                        // translate them as Question object
+
                                         List<Question> questions = new ArrayList<>();
                                         for (QueryDocumentSnapshot doc : docs) {
                                             try {
-                                                questions.add(getQuestionFromDoc(doc));
+                                                questions.add(Util.convertToQuestion(doc));
                                             } catch (Exception e) {
-                                                /**
-                                                 * If the translation raise an exception then the
-                                                 * format of the document is wrong, we print the
-                                                 * stack trace for debug purpose, and respond an
-                                                 * error
-                                                 */
+
+                                                // If the translation raise an exception then the
+                                                // format of the document is wrong, we print the
+                                                // stack trace for debug purpose, and respond an
+                                                // error
+
                                                 e.printStackTrace();
                                                 response = Response.error(WRONG_DOCUMENT);
                                                 responseCallback.onReceive(response);
@@ -76,22 +199,9 @@ public class FirebaseDBService implements DatabaseService {
                                             }
                                         }
                                         response = Response.ok(questions);
-                                    } else {
-                                        /**
-                                         * If the QuerySnapshot is empty then the collection does
-                                         * not exist because we don't support Quizzes with no
-                                         * Questions
-                                         */
-                                        response = Response.error(WRONG_COLLECTION);
+                                        responseCallback.onReceive(response);
                                     }
-                                } else {
-                                    /**
-                                     * If task is not successful, we don't retrieve any information
-                                     * with this query from the database
-                                     */
-                                    response = Response.error(CONNECTION_ERROR);
                                 }
-                                responseCallback.onReceive(response);
                             }
                         });
     }
@@ -100,7 +210,6 @@ public class FirebaseDBService implements DatabaseService {
     public void getQuizTitle(String quizID, final Callback<Response<String>> responseCallback) {
 
         final String language = Locale.getDefault().getLanguage();
-
         db.collection("quizzes")
                 .document(quizID)
                 .get()
@@ -109,42 +218,34 @@ public class FirebaseDBService implements DatabaseService {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 Response<String> response;
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        String title =
-                                                document.get("title_" + language, String.class);
-                                        response = Response.ok(title);
-                                    } else {
-                                        /**
-                                         * If the document does not exist then quizID does not
-                                         * describe an existing quiz in the database
-                                         */
-                                        response = Response.error(WRONG_DOCUMENT);
+                                if (isSuccessful(task, responseCallback)) {
+                                    DocumentSnapshot doc = task.getResult();
+                                    if (exists(doc, responseCallback)) {
+                                        String title = doc.get("title_" + language, String.class);
+                                        responseCallback.onReceive(Response.ok(title));
                                     }
-                                } else {
-                                    /**
-                                     * If task is not successful, we don't retrieve any information
-                                     * with this query from the database
-                                     */
-                                    response = Response.error(CONNECTION_ERROR);
                                 }
-                                responseCallback.onReceive(response);
                             }
                         });
     }
 
+    @Override
     public void getQuiz(final String quizID, final Callback<Response<Quiz>> responseCallback) {
-        /** First we load the title from the database */
+
+        // First we load the title from the database
+
         getQuizTitle(
                 quizID,
                 new Callback<Response<String>>() {
                     @Override
                     public void onReceive(final Response<String> titleResponse) {
-                        /** If we manage to extract the title */
+
+                        // If we manage to extract the title
+
                         if (titleResponse.getError() == Response.NO_ERROR) {
                             final String title = titleResponse.getData();
-                            /** We try to extract the list of Questions */
+
+                            // We try to extract the list of Questions
                             getQuizQuestions(
                                     quizID,
                                     new Callback<Response<List<Question>>>() {
@@ -157,10 +258,10 @@ public class FirebaseDBService implements DatabaseService {
                                                                 title, questionsResponse.getData());
                                                 responseCallback.onReceive(Response.ok(quiz));
                                             } else {
-                                                /**
-                                                 * If we cannot load the questions, we respond the
-                                                 * error we get from getQuizTitle
-                                                 */
+
+                                                // If we cannot load the questions, we respond the
+                                                // error we get from getQuizTitle
+
                                                 responseCallback.onReceive(
                                                         Response.<Quiz>error(
                                                                 questionsResponse.getError()));
@@ -168,14 +269,15 @@ public class FirebaseDBService implements DatabaseService {
                                         }
                                     });
                         } else {
-                            /**
-                             * If we cannot load the title, we respond the error we get from
-                             * getQuizTitle
-                             */
+
+                            // If we cannot load the title, we respond the error we get from
+                            // getQuizTitle
+
                             responseCallback.onReceive(
                                     Response.<Quiz>error(titleResponse.getError()));
                         }
                     }
                 });
     }
+    // ========================================================================================
 }
