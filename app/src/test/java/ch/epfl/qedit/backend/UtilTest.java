@@ -18,7 +18,8 @@ import org.junit.function.ThrowingRunnable;
 
 public class UtilTest {
 
-    private MatrixFormat singleField = new MatrixFormat(1, 1);
+    private MatrixFormat singleField =
+            MatrixFormat.singleField(MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
 
     @Test
     public void convertToAnswerFormatTestEmpty() {
