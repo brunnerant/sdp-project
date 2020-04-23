@@ -2,79 +2,79 @@ package ch.epfl.qedit.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 
-import ch.epfl.qedit.model.answer.AnswerFormat;
+import androidx.fragment.app.Fragment;
+import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixModel;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 
 public class MatrixFormatTest {
+
+    private final MatrixFormat.Field field = MatrixFormat.Field.preFilledField("");
+
     @Test
-    public void checkMatrixSingleField() {
-        MatrixFormat matrixFormat = MatrixFormat.createSingleField(true, true, 5);
-        matrixFormat.setHint("00");
-        checkAllElements(matrixFormat, true, true, 1, 1, 5, "00");
+    public void testFieldEquals() {
+        assertEquals(field, MatrixFormat.Field.preFilledField(""));
+        assertNotEquals(field, null);
+        assertNotEquals(null, field);
+        assertNotEquals(field, "string");
+        assertNotEquals(field, MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
     }
 
     @Test
-    public void checkSetHint() {
-        MatrixFormat matrixFormat = MatrixFormat.createSingleField(true, true, 5);
-        matrixFormat.setHint("00");
-        checkAllElements(matrixFormat, true, true, 1, 1, 5, "00");
+    public void testMatrixFormatEquals() {
+        MatrixFormat.Field a = MatrixFormat.Field.preFilledField("a");
+        MatrixFormat.Field b = MatrixFormat.Field.preFilledField("b");
+
+        MatrixFormat m1 = new MatrixFormat.Builder(2, 2).withField(0, 0, a).build();
+        MatrixFormat m2 = new MatrixFormat.Builder(2, 2).build();
+        MatrixFormat m3 = new MatrixFormat.Builder(2, 2).build();
+        assertNotEquals(m1, m2);
+        assertEquals(m2, m3);
+
+        m1 = new MatrixFormat.Builder(1, 1).withField(0, 0, a).withField(0, 0, b).build();
+        m2 = new MatrixFormat.Builder(1, 1).withField(0, 0, b).build();
+        assertEquals(m1, m2);
     }
 
     @Test
-    public void checkMatrix3x3Normal() {
-        MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3();
+    public void testMatrixFormatBuilderCrashes() {
+        assertThrows(
+                IllegalArgumentException.class,
+                new ThrowingRunnable() {
+                    @Override
+                    public void run() throws Throwable {
+                        new MatrixFormat.Builder(-1, 1);
+                    }
+                });
 
-        checkAllElements(matrixFormat, true, true, 3, 3, 5, "00000");
+        assertThrows(
+                IllegalStateException.class,
+                new ThrowingRunnable() {
+                    @Override
+                    public void run() throws Throwable {
+                        MatrixFormat.Builder b = new MatrixFormat.Builder(1, 1);
+                        b.build();
+                        b.build();
+                    }
+                });
     }
 
     @Test
-    public void checkMatrix3x3WithParam() {
-        MatrixFormat matrixFormat = MatrixFormat.createMatrix3x3(true, true, 5);
-
-        checkAllElements(matrixFormat, true, true, 3, 3, 5, "00000");
-    }
-
-    private void checkAllElements(
-            MatrixFormat matrixFormat,
-            boolean hasDecimal,
-            boolean hasSign,
-            int tableRowsNumber,
-            int tableColumnsNumber,
-            int maxCharacters,
-            String hintString) {
-        assertEquals(matrixFormat.hasDecimal(), hasDecimal);
-        assertEquals(matrixFormat.hasSign(), hasSign);
-        assertEquals(matrixFormat.getTableColumnsNumber(), tableColumnsNumber);
-        assertEquals(matrixFormat.getTableRowsNumber(), tableRowsNumber);
-        assertEquals(matrixFormat.getTableRowsNumber(), tableRowsNumber);
-        assertEquals(matrixFormat.getMaxCharacters(), maxCharacters);
-        assertEquals(matrixFormat.getHint(), hintString);
-    }
-
-    /** Parsing Test */
-    @Test
-    public void parseMatrixCorrectly() {
-        assertEquals(new MatrixFormat(1, 1), AnswerFormat.parse("matrix1x1"));
-        assertEquals(new MatrixFormat(1, 1), AnswerFormat.parse("matrix1x1   "));
-        assertEquals(new MatrixFormat(4, 1), AnswerFormat.parse("    matrix4x1"));
-        assertEquals(new MatrixFormat(1, 7878), AnswerFormat.parse("    matrix1x7878   "));
+    public void testFragmentIsCorrectlyDispatched() {
+        MatrixFormat matrixFormat = MatrixFormat.singleField(field);
+        Fragment fragment = matrixFormat.getAnswerFragment();
+        assertEquals(MatrixFragment.class, fragment.getClass());
     }
 
     @Test
-    public void parseMatrixFailed() {
-        assertNull(AnswerFormat.parse("matrix1xx1"));
-        assertNull(AnswerFormat.parse("matrix4x1x"));
-        assertNull(AnswerFormat.parse("m_matrix1x7878"));
-        assertNull(AnswerFormat.parse("matrix1x7878a"));
-        assertNull(AnswerFormat.parse("m matrix1x7878"));
-        assertNull(AnswerFormat.parse("@@@@,ko"));
-    }
-
-    @Test
-    public void testNotEquals() {
-        assertNotEquals(new MatrixFormat(1, 1), "Gorille");
+    public void testModelIsCorrectlyDispatched() {
+        MatrixFormat matrixFormat = MatrixFormat.singleField(field);
+        AnswerModel answerModel = matrixFormat.getEmptyAnswerModel();
+        assertEquals(MatrixModel.class, answerModel.getClass());
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /** Represents a quiz. For now, it is simply a immutable list of question. */
 public final class Quiz implements Serializable {

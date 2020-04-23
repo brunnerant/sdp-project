@@ -12,6 +12,9 @@ import ch.epfl.qedit.viewmodel.EditionViewModel;
 import java.util.Objects;
 
 public class EditQuizActivity extends AppCompatActivity {
+
+    public final static String QUESTION_BUILDER= "ch.epfl.qedit.view.edit.QUESTION_BUILDER"; //TODO
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

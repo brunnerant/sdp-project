@@ -58,7 +58,10 @@ public class EditOverviewFragment extends Fragment {
                             public void onClick(View v) {
                                 numQuestions++;
                                 adapter.addItem(
-                                        new Question("Title", "Text", new MatrixFormat(1, 1)));
+                                        new Question(
+                                                "Title",
+                                                "Text",
+                                                MatrixFormat.singleField(MatrixFormat.Field.textField("", 25))));
                             }
                         });
 
