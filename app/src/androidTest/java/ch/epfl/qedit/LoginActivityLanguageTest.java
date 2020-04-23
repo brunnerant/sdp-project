@@ -32,11 +32,10 @@ public class LoginActivityLanguageTest {
     public final IntentsTestRule<LoginActivity> testRule =
             new IntentsTestRule<>(LoginActivity.class, false, false);
 
-    public void launchActivity(String languageCode) {
-        Locale.setDefault(new Locale(languageCode));
+    public void launchActivity(Locale locale) {
+        Locale.setDefault(locale);
         Intent intent = new Intent();
         testRule.launchActivity(intent);
-        LocaleHelper.setLocale(testRule.getActivity(), languageCode);
     }
 
     @After
@@ -49,8 +48,6 @@ public class LoginActivityLanguageTest {
             String languageCode,
             String loginString,
             String languageChangedString) {
-
-        String currentLanguage = LocaleHelper.getLanguage(testRule.getActivity());
 
         setLanguage(languageCode);
 
@@ -91,7 +88,7 @@ public class LoginActivityLanguageTest {
 
     @Test
     public void testChangeLanguageToEnglish() {
-        launchActivity("fr");
+        launchActivity(Locale.FRENCH);
 
         assertEquals("fr", Locale.getDefault().getLanguage());
         assertEquals("fr", LocaleHelper.getLanguage(testRule.getActivity()));
@@ -102,7 +99,7 @@ public class LoginActivityLanguageTest {
 
     @Test
     public void testChangeLanguageToFrench() {
-        launchActivity("en");
+        launchActivity(Locale.ENGLISH);
 
         assertEquals("en", Locale.getDefault().getLanguage());
         assertEquals("en", LocaleHelper.getLanguage(testRule.getActivity()));
@@ -113,7 +110,7 @@ public class LoginActivityLanguageTest {
 
     @Test
     public void testStayOnEnglish() {
-        launchActivity("en");
+        launchActivity(Locale.ENGLISH);
 
         assertEquals("en", Locale.getDefault().getLanguage());
         assertEquals("en", LocaleHelper.getLanguage(testRule.getActivity()));
@@ -124,7 +121,7 @@ public class LoginActivityLanguageTest {
 
     @Test
     public void testStayOnFrench() {
-        launchActivity("fr");
+        launchActivity(Locale.FRENCH);
 
         assertEquals("fr", Locale.getDefault().getLanguage());
         assertEquals("fr", LocaleHelper.getLanguage(testRule.getActivity()));
