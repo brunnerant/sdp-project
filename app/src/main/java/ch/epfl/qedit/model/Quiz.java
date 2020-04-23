@@ -28,7 +28,7 @@ public final class Quiz implements Serializable {
         return ImmutableList.copyOf(questions);
     }
 
-    public static class Builder {
+    public static class Builder implements Serializable {
 
         private List<Question> questions;
 

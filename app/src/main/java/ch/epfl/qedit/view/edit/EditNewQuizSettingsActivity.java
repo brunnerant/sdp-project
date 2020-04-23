@@ -4,52 +4,34 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.viewmodel.EditionViewModel;
-import java.util.Arrays;
+import ch.epfl.qedit.model.StringPool;
 
 public class EditNewQuizSettingsActivity extends AppCompatActivity {
-    private EditionViewModel model;
+    public static final String QUIZ_BUILDER = "ch.epfl.qedit.model.QUIZ_BUILDER";
+    public static final String STRING_POOL = "ch.epfl.qedit.model.STRING_POOL";
+
+    private Quiz.Builder quizBuilder;
+    private StringPool stringPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_new_quiz_settings);
 
-        model = new ViewModelProvider(this).get(EditionViewModel.class);
+        quizBuilder = new Quiz.Builder();
+        stringPool = new StringPool();
 
-        // Testing, remove TODO
-        Quiz quiz =
-                new Quiz(
-                        "Test",
-                        Arrays.asList(
-                                new Question(
-                                        "The matches problem",
-                                        "How many matches can fit in a shoe of size 43?",
-                                        "matrix3x3"),
-                                new Question(
-                                        "Pigeons",
-                                        "How many pigeons are there on Earth? (Hint: do not count yourself)",
-                                        "matrix1x1"),
-                                new Question("KitchenBu", "Oyster", "matrix1x1"),
-                                new Question(
-                                        "Everything",
-                                        "What is the answer to life the universe and everything?",
-                                        "matrix3x3"),
-                                new Question(
-                                        "Banane", "Combien y a-t-il de bananes ?", "matrix1x1")));
-        model.getQuizBuilder().add(quiz.getQuestions().get(0));
-        model.getQuizBuilder().add(quiz.getQuestions().get(1));
-        model.getQuizBuilder().add(quiz.getQuestions().get(2));
-        model.getQuizBuilder().add(quiz.getQuestions().get(3));
-        model.setQuizTitle(quiz.getTitle());
+        stringPool.put(StringPool.TITLE_ID, "Test");
     }
 
     public void startEditing(View view) {
         Intent intent = new Intent(EditNewQuizSettingsActivity.this, EditQuizActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(QUIZ_BUILDER, quizBuilder);
+        bundle.putSerializable(STRING_POOL, stringPool);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }

@@ -1,11 +1,12 @@
 package ch.epfl.qedit.model;
 
 import com.google.common.collect.ImmutableMap;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class StringPool {
+public class StringPool implements Serializable {
 
     public static final String TITLE_ID = "title";
     private Map<String, String> stringPool;

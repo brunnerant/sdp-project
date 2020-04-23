@@ -1,26 +1,32 @@
 package ch.epfl.qedit.view.edit;
 
-import android.app.Activity;
+import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ListEditView;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
+import java.util.Objects;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
-    private int numQuestions;
-
     private ListEditView.Adapter<Question> adapter;
+    private int numQuestions;
     private EditionViewModel model;
+    private Quiz.Builder quizBuilder;
+    private StringPool stringPool;
 
     @Override
     public View onCreateView(
@@ -28,14 +34,15 @@ public class EditOverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
 
-        Activity activity = requireActivity();
-        Activity parent = activity.getParent();
-        // TODO getParent won't work unless this activity is embedded as a child
-        model =
-                new ViewModelProvider((ViewModelStoreOwner) requireActivity().getParent())
-                        .get(EditionViewModel.class);
+        Intent intent = requireActivity().getIntent();
+        quizBuilder =
+                (Quiz.Builder)
+                        Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_BUILDER);
+        stringPool =
+                (StringPool)
+                        Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
 
-        numQuestions = model.getQuizBuilder().numberOfQuestions();
+        model = new ViewModelProvider(requireActivity()).get(EditionViewModel.class);
 
         // Retrieve and configure the recycler view
         ListEditView listEditView = view.findViewById(R.id.question_list);
@@ -51,10 +58,7 @@ public class EditOverviewFragment extends Fragment {
                             public void onClick(View v) {
                                 numQuestions++;
                                 adapter.addItem(
-                                        new Question(
-                                                "Q" + numQuestions,
-                                                "is it " + numQuestions + "?",
-                                                new MatrixFormat(1, 1)));
+                                        new Question("Title", "Text", new MatrixFormat(1, 1)));
                             }
                         });
 
@@ -65,7 +69,7 @@ public class EditOverviewFragment extends Fragment {
         // Create an adapter for the question list
         adapter =
                 new ListEditView.Adapter<>(
-                        model.getQuizBuilder().getQuestions(),
+                        quizBuilder.getQuestions(),
                         new ListEditView.GetItemText<Question>() {
                             @Override
                             public String getText(Question item) {
@@ -86,11 +90,12 @@ public class EditOverviewFragment extends Fragment {
                                 break;
                             case RemoveRequest:
                                 adapter.removeItem(position);
-                                model.getQuizBuilder().remove(position);
+                                quizBuilder.remove(position);
+                                --numQuestions;
                                 updateFocus(position);
                                 break;
                             case EditRequest:
-                                setFragment(new EditQuestionFragment());
+                                // launch EditQuestion activity
                                 break;
                             default:
                                 break;
@@ -100,7 +105,7 @@ public class EditOverviewFragment extends Fragment {
     }
 
     private void updateFocus(int position) {
-        if (model.getQuizBuilder().numberOfQuestions() == 0) {
+        if (numQuestions == 0) {
             model.getFocusedQuestion().postValue(null);
         } else if (position <= model.getFocusedQuestion().getValue()) {
             // TODO stuff

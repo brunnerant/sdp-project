@@ -23,6 +23,6 @@ public class EditQuestionActivity extends AppCompatActivity {
 
         // this need to be replace by this.getParent()
         model = new ViewModelProvider(this).get(EditionViewModel.class);
-        model.initQuestionBuilder();
+        // model.initQuestionBuilder(); TODO handle this
     }
 }

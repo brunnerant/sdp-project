@@ -1,13 +1,12 @@
 package ch.epfl.qedit.view.edit;
 
-import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_FORMAT;
-import static ch.epfl.qedit.view.quiz.QuestionFragment.ANSWER_MODEL;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,54 +15,47 @@ import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.AnswerModel;
-import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.HashMap;
+import ch.epfl.qedit.viewmodel.EditionViewModel;
 
 public class EditQuestionFragment extends Fragment {
-    public static final String EDIT_ANSWER_FORMAT = "ch.epfl.qedit.view.edit.EDIT_ANSWER_FORMAT";
-    public static final String EDIT_ANSWER_MODEL = "ch.epfl.qedit.view.edit.EDIT_ANSWER_MODEL";
-    public static final String EDIT_FRAGMENT_TAG = "ch.epfl.qedit.view.edit.EDIT_FRAGMENT_TAG";
+    public static final String ANSWER_FORMAT = "ch.epfl.qedit.view.ANSWER_FORMAT";
+    public static final String ANSWER_MODEL = "ch.epfl.qedit.view.ANSWER_MODEL";
+    public static final String FRAGMENT_TAG = "ch.epfl.qedit.view.FRAGMENT_TAG";
 
-    private EditText editQuestionDisplay;
-    private EditText editQuestionTitle;
-    private QuizViewModel model;
+    private TextView questionTitle;
+    private TextView questionDisplay;
+    private EditionViewModel editionViewModel;
 
-    // TODO remove
-
+    @Nullable
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.edit_fragment_quiz_question, container, false);
-        editQuestionDisplay = v.findViewById(R.id.edit_question_display);
-        editQuestionTitle = v.findViewById(R.id.edit_question_title);
+        View view = inflater.inflate(R.layout.fragment_quiz_question, container, false);
+        questionTitle = view.findViewById(R.id.question_title);
+        questionDisplay = view.findViewById(R.id.question_display);
 
-        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        editionViewModel = new ViewModelProvider(requireActivity()).get(EditionViewModel.class);
 
-        observeModelOnEdit(model);
-
-        return v;
-    }
-
-    private void observeModelOnEdit(final QuizViewModel model) {
-        model.getFocusedQuestion()
+        editionViewModel
+                .getFocusedQuestion()
                 .observe(
                         getViewLifecycleOwner(),
                         new Observer<Integer>() {
                             @Override
                             public void onChanged(Integer index) {
-                                editOnQuestionChanged(model.getQuiz(), index);
+                                // onQuestionChanged(editionViewModel.getQuiz(), index);
                             }
                         });
-    }
 
-    private boolean quizAndIndexAreValid(Quiz quiz, Integer index) {
-        return index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size();
+        return view;
     }
 
     /** Handles the transition from one question to another */
-    private void editOnQuestionChanged(Quiz quiz, Integer index) {
-        if (quizAndIndexAreValid(quiz, index)) {
+    private void onQuestionChanged(Quiz quiz, Integer index) {
+        if (index == null || quiz == null || index < 0 || index >= quiz.getQuestions().size()) {
             return;
         }
 
@@ -71,42 +63,52 @@ public class EditQuestionFragment extends Fragment {
 
         // We have to change the question title and text
         String questionTitleStr = "Question " + (index + 1) + " - " + question.getTitle();
-        editQuestionDisplay.setText(question.getText());
-        editQuestionTitle.setText(questionTitleStr);
+        questionTitle.setText(questionTitleStr);
+        questionDisplay.setText(question.getText());
 
-        prepareEditAnswerFormatFragment(question, index);
+        // Set everything up for the concrete AnswerFragment and launch it
+        prepareAnswerFormatFragment(question, index);
     }
 
-    private AnswerModel getAnswerModel(AnswerFormat answerFormat, int index) {
-        AnswerModel answerModel;
-        HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
-        if (!answers.containsKey(index)) {
-            answerModel = answerFormat.getEmptyAnswerModel();
-            answers.put(index, answerModel);
-            model.getAnswers().postValue(answers);
-        } else {
-            answerModel = answers.get(index);
-        }
-
-        return answerModel;
-    }
-
-    private void prepareEditAnswerFormatFragment(Question question, Integer index) {
+    /**
+     * This method gets the concrete AnswerFormat, checks if the QuizViewModel contains already a
+     * matching AnswerModel and otherwise creates a new one and adds it to the QuizViewModel.
+     * Further a bundle is prepared, then it dispatches the correct Fragment class and finally
+     * starts it.
+     *
+     * @param question The question that is going to be shown
+     * @param index The index of that Question in the Quiz, the question list
+     */
+    private void prepareAnswerFormatFragment(Question question, Integer index) {
+        // Get the AnswerFormat of the question
         AnswerFormat answerFormat = question.getFormat();
 
-        AnswerModel answerModel = getAnswerModel(answerFormat, index);
+        AnswerModel answerModel;
+        //        HashMap<Integer, AnswerModel> answers = quizViewModel.getAnswers().getValue();
+        //
+        //        // Check if the model already holds an AnswerModel for this question
+        //        if (answers.containsKey(index)) {
+        //            answerModel = answers.get(index);
+        //        } else { // and otherwise create a new one and add it to the QuizViewModel
+        //            answerModel = answerFormat.getEmptyAnswerModel();
+        //            answers.put(index, answerModel);
+        //            quizViewModel.getAnswers().postValue(answers);
+        //        }
 
+        // Prepare the bundle for the Fragment
         Bundle bundle = new Bundle();
         bundle.putSerializable(ANSWER_FORMAT, answerFormat);
-        bundle.putSerializable(ANSWER_MODEL, answerModel);
+        // bundle.putSerializable(ANSWER_MODEL, answerModel);
 
-        Fragment editFragment = answerFormat.getAnswerFragment();
-        editFragment.setArguments(bundle);
+        // Get the fragment that matches the concrete type of AnswerFormat
+        Fragment fragment = answerFormat.getAnswerFragment();
+        fragment.setArguments(bundle);
 
+        // And dynamically instantiate the answer form
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.edit_answer_fragment_container, editFragment, EDIT_FRAGMENT_TAG)
+                .replace(R.id.answer_fragment_container, fragment, FRAGMENT_TAG)
                 .commit();
     }
 }
