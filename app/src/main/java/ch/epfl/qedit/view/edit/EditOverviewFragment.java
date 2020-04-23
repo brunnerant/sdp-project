@@ -61,7 +61,8 @@ public class EditOverviewFragment extends Fragment {
                                         new Question(
                                                 "Title",
                                                 "Text",
-                                                MatrixFormat.singleField(MatrixFormat.Field.textField("", 25))));
+                                                MatrixFormat.singleField(
+                                                        MatrixFormat.Field.textField("", 25))));
                             }
                         });
 
