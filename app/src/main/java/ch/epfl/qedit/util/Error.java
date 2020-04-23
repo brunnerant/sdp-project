@@ -6,7 +6,6 @@ import android.widget.Toast;
 public class Error {
 
     private final int stringId;
-    private Toast toast;
 
     /**
      * @param stringId the id of the error string that correspond to this error, a stringId 0 is
@@ -26,18 +25,11 @@ public class Error {
             return true;
         }
 
-        toast =
+        Toast toast =
                 Toast.makeText(
                         context, context.getResources().getString(stringId), Toast.LENGTH_SHORT);
         toast.show();
 
         return false;
-    }
-
-    /**
-     * If the toast has been assigned, cancel it before showing a new one or stopping the activity
-     */
-    public void cancelToast() {
-        if (toast != null) toast.cancel();
     }
 }

@@ -22,7 +22,6 @@ import java.util.Objects;
 public class QuizActivity extends AppCompatActivity {
     private QuizViewModel model;
     private Boolean overviewActive;
-    private Toast toast;
 
     private Quiz quiz;
 
@@ -73,9 +72,7 @@ public class QuizActivity extends AppCompatActivity {
                 handleNavigation(id == R.id.next ? 1 : -1);
                 break;
             case R.id.time:
-                cancelToast();
-                toast = Toast.makeText(this, "Unimplemented Feature", Toast.LENGTH_SHORT);
-                toast.show();
+                Toast.makeText(this, "Unimplemented Feature", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.overview:
                 handleToggleOverview();
@@ -106,19 +103,5 @@ public class QuizActivity extends AppCompatActivity {
         findViewById(R.id.quiz_overview_container)
                 .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
         overviewActive = !overviewActive;
-    }
-
-    /** Cancel the toast, the toast's lifecycle is not bound to the one of the activity */
-    @Override
-    public void onStop() {
-        cancelToast();
-        super.onStop();
-    }
-
-    /**
-     * If the toast has been assigned, cancel it before showing a new one or stopping the activity
-     */
-    private void cancelToast() {
-        if (toast != null) toast.cancel();
     }
 }

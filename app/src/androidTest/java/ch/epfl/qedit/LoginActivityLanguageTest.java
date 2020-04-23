@@ -22,7 +22,6 @@ import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.LoginActivity;
 import java.util.Locale;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,10 +32,11 @@ public class LoginActivityLanguageTest {
     public final IntentsTestRule<LoginActivity> testRule =
             new IntentsTestRule<>(LoginActivity.class, false, false);
 
-    @Before
-    public void launchActivity() {
+    public void launchActivity(String languageCode) {
+        Locale.setDefault(new Locale(languageCode));
         Intent intent = new Intent();
         testRule.launchActivity(intent);
+        LocaleHelper.setLocale(testRule.getActivity(), languageCode);
     }
 
     @After
@@ -58,7 +58,7 @@ public class LoginActivityLanguageTest {
         onView(withId(R.id.login_button)).check(matches(withText(loginString)));
 
         // Test toast
-        if (!currentLanguage.equals(languageCode)) {
+        if (languageChangedString != null) {
             onView(withText(languageChangedString))
                     .inRoot(
                             withDecorView(
@@ -91,29 +91,45 @@ public class LoginActivityLanguageTest {
 
     @Test
     public void testChangeLanguageToEnglish() {
-        setLanguage("fr");
+        launchActivity("fr");
+
+        assertEquals("fr", Locale.getDefault().getLanguage());
+        assertEquals("fr", LocaleHelper.getLanguage(testRule.getActivity()));
         testChangeLanguage("English", "en", "Log in", "Language changed to English");
         assertEquals("en", Locale.getDefault().getLanguage());
+        assertEquals("en", LocaleHelper.getLanguage(testRule.getActivity()));
     }
 
     @Test
     public void testChangeLanguageToFrench() {
-        setLanguage("en");
+        launchActivity("en");
+
+        assertEquals("en", Locale.getDefault().getLanguage());
+        assertEquals("en", LocaleHelper.getLanguage(testRule.getActivity()));
         testChangeLanguage("Français", "fr", "Connexion", "Langue changée en Français");
         assertEquals("fr", Locale.getDefault().getLanguage());
+        assertEquals("fr", LocaleHelper.getLanguage(testRule.getActivity()));
     }
 
     @Test
     public void testStayOnEnglish() {
-        setLanguage("en");
+        launchActivity("en");
+
+        assertEquals("en", Locale.getDefault().getLanguage());
+        assertEquals("en", LocaleHelper.getLanguage(testRule.getActivity()));
         testChangeLanguage("English", "en", "Log in", null);
         assertEquals("en", Locale.getDefault().getLanguage());
+        assertEquals("en", LocaleHelper.getLanguage(testRule.getActivity()));
     }
 
     @Test
     public void testStayOnFrench() {
-        setLanguage("fr");
+        launchActivity("fr");
+
+        assertEquals("fr", Locale.getDefault().getLanguage());
+        assertEquals("fr", LocaleHelper.getLanguage(testRule.getActivity()));
         testChangeLanguage("Français", "fr", "Connexion", null);
         assertEquals("fr", Locale.getDefault().getLanguage());
+        assertEquals("fr", LocaleHelper.getLanguage(testRule.getActivity()));
     }
 }

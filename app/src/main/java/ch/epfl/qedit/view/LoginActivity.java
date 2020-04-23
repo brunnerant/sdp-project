@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private Context context;
     private Resources resources;
-    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,15 +129,13 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
      * @param languagePos position of the language in the spinner
      */
     private void printChangedLanguageToast(int languagePos) {
-        cancelToast();
-        toast =
-                Toast.makeText(
+        Toast.makeText(
                         getApplicationContext(),
                         resources.getString(R.string.language_changed)
                                 + " "
                                 + resources.getStringArray(R.array.languages_list)[languagePos],
-                        Toast.LENGTH_SHORT);
-        toast.show();
+                        Toast.LENGTH_SHORT)
+                .show();
     }
 
     public void handleLogin(View view) {
@@ -186,24 +183,9 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void printShortToast(int stringId) {
-        cancelToast();
-        toast =
+        Toast toast =
                 Toast.makeText(
                         getApplicationContext(), resources.getString(stringId), Toast.LENGTH_SHORT);
         toast.show();
-    }
-
-    /** Cancel the toast, the toast's lifecycle is not bound to the one of the activity */
-    @Override
-    public void onStop() {
-        cancelToast();
-        super.onStop();
-    }
-
-    /**
-     * If the toast has been assigned, cancel it before showing a new one or stopping the activity
-     */
-    private void cancelToast() {
-        if (toast != null) toast.cancel();
     }
 }
