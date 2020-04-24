@@ -12,7 +12,6 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.LocaleHelper;
-
 import java.util.Arrays;
 import java.util.Locale;
 

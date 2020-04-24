@@ -14,7 +14,6 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
-import java.util.List;
 
 public class EditQuestionFragment extends Fragment {
     public static final String EDIT_ANSWER_FORMAT = "ch.epfl.qedit.view.edit.EDIT_ANSWER_FORMAT";
@@ -38,8 +37,7 @@ public class EditQuestionFragment extends Fragment {
 
         model = new ViewModelProvider(requireActivity()).get(EditionViewModel.class);
 
-        model
-                .getFocusedQuestion()
+        model.getFocusedQuestion()
                 .observe(
                         getViewLifecycleOwner(),
                         new Observer<Integer>() {
@@ -72,7 +70,7 @@ public class EditQuestionFragment extends Fragment {
             questionDisplay.setText(question.getText());
 
             // Set everything up for the concrete AnswerFragment and launch it
-            //prepareAnswerFormatFragment(question, index); //TODO
+            // prepareAnswerFormatFragment(question, index); //TODO
         }
     }
 

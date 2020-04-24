@@ -16,7 +16,6 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ListEditView;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 
@@ -115,7 +114,11 @@ public class EditOverviewFragment extends Fragment {
                                 Intent intent =
                                         new Intent(requireActivity(), EditQuestionActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable(QUESTION_BUILDER, new Question.Builder()); //TODO if the question is not empty initialize builder
+                                bundle.putSerializable(
+                                        QUESTION_BUILDER,
+                                        new Question
+                                                .Builder()); // TODO if the question is not empty
+                                // initialize builder
                                 bundle.putSerializable(STRING_POOL, stringPool);
                                 intent.putExtras(bundle);
                                 startActivityForResult(intent, EDIT_QUESTION_ACTIVITY_REQUEST_CODE);
