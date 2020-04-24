@@ -1,12 +1,13 @@
 package ch.epfl.qedit.model;
 
 import com.google.common.collect.ImmutableMap;
-
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class StringPool {
+public class StringPool implements Serializable {
+
     public static final String TITLE_ID = "title";
     private Map<String, String> stringPool;
 
@@ -18,29 +19,29 @@ public class StringPool {
         this.stringPool = new HashMap<>(stringPool);
     }
 
-    private String newUID(){
+    private String newUID() {
         String id = UUID.randomUUID().toString();
-        while(stringPool.containsKey(id)){
+        while (stringPool.containsKey(id)) {
             id = UUID.randomUUID().toString();
         }
         return id;
     }
 
-    public String put(String text){
+    public String put(String text) {
         String id = newUID();
         stringPool.put(id, text);
         return id;
     }
 
-    public String put(String key, String text){
+    public String put(String key, String text) {
         return stringPool.put(key, text);
     }
 
-    public String get(String key){
+    public String get(String key) {
         return stringPool.get(key);
     }
 
-    public ImmutableMap<String, String> get(){
+    public ImmutableMap<String, String> get() {
         return ImmutableMap.copyOf(stringPool);
     }
 }

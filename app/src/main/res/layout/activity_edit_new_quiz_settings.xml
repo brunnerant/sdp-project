@@ -6,6 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".view.edit.EditNewQuizSettingsActivity">
 
+    <EditText
+        android:id="@+id/edit_quiz_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:hint="@string/edit_quiz_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/edit_language_selection"/>
+
+    <Spinner
+        android:id="@+id/edit_language_selection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/languages_list"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toTopOf="@id/button_start_editing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_quiz_title" />
+
     <Button
         android:id="@+id/button_start_editing"
         android:layout_width="wrap_content"
@@ -15,5 +40,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/edit_language_selection" />
 </androidx.constraintlayout.widget.ConstraintLayout>
