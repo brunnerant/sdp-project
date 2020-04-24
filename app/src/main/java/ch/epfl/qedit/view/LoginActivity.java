@@ -20,7 +20,7 @@ import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Response;
-import ch.epfl.qedit.view.home.HomeActivity;
+import ch.epfl.qedit.view.sensor.ScannerActivity;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -175,10 +175,12 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void onLoginSuccessful(User user) {
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        /*Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
+        startActivity(intent);*/
+        Intent intent = new Intent(LoginActivity.this, ScannerActivity.class);
         startActivity(intent);
     }
 
