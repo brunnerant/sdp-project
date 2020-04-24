@@ -50,7 +50,7 @@ public final class Question implements Serializable {
         return false;
     }
 
-    public static class Builder {
+    public static class Builder implements Serializable {
 
         private String titleID;
         private String textID;

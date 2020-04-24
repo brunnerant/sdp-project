@@ -66,6 +66,7 @@
     <string name="title_activity_edit_quiz">Edit</string>
 
     <!-- Edit New Quiz Settings -->
+    <string name="edit_quiz_title">Enter the quiz title</string>
     <string name="button_start_editing_message">Start editing</string>
 
     <!-- Edit -->
@@ -94,4 +95,7 @@
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
     <string name="test_answer_format_message">This is just a test!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -40,6 +40,7 @@
     <string name="title_activity_edit_quiz">Édition</string>
 
     <!-- Edit New Quiz Settings -->
+    <string name="edit_quiz_title">Entrez le titre du quiz</string>
     <string name="button_start_editing_message">Démarrer l\'édition</string>
 
     <!-- Edit -->
