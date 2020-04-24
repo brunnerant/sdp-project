@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ch.epfl.qedit">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -16,7 +18,6 @@
             android:name=".view.edit.EditQuizActivity"
             android:label="@string/title_activity_edit_quiz"
             android:parentActivityName=".view.home.HomeActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
 
@@ -32,12 +33,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".NewSignUpActivity"
+            android:label="New sign up">
+            <intent-filter>
+                <action android:name="android.intent.action.NEWSIGNUP" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".NewLoginActivity"
+            android:label="New login">
+            <intent-filter>
+                <action android:name="android.intent.action.NEWLOGIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+
         <activity
             android:name=".view.home.HomeActivity"
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"
             android:parentActivityName=".view.LoginActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW_ROLE" />
 
@@ -47,7 +70,6 @@
         <activity
             android:name=".view.quiz.QuizActivity"
             android:parentActivityName=".view.home.HomeActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
 
@@ -62,6 +84,14 @@
             android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
             android:launchMode="standard"
             tools:replace="android:launchMode" />
+
+
+
+
     </application>
+
+
+
+
 
 </manifest>
