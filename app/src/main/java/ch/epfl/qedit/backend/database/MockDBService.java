@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class MockDBService implements DatabaseService {
 
@@ -234,8 +235,7 @@ public class MockDBService implements DatabaseService {
     }
 
     @Override
-    public void getQuizLanguages(
-            final String quizID, final Callback<Response<List<String>>> responseCallback) {
+    public CompletableFuture<Quiz> getQuizLanguages(final String quizId) {
         idlingResource.increment();
         new Thread(
                         new Runnable() {
@@ -244,9 +244,9 @@ public class MockDBService implements DatabaseService {
 
                                 wait2second();
 
-                                if (exists(quizID, responseCallback)) {
+                                if (exists(quizId, responseCallback)) {
                                     List<String> supportedLanguage =
-                                            dbV2.get(quizID).getLanguages();
+                                            dbV2.get(quizId).getLanguages();
                                     responseCallback.onReceive(Response.ok(supportedLanguage));
                                 }
                                 idlingResource.decrement();

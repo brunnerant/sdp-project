@@ -1,11 +1,10 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.model.MultiLanguage;
+import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
-
-import ch.epfl.qedit.model.MultiLanguage;
-import ch.epfl.qedit.view.answer.AnswerFragment;
 
 /**
  * This class represents all the answer formats that are available in the app. The purpose of this

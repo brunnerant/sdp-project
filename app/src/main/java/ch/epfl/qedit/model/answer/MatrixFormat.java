@@ -1,15 +1,14 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.view.answer.AnswerFragment;
+import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.view.answer.AnswerFragment;
-import ch.epfl.qedit.view.answer.MatrixFragment;
 
 /**
  * This class represents matrices where the user can enter his answers. Fields of the matrices can
@@ -63,8 +62,11 @@ public final class MatrixFormat extends AnswerFormat {
         // This is the text of a pre-filled field, or the hint for the other types
         private String text;
 
-        // This constructor is private to ensure that nobody can initialize an invalid field
-        private Field(Type type, int maxCharacters, String text) {
+        /**
+         * Constructs a field with the given characteristics. Note that this constructor is exposed
+         * for the backend, so you should preferably call the static factory methods if you can.
+         */
+        public Field(Type type, int maxCharacters, String text) {
             this.type = type;
             this.maxCharacters = maxCharacters;
             this.text = text;

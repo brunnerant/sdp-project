@@ -124,15 +124,7 @@ public class MockDBTest {
 
     @Test
     public void testQuizLanguagesError() {
-        db.getQuizLanguages(
-                "error",
-                new Callback<Response<List<String>>>() {
-                    @Override
-                    public void onReceive(Response<List<String>> data) {
-                        languages = data.getData();
-                        error = data.getError();
-                    }
-                });
+        db.getQuizLanguages("error");
         lockWait();
         assertEquals(DatabaseService.WRONG_DOCUMENT, error);
         assertNull(languages);
@@ -140,15 +132,7 @@ public class MockDBTest {
 
     @Test
     public void testQuizLanguages() {
-        db.getQuizLanguages(
-                "quiz1",
-                new Callback<Response<List<String>>>() {
-                    @Override
-                    public void onReceive(Response<List<String>> data) {
-                        languages = data.getData();
-                        error = data.getError();
-                    }
-                });
+        db.getQuizLanguages("quiz1");
         lockWait();
         assertEquals(Response.NO_ERROR, error);
         assertThat(languages, containsInAnyOrder("en", "fr"));
