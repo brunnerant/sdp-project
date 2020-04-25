@@ -1,10 +1,9 @@
 package ch.epfl.qedit.backend.database;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This interface represents a database from which data can be retrieved or modified. For now, only

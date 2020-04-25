@@ -1,17 +1,15 @@
 package ch.epfl.qedit.backend.database;
 
+import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.StringPool;
-
 /**
- * This class is a database service that connects to the real Firestore backend. To
- * have more information on how we chose to represent our data, you can visit
+ * This class is a database service that connects to the real Firestore backend. To have more
+ * information on how we chose to represent our data, you can visit
  * https://github.com/brunnerant/sdp-project/wiki/Firestore-database-structure.
  */
 public class FirebaseDBService implements DatabaseService {
@@ -37,7 +35,8 @@ public class FirebaseDBService implements DatabaseService {
     public CompletableFuture<List<String>> getQuizLanguages(String quizId) {
         CompletableFuture<List<String>> future = new CompletableFuture<>();
 
-        getQuizRef(quizId).get()
+        getQuizRef(quizId)
+                .get()
                 .addOnSuccessListener(doc -> Util.extractLanguages(future, doc))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
@@ -48,7 +47,10 @@ public class FirebaseDBService implements DatabaseService {
     public CompletableFuture<Quiz> getQuizStructure(String quizId) {
         CompletableFuture<Quiz> future = new CompletableFuture<>();
 
-        getQuizRef(quizId).collection("questions").orderBy("index").get()
+        getQuizRef(quizId)
+                .collection("questions")
+                .orderBy("index")
+                .get()
                 .addOnSuccessListener(query -> Util.extractQuiz(future, query))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
@@ -59,7 +61,10 @@ public class FirebaseDBService implements DatabaseService {
     public CompletableFuture<StringPool> getQuizStringPool(String quizId, String language) {
         CompletableFuture<StringPool> future = new CompletableFuture<>();
 
-        getQuizRef(quizId).collection("string_pools").document(language).get()
+        getQuizRef(quizId)
+                .collection("string_pools")
+                .document(language)
+                .get()
                 .addOnSuccessListener(doc -> Util.extractStringPool(future, doc))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
