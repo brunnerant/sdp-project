@@ -65,6 +65,10 @@
     <!-- Edit Answer -->
     <string name="choose_answer_format">Choisir un type de réponse tel que TEXTE, NOMBRE, MATRICE et ANNOTATION DE GRAPHE.</string>
 
+    <!-- Edit Field -->
+    <string name="hint_pre_filled_field">Entrer le texte de ce champ pré-rempli.</string>
+    <string name="hint_text_field">Entrer une réponse textuelle ici.</string>
+
     <!-- Miscellaneous -->
     <!-- In French, there is a space before the exclammation point.
          Since we cannot have leading and trailing spaces in string resources,

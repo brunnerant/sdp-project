@@ -92,10 +92,14 @@
     <!-- Edit Answer -->
     <string name="choose_answer_format">Choose a type of answer among TEXT, NUMBER, MATRIX and ANNOTATED GRAPH.</string>
 
+    <!-- Edit Field -->
+    <string name="hint_pre_filled_field">Enter here the text of this pre-filled field.</string>
+    <string name="hint_text_field">Enter a text answer here.</string>
+
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
     <string name="test_answer_format_message">This is just a test!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 </resources>
