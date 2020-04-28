@@ -94,11 +94,15 @@
 
     <!-- Edit Field -->
     <string name="edit_field_title">Field edition</string>
+    <string name="preview_title">Preview</string>
     <string name="hint_pre_filled_field">Enter here the text of this pre-filled field.</string>
     <string name="hint_text_field">Enter a text answer here.</string>
     <string name="check_box_sign">Can be negative</string>
     <string name="check_box_decimal">Can be decimals</string>
+    <string name="max_char">Maximum number of character</string>
+    <string name="no_limit">No limit</string>
     <!-- Type selection -->
+    <string name="select_field_type">Type of this field</string>
     <string-array name="field_types_list">
         <item>Number</item>
         <item>Text</item>
