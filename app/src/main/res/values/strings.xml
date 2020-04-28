@@ -93,8 +93,17 @@
     <string name="choose_answer_format">Choose a type of answer among TEXT, NUMBER, MATRIX and ANNOTATED GRAPH.</string>
 
     <!-- Edit Field -->
+    <string name="edit_field_title">Field edition</string>
     <string name="hint_pre_filled_field">Enter here the text of this pre-filled field.</string>
     <string name="hint_text_field">Enter a text answer here.</string>
+    <string name="check_box_sign">Can be negative</string>
+    <string name="check_box_decimal">Can be decimals</string>
+    <!-- Type selection -->
+    <string-array name="field_types_list">
+        <item>Number</item>
+        <item>Text</item>
+        <item>Pre-filled</item>
+    </string-array>
 
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>

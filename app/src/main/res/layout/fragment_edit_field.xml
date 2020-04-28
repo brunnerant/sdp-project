@@ -1,14 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.edit.EditFieldFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_margin">
+
+            <EditText
+                android:id="@+id/field_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:imeActionLabel="@string/login_action_label"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:backgroundTint="@color/colorLoginBar" />
+
+            <it.sephiroth.android.library.numberpicker.NumberPicker
+                style="@style/NumberPicker.Filled"
+                app:picker_max="100"
+                app:picker_min="1"
+                android:progress="50"
+                app:picker_stepSize="2"
+                app:picker_tracker="exponential"
+                app:picker_orientation="vertical"
+                android:id="@+id/numberPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:id="@+id/field_types_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/field_types_list" />
+
+            <CheckBox
+                android:id="@+id/signCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:text="@string/check_box_sign" />
+
+            <CheckBox
+                android:id="@+id/decimalCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:text="@string/check_box_decimal" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
