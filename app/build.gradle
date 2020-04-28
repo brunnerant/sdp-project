@@ -124,5 +124,4 @@ dependencies {
     androidTestImplementation 'com.21buttons:fragment-test-rule:2.0.1'
     debugImplementation 'com.21buttons:fragment-test-rule-extras:2.0.1'
     implementation 'androidx.mediarouter:mediarouter:1.1.0'
-    implementation 'com.github.sephiroth74:NumberSlidingPicker:v.1.1.1'
 }

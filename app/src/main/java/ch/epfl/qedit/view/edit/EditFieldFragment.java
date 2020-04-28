@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.edit;
 
+import static ch.epfl.qedit.model.answer.MatrixFormat.Field.NO_LIMIT;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -8,21 +10,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat.Field;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
-import it.sephiroth.android.library.numberpicker.NumberPicker;
 
 public class EditFieldFragment extends DialogFragment {
 
-    /** id of the boolean argument passed through a bundle at creation of a EditFieldCreation*/
+    /** id of the boolean argument passed through a bundle at creation of a EditFieldCreation */
     private static final String IS_TEXT_ARG = "ch.epfl.qedit.view.edit.IS_TEXT_ARG";
 
-    /** State variables, we determine the correct type of Field to create from this variable*/
-    private int maxNbOfChar;
+    /** State variables, we determine the correct type of Field to create from this variable */
+    private int maxCharLimit;
+
+    private int minLimit;
+
     private boolean isSigned;
     private boolean isDecimal;
     private boolean isText;
@@ -30,20 +34,22 @@ public class EditFieldFragment extends DialogFragment {
     private String preFilledText;
 
     /** Layout component */
-    private CheckBox decimalCheckBox;
-    private CheckBox signCheckBox;
-    private CheckBox noLimitCheckBox;
+    private CheckBox decimalCheckbox;
+
+    private CheckBox signCheckbox;
     private EditText preview;
-    private Spinner typeSpinner;
+    private Spinner typesSpinner;
     private NumberPicker limitPicker;
 
     /** Index in the spinner of the different types */
     private final int NUMBER_TYPE_IDX = 0;
+
     private final int TEXT_TYPE_IDX = 1;
     private final int PRE_FILLED_TYPE_IDX = 2;
 
     public EditFieldFragment() {
-        this.maxNbOfChar = MatrixFormat.Field.NO_LIMIT;
+        maxCharLimit = NO_LIMIT;
+        minLimit = 1;
         isText = false;
         isSigned = false;
         isDecimal = false;
@@ -66,7 +72,6 @@ public class EditFieldFragment extends DialogFragment {
         return dialogue;
     }
 
-    @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -90,128 +95,100 @@ public class EditFieldFragment extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Init all the layout component with listener and default parameters
+     *
+     * @param view View from which we retrieve layout component
+     */
     private void initLayoutComponent(View view) {
 
         // find layout component in the layout
-        decimalCheckBox = view.findViewById(R.id.decimalCheckBox);
-        signCheckBox = view.findViewById(R.id.signCheckBox);
+        decimalCheckbox = view.findViewById(R.id.decimalCheckBox);
+        signCheckbox = view.findViewById(R.id.signCheckBox);
         preview = view.findViewById(R.id.field_preview);
-        typeSpinner = view.findViewById(R.id.field_types_selection);
+        typesSpinner = view.findViewById(R.id.field_types_selection);
         limitPicker = view.findViewById(R.id.limitPicker);
-        noLimitCheckBox = view.findViewById(R.id.noLimitCheckBox);
 
         // create listeners for each check box
         setDecimalCheckboxListener();
         setSignCheckboxListener();
-        setNoLimitCheckboxListener();
 
         setTypesSpinnerListener();
         setLimitPickerListener();
 
-        limitPicker.setVisibility(View.GONE);
-        noLimitCheckBox.setChecked(true);
-
         // set spinner to initial value
-        int selectSpinner = isNumber() ?  NUMBER_TYPE_IDX : isPreFilled ? PRE_FILLED_TYPE_IDX : TEXT_TYPE_IDX;
-        typeSpinner.setSelection(selectSpinner);
+        int selectSpinner =
+                isNumber() ? NUMBER_TYPE_IDX : isPreFilled ? PRE_FILLED_TYPE_IDX : TEXT_TYPE_IDX;
+        typesSpinner.setSelection(selectSpinner);
 
         updateLayout();
     }
 
-    private void setLimitPickerListener(){
-        limitPicker.setNumberPickerChangeListener(new NumberPicker.OnNumberPickerChangeListener(){
-
-            @Override
-            public void onStopTrackingTouch(@NotNull NumberPicker numberPicker) { }
-
-            @Override
-            public void onStartTrackingTouch(@NotNull NumberPicker numberPicker) { }
-
-            @Override
-            public void onProgressChanged(@NotNull NumberPicker numberPicker, int i, boolean b) {
-                maxNbOfChar = i;
-            }
-        });
+    /** Helper methods that create listeners for several layout component */
+    private void setLimitPickerListener() {
+        limitPicker.setOnValueChangedListener(
+                new NumberPicker.OnValueChangeListener() {
+                    @Override
+                    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                        maxCharLimit = (newVal == 0) ? NO_LIMIT : newVal + minLimit - 1;
+                    }
+                });
     }
 
-    private void setTypesSpinnerListener(){
-        typeSpinner.setOnItemSelectedListener(
+    private void setTypesSpinnerListener() {
+        typesSpinner.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemSelected(
+                            AdapterView<?> parent, View view, int position, long id) {
                         isText = position == TEXT_TYPE_IDX;
                         isPreFilled = position == PRE_FILLED_TYPE_IDX;
                         updateLayout();
                     }
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> parent) { }
-
+                    public void onNothingSelected(AdapterView<?> parent) {}
                 });
     }
 
-    private void setNoLimitCheckboxListener(){
-        noLimitCheckBox.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        boolean checked = ((CheckBox) v).isChecked();
-                        if (checked) {
-                            maxNbOfChar = MatrixFormat.Field.NO_LIMIT;
-                            limitPicker.setVisibility(View.GONE);
-                        } else {
-                            maxNbOfChar = getMinCharLimit();
-                            limitPicker.setProgress(maxNbOfChar);
-                            limitPicker.setVisibility(View.VISIBLE);
-                        }
-                    }
-                }
-        );
-    }
-
-    private void setDecimalCheckboxListener(){
-        decimalCheckBox.setOnClickListener(
+    private void setDecimalCheckboxListener() {
+        decimalCheckbox.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         isDecimal = ((CheckBox) v).isChecked();
                         updateLayout();
                     }
-                }
-        );
+                });
     }
 
-    private void setSignCheckboxListener(){
-        signCheckBox.setOnClickListener(
+    private void setSignCheckboxListener() {
+        signCheckbox.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         isSigned = ((CheckBox) v).isChecked();
                         updateLayout();
                     }
-                }
-        );
+                });
     }
-
 
     /**
      * This method is call when we need to return the Field constructed with this dialogue fragment
      *
-     * @return MatrixFormat.Field corresponding to the current state of the parameter of this fragment
+     * @return MatrixFormat.Field corresponding to the current state of the parameter of this
+     *     fragment
      */
-    private MatrixFormat.Field getResultingField() {
-        if (isPreFilled) return MatrixFormat.Field.preFilledField(preFilledText);
-        if (isText) return MatrixFormat.Field.textField(getHint(), maxNbOfChar);
-        else return MatrixFormat.Field.numericField(isDecimal, isDecimal, getHint(), maxNbOfChar);
+    private Field getResultingField() {
+        if (isPreFilled) return Field.preFilledField(preFilledText);
+        if (isText) return Field.textField(getHint(), maxCharLimit);
+        else return Field.numericField(isDecimal, isDecimal, getHint(), maxCharLimit);
     }
 
     /**
-     * Update the layout in function of the current state of the fragment,
-     * the update concern:
-     * - the hint in the preview
-     * - if the preview is usable
-     * - the visibility of the decimal and sign checkbox
-     * - minimum value of the limitPicker
+     * Update the layout in function of the current state of the fragment, the update concern: - the
+     * hint in the preview - if the preview is usable - the visibility of the decimal and sign
+     * checkbox - minimum value of the limitPicker
      */
     private void updateLayout() {
 
@@ -224,14 +201,38 @@ public class EditFieldFragment extends DialogFragment {
 
         // update checkbox visibility
         int checkBoxVisibility = isNumber() ? View.VISIBLE : View.GONE;
-        decimalCheckBox.setVisibility(checkBoxVisibility);
-        signCheckBox.setVisibility(checkBoxVisibility);
+        decimalCheckbox.setVisibility(checkBoxVisibility);
+        signCheckbox.setVisibility(checkBoxVisibility);
 
         // update maxNbOfChar and limitPicker
-        int min = getMinCharLimit();
-        maxNbOfChar = Math.max(maxNbOfChar, min);
-        limitPicker.setMinValue(min);
-        limitPicker.setProgress(maxNbOfChar);
+        updatePickers();
+    }
+
+    /**
+     * update the number picker of limit character number it also update the minLimit and the
+     * maxCharLimit parameter if necessary i.e. if maxCharLimit < minLimit
+     */
+    private void updatePickers() {
+        setMinCharLimit();
+        int size = 256 - minLimit;
+        String[] values = new String[size + 1]; // +1 for the no limit part
+        values[0] = getString(R.string.no_limit);
+        for (int i = 0; i < size; ++i) {
+            values[i + 1] = Integer.toString(minLimit + i);
+        }
+        limitPicker.setMinValue(0);
+
+        // avoid an index out of bound
+        if (size > limitPicker.getMaxValue()) {
+            limitPicker.setDisplayedValues(values);
+            limitPicker.setMaxValue(size);
+        } else {
+            limitPicker.setMaxValue(size);
+            limitPicker.setDisplayedValues(values);
+        }
+
+        int idx = (maxCharLimit == NO_LIMIT) ? 0 : maxCharLimit - minLimit + 1;
+        limitPicker.setValue(idx);
     }
 
     /** @return true if the field want a number answer, False otherwise */
@@ -240,17 +241,17 @@ public class EditFieldFragment extends DialogFragment {
     }
 
     /** @return the minimum character limit acceptable regarding the type of this field */
-    private int getMinCharLimit() {
-        int min = 1;
+    private void setMinCharLimit() {
+        // text or pre filled: 'A'
+        minLimit = 1;
         if (isNumber()) {
             // signed: '-1'
             // decimal: '1.0'
             // decimal and signed: '-1.0'
-            min = isSigned ? min + 1 : min;
-            min = isDecimal ? min + 2 : min;
+            minLimit = isSigned ? minLimit + 1 : minLimit;
+            minLimit = isDecimal ? minLimit + 2 : minLimit;
         }
-        // text or pre filled: 'A'
-        return min;
+        maxCharLimit = (maxCharLimit == NO_LIMIT) ? NO_LIMIT : Math.max(maxCharLimit, minLimit);
     }
 
     /**

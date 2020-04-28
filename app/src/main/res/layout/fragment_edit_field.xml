@@ -40,38 +40,10 @@
                 android:textColor="@color/colorSubTitle"
                 android:textStyle="bold"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <NumberPicker
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/noLimitCheckBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_limit"
-                    android:textSize="@dimen/text_size"/>
-
-                <!-- Allow space between number picker and check box -->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="1dp"/>
-
-                <it.sephiroth.android.library.numberpicker.NumberPicker
-                    style="@style/NumberPicker.Filled"
-                    app:picker_max="255"
-                    app:picker_min="1"
-                    android:progress="1"
-                    app:picker_stepSize="1"
-                    app:picker_tracker="exponential"
-                    app:picker_orientation="vertical"
-                    android:id="@+id/limitPicker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size"/>
-
-            </LinearLayout>
+                android:id="@+id/limitPicker"/>
 
             <TextView
                 android:id="@+id/selectTypeText"

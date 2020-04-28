@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
@@ -34,10 +33,9 @@ public class EditAnswerActivity extends AppCompatActivity {
         setTextButtonListener();
         setMatrixButtonListener();
         setGraphButtonListener();
-
     }
 
-    private void setNumButtonListener(){
+    private void setNumButtonListener() {
         numButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
@@ -47,7 +45,7 @@ public class EditAnswerActivity extends AppCompatActivity {
                 });
     }
 
-    private void setTextButtonListener(){
+    private void setTextButtonListener() {
         textButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
@@ -57,22 +55,28 @@ public class EditAnswerActivity extends AppCompatActivity {
                 });
     }
 
-    private void setMatrixButtonListener(){
+    private void setMatrixButtonListener() {
         matrixButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
-                        Toast.makeText(getBaseContext(),
-                                "Unimplemented feature", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                                        getBaseContext(),
+                                        "Unimplemented feature",
+                                        Toast.LENGTH_SHORT)
+                                .show();
                     }
                 });
     }
 
-    private void setGraphButtonListener(){
+    private void setGraphButtonListener() {
         graphButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
-                        Toast.makeText(getBaseContext(),
-                                "Unimplemented feature", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                                        getBaseContext(),
+                                        "Unimplemented feature",
+                                        Toast.LENGTH_SHORT)
+                                .show();
                     }
                 });
     }
