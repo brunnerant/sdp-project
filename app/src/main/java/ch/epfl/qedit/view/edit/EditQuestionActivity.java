@@ -34,6 +34,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.edit_question_title);
         editText = findViewById(R.id.edit_question_text);
 
+        /**
         Intent intent = getIntent();
         questionBuilder =
                 (Question.Builder)
@@ -42,7 +43,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         StringPool stringPool =
                 (StringPool)
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
-
+        **/
         ImageButton addButton = (ImageButton) findViewById(R.id.add_button);
         addButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -50,7 +51,7 @@ public class EditQuestionActivity extends AppCompatActivity {
                         switchToEditAnswerActivity();
                     }
                 });
-
+        /**
         questionBuilder.setTitleID(stringPool.put("This is a test title"));
         questionBuilder.setTextID(stringPool.put("This is a test text"));
         questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
@@ -58,7 +59,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         intent = new Intent();
         intent.putExtra(QUESTION, questionBuilder.build());
         setResult(RESULT_OK, intent);
-        finish();
+        finish(); **/
     }
 
     private void switchToEditAnswerActivity() {

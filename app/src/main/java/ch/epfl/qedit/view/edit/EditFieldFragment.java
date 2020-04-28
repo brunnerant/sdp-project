@@ -7,10 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.MatrixFormat;
@@ -20,8 +18,10 @@ import it.sephiroth.android.library.numberpicker.NumberPicker;
 
 public class EditFieldFragment extends DialogFragment {
 
-    public static final String IS_TEXT_ARG = "ch.epfl.qedit.view.edit.IS_TEXT_ARG";
+    /** id of the boolean argument passed through a bundle at creation of a EditFieldCreation*/
+    private static final String IS_TEXT_ARG = "ch.epfl.qedit.view.edit.IS_TEXT_ARG";
 
+    /** State variables, we determine the correct type of Field to create from this variable*/
     private int maxNbOfChar;
     private boolean isSigned;
     private boolean isDecimal;
@@ -29,20 +29,20 @@ public class EditFieldFragment extends DialogFragment {
     private boolean isPreFilled;
     private String preFilledText;
 
-    /** Layout component * */
+    /** Layout component */
     private CheckBox decimalCheckBox;
     private CheckBox signCheckBox;
     private CheckBox noLimitCheckBox;
-    private TextView preview;
+    private EditText preview;
     private Spinner typeSpinner;
     private NumberPicker limitPicker;
 
-    /** Index in the spinner of the different types * */
+    /** Index in the spinner of the different types */
     private final int NUMBER_TYPE_IDX = 0;
     private final int TEXT_TYPE_IDX = 1;
     private final int PRE_FILLED_TYPE_IDX = 2;
 
-    private EditFieldFragment() {
+    public EditFieldFragment() {
         this.maxNbOfChar = MatrixFormat.Field.NO_LIMIT;
         isText = false;
         isSigned = false;
@@ -51,6 +51,12 @@ public class EditFieldFragment extends DialogFragment {
         preFilledText = null;
     }
 
+    /**
+     * static factory method that create a new instance of an EditFieldFragment
+     *
+     * @param isText boolean argument passed through a bundle to the new Fragment
+     * @return a EditFieldFragment with the default parameters set in function of isText
+     */
     public static EditFieldFragment newInstance(boolean isText) {
         EditFieldFragment dialogue = new EditFieldFragment();
 
@@ -63,14 +69,15 @@ public class EditFieldFragment extends DialogFragment {
     @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        super.onCreateDialog(savedInstanceState);
-        // Use the Builder class for convenient dialog construction
+
+        // Get isText parameter from the bundle set in the newInstance function
+        isText = Objects.requireNonNull(getArguments()).getBoolean(IS_TEXT_ARG);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        // inflate custom layout
         LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_edit_field, null);
-
-        isText = getArguments().getBoolean(IS_TEXT_ARG);
 
         initLayoutComponent(view);
 
@@ -105,10 +112,7 @@ public class EditFieldFragment extends DialogFragment {
         noLimitCheckBox.setChecked(true);
 
         // set spinner to initial value
-        int selectSpinner =
-                isNumber() ?  NUMBER_TYPE_IDX :
-                isPreFilled ? PRE_FILLED_TYPE_IDX :
-                              TEXT_TYPE_IDX;
+        int selectSpinner = isNumber() ?  NUMBER_TYPE_IDX : isPreFilled ? PRE_FILLED_TYPE_IDX : TEXT_TYPE_IDX;
         typeSpinner.setSelection(selectSpinner);
 
         updateLayout();
@@ -190,6 +194,11 @@ public class EditFieldFragment extends DialogFragment {
     }
 
 
+    /**
+     * This method is call when we need to return the Field constructed with this dialogue fragment
+     *
+     * @return MatrixFormat.Field corresponding to the current state of the parameter of this fragment
+     */
     private MatrixFormat.Field getResultingField() {
         if (isPreFilled) return MatrixFormat.Field.preFilledField(preFilledText);
         if (isText) return MatrixFormat.Field.textField(getHint(), maxNbOfChar);

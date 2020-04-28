@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
@@ -13,6 +15,8 @@ public class EditAnswerActivity extends AppCompatActivity {
 
     private ImageButton textButton;
     private ImageButton numButton;
+    private ImageButton matrixButton;
+    private ImageButton graphButton;
 
     public static final String NUM_DIALOG_TAG = "ch.epfl.qedit.view.edit.NUM_DIALOG_TAG";
     public static final String TEXT_DIALOG_TAG = "ch.epfl.qedit.view.edit.TEXT_DIALOG_TAG";
@@ -24,8 +28,12 @@ public class EditAnswerActivity extends AppCompatActivity {
 
         textButton = findViewById(R.id.text_button);
         numButton = findViewById(R.id.number_button);
+        matrixButton = findViewById(R.id.matrix_button);
+        graphButton = findViewById(R.id.graph_button);
         setNumButtonListener();
         setTextButtonListener();
+        setMatrixButtonListener();
+        setGraphButtonListener();
 
     }
 
@@ -45,6 +53,26 @@ public class EditAnswerActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         DialogFragment editFieldFragment = EditFieldFragment.newInstance(true);
                         editFieldFragment.show(getSupportFragmentManager(), TEXT_DIALOG_TAG);
+                    }
+                });
+    }
+
+    private void setMatrixButtonListener(){
+        matrixButton.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Toast.makeText(getBaseContext(),
+                                "Unimplemented feature", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void setGraphButtonListener(){
+        graphButton.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Toast.makeText(getBaseContext(),
+                                "Unimplemented feature", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
