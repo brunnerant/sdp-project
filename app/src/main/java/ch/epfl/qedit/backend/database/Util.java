@@ -35,7 +35,7 @@ public final class Util {
      * This type of exception indicates that the data from the database has the wrong format. In
      * practice, it should never happen, but can be used to debug the database.
      */
-    static class FormatException extends Exception {
+    public static class FormatException extends Exception {
         public FormatException(String message) {
             super(message);
         }
@@ -81,7 +81,7 @@ public final class Util {
         return new Question(title, text, extractAnswerFormats(answers));
     }
 
-    private static AnswerFormat extractAnswerFormats(List<Object> docs) throws FormatException {
+    public static AnswerFormat extractAnswerFormats(List<Object> docs) throws FormatException {
         if (docs.isEmpty())
             throw new FormatException("Invalid question: it should contain at least one answer");
         else if (docs.size() == 1) return extractAnswerFormat((Map<String, Object>) docs.get(0));
@@ -93,8 +93,7 @@ public final class Util {
         return new MultiFieldFormat(formats);
     }
 
-    private static AnswerFormat extractAnswerFormat(Map<String, Object> doc)
-            throws FormatException {
+    public static AnswerFormat extractAnswerFormat(Map<String, Object> doc) throws FormatException {
         String type = (String) doc.get("type");
 
         if (type == null) throw new FormatException("Invalid answer format: missing type");
@@ -102,8 +101,7 @@ public final class Util {
         else throw new FormatException("Invalid answer format");
     }
 
-    private static MatrixFormat extractMatrixFormat(Map<String, Object> doc)
-            throws FormatException {
+    public static MatrixFormat extractMatrixFormat(Map<String, Object> doc) throws FormatException {
         Integer rows = (Integer) doc.get("rows");
         Integer columns = (Integer) doc.get("columns");
         Map<String, Object> matrix = (Map<String, Object>) doc.get("matrix");
@@ -114,7 +112,7 @@ public final class Util {
         MatrixFormat.Builder builder = new MatrixFormat.Builder(rows, columns);
 
         for (Map.Entry<String, Object> entry : matrix.entrySet()) {
-            int[] index = extractIndex(entry.getKey(), rows, columns);
+            int[] index = extractFieldIndex(entry.getKey(), rows, columns);
             MatrixFormat.Field field = extractField((Map<String, Object>) entry.getValue());
             builder.withField(index[0], index[1], field);
         }
@@ -122,7 +120,7 @@ public final class Util {
         return builder.build();
     }
 
-    private static int[] extractIndex(String key, int rows, int cols) throws FormatException {
+    public static int[] extractFieldIndex(String key, int rows, int cols) throws FormatException {
         String[] parts = key.split(",");
 
         if (parts.length != 2) throw new FormatException("Illegal field index format");
@@ -141,11 +139,11 @@ public final class Util {
         return new int[] {row, col};
     }
 
-    private static MatrixFormat.Field extractField(Map<String, Object> field)
+    public static MatrixFormat.Field extractField(Map<String, Object> field)
             throws FormatException {
         String typeString = (String) field.get("type");
         String text = (String) field.get("text");
-        Integer maxCharacters = (Integer) field.get("mac_characters");
+        Integer maxCharacters = (Integer) field.get("max_characters");
 
         if (typeString == null || text == null || maxCharacters == null)
             throw new FormatException(
@@ -154,7 +152,7 @@ public final class Util {
         return new MatrixFormat.Field(extractFieldType(typeString), maxCharacters, text);
     }
 
-    private static MatrixFormat.Field.Type extractFieldType(String type) throws FormatException {
+    public static MatrixFormat.Field.Type extractFieldType(String type) throws FormatException {
         switch (type) {
             case "pre_filled":
                 return MatrixFormat.Field.Type.PreFilled;

@@ -2,9 +2,11 @@ package ch.epfl.qedit.backend.database;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-
+import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,11 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-
-import ch.epfl.qedit.model.Question;
-import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.model.answer.MatrixFormat;
 
 public class MockDBService implements DatabaseService {
     /** This class simulates a quiz that is stored in Firestore */
@@ -159,14 +156,16 @@ public class MockDBService implements DatabaseService {
         idlingResource.increment();
 
         new Thread(
-                () -> {
-                    wait2second();
-                    MockQuiz quiz = quizzes.get(quizId);
-                    if (quiz == null)
-                        future.completeExceptionally(new Util.RequestException("Invalid quiz id"));
-                    else future.complete(f.apply(quiz));
-                    idlingResource.decrement();
-                });
+                        () -> {
+                            wait2second();
+                            MockQuiz quiz = quizzes.get(quizId);
+                            if (quiz == null)
+                                future.completeExceptionally(
+                                        new Util.RequestException("Invalid quiz id"));
+                            else future.complete(f.apply(quiz));
+                            idlingResource.decrement();
+                        })
+                .run();
     }
 
     @Override
@@ -186,7 +185,16 @@ public class MockDBService implements DatabaseService {
     @Override
     public CompletableFuture<StringPool> getQuizStringPool(String quizId, String language) {
         CompletableFuture<StringPool> future = new CompletableFuture<>();
-        waitForQuiz(future, quizId, mockQuiz -> mockQuiz.getStringPool(language));
+        waitForQuiz(
+                future,
+                quizId,
+                mockQuiz -> {
+                    StringPool pool = mockQuiz.getStringPool(language);
+                    if (pool == null)
+                        future.completeExceptionally(
+                                new Util.RequestException("Language does not exist"));
+                    return pool;
+                });
         return future;
     }
 
