@@ -69,8 +69,21 @@
     <string name="choose_answer_format">Choisir un type de réponse tel que TEXTE, NOMBRE, MATRICE et ANNOTATION DE GRAPHE.</string>
 
     <!-- Edit Field -->
+    <string name="edit_field_title">Edition de champ</string>
+    <string name="preview_title">Aperçu</string>
     <string name="hint_pre_filled_field">Entrer le texte de ce champ pré-rempli.</string>
     <string name="hint_text_field">Entrer une réponse textuelle ici.</string>
+    <string name="check_box_sign">Peut être négatif</string>
+    <string name="check_box_decimal">Peut être decimal</string>
+    <string name="max_char">Nombre maximum de caractère</string>
+    <string name="no_limit">Pas de limite</string>
+    <!-- Type selection -->
+    <string name="select_field_type">Type de ce champ</string>
+    <string-array name="field_types_list">
+        <item>Nombre</item>
+        <item>Texte</item>
+        <item>Pré-rempli</item>
+    </string-array>
 
     <!-- Miscellaneous -->
     <!-- In French, there is a space before the exclammation point.
