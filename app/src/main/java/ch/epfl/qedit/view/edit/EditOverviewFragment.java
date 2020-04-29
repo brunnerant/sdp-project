@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ListEditView;
@@ -41,11 +42,7 @@ public class EditOverviewFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 numQuestions++;
-                                adapter.addItem(
-                                        new Question(
-                                                "Q" + numQuestions,
-                                                "is it " + numQuestions + "?",
-                                                new MatrixFormat(1, 1)));
+                                adapter.addItem(createDummyQuestion(numQuestions));
                             }
                         });
 
@@ -104,10 +101,11 @@ public class EditOverviewFragment extends Fragment {
         // For now, we just add dummy questions to the quiz
         questions = new LinkedList<>();
         for (numQuestions = 0; numQuestions < 5; numQuestions++)
-            questions.add(
-                    new Question(
-                            "Q" + (numQuestions + 1),
-                            "is it " + (numQuestions + 1) + "?",
-                            new MatrixFormat(1, 1)));
+            questions.add(createDummyQuestion(numQuestions + 1));
+    }
+
+    private static Question createDummyQuestion(int i) {
+        AnswerFormat format = MatrixFormat.singleField(MatrixFormat.Field.textField("abc", 3));
+        return new Question("Q" + i, "it it " + i + "?", format);
     }
 }
