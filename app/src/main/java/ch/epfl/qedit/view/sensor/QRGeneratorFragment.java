@@ -30,7 +30,7 @@ public class QRGeneratorFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_q_r_generator, container, false);
 
         qr_code = (ImageView) view.findViewById(R.id.qr_code);
-        quiz_name = requireArguments().getSerializable(QUIZ_NAME);
+        // quiz_name = requireArguments().getSerializable(QUIZ_NAME);
         if (quiz_name.length() > 0) {
             WindowManager manager =
                     (WindowManager) requireActivity().getSystemService(WINDOW_SERVICE);
