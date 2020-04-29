@@ -12,10 +12,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 
-public class EditQuestionFragment extends Fragment {
+public class EditPreviewFragment extends Fragment {
     public static final String EDIT_ANSWER_FORMAT = "ch.epfl.qedit.view.edit.EDIT_ANSWER_FORMAT";
     public static final String EDIT_ANSWER_MODEL = "ch.epfl.qedit.view.edit.EDIT_ANSWER_MODEL";
     public static final String EDIT_FRAGMENT_TAG = "ch.epfl.qedit.view.edit.EDIT_FRAGMENT_TAG";
@@ -52,26 +54,28 @@ public class EditQuestionFragment extends Fragment {
 
     /** Handles the transition from one question to another */
     private void onQuestionChanged(Integer index) {
-        if (index == null || index < 0 || index >= model.getOverviewList().size()) {
-            questionTitle.setText("");
-            questionDisplay.setText("");
+        Quiz.Builder quizBuilder = model.getQuizBuilder();
+
+        if (index == null || index < 0 || index >= quizBuilder.size()) {
+            questionTitle.setText(null);
+            questionDisplay.setText(null);
             return;
         }
 
-        Question question = model.getOverviewList().get(index);
+        Question question = quizBuilder.getQuestions().get(index);
+        StringPool stringPool = model.getStringPool();
 
-        if (question == null) {
-            questionTitle.setText("Title");
-            questionDisplay.setText("Text");
-        } else {
-            // We have to change the question title and text
-            String questionTitleStr = "Question " + (index + 1) + " - " + question.getTitle();
-            questionTitle.setText(questionTitleStr);
-            questionDisplay.setText(question.getText());
+        // We have to change the question title and text
+        String key = question.getTitle(); // TODO port questions to ids only
+        String text = stringPool.get(key);
+        questionTitle.setText((text == null) ? key : text);
 
-            // Set everything up for the concrete AnswerFragment and launch it
-            // prepareAnswerFormatFragment(question, index); //TODO
-        }
+        key = question.getText();
+        text = stringPool.get(key);
+        questionDisplay.setText((text == null) ? key : text);
+
+        // Set everything up for the concrete AnswerFragment and launch it
+        // prepareAnswerFormatFragment(question, index); //TODO
     }
 
     /**

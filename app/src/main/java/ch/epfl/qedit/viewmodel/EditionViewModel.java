@@ -2,28 +2,29 @@ package ch.epfl.qedit.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import ch.epfl.qedit.model.Question;
-import com.google.common.collect.ImmutableList;
-import java.util.ArrayList;
-import java.util.List;
+import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 
 public class EditionViewModel extends ViewModel {
 
     private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);
-    private List<Question> overviewList;
+    private StringPool stringPool;
+    private Quiz.Builder quizBuilder;
 
-    public void initializeOverviewList(ImmutableList<Question> questions) {
-        overviewList = new ArrayList<>(questions);
+    public Quiz.Builder getQuizBuilder() {
+        return quizBuilder;
     }
 
-    public List<Question> getOverviewList() { // TODO ugly
-        return overviewList;
+    public void setQuizBuilder(Quiz.Builder quizBuilder) {
+        this.quizBuilder = quizBuilder;
     }
 
-    public void addFilledOutQuestion(int position, Question question) {
-        if (position >= 0 && position < overviewList.size() && overviewList.get(position) == null) {
-            overviewList.add(position, question);
-        }
+    public StringPool getStringPool() {
+        return stringPool;
+    }
+
+    public void setStringPool(StringPool stringPool) {
+        this.stringPool = stringPool;
     }
 
     public MutableLiveData<Integer> getFocusedQuestion() {

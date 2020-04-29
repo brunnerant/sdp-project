@@ -13,6 +13,8 @@
         android:layout_gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:hint="@string/edit_quiz_title"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

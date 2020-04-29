@@ -1,5 +1,9 @@
 package ch.epfl.qedit.view.edit;
 
+import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
+import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
+import static ch.epfl.qedit.model.StringPool.TITLE_ID;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.LocaleHelper;
@@ -32,7 +37,29 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_new_quiz_settings);
 
-        quizBuilder = new Quiz.Builder();
+        // Testing, remove TODO
+        Quiz quiz =
+                new Quiz(
+                        "Test",
+                        Arrays.asList(
+                                new Question(
+                                        "The matches problem",
+                                        "How many matches can fit in a shoe of size 43?",
+                                        "matrix3x3"),
+                                new Question(
+                                        "Pigeons",
+                                        "How many pigeons are there on Earth? (Hint: do not count yourself)",
+                                        "matrix1x1"),
+                                new Question("KitchenBu", "Oyster", "matrix1x1"),
+                                new Question(
+                                        "Everything",
+                                        "What is the answer to life the universe and everything?",
+                                        "matrix3x3"),
+                                new Question(
+                                        "Banane", "Combien y a-t-il de bananes ?", "matrix1x1")));
+
+        quizBuilder =
+                new Quiz.Builder(quiz); // TODO dispatch between empty or not, same for string pool
         stringPool = new StringPool();
 
         // Create spinner (language list)
@@ -52,9 +79,13 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
     }
 
     public void startEditing(View view) {
-        stringPool.put(
-                StringPool.TITLE_ID, editTitle.getText().toString()); // TODO check non empty etc
+        stringPool.put(TITLE_ID, editTitle.getText().toString()); // TODO check non empty etc
         // TODO languageCode contains the language, and we should use startActivityForResult
+
+        stringPool.put(
+                NO_QUESTION_TITLE_ID, getResources().getString(R.string.no_question_title_message));
+        stringPool.put(
+                NO_QUESTION_TEXT_ID, getResources().getString(R.string.no_question_text_message));
 
         Intent intent = new Intent(EditNewQuizSettingsActivity.this, EditQuizActivity.class);
         Bundle bundle = new Bundle();

@@ -51,12 +51,13 @@ public class EditQuestionActivity extends AppCompatActivity {
                     }
                 });
 
-        questionBuilder.setTitleID(stringPool.put("This is a test title"));
-        questionBuilder.setTextID(stringPool.put("This is a test text"));
+        questionBuilder.setTitleID(stringPool.put("This is a new title"));
+        questionBuilder.setTextID(stringPool.put("This is a new text"));
         questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
 
         intent = new Intent();
         intent.putExtra(QUESTION, questionBuilder.build());
+        intent.putExtra(STRING_POOL, stringPool);
         setResult(RESULT_OK, intent);
         finish();
     }

@@ -1,16 +1,13 @@
 package ch.epfl.qedit.view.edit;
 
+import static ch.epfl.qedit.model.answer.MatrixFormat.Field.Type.*;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-
 import androidx.fragment.app.DialogFragment;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.MatrixFormat;
-import ch.epfl.qedit.model.answer.MatrixFormat.Field.Type;
-
-import static ch.epfl.qedit.model.answer.MatrixFormat.Field.Type.*;
 
 public class EditFieldFragment extends DialogFragment {
 
@@ -21,7 +18,7 @@ public class EditFieldFragment extends DialogFragment {
     private boolean isPreFilled;
     private String preFilledText;
 
-    public EditFieldFragment(){
+    public EditFieldFragment() {
         this.maxNbOfChar = MatrixFormat.Field.NO_LIMIT;
         isSigned = false;
         isDecimal = false;
@@ -39,33 +36,26 @@ public class EditFieldFragment extends DialogFragment {
         return builder.create();
     }
 
-    private MatrixFormat.Field getResultingField(){
-        if(isPreFilled)
-            return MatrixFormat.Field.preFilledField(preFilledText);
-        if(isText)
-            return MatrixFormat.Field.textField(getHint(), maxNbOfChar);
-        else
-            return MatrixFormat.Field.numericField(isDecimal, isDecimal, getHint(), maxNbOfChar);
+    private MatrixFormat.Field getResultingField() {
+        if (isPreFilled) return MatrixFormat.Field.preFilledField(preFilledText);
+        if (isText) return MatrixFormat.Field.textField(getHint(), maxNbOfChar);
+        else return MatrixFormat.Field.numericField(isDecimal, isDecimal, getHint(), maxNbOfChar);
     }
 
-    /**
-     * @return true if the field want a number answer, False otherwise
-     */
-    private boolean isNumber(){
+    /** @return true if the field want a number answer, False otherwise */
+    private boolean isNumber() {
         return !isText && !isPreFilled;
     }
 
-    /**
-     * @return the minimum character limit acceptable regarding the type of this field
-     */
-    private int getMinCharLimit(){
+    /** @return the minimum character limit acceptable regarding the type of this field */
+    private int getMinCharLimit() {
         int min = 1;
-        if(isNumber()){
+        if (isNumber()) {
             // signed: '-1'
             // decimal: '1.0'
             // decimal and signed: '-1.0'
-            min = isSigned? min + 1 : min;
-            min = isDecimal? min + 2 : min;
+            min = isSigned ? min + 1 : min;
+            min = isDecimal ? min + 2 : min;
         }
         // text or pre filled: 'A'
         return min;
@@ -74,18 +64,17 @@ public class EditFieldFragment extends DialogFragment {
     /**
      * @return the String hint of the text view of this fragment regarding the type of this field
      */
-    private String getHint(){
-        if(isNumber()){
+    private String getHint() {
+        if (isNumber()) {
             // signed: ±0
             // decimal: 0.0
             // decimal and signed: ±0.0
-            String hint = isSigned? "±0" : "0";
-            return isDecimal? hint + ".0" : hint;
+            String hint = isSigned ? "±0" : "0";
+            return isDecimal ? hint + ".0" : hint;
         } else if (isPreFilled) {
             return getString(R.string.hint_pre_filled_field);
         } else { // isText is true
             return "???";
         }
     }
-
 }

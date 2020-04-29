@@ -8,7 +8,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
-import ch.epfl.qedit.view.edit.EditQuestionFragment;
+import ch.epfl.qedit.view.edit.EditPreviewFragment;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
@@ -16,16 +16,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class EditQuestionFragmentTest extends QuizFragmentsTestUsingDB {
+public class EditPreviewFragmentTest extends QuizFragmentsTestUsingDB {
     private QuizViewModel model;
 
     @Rule
-    public final FragmentTestRule<?, EditQuestionFragment> editTestRule =
-            FragmentTestRule.create(EditQuestionFragment.class, false, false);
+    public final FragmentTestRule<?, EditPreviewFragment> editTestRule =
+            FragmentTestRule.create(EditPreviewFragment.class, false, false);
 
     @Before
     public void setup() {
-        model = super.setup(editTestRule, new EditQuestionFragment());
+        model = super.setup(editTestRule, new EditPreviewFragment());
     }
 
     @After
@@ -35,15 +35,15 @@ public class EditQuestionFragmentTest extends QuizFragmentsTestUsingDB {
 
     @Test
     public void testFragmentIsEmptyByDefault() {
-        onView(withId(R.id.edit_question_title)).check(matches(withText("")));
-        onView(withId(R.id.edit_question_display)).check(matches(withText("")));
+        onView(withId(R.id.question_title)).check(matches(withText("")));
+        onView(withId(R.id.question_display)).check(matches(withText("")));
     }
 
     @Test
     public void testFragmentDisplaysEditQuestionCorrectly() {
         model.getFocusedQuestion().postValue(0);
-        onView(withId(R.id.edit_question_title))
+        onView(withId(R.id.question_title))
                 .check(matches(withText("Question 1 - The matches problem")));
-        onView(withId(R.id.edit_question_display)).perform(typeText("help"));
+        onView(withId(R.id.question_display)).perform(typeText("help"));
     }
 }

@@ -1,11 +1,15 @@
 package ch.epfl.qedit.model;
 
+import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
+import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
+
 import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.EmptyAnswerFormat;
 import java.io.Serializable;
 import java.util.Objects;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
-public final class Question implements Serializable {
+public class Question implements Serializable {
     /** For now, a question consists of a number, a title, and a text */
     private final String title;
 
@@ -48,6 +52,21 @@ public final class Question implements Serializable {
                     && this.format.equals(other.format);
         }
         return false;
+    }
+
+    public boolean isEmpty() {
+        return false;
+    }
+
+    public static class EmptyQuestion extends Question {
+        public EmptyQuestion() {
+            super(NO_QUESTION_TITLE_ID, NO_QUESTION_TEXT_ID, new EmptyAnswerFormat(null));
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return true;
+        }
     }
 
     public static class Builder implements Serializable {

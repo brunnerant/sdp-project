@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public class StringPool implements Serializable {
-
     public static final String TITLE_ID = "title";
+    public static final String NO_QUESTION_TITLE_ID = "noQuestionTitle";
+    public static final String NO_QUESTION_TEXT_ID = "noQuestionText";
+
     private Map<String, String> stringPool;
 
     public StringPool() {

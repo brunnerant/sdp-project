@@ -36,6 +36,10 @@ public final class Quiz implements Serializable {
             questions = new ArrayList<>();
         }
 
+        public Builder(Quiz quiz) {
+            questions = new ArrayList<>(quiz.getQuestions());
+        }
+
         public Builder add(Question question) {
             checkState();
             questions.add(question);
@@ -45,6 +49,20 @@ public final class Quiz implements Serializable {
         public Builder add(int index, Question question) {
             checkState();
             questions.add(index, question);
+            return this;
+        }
+
+        public Builder addEmptyQuestion() {
+            checkState();
+            questions.add(new Question.EmptyQuestion());
+            return this;
+        }
+
+        public Builder update(int index, Question question) {
+            checkState();
+            if (!question.isEmpty()) {
+                questions.set(index, question);
+            }
             return this;
         }
 
@@ -69,13 +87,14 @@ public final class Quiz implements Serializable {
             return ImmutableList.copyOf(questions);
         }
 
-        public int numberOfQuestions() {
+        public int size() {
             checkState();
             return questions.size();
         }
 
         public Quiz build() {
             checkState();
+            // TODO check that no empty questions
             List<Question> quizQuestion = questions;
             questions = null;
             return new Quiz(StringPool.TITLE_ID, quizQuestion);
