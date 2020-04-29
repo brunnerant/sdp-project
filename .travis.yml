@@ -34,7 +34,7 @@ before_script:
   - ./cc-test-reporter before-build
 script:
   # Launch the android tests and build the test report
-  - ./gradlew build connectedCheck jacocoTestReport
+  - travis_wait ./gradlew build connectedCheck jacocoTestReport
 after_script:
   # Report test coverage to Code Climate
   - export JACOCO_SOURCE_PATH=app/src/main/java/
