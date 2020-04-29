@@ -94,7 +94,6 @@ public final class Quiz implements Serializable {
 
         public Quiz build() {
             checkState();
-            // TODO check that no empty questions
             List<Question> quizQuestion = questions;
             questions = null;
             return new Quiz(StringPool.TITLE_ID, quizQuestion);

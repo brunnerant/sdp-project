@@ -28,8 +28,6 @@ public class EditOverviewFragment extends Fragment {
     private EditionViewModel model;
     private List<String> titles;
 
-    // TODO title in top bar
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +42,7 @@ public class EditOverviewFragment extends Fragment {
         final ListEditView listEditView = view.findViewById(R.id.question_list);
         createAdapter();
         setItemListener();
-        //setMoveListener();
+        setMoveListener();
         listEditView.setAdapter(adapter);
 
         // Configure the add button
@@ -54,7 +52,8 @@ public class EditOverviewFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 model.getQuizBuilder().addEmptyQuestion();
-                                adapter.addItem("New Question"); //TODO string
+                                adapter.addItem(
+                                        getResources().getString(R.string.new_empty_question));
                             }
                         });
 
@@ -68,7 +67,8 @@ public class EditOverviewFragment extends Fragment {
         if (requestCode == EDIT_QUESTION_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Question filledOutQuestion = (Question) data.getExtras().getSerializable(QUESTION);
-                StringPool extendedStringPool = (StringPool) data.getExtras().getSerializable(STRING_POOL);
+                StringPool extendedStringPool =
+                        (StringPool) data.getExtras().getSerializable(STRING_POOL);
                 model.setStringPool(extendedStringPool);
 
                 int position = model.getFocusedQuestion().getValue();
@@ -89,7 +89,8 @@ public class EditOverviewFragment extends Fragment {
             String key = question.getTitle();
             String text = model.getStringPool().get(key);
 
-            titles.add((text == null) ? key : text); // TODO Port questions to only using ids
+            // TODO Support old questions that store the strings directly as well
+            titles.add((text == null) ? key : text);
         }
     }
 
@@ -125,10 +126,7 @@ public class EditOverviewFragment extends Fragment {
                                 Intent intent =
                                         new Intent(requireActivity(), EditQuestionActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable(
-                                        QUESTION_BUILDER,
-                                        new Question
-                                                .Builder()); // TODO if the question is not empty
+                                bundle.putSerializable(QUESTION_BUILDER, new Question.Builder());
                                 // initialize builder
                                 bundle.putSerializable(STRING_POOL, model.getStringPool());
                                 intent.putExtras(bundle);
@@ -142,14 +140,12 @@ public class EditOverviewFragment extends Fragment {
     }
 
     private void setMoveListener() {
-        adapter.setMoveListener(new ListEditView.MoveListener() {
-            @Override
-            public void onItemMoved(int from, int to) {
-                model.getQuizBuilder().swap(from, to);
-                String temp = titles.get(from);
-                titles.set(from, titles.get(to));
-                titles.set(to, temp);
-            }
-        });
+        adapter.setMoveListener(
+                new ListEditView.MoveListener() {
+                    @Override
+                    public void onItemMoved(int from, int to) {
+                        model.getQuizBuilder().swap(from, to);
+                    }
+                });
     }
 }

@@ -37,7 +37,7 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_new_quiz_settings);
 
-        // Testing, remove TODO
+        // TODO Test edit existing quiz, move to new activity in next sprint
         Quiz quiz =
                 new Quiz(
                         "Test",
@@ -58,8 +58,7 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
                                 new Question(
                                         "Banane", "Combien y a-t-il de bananes ?", "matrix1x1")));
 
-        quizBuilder =
-                new Quiz.Builder(quiz); // TODO dispatch between empty or not, same for string pool
+        quizBuilder = new Quiz.Builder(quiz);
         stringPool = new StringPool();
 
         // Create spinner (language list)
@@ -79,8 +78,7 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
     }
 
     public void startEditing(View view) {
-        stringPool.put(TITLE_ID, editTitle.getText().toString()); // TODO check non empty etc
-        // TODO languageCode contains the language, and we should use startActivityForResult
+        stringPool.put(TITLE_ID, editTitle.getText().toString());
 
         stringPool.put(
                 NO_QUESTION_TITLE_ID, getResources().getString(R.string.no_question_title_message));

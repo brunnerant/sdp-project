@@ -14,7 +14,6 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 
 public class EditPreviewFragment extends Fragment {
@@ -66,57 +65,14 @@ public class EditPreviewFragment extends Fragment {
         StringPool stringPool = model.getStringPool();
 
         // We have to change the question title and text
-        String key = question.getTitle(); // TODO port questions to ids only
+        String key =
+                question.getTitle(); // TODO Support old questions that store the strings directly
+        // as well
         String text = stringPool.get(key);
         questionTitle.setText((text == null) ? key : text);
 
         key = question.getText();
         text = stringPool.get(key);
         questionDisplay.setText((text == null) ? key : text);
-
-        // Set everything up for the concrete AnswerFragment and launch it
-        // prepareAnswerFormatFragment(question, index); //TODO
-    }
-
-    /**
-     * This method gets the concrete AnswerFormat, checks if the QuizViewModel contains already a
-     * matching AnswerModel and otherwise creates a new one and adds it to the QuizViewModel.
-     * Further a bundle is prepared, then it dispatches the correct Fragment class and finally
-     * starts it.
-     *
-     * @param question The question that is going to be shown
-     * @param index The index of that Question in the Quiz, the question list
-     */
-    private void prepareAnswerFormatFragment(Question question, Integer index) {
-        // Get the AnswerFormat of the question
-        AnswerFormat answerFormat = question.getFormat();
-
-        //        AnswerModel answerModel; TODO
-        //        HashMap<Integer, AnswerModel> answers = quizViewModel.getAnswers().getValue();
-        //
-        //        // Check if the model already holds an AnswerModel for this question
-        //        if (answers.containsKey(index)) {
-        //            answerModel = answers.get(index);
-        //        } else { // and otherwise create a new one and add it to the QuizViewModel
-        //            answerModel = answerFormat.getEmptyAnswerModel();
-        //            answers.put(index, answerModel);
-        //            quizViewModel.getAnswers().postValue(answers);
-        //        }
-
-        // Prepare the bundle for the Fragment
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(EDIT_ANSWER_FORMAT, answerFormat);
-        // bundle.putSerializable(EDIT_ANSWER_MODEL, answerModel);
-
-        // Get the fragment that matches the concrete type of AnswerFormat
-        Fragment fragment = answerFormat.getAnswerFragment();
-        fragment.setArguments(bundle);
-
-        // And dynamically instantiate the answer form
-        requireActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.answer_fragment_container, fragment, EDIT_FRAGMENT_TAG)
-                .commit();
     }
 }
