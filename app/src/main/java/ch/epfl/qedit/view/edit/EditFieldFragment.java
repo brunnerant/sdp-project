@@ -264,10 +264,8 @@ public class EditFieldFragment extends DialogFragment {
             // decimal and signed: ±0.0
             String hint = isSigned ? "±0" : "0";
             return isDecimal ? hint + ".0" : hint;
-        } else if (isPreFilled) {
-            return getString(R.string.hint_pre_filled_field);
-        } else { // isText is true
-            return "???";
+        } else {
+            return isPreFilled ? getString(R.string.hint_pre_filled_field) : "???";
         }
     }
 }
