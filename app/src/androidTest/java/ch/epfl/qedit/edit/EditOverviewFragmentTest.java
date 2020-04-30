@@ -7,14 +7,20 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
+import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
+import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
+import static ch.epfl.qedit.util.Util.createMockQuiz;
 import static org.hamcrest.Matchers.not;
 
-import androidx.test.rule.ActivityTestRule;
+import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.edit.EditOverviewFragment;
-import ch.epfl.qedit.view.edit.EditQuizActivity;
+import ch.epfl.qedit.viewmodel.EditionViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
 import org.junit.Before;
@@ -22,22 +28,32 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class EditOverviewFragmentTest extends RecyclerViewHelpers {
+    private static final Quiz mockQuiz = createMockQuiz("TestTitle");
+
     @Rule
     public final FragmentTestRule<?, EditOverviewFragment> testRule =
-            FragmentTestRule.create(EditOverviewFragment.class);
-
-    @Rule
-    public ActivityTestRule<EditQuizActivity> fRule =
-            new ActivityTestRule<>(EditQuizActivity.class);
+            FragmentTestRule.create(EditOverviewFragment.class, false, false);
 
     @Before
-    public void setUp() throws Exception {
-        fRule.getActivity().getSupportFragmentManager().beginTransaction();
+    public void setUp() {
+        StringPool stringPool = new StringPool();
+        stringPool.put(TITLE_ID, mockQuiz.getTitle());
+        stringPool.put(NO_QUESTION_TITLE_ID, "testNoTitle");
+        stringPool.put(NO_QUESTION_TEXT_ID, "testNoText");
+
+        Quiz.Builder quizBuilder = new Quiz.Builder(mockQuiz);
+
+        EditionViewModel model =
+                new ViewModelProvider(testRule.getActivity()).get(EditionViewModel.class);
+
+        model.setQuizBuilder(quizBuilder);
+        model.setStringPool(stringPool);
+
+        testRule.launchFragment(new EditOverviewFragment());
     }
 
     @After
     public void commit() {
-        fRule.getActivity().finish();
         testRule.finishActivity();
     }
 
@@ -71,24 +87,29 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     public void testCanDeleteItem() {
         item(0).perform(click());
         itemView(0, R.id.delete_button).perform(click());
-        onView(withText("Q1")).check(doesNotExist());
+        onView(withText(mockQuiz.getQuestions().get(0).getTitle())).check(doesNotExist());
         assertOverlayAt(-1, 4);
     }
 
     @Test
     public void testCanAddItem() {
-        onView(withText("Q6")).check(doesNotExist());
+        String newQuestion =
+                testRule.getActivity().getResources().getString(R.string.new_empty_question);
+
+        onView(withText(newQuestion)).check(doesNotExist());
         onView(withId(R.id.add_question_button)).perform(click());
-        onView(withText("Q6")).check(matches(isDisplayed()));
+        onView(withText(newQuestion)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testCanDragAndDrop() {
-        checkText(0, "Q1");
-        checkText(1, "Q2");
+        String[] titles = getTitles();
+
+        checkText(0, titles[0]);
+        checkText(1, titles[1]);
         onView(withId(R.id.question_list)).perform(dragAndDrop(0, 1));
-        checkText(0, "Q2");
-        checkText(1, "Q1");
+        checkText(0, titles[1]);
+        checkText(1, titles[0]);
 
         item(0).perform(click());
         assertOverlayAt(0, 5);
@@ -100,10 +121,20 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         onView(withId(R.id.question_list)).perform(dragAndDrop(4, 0));
         assertOverlayAt(0, 5);
 
-        checkText(0, "Q5");
-        checkText(1, "Q1");
-        checkText(2, "Q2");
-        checkText(3, "Q3");
-        checkText(4, "Q4");
+        checkText(0, titles[4]);
+        checkText(1, titles[0]);
+        checkText(2, titles[1]);
+        checkText(3, titles[2]);
+        checkText(4, titles[3]);
+    }
+
+    private String[] getTitles() {
+        String[] titles = new String[mockQuiz.getQuestions().size()];
+
+        for (int i = 0; i < titles.length; ++i) {
+            titles[i] = mockQuiz.getQuestions().get(i).getTitle();
+        }
+
+        return titles;
     }
 }
