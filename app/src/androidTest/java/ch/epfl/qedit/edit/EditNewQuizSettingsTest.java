@@ -1,17 +1,5 @@
 package ch.epfl.qedit.edit;
 
-import android.content.Intent;
-
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.rule.ActivityTestRule;
-
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity;
-import ch.epfl.qedit.view.edit.EditQuizActivity;
-
-import org.junit.Rule;
-import org.junit.Test;
-
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -26,6 +14,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.core.AllOf.allOf;
 
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity;
+import ch.epfl.qedit.view.edit.EditQuizActivity;
+import org.junit.Rule;
+import org.junit.Test;
+
 public class EditNewQuizSettingsTest {
     @Rule
     public final IntentsTestRule<EditNewQuizSettingsActivity> testRule =
@@ -35,7 +30,9 @@ public class EditNewQuizSettingsTest {
     public void testEnterTitle() {
         onView(withId(R.id.edit_quiz_title)).check(matches(withText("")));
 
-        onView(withId(R.id.edit_quiz_title)).perform((typeText("Title"))).perform(closeSoftKeyboard());
+        onView(withId(R.id.edit_quiz_title))
+                .perform((typeText("Title")))
+                .perform(closeSoftKeyboard());
         onView(withId(R.id.edit_quiz_title)).check(matches(withText("Title")));
     }
 
@@ -48,10 +45,10 @@ public class EditNewQuizSettingsTest {
 
     @Test
     public void testButtonsIntent() {
-        onView(withId(R.id.edit_quiz_title)).perform((typeText("Title"))).perform(closeSoftKeyboard());
+        onView(withId(R.id.edit_quiz_title))
+                .perform((typeText("Title")))
+                .perform(closeSoftKeyboard());
         onView(withId(R.id.button_start_editing)).perform(click());
-        intended(
-                allOf(
-                        hasComponent(EditQuizActivity.class.getName())));
+        intended(allOf(hasComponent(EditQuizActivity.class.getName())));
     }
 }
