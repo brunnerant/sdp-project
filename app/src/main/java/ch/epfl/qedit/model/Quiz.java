@@ -59,7 +59,7 @@ public final class Quiz implements Serializable {
         /** Append an empty question to the Quiz */
         public Builder addEmptyQuestion() {
             checkState();
-            questions.add(new Question.EmptyQuestion());
+            questions.add(new Question.Empty());
             return this;
         }
 
