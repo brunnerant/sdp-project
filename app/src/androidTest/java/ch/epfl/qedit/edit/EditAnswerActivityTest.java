@@ -60,9 +60,9 @@ public class EditAnswerActivityTest {
         onView(withId(R.id.matrix_button)).perform(click());
     }
 
-    @Test
-    public void textButtonOnClick() {
-        onView(withId(R.id.text_button)).perform(click());
+    private void openFieldEdition(int buttonId) {
+
+        onView(withId(buttonId)).perform(click());
 
         int titleId =
                 testRule.getActivity().getResources().getIdentifier("alertTitle", "id", "android");
@@ -71,7 +71,11 @@ public class EditAnswerActivityTest {
                 .inRoot(isDialog())
                 .check(matches(withText(R.string.edit_field_title)))
                 .check(matches(isDisplayed()));
+    }
 
+    @Test
+    public void textButtonOnClick() {
+        openFieldEdition(R.id.text_button);
         onView(withId(R.id.field_types_selection))
                 .inRoot(isDialog())
                 .check(
@@ -84,15 +88,7 @@ public class EditAnswerActivityTest {
 
     @Test
     public void numberButtonOnClick() {
-        onView(withId(R.id.number_button)).perform(click());
-
-        int titleId =
-                testRule.getActivity().getResources().getIdentifier("alertTitle", "id", "android");
-
-        onView(withId(titleId))
-                .inRoot(isDialog())
-                .check(matches(withText(R.string.edit_field_title)))
-                .check(matches(isDisplayed()));
+        openFieldEdition(R.id.number_button);
 
         onView(withId(R.id.field_types_selection))
                 .inRoot(isDialog())
