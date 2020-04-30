@@ -8,8 +8,6 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -36,7 +34,6 @@ import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.LoginActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
-import ch.epfl.qedit.view.sensor.ScannerActivity;
 import java.util.Collection;
 import org.junit.After;
 import org.junit.Before;
@@ -136,14 +133,18 @@ public class HomeActivityTest extends RecyclerViewHelpers {
     }
 
     @Test
-    public void testClickScanner() {
-
+    public void testSelectUnimplementedFeatures() {
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.START)))
                 .perform(DrawerActions.open());
+        onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.my_quizzes));
         onView(withId(R.id.burger_view))
-                .perform(NavigationViewActions.navigateTo(R.id.qr_code_burger));
-        intended(hasComponent(ScannerActivity.class.getName()));
+                .perform(NavigationViewActions.navigateTo(R.id.online_quizzes));
+        onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.my_account));
+        onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.settings));
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isOpen(Gravity.START)))
+                .perform(DrawerActions.close());
     }
 
     Activity currentActivity = null;

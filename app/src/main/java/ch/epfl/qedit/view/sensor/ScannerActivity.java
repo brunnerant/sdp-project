@@ -88,34 +88,9 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
                 Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-                cameraNotAccepted();
+                super.onBackPressed();
             }
         }
-    }
-
-    private void cameraNotAccepted() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (shouldShowRequestPermissionRationale(CAMERA)) {
-                showMessageOKCancel(
-                        "You need to allow access to both the permissions",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                requestPermissions(new String[] {CAMERA}, REQUEST_CAMERA);
-                            }
-                        });
-                return;
-            }
-        }
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(ScannerActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
     }
 
     @Override

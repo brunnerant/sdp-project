@@ -17,7 +17,11 @@
         android:theme="@style/AppTheme">
         <activity android:name=".view.sensor.ScannerActivity"
             android:label="Scanner"
-            android:parentActivityName=".view.home.HomeActivity"/>
+            android:parentActivityName=".view.home.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.home.HomeActivity"/>
+        </activity>
         <activity
             android:name=".view.edit.EditQuizActivity"
             android:label="@string/title_activity_edit_quiz"
