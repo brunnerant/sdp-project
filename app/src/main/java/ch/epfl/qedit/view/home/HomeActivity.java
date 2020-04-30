@@ -70,6 +70,7 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    // manage selection of items in navigation drawer
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
