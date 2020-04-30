@@ -57,15 +57,19 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkPermission()) {
-                if (scannerView == null) {
-                    scannerView = new ZXingScannerView(this);
-                    setContentView(scannerView);
-                }
+                checkNullScanner();
                 scannerView.setResultHandler(this);
                 scannerView.startCamera();
             } else {
                 requestPermission();
             }
+        }
+    }
+
+    public void checkNullScanner() {
+        if (scannerView == null) {
+            scannerView = new ZXingScannerView(this);
+            setContentView(scannerView);
         }
     }
 
@@ -77,35 +81,33 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     public void onRequestPermissionsResult(
             int requestCode, String permissions[], int[] grantResults) {
-        if (requestCode == REQUEST_CAMERA) {
+        if (requestCode == REQUEST_CAMERA && grantResults.length > 0) {
 
-            if (grantResults.length > 0) {
-                boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                if (cameraAccepted) {
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (shouldShowRequestPermissionRationale(CAMERA)) {
-                            showMessageOKCancel(
-                                    "You need to allow access to both the permissions",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            requestPermissions(
-                                                    new String[] {CAMERA}, REQUEST_CAMERA);
-                                        }
-                                    });
-                            return;
-                        }
-                    }
-                }
+            boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+            if (cameraAccepted) {
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                cameraNotAccepted();
             }
         }
     }
 
-    private void acceptCamera(boolean cameraAccepted) {}
+    private void cameraNotAccepted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(CAMERA)) {
+                showMessageOKCancel(
+                        "You need to allow access to both the permissions",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPermissions(new String[] {CAMERA}, REQUEST_CAMERA);
+                            }
+                        });
+                return;
+            }
+        }
+    }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(ScannerActivity.this)
