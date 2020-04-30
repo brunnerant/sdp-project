@@ -19,6 +19,7 @@ import ch.epfl.qedit.R;
 import com.google.zxing.WriterException;
 
 public class QRGeneratorFragment extends Fragment {
+    public static final String QUIZ_NAME = "ch.epfl.qedit.view.quiz_name";
     String quiz_name;
     ImageView qr_code;
     Bitmap bitmap;
@@ -30,7 +31,7 @@ public class QRGeneratorFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_q_r_generator, container, false);
 
         qr_code = (ImageView) view.findViewById(R.id.qr_code);
-        // quiz_name = requireArguments().getSerializable(QUIZ_NAME);
+        quiz_name = requireArguments().getString(QUIZ_NAME);
         if (quiz_name.length() > 0) {
             WindowManager manager =
                     (WindowManager) requireActivity().getSystemService(WINDOW_SERVICE);
