@@ -2,6 +2,8 @@ package ch.epfl.qedit.backend.database;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
+
+import ch.epfl.qedit.Search.Searchable;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.Callback;
@@ -10,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -106,6 +109,10 @@ public class MockDBService implements DatabaseService {
         MockQuizV2(List<Question> questions, HashMap<String, HashMap<String, String>> stringPools) {
             this.questions = ImmutableList.copyOf(questions);
             this.stringPools = stringPools;
+        }
+
+        public HashMap<String, HashMap<String, String>> getStringPools(){
+            return stringPools;
         }
 
         public List<Question> getQuestions() {
@@ -410,5 +417,35 @@ public class MockDBService implements DatabaseService {
     public IdlingResource getIdlingResource() {
         return idlingResource;
     }
+
+    @Override
+    public void searchDatabase(final int number, String search, final Callback<Response<String>> responseCallback) {
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+
+                        wait2second();
+
+                        ArrayList<String> results = new ArrayList<>();
+                        Iterator<Map.Entry<String, MockQuizV2>> i2 = dbV2.entrySet().iterator();
+                        int temp = 0;
+                        while(i2.hasNext()) {
+                            ++temp;
+                            if(temp == number) {
+                                HashMap<String, HashMap<String, String>> s = i2.next().getValue().stringPools;
+
+                                responseCallback.onReceive(Response.ok(""));
+                            }
+                        }
+
+                        responseCallback.onReceive(Response.ok(""));
+
+                        idlingResource.decrement();
+                    }
+                })
+                .start();
+    }
+
     // ========================================================================================
 }

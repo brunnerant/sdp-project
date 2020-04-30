@@ -11,6 +11,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -20,6 +22,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.Search.Searchable;
+import ch.epfl.qedit.Search.SearchablePair;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -144,9 +152,11 @@ public class ListEditView extends RecyclerView {
      *
      * @param <T> the type of the underlying items
      */
-    public static class Adapter<T> extends RecyclerView.Adapter<ItemHolder> {
+    public static class Adapter<T, E extends SearchablePair<T>> extends RecyclerView.Adapter<ItemHolder> implements Filterable {
 
-        private final List<T> items;
+        private final E e;
+        private List<T> items;
+        private List<T> backup;
         private int selectedQuestion = NO_POSITION;
         private final GetItemText<T> getText;
         private ListEditView listEditView;
@@ -180,11 +190,13 @@ public class ListEditView extends RecyclerView {
          * An adapter is used to hold the items of the list edit view. It contains a generic list of
          * items, along with a function to retrieve the text from an item.
          *
-         * @param items the list of items to display
+         * @param e the list of items to display
          * @param getText a function to retrieve the text from one item
          */
-        public Adapter(List<T> items, GetItemText<T> getText) {
-            this.items = Objects.requireNonNull(items);
+        public Adapter(E e, GetItemText<T> getText) {
+            this.e = e;
+            this.items = Objects.requireNonNull(e.e);
+            this.backup = new ArrayList<>(items);
             this.getText = Objects.requireNonNull(getText);
         }
 
@@ -195,6 +207,7 @@ public class ListEditView extends RecyclerView {
          */
         public void addItem(T item) {
             items.add(item);
+            backup.add(item);
             notifyItemInserted(items.size() - 1);
         }
 
@@ -207,6 +220,7 @@ public class ListEditView extends RecyclerView {
             if (position == selectedQuestion) selectedQuestion = NO_POSITION;
 
             items.remove(position);
+            backup.remove(position);
             notifyItemRemoved(position);
         }
 
@@ -269,6 +283,42 @@ public class ListEditView extends RecyclerView {
         @Override
         public int getItemCount() {
             return items.size();
+        }
+
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<T> filtered = new ArrayList<>();
+
+                e.e = new ArrayList<>(backup);
+                if (constraint == null || constraint.length() == 0) {
+                    filtered.addAll(e.e);
+                } else {
+                    String pattern = constraint.toString().toLowerCase().trim();
+
+                    for(int i = 0; i < e.e.size(); ++i) {
+                        T searched = e.search(pattern, i);
+
+                        if (searched != null) {
+                            filtered.add(searched);
+                        }
+                    }
+                }
+
+                FilterResults r = new FilterResults();
+                r.values = new ArrayList<>(filtered);
+                return r;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                items.clear();
+                items.addAll((List) results.values);
+                notifyDataSetChanged();
+            }
+        };
         }
 
         // This handles items being moved around

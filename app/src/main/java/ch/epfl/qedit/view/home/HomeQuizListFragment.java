@@ -11,10 +11,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.Search.SearchableMapEntry;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.model.Quiz;
@@ -39,14 +43,15 @@ public class HomeQuizListFragment extends Fragment
     private Handler handler;
 
     private ProgressBar progressBar;
-    private ListEditView.Adapter<Map.Entry<String, String>> listAdapter;
+
+    private ListEditView.Adapter<Map.Entry<String, String>, SearchableMapEntry> listAdapter;
 
     private ConfirmDialog deleteDialog;
     private EditTextDialog addDialog;
     private int deleteIndex;
 
     private User user;
-    private List<Map.Entry<String, String>> quizzes;
+    private SearchableMapEntry quizzes = new SearchableMapEntry();
 
     @Override
     public View onCreateView(
@@ -60,7 +65,7 @@ public class HomeQuizListFragment extends Fragment
 
         // Get user from the bundle created by the parent activity
         user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
-        quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
+        quizzes.e = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter and bind it to the list edit view
         createAdapter(user);
@@ -73,14 +78,15 @@ public class HomeQuizListFragment extends Fragment
         // Instantiate Handler and the DatabaseService
         db = DatabaseFactory.getInstance();
         handler = new Handler();
-
+        HomeActivity homeActivity = (HomeActivity)getActivity();
+        homeActivity.setAdapter(listAdapter);
         return view;
     }
 
     // This function is used to create the list of quizzes for the given user
     private void createAdapter(User user) {
         // Retrieve the quizzes from the user
-        quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
+        quizzes.e = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter
         listAdapter =
@@ -123,7 +129,7 @@ public class HomeQuizListFragment extends Fragment
                         if (text.trim().length() == 0)
                             return getString(R.string.empty_quiz_name_error);
 
-                        for (Map.Entry<String, String> entry : quizzes) {
+                        for (Map.Entry<String, String> entry : quizzes.e) {
                             if (entry.getValue().equals(text))
                                 return getString(R.string.dup_quiz_name_error);
                         }
@@ -135,7 +141,24 @@ public class HomeQuizListFragment extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_editor_mode, menu);
+        //inflater.inflate(R.menu.menu_editor_mode, menu);
+        inflater.inflate(R.menu.search, menu);
+
+        MenuItem item = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = (SearchView) item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                listAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -162,7 +185,7 @@ public class HomeQuizListFragment extends Fragment
 
     // Handles when a user clicked on the button to edit a quiz
     private void editQuiz(int position) {
-        String quizID = quizzes.get(position).getKey();
+        String quizID = quizzes.e.get(position).getKey();
         progressBar.setVisibility(View.VISIBLE);
 
         // Query quiz questions from the database

@@ -279,5 +279,9 @@ public class FirebaseDBService implements DatabaseService {
                     }
                 });
     }
+
+    @Override
+    public void searchDatabase(int number, String search, Callback<Response<Quiz>> responseCallback) {
+    }
     // ========================================================================================
 }

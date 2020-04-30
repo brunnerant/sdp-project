@@ -1,6 +1,7 @@
 package ch.epfl.qedit.backend.database;
 
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.Search.Searchable;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.Callback;
@@ -85,6 +86,8 @@ public interface DatabaseService {
      * @param responseCallback the callback that will be triggered when the data arrives
      */
     void getQuiz(String quizID, Callback<Response<Quiz>> responseCallback);
+
+    void searchDatabase(int number, String search, Callback<Response<String>> responseCallback);
 
     // ========================================================================================
 }

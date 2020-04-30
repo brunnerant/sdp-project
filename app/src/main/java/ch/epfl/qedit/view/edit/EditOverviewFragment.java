@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.Search.PairQuestions;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
@@ -18,9 +19,9 @@ import java.util.List;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
-    private List<Question> questions;
+    private PairQuestions questions;
     private int numQuestions;
-    private ListEditView.Adapter<Question> adapter;
+    private ListEditView.Adapter<Question, PairQuestions> adapter;
     private QuizViewModel model;
 
     @Override
@@ -99,9 +100,9 @@ public class EditOverviewFragment extends Fragment {
 
     private void addDummyQuestions() {
         // For now, we just add dummy questions to the quiz
-        questions = new LinkedList<>();
+        questions.e = new LinkedList<>();
         for (numQuestions = 0; numQuestions < 5; numQuestions++)
-            questions.add(createDummyQuestion(numQuestions + 1));
+            questions.e.add(createDummyQuestion(numQuestions + 1));
     }
 
     private static Question createDummyQuestion(int i) {
