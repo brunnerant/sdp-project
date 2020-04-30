@@ -5,6 +5,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -19,10 +20,12 @@ import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.EDIT_QUESTION_ACTIVITY_REQUEST_CODE;
 import static ch.epfl.qedit.view.edit.EditQuestionActivity.QUESTION;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.AllOf.allOf;
 
 import android.app.Instrumentation;
 import android.content.Intent;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
@@ -52,6 +55,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
 
     @Before
     public void setUp() {
+        Intents.init();
         Quiz.Builder quizBuilder = new Quiz.Builder(mockQuiz);
 
         StringPool stringPool = new StringPool();
@@ -71,6 +75,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     @After
     public void commit() {
         testRule.finishActivity();
+        Intents.release();
     }
 
     public EditOverviewFragmentTest() {
@@ -154,7 +159,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         return titles;
     }
 
-    // @Test TODO
+    // TODO @Test
     public void testOnActivityResult() {
         Question.Builder questionBuilder = new Question.Builder();
         StringPool stringPool = new StringPool();
@@ -174,5 +179,13 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
                 .startActivityForResult(
                         new Intent(testRule.getFragment().getContext(), EditQuestionActivity.class),
                         EDIT_QUESTION_ACTIVITY_REQUEST_CODE);
+    }
+
+    @Test
+    public void testLaunchesEditQuestionActivity() {
+        item(0).perform(click());
+        itemView(0, R.id.edit_button).perform(click());
+
+        intended(allOf(hasComponent(EditQuestionActivity.class.getName())));
     }
 }

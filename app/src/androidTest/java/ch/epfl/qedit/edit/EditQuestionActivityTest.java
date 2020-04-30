@@ -16,8 +16,9 @@ import static org.hamcrest.core.AllOf.allOf;
 
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
@@ -30,11 +31,12 @@ import org.junit.Test;
 
 public class EditQuestionActivityTest {
     @Rule
-    public final IntentsTestRule<EditQuestionActivity> testRule =
-            new IntentsTestRule<>(EditQuestionActivity.class, false, false);
+    public final ActivityTestRule<EditQuestionActivity> testRule =
+            new ActivityTestRule<>(EditQuestionActivity.class, false, false);
 
     @Before
     public void setUp() {
+        Intents.init();
         Question.Builder questionBuilder = new Question.Builder();
         StringPool stringPool = new StringPool();
 
@@ -51,6 +53,7 @@ public class EditQuestionActivityTest {
     @After
     public void cleanUp() {
         testRule.finishActivity();
+        Intents.release();
     }
 
     @Test
