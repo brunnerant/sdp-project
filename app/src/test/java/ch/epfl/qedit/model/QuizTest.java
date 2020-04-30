@@ -61,7 +61,7 @@ public class QuizTest {
         List<Question> questions = initQuestionList();
         Quiz q0 = new Quiz("title", questions);
         Quiz.Builder builder = new Quiz.Builder();
-        builder.add(questions.get(0)).add(questions.get(1)).add(questions.get(2));
+        builder.append(questions.get(0)).append(questions.get(1)).append(questions.get(2));
         assertEquals(q0.getQuestions(), builder.build().getQuestions());
     }
 
@@ -70,7 +70,7 @@ public class QuizTest {
         List<Question> questions = initQuestionList();
         Quiz q0 = new Quiz("title", questions);
         Quiz.Builder builder = new Quiz.Builder();
-        builder.add(questions.get(1)).add(0, questions.get(0)).add(questions.get(2));
+        builder.append(questions.get(1)).insert(0, questions.get(0)).append(questions.get(2));
         assertEquals(q0.getQuestions(), builder.build().getQuestions());
     }
 
@@ -79,7 +79,10 @@ public class QuizTest {
         List<Question> questions = initQuestionList();
         Quiz q0 = new Quiz("title", questions);
         Quiz.Builder builder = new Quiz.Builder();
-        builder.add(questions.get(2)).add(questions.get(1)).add(questions.get(0)).swap(0, 2);
+        builder.append(questions.get(2))
+                .append(questions.get(1))
+                .append(questions.get(0))
+                .swap(0, 2);
         assertEquals(q0.getQuestions(), builder.build().getQuestions());
     }
 
@@ -88,10 +91,10 @@ public class QuizTest {
         List<Question> questions = initQuestionList();
         Quiz q0 = new Quiz("title", questions);
         Quiz.Builder builder = new Quiz.Builder();
-        builder.add(questions.get(0))
-                .add(questions.get(0))
-                .add(questions.get(1))
-                .add(questions.get(2))
+        builder.append(questions.get(0))
+                .append(questions.get(0))
+                .append(questions.get(1))
+                .append(questions.get(2))
                 .remove(1);
         assertEquals(q0.getQuestions(), builder.build().getQuestions());
     }
@@ -107,14 +110,14 @@ public class QuizTest {
     public void builderAddFail1Test() {
         Quiz.Builder builder = new Quiz.Builder();
         builder.build();
-        builder.add(null);
+        builder.append(null);
     }
 
     @Test(expected = IllegalStateException.class)
     public void builderAddFail2Test() {
         Quiz.Builder builder = new Quiz.Builder();
         builder.build();
-        builder.add(0, null);
+        builder.insert(0, null);
     }
 
     @Test(expected = IllegalStateException.class)
