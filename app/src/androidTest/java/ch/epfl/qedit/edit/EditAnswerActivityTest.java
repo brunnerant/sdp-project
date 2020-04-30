@@ -9,12 +9,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.core.IsNot.not;
 
 import android.content.Intent;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.edit.EditAnswerActivity;
+import ch.epfl.qedit.view.edit.EditFieldFragment;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,6 +34,10 @@ public class EditAnswerActivityTest {
     @After
     public void cleanUp() {
         testRule.finishActivity();
+    }
+
+    private String[] getFieldTypes() {
+        return testRule.getActivity().getResources().getStringArray(R.array.field_types_list);
     }
 
     @Test
@@ -70,7 +74,12 @@ public class EditAnswerActivityTest {
 
         onView(withId(R.id.field_types_selection))
                 .inRoot(isDialog())
-                .check(matches(withSpinnerText(containsString("Text"))));
+                .check(
+                        matches(
+                                withSpinnerText(
+                                        containsString(
+                                                getFieldTypes()[
+                                                        EditFieldFragment.TEXT_TYPE_IDX]))));
     }
 
     @Test
@@ -87,6 +96,11 @@ public class EditAnswerActivityTest {
 
         onView(withId(R.id.field_types_selection))
                 .inRoot(isDialog())
-                .check(matches(withSpinnerText(not(containsString("Text")))));
+                .check(
+                        matches(
+                                withSpinnerText(
+                                        containsString(
+                                                getFieldTypes()[
+                                                        EditFieldFragment.NUMBER_TYPE_IDX]))));
     }
 }
