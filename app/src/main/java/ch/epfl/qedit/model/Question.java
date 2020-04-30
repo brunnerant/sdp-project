@@ -59,8 +59,8 @@ public class Question implements Serializable {
         return false;
     }
 
-    public static class EmptyQuestion extends Question {
-        public EmptyQuestion() {
+    public static class Empty extends Question {
+        public Empty() {
             super(NO_QUESTION_TITLE_ID, NO_QUESTION_TEXT_ID, new EmptyAnswerFormat(null));
         }
 
