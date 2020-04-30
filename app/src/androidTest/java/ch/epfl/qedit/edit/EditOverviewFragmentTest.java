@@ -17,7 +17,7 @@ import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
 import static ch.epfl.qedit.util.Util.createMockQuiz;
 import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.EDIT_QUESTION_ACTIVITY_REQUEST_CODE;
-import static ch.epfl.qedit.view.edit.EditQuestionActivity.QUESTION;
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static org.hamcrest.Matchers.not;
 
 import android.app.Instrumentation;
@@ -159,15 +159,15 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
 
     // TODO @Test
     public void testOnActivityResult() {
-        Question.Builder questionBuilder = new Question.Builder();
         StringPool stringPool = new StringPool();
-
-        questionBuilder.setTitleID(stringPool.add("This is a new title"));
-        questionBuilder.setTextID(stringPool.add("This is a new text"));
-        questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
+        Question question =
+                new Question(
+                        stringPool.add("This is a new title"),
+                        stringPool.add("This is a new text"),
+                        MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
 
         Intent dataIntent = new Intent();
-        dataIntent.putExtra(QUESTION, questionBuilder.build());
+        dataIntent.putExtra(QUESTION, question);
         dataIntent.putExtra(STRING_POOL, stringPool);
 
         intending(hasComponent(EditQuestionActivity.class.getName()))

@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view.edit;
 
 import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,8 +20,6 @@ import ch.epfl.qedit.util.LocaleHelper;
 import java.util.Objects;
 
 public class EditQuestionActivity extends AppCompatActivity {
-    public static final String QUESTION = "ch.epfl.qedit.view.edit.QUESTION";
-
     private String title;
     private String text;
 

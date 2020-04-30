@@ -14,7 +14,6 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
 import ch.epfl.qedit.view.edit.EditPreviewFragment;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
@@ -23,7 +22,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class EditPreviewFragmentTest extends QuizFragmentsTestUsingDB {
+public class EditPreviewFragmentTest {
     private static final String testTitle = "TestTitle";
     private static final String testNoTitle = "No TestTitle";
     private static final String testNoText = "No TestQuestionText";

@@ -7,8 +7,7 @@ import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCod
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
-import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION_BUILDER;
-import static ch.epfl.qedit.view.edit.EditQuestionActivity.QUESTION;
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import android.content.Intent;
@@ -33,13 +32,13 @@ public class EditQuestionActivityTest {
     @Before
     public void setUp() {
         Intents.init();
-        Question.Builder questionBuilder = new Question.Builder();
+        Question question = new Question.Empty();
         StringPool stringPool = new StringPool();
 
         Intent intent;
         intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(QUESTION_BUILDER, questionBuilder);
+        bundle.putSerializable(QUESTION, question);
         bundle.putSerializable(STRING_POOL, stringPool);
         intent.putExtras(bundle);
 

@@ -2,7 +2,6 @@ package ch.epfl.qedit.view.edit;
 
 import static android.app.Activity.RESULT_OK;
 import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
-import static ch.epfl.qedit.view.edit.EditQuestionActivity.QUESTION;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import java.util.List;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
+    public static final String QUESTION = "ch.epfl.qedit.view.edit.QUESTION";
     public static final int EDIT_QUESTION_ACTIVITY_REQUEST_CODE = 0;
 
     private ListEditView.Adapter<String> adapter;
