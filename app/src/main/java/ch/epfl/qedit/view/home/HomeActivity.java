@@ -32,18 +32,9 @@ public class HomeActivity extends AppCompatActivity
         Intent intent = getIntent();
         User user = (User) Objects.requireNonNull(intent.getExtras()).getSerializable(USER);
 
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.burger_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        // create hamburger menu
+        createDrawer();
 
-        ActionBarDrawerToggle toggle =
-                new ActionBarDrawerToggle(
-                        this,
-                        drawer,
-                        R.string.navigation_drawer_open,
-                        R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
         // Prepare a bundle that contains the user and create a new HomeInfoFragment
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
@@ -105,5 +96,20 @@ public class HomeActivity extends AppCompatActivity
                 break;
         }
         return true;
+    }
+
+    private void createDrawer() {
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.burger_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle =
+                new ActionBarDrawerToggle(
+                        this,
+                        drawer,
+                        R.string.navigation_drawer_open,
+                        R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
     }
 }
