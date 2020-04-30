@@ -1,4 +1,4 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.login;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -16,9 +16,11 @@ import static org.hamcrest.core.Is.is;
 
 import android.content.Intent;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.view.LoginActivity;
+import ch.epfl.qedit.view.login.TokenLogInActivity;
 import java.util.Locale;
 import org.junit.After;
 import org.junit.Before;
@@ -27,10 +29,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class LoginActivityLanguageTest {
+public class TokenLogInActivityLanguageTest {
     @Rule
-    public final IntentsTestRule<LoginActivity> testRule =
-            new IntentsTestRule<>(LoginActivity.class, false, false);
+    public final IntentsTestRule<TokenLogInActivity> testRule =
+            new IntentsTestRule<>(TokenLogInActivity.class, false, false);
 
     @Before
     public void launchActivity() {
@@ -63,7 +65,7 @@ public class LoginActivityLanguageTest {
             pos = 0;
         }
 
-        onView(withId(R.id.login_button)).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.login_button)).perform(closeSoftKeyboard());
         onView(withId(R.id.language_selection)).perform(click());
         onData(anything()).atPosition(pos).perform(click());
         onView(withId(R.id.language_selection)).check(matches(withSpinnerText(language)));

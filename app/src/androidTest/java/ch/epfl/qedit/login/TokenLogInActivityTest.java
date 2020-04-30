@@ -1,4 +1,4 @@
-package ch.epfl.qedit;
+package ch.epfl.qedit.login;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -19,12 +19,14 @@ import static org.hamcrest.core.Is.is;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.LoginActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
+import ch.epfl.qedit.view.login.TokenLogInActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,13 +34,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class LoginActivityTest {
+public class TokenLogInActivityTest {
 
     private IdlingResource idlingResource;
 
     @Rule
-    public final IntentsTestRule<LoginActivity> testRule =
-            new IntentsTestRule<>(LoginActivity.class, false, false);
+    public final IntentsTestRule<TokenLogInActivity> testRule =
+            new IntentsTestRule<>(TokenLogInActivity.class, false, false);
 
     @Before
     public void init() {
@@ -56,7 +58,9 @@ public class LoginActivityTest {
     }
 
     private void performLogin(String token) {
-        onView(withId(R.id.login_token)).perform((typeText(token))).perform(closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.login_token))
+                .perform((typeText(token)))
+                .perform(closeSoftKeyboard());
         onView(withId(R.id.login_button)).perform(click());
     }
 
@@ -65,12 +69,12 @@ public class LoginActivityTest {
         intended(
                 allOf(
                         hasComponent(HomeActivity.class.getName()),
-                        hasExtra(LoginActivity.USER, user)));
+                        hasExtra(TokenLogInActivity.USER, user)));
     }
 
     private void testLoginFailed(String token, int toastStringId) {
         performLogin(token);
-        LoginActivity activity = testRule.getActivity();
+        TokenLogInActivity activity = testRule.getActivity();
         onView(withText(toastStringId))
                 .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));

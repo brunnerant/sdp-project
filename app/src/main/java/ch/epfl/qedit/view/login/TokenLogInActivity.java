@@ -1,4 +1,4 @@
-package ch.epfl.qedit.view;
+package ch.epfl.qedit.view.login;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,8 @@ import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class TokenLogInActivity extends AppCompatActivity
+        implements AdapterView.OnItemSelectedListener {
 
     public static final String USER = "ch.epfl.qedit.view.USER";
 
@@ -43,11 +44,11 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_token_log_in);
 
-        tokenText = findViewById(R.id.login_token);
-        loginButton = findViewById(R.id.login_button);
-        progressBar = findViewById(R.id.login_progress_bar);
+        tokenText = findViewById(R.id.log_in_token);
+        loginButton = findViewById(R.id.log_in_button);
+        progressBar = findViewById(R.id.log_in_token_progress_bar);
 
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
@@ -69,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         // Set listener
         languageSelectionSpinner.setOnItemSelectedListener(this);
         // Set page title to display it in the right language
-        setTitle(R.string.title_activity_login);
+        setTitle(R.string.title_activity_token_log_in);
     }
 
     @Override
@@ -118,9 +119,9 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     /** Update activity's texts */
     private void updateTexts() {
-        tokenText.setHint(resources.getString(R.string.token_hint));
-        loginButton.setText(resources.getString(R.string.login_button_text));
-        setTitle(resources.getString(R.string.title_activity_login));
+        tokenText.setHint(resources.getString(R.string.hint_token));
+        loginButton.setText(resources.getString(R.string.log_in_button_text));
+        setTitle(resources.getString(R.string.title_activity_token_log_in));
     }
 
     /**
@@ -175,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void onLoginSuccessful(User user) {
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        Intent intent = new Intent(TokenLogInActivity.this, HomeActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         intent.putExtras(bundle);

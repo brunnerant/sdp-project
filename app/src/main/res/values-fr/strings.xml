@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- French -->
+
 <resources>
 
     <!-- App and logo -->
@@ -8,11 +10,21 @@
     <!-- Language selection -->
     <string name="language_changed">Langue changée en</string>
 
-    <!-- Log in -->
-    <string name="title_activity_login">Connexion</string>
-    <string name="login_button_text">Connexion</string>
-    <string name="login_action_label">Connexion</string>
-    <string name="token_hint">Token de connexion</string>
+    <!-- Log in, sign up, token log in -->
+    <string name="title_activity_log_in">Connexion</string>
+    <string name="title_activity_sign_up">Inscription</string>
+    <string name="title_activity_token_log_in">Connexion avec token</string>
+    <string name="log_in_button_text">Connexion</string>
+    <string name="log_in_action_label">Connexion</string>
+    <string name="sign_up_button_text">Inscription</string>
+    <string name="sign_up_action_label">Inscription</string>
+    <string name="hint_email">Mail</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="hint_token">Token</string>
+    <string name="wrong_email_message">Mail invalide</string>
+    <string name="empty_email_message">Mail vide</string>
+    <string name="wrong_password_message">Mot de passe invalide</string>
+    <string name="empty_password_message">Mot de passe vide</string>
     <string name="wrong_token_message">Token invalide</string>
     <string name="empty_token_message">Token vide</string>
 

@@ -21,8 +21,8 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
-import ch.epfl.qedit.view.LoginActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
+import ch.epfl.qedit.view.login.TokenLogInActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -46,7 +46,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
 
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(LoginActivity.USER, user);
+        bundle.putSerializable(TokenLogInActivity.USER, user);
         intent.putExtras(bundle);
         testRule.launchActivity(intent);
     }

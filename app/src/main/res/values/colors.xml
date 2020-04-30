@@ -3,5 +3,5 @@
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#FF0000</color>
-    <color name="colorLoginBar">#808080</color>
+    <color name="colorLogInBar">#808080</color>
 </resources>

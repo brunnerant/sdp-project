@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- English -->
+
 <!-- Note: this default string resource is for English. In fact, if the language of the system does not
      have an associated string resource, this default string resource is loaded and therefore the
      app is in English.
@@ -14,6 +16,7 @@
 <!-- To access the current language:
      Locale.getDefault().getLanguage())
      will return the language code (e.g. "en" for English, "fr" for French) -->
+
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
 
     <!-- App and logo -->
@@ -35,11 +38,21 @@
     </string-array>
     <string name="language_changed">Language changed to</string>
 
-    <!-- Log in -->
-    <string name="title_activity_login">Log in</string>
-    <string name="login_button_text">Log in</string>
-    <string name="login_action_label">Log in</string>
-    <string name="token_hint">Login token</string>
+    <!-- Log in, sign up, token log in -->
+    <string name="title_activity_log_in">Log in</string>
+    <string name="title_activity_sign_up">Sign up</string>
+    <string name="title_activity_token_log_in">Token log in</string>
+    <string name="log_in_button_text">Log in</string>
+    <string name="log_in_action_label">Log in</string>
+    <string name="sign_up_button_text">Sign up</string>
+    <string name="sign_up_action_label">Sign up</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_token">Token</string>
+    <string name="wrong_email_message">Invalid email</string>
+    <string name="empty_email_message">Empty email</string>
+    <string name="wrong_password_message">Invalid password</string>
+    <string name="empty_password_message">Empty password</string>
     <string name="wrong_token_message">Invalid token</string>
     <string name="empty_token_message">Empty token</string>
 

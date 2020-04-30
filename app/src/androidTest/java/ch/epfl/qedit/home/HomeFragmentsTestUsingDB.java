@@ -1,6 +1,6 @@
 package ch.epfl.qedit.home;
 
-import static ch.epfl.qedit.view.LoginActivity.USER;
+import static ch.epfl.qedit.view.login.TokenLogInActivity.USER;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
