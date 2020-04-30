@@ -34,6 +34,14 @@ public class EditQuestionActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.edit_question_title);
         editText = findViewById(R.id.edit_question_text);
 
+        ImageButton addButton = (ImageButton) findViewById(R.id.add_button);
+        addButton.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        switchToEditAnswerActivity();
+                    }
+                });
+
         Intent intent = getIntent();
         questionBuilder =
                 (Question.Builder)
@@ -43,23 +51,22 @@ public class EditQuestionActivity extends AppCompatActivity {
                 (StringPool)
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
 
-        ImageButton addButton = (ImageButton) findViewById(R.id.add_button);
-        addButton.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-                        switchToEditAnswerActivity();
-                    }
-                });
-
-        questionBuilder.setTitleID(stringPool.put("This is a new title"));
-        questionBuilder.setTextID(stringPool.put("This is a new text"));
-        questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
+        setupDummyResult(
+                (StringPool)
+                        Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL));
 
         intent = new Intent();
         intent.putExtra(QUESTION, questionBuilder.build());
         intent.putExtra(STRING_POOL, stringPool);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    /** Remove when the real question is ready */
+    private void setupDummyResult(StringPool stringPool) {
+        questionBuilder.setTitleID(stringPool.put("This is a new title"));
+        questionBuilder.setTextID(stringPool.put("This is a new text"));
+        questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
     }
 
     private void switchToEditAnswerActivity() {

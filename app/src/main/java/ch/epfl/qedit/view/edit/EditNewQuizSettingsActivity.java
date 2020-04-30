@@ -37,28 +37,7 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_new_quiz_settings);
 
-        // TODO Test edit existing quiz, move to new activity in next sprint
-        Quiz quiz =
-                new Quiz(
-                        "Test",
-                        Arrays.asList(
-                                new Question(
-                                        "The matches problem",
-                                        "How many matches can fit in a shoe of size 43?",
-                                        "matrix3x3"),
-                                new Question(
-                                        "Pigeons",
-                                        "How many pigeons are there on Earth? (Hint: do not count yourself)",
-                                        "matrix1x1"),
-                                new Question("KitchenBu", "Oyster", "matrix1x1"),
-                                new Question(
-                                        "Everything",
-                                        "What is the answer to life the universe and everything?",
-                                        "matrix3x3"),
-                                new Question(
-                                        "Banane", "Combien y a-t-il de bananes ?", "matrix1x1")));
-
-        quizBuilder = new Quiz.Builder(quiz);
+        quizBuilder = new Quiz.Builder(createTestQuiz());
         stringPool = new StringPool();
 
         // Create spinner (language list)
@@ -91,6 +70,28 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
         bundle.putSerializable(STRING_POOL, stringPool);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    /** Remove in next sprint */
+    private Quiz createTestQuiz() {
+        // TODO Test edit existing quiz, move to new activity in next sprint
+        return new Quiz(
+                "Test",
+                Arrays.asList(
+                        new Question(
+                                "The matches problem",
+                                "How many matches can fit in a shoe of size 43?",
+                                "matrix3x3"),
+                        new Question(
+                                "Pigeons",
+                                "How many pigeons are there on Earth? (Hint: do not count yourself)",
+                                "matrix1x1"),
+                        new Question("KitchenBu", "Oyster", "matrix1x1"),
+                        new Question(
+                                "Everything",
+                                "What is the answer to life the universe and everything?",
+                                "matrix3x3"),
+                        new Question("Banane", "Combien y a-t-il de bananes ?", "matrix1x1")));
     }
 
     @Override

@@ -122,15 +122,7 @@ public class EditOverviewFragment extends Fragment {
                                 adapter.removeItem(position);
                                 break;
                             case EditRequest:
-                                // launch EditQuestion activity
-                                Intent intent =
-                                        new Intent(requireActivity(), EditQuestionActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable(QUESTION_BUILDER, new Question.Builder());
-                                // initialize builder
-                                bundle.putSerializable(STRING_POOL, model.getStringPool());
-                                intent.putExtras(bundle);
-                                startActivityForResult(intent, EDIT_QUESTION_ACTIVITY_REQUEST_CODE);
+                                launchEditQuestionActivity();
                                 break;
                             default:
                                 break;
@@ -147,5 +139,14 @@ public class EditOverviewFragment extends Fragment {
                         model.getQuizBuilder().swap(from, to);
                     }
                 });
+    }
+
+    private void launchEditQuestionActivity() {
+        Intent intent = new Intent(requireActivity(), EditQuestionActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(QUESTION_BUILDER, new Question.Builder());
+        bundle.putSerializable(STRING_POOL, model.getStringPool());
+        intent.putExtras(bundle);
+        startActivityForResult(intent, EDIT_QUESTION_ACTIVITY_REQUEST_CODE);
     }
 }
