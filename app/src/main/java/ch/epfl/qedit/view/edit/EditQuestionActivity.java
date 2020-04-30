@@ -24,6 +24,7 @@ public class EditQuestionActivity extends AppCompatActivity {
     private EditText editTitle;
     private EditText editText;
     private Question.Builder questionBuilder;
+    private StringPool stringPool;
     private AnswerFormat answerFormat;
 
     @Override
@@ -47,26 +48,26 @@ public class EditQuestionActivity extends AppCompatActivity {
                 (Question.Builder)
                         Objects.requireNonNull(intent.getExtras())
                                 .getSerializable(QUESTION_BUILDER);
-        StringPool stringPool =
+        stringPool =
                 (StringPool)
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
 
-        setupDummyResult(
-                (StringPool)
-                        Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL));
+        setupDummyResult();
+    }
 
-        intent = new Intent();
+    /** Remove when the real question is ready */
+    private void setupDummyResult() {
+        questionBuilder.setTitleID(stringPool.put("This is a new title"));
+        questionBuilder.setTextID(stringPool.put("This is a new text"));
+        questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
+    }
+
+    private void returnResult() {
+        Intent intent = new Intent();
         intent.putExtra(QUESTION, questionBuilder.build());
         intent.putExtra(STRING_POOL, stringPool);
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-    /** Remove when the real question is ready */
-    private void setupDummyResult(StringPool stringPool) {
-        questionBuilder.setTitleID(stringPool.put("This is a new title"));
-        questionBuilder.setTextID(stringPool.put("This is a new text"));
-        questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
     }
 
     private void switchToEditAnswerActivity() {
