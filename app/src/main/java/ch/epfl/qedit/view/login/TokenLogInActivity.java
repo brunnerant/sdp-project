@@ -30,7 +30,7 @@ public class TokenLogInActivity extends AppCompatActivity
     public static final String USER = "ch.epfl.qedit.view.USER";
 
     private EditText tokenText;
-    private Button loginButton;
+    private Button logInButton;
     private ProgressBar progressBar;
 
     private AuthenticationService authService;
@@ -47,8 +47,8 @@ public class TokenLogInActivity extends AppCompatActivity
         setContentView(R.layout.activity_token_log_in);
 
         tokenText = findViewById(R.id.field_token);
-        loginButton = findViewById(R.id.button_log_in_token);
-        progressBar = findViewById(R.id.progress_bar_log_in_token);
+        logInButton = findViewById(R.id.button_log_in);
+        progressBar = findViewById(R.id.progress_bar);
 
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
@@ -58,7 +58,7 @@ public class TokenLogInActivity extends AppCompatActivity
 
         /* Language selection */
         // Create spinner (language list)
-        Spinner languageSelectionSpinner = findViewById(R.id.language_selection_log_in_token);
+        Spinner languageSelectionSpinner = findViewById(R.id.spinner_language_selection);
 
         // Find app's current language position in languages list
         String currentLanguage = Locale.getDefault().getLanguage();
@@ -120,7 +120,7 @@ public class TokenLogInActivity extends AppCompatActivity
     /** Update activity's texts */
     private void updateTexts() {
         tokenText.setHint(resources.getString(R.string.hint_token));
-        loginButton.setText(resources.getString(R.string.log_in_button_text));
+        logInButton.setText(resources.getString(R.string.log_in_button_text));
         setTitle(resources.getString(R.string.title_activity_token_log_in));
     }
 
