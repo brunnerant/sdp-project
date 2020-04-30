@@ -12,6 +12,10 @@ public class QuestionTest {
     private MatrixFormat format =
             MatrixFormat.singleField(MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
 
+    private final String TITLE_ID = "ID0", TEXT_ID = "ID1", PRE_FILLED_ID = "ID2";
+    private final MatrixFormat answer =
+            MatrixFormat.singleField(MatrixFormat.Field.preFilledField(PRE_FILLED_ID));
+
     @Test
     public void questionConstructorIsCorrect() {
         Question q = new Question("Question 1", "How old are you?", format);
@@ -59,5 +63,55 @@ public class QuestionTest {
     @Test(expected = NullPointerException.class)
     public void invalidQuestionsCannotBeBuilt() {
         new Question("", "", "");
+    }
+
+    // BUILDER TESTS //
+    private Question.Builder initBuilder() {
+        Question.Builder builder = new Question.Builder();
+        return builder.setTitleID(TITLE_ID).setTextID(TEXT_ID).setFormat(answer);
+    }
+
+    @Test
+    public void builderTest() {
+        Question q0 = new Question(TITLE_ID, TEXT_ID, answer);
+        Question q1 = initBuilder().build();
+        Question q2 = (new Question.Builder(q0)).build();
+        assertEquals(q0, q1);
+        assertEquals(q0, q2);
+        assertEquals(q1, q2);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderBuildFail0Test() {
+        Question.Builder builder = new Question.Builder();
+        builder.build();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderBuildFail1Test() {
+        Question.Builder builder = initBuilder();
+        builder.build();
+        builder.build();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderBuildFail2Test() {
+        Question.Builder builder = initBuilder();
+        builder.build();
+        builder.setTitleID("ID1");
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderBuildFail3Test() {
+        Question.Builder builder = initBuilder();
+        builder.build();
+        builder.setTextID("ID1");
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderBuildFail4Test() {
+        Question.Builder builder = initBuilder();
+        builder.build();
+        builder.setFormat(answer);
     }
 }

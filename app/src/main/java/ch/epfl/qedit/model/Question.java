@@ -3,6 +3,7 @@ package ch.epfl.qedit.model;
 import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
 import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
 
+import androidx.annotation.NonNull;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.EmptyAnswerFormat;
 import java.io.Serializable;
@@ -87,19 +88,19 @@ public class Question implements Serializable {
             format = question.format;
         }
 
-        public Builder setTitleID(String id) {
+        public Builder setTitleID(@NonNull String id) {
             checkState();
             titleID = id;
             return this;
         }
 
-        public Builder setTextID(String id) {
+        public Builder setTextID(@NonNull String id) {
             checkState();
             textID = id;
             return this;
         }
 
-        public Builder setFormat(AnswerFormat format) {
+        public Builder setFormat(@NonNull AnswerFormat format) {
             checkState();
             this.format = format;
             return this;
@@ -131,9 +132,7 @@ public class Question implements Serializable {
         }
 
         private void checkState() {
-            if (titleID == null) {
-                throw new IllegalStateException("Builder already build once.");
-            }
+            if (titleID == null) throw new IllegalStateException("Builder already build once.");
         }
     }
 }
