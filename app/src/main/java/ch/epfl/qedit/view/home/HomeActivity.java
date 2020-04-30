@@ -73,7 +73,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.home:
+            case R.id.burger_home:
                 drawer.closeDrawer(GravityCompat.START);
                 break;
             case R.id.my_quizzes:

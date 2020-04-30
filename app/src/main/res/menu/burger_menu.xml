@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
-        <item android:id="@+id/home"
+        <item android:id="@+id/burger_home"
             android:icon="@drawable/ic_home"
             android:title="@string/menu_home"/>
         <item android:id="@+id/my_quizzes"
