@@ -37,7 +37,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         editText = findViewById(R.id.edit_question_text);
 
         // Initialize the button that allows to add an Answer
-        ImageButton addButton = (ImageButton) findViewById(R.id.add_button);
+        ImageButton addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
