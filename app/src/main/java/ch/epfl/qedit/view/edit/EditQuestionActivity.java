@@ -56,8 +56,8 @@ public class EditQuestionActivity extends AppCompatActivity {
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
 
         // Return dummy result (temporarily)
-        // setupDummyResult();
-        // returnResult();
+        setupDummyResult();
+        returnResult();
     }
 
     /** Remove when the real question is ready */
