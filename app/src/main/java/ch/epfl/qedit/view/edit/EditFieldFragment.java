@@ -57,12 +57,12 @@ public class EditFieldFragment extends DialogFragment {
      * @return a EditFieldFragment with the default parameters set in function of isText
      */
     public static EditFieldFragment newInstance(boolean isText) {
-        EditFieldFragment dialogue = new EditFieldFragment();
+        EditFieldFragment dialog = new EditFieldFragment();
 
         Bundle args = new Bundle();
         args.putBoolean(IS_TEXT_ARG, isText);
-        dialogue.setArguments(args);
-        return dialogue;
+        dialog.setArguments(args);
+        return dialog;
     }
 
     @Override
