@@ -28,6 +28,7 @@ public final class Quiz implements Serializable {
         return ImmutableList.copyOf(questions);
     }
 
+    /** A Quiz Builder use to build a Quiz step by step, essentially useful in Quiz edition */
     public static class Builder implements Serializable {
 
         private List<Question> questions;
@@ -36,28 +37,33 @@ public final class Quiz implements Serializable {
             questions = new ArrayList<>();
         }
 
+        /** Useful when we want to modify a quiz already existent */
         public Builder(Quiz quiz) {
             questions = new ArrayList<>(quiz.getQuestions());
         }
 
-        public Builder add(Question question) {
+        /** Append a question the quiz's list of question */
+        public Builder append(Question question) {
             checkState();
             questions.add(question);
             return this;
         }
 
-        public Builder add(int index, Question question) {
+        /** Put a question at a certain index in the quiz */
+        public Builder insert(int index, Question question) {
             checkState();
             questions.add(index, question);
             return this;
         }
 
+        /** Append an empty question to the Quiz */
         public Builder addEmptyQuestion() {
             checkState();
             questions.add(new Question.Empty());
             return this;
         }
 
+        /** Change the question at a certain index */
         public Builder update(int index, Question question) {
             checkState();
             if (!question.isEmpty()) {
@@ -66,6 +72,7 @@ public final class Quiz implements Serializable {
             return this;
         }
 
+        /** swap questions at index index1 and index2 */
         public Builder swap(int index1, int index2) {
             checkState();
             Question tmp = questions.get(index1);
@@ -74,6 +81,7 @@ public final class Quiz implements Serializable {
             return this;
         }
 
+        /** remove question from the quiz */
         public Builder remove(int index) {
             checkState();
             if (index >= 0 && index < questions.size()) {
@@ -82,16 +90,22 @@ public final class Quiz implements Serializable {
             return this;
         }
 
+        /** return the current list of question in the builder */
         public ImmutableList<Question> getQuestions() {
             checkState();
             return ImmutableList.copyOf(questions);
         }
 
+        /** return the current number of question in the Quiz */
         public int size() {
             checkState();
             return questions.size();
         }
 
+        /**
+         * Build a quiz from the current state of the builder, invalid the state of the builder so
+         * that it only be called once
+         */
         public Quiz build() {
             checkState();
             List<Question> quizQuestion = questions;
@@ -99,6 +113,7 @@ public final class Quiz implements Serializable {
             return new Quiz(StringPool.TITLE_ID, quizQuestion);
         }
 
+        /** check if the builder is valid i.e. build() has not been called yet */
         private void checkState() {
             if (questions == null) {
                 throw new IllegalStateException("Builder already build once.");

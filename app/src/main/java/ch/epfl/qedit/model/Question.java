@@ -3,7 +3,6 @@ package ch.epfl.qedit.model;
 import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
 import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
 
-import androidx.annotation.NonNull;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.EmptyAnswerFormat;
 import java.io.Serializable;
@@ -70,6 +69,10 @@ public class Question implements Serializable {
         }
     }
 
+    /**
+     * A Question Builder use to build a Question step by step, essentially useful in Question
+     * edition
+     */
     public static class Builder implements Serializable {
 
         private String titleID;
@@ -82,30 +85,32 @@ public class Question implements Serializable {
             format = null;
         }
 
+        /** Useful if we need to modify an already existing function */
         public Builder(Question question) {
             titleID = question.title;
             textID = question.text;
             format = question.format;
         }
 
-        public Builder setTitleID(@NonNull String id) {
+        public Builder setTitleID(String id) {
             checkState();
-            titleID = id;
+            titleID = Objects.requireNonNull(id);
             return this;
         }
 
-        public Builder setTextID(@NonNull String id) {
+        public Builder setTextID(String id) {
             checkState();
-            textID = id;
+            textID = Objects.requireNonNull(id);
             return this;
         }
 
-        public Builder setFormat(@NonNull AnswerFormat format) {
+        public Builder setFormat(AnswerFormat format) {
             checkState();
-            this.format = format;
+            this.format = Objects.requireNonNull(format);
             return this;
         }
 
+        /** If possible, build the builder into a Question and invalid the builder state */
         public Question build() {
             checkState();
             checkAttributesValidity();
@@ -115,6 +120,7 @@ public class Question implements Serializable {
             return new Question(resultTitleID, textID, format);
         }
 
+        /** Check if the builder can be build into a Question regarding its current state */
         private void checkAttributesValidity() {
             String strError = "";
             if (format == null) {
@@ -131,6 +137,7 @@ public class Question implements Serializable {
             }
         }
 
+        /** check if the builder is valid i.e. build() has not been called yet */
         private void checkState() {
             if (titleID == null) throw new IllegalStateException("Builder already build once.");
         }

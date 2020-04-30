@@ -39,9 +39,9 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         Quiz.Builder quizBuilder = new Quiz.Builder(mockQuiz);
 
         StringPool stringPool = new StringPool();
-        stringPool.put(TITLE_ID, mockQuiz.getTitle());
-        stringPool.put(NO_QUESTION_TITLE_ID, "testNoTitle");
-        stringPool.put(NO_QUESTION_TEXT_ID, "testNoText");
+        stringPool.update(TITLE_ID, mockQuiz.getTitle());
+        stringPool.update(NO_QUESTION_TITLE_ID, "testNoTitle");
+        stringPool.update(NO_QUESTION_TEXT_ID, "testNoText");
 
         EditionViewModel model =
                 new ViewModelProvider(testRule.getActivity()).get(EditionViewModel.class);

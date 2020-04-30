@@ -62,8 +62,8 @@ public class EditQuestionActivity extends AppCompatActivity {
 
     /** Remove when the real question is ready */
     private void setupDummyResult() {
-        questionBuilder.setTitleID(stringPool.put("This is a new title"));
-        questionBuilder.setTextID(stringPool.put("This is a new text"));
+        questionBuilder.setTitleID(stringPool.add("This is a new title"));
+        questionBuilder.setTextID(stringPool.add("This is a new text"));
         questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
     }
 

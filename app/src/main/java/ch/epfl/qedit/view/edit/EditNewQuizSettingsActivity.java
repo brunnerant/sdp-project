@@ -60,10 +60,10 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
 
     public void startEditing(View view) {
         // Add the title and two strings for new empty questions to the StringPool
-        stringPool.put(TITLE_ID, editTitle.getText().toString());
-        stringPool.put(
+        stringPool.update(TITLE_ID, editTitle.getText().toString());
+        stringPool.update(
                 NO_QUESTION_TITLE_ID, getResources().getString(R.string.no_question_title_message));
-        stringPool.put(
+        stringPool.update(
                 NO_QUESTION_TEXT_ID, getResources().getString(R.string.no_question_text_message));
 
         // Launch the EditQuizActivity
