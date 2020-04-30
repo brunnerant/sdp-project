@@ -37,6 +37,22 @@ public class EditQuestionActivity extends AppCompatActivity {
         editTitle = findViewById(R.id.edit_question_title);
         editText = findViewById(R.id.edit_question_text);
 
+        // Initialize buttons
+        initializeButtons();
+
+        // Get the prepared QuestionBuilder and the StringPool from the Intent
+        Intent intent = getIntent();
+        questionBuilder =
+                (Question.Builder)
+                        Objects.requireNonNull(intent.getExtras())
+                                .getSerializable(QUESTION_BUILDER);
+        stringPool =
+                (StringPool)
+                        Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
+    }
+
+    /** Handles the setup of the two buttons of this activity */
+    private void initializeButtons() {
         // Initialize the button that allows to add an Answer
         ImageButton addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(
@@ -56,16 +72,6 @@ public class EditQuestionActivity extends AppCompatActivity {
                         returnResult();
                     }
                 });
-
-        // Get the prepared QuestionBuilder and the StringPool from the Intent
-        Intent intent = getIntent();
-        questionBuilder =
-                (Question.Builder)
-                        Objects.requireNonNull(intent.getExtras())
-                                .getSerializable(QUESTION_BUILDER);
-        stringPool =
-                (StringPool)
-                        Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
     }
 
     /** Remove when the real question is ready */

@@ -1,9 +1,12 @@
 package ch.epfl.qedit.edit;
 
+import static android.app.Activity.RESULT_OK;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -12,14 +15,23 @@ import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
 import static ch.epfl.qedit.util.Util.createMockQuiz;
+import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.EDIT_QUESTION_ACTIVITY_REQUEST_CODE;
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.QUESTION;
 import static org.hamcrest.Matchers.not;
 
+import android.app.Instrumentation;
+import android.content.Intent;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.edit.EditOverviewFragment;
+import ch.epfl.qedit.view.edit.EditQuestionActivity;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
@@ -33,6 +45,10 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     @Rule
     public final FragmentTestRule<?, EditOverviewFragment> testRule =
             FragmentTestRule.create(EditOverviewFragment.class, false, false);
+
+    @Rule
+    public final ActivityTestRule<EditQuestionActivity> resultTestRule =
+            new ActivityTestRule<>(EditQuestionActivity.class, false, false);
 
     @Before
     public void setUp() {
@@ -136,5 +152,27 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         }
 
         return titles;
+    }
+
+    // @Test TODO
+    public void testOnActivityResult() {
+        Question.Builder questionBuilder = new Question.Builder();
+        StringPool stringPool = new StringPool();
+
+        questionBuilder.setTitleID(stringPool.add("This is a new title"));
+        questionBuilder.setTextID(stringPool.add("This is a new text"));
+        questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
+
+        Intent dataIntent = new Intent();
+        dataIntent.putExtra(QUESTION, questionBuilder.build());
+        dataIntent.putExtra(STRING_POOL, stringPool);
+
+        intending(hasComponent(EditQuestionActivity.class.getName()))
+                .respondWith(new Instrumentation.ActivityResult(RESULT_OK, dataIntent));
+        resultTestRule
+                .getActivity()
+                .startActivityForResult(
+                        new Intent(testRule.getFragment().getContext(), EditQuestionActivity.class),
+                        EDIT_QUESTION_ACTIVITY_REQUEST_CODE);
     }
 }
