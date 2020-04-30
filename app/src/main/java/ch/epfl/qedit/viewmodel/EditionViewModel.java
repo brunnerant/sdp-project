@@ -5,6 +5,11 @@ import androidx.lifecycle.ViewModel;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 
+/**
+ * This ViewModel will be created by the EditQuizActivity and will be used to share state between
+ * the two fragments EditOverviewFragment and EditPreviewFragment which are shown simultaneously to
+ * the user
+ */
 public class EditionViewModel extends ViewModel {
 
     private final MutableLiveData<Integer> focusedQuestion = new MutableLiveData<>(null);

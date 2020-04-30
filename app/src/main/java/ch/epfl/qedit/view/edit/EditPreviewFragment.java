@@ -16,11 +16,8 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 
+/** This class is used the show a preview of the currently selected question. */
 public class EditPreviewFragment extends Fragment {
-    public static final String EDIT_ANSWER_FORMAT = "ch.epfl.qedit.view.edit.EDIT_ANSWER_FORMAT";
-    public static final String EDIT_ANSWER_MODEL = "ch.epfl.qedit.view.edit.EDIT_ANSWER_MODEL";
-    public static final String EDIT_FRAGMENT_TAG = "ch.epfl.qedit.view.edit.EDIT_FRAGMENT_TAG";
-
     private TextView questionTitle;
     private TextView questionDisplay;
     private EditionViewModel model;
@@ -33,11 +30,13 @@ public class EditPreviewFragment extends Fragment {
             @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_quiz_question, container, false);
+
+        // Initialize the two TextViews
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
 
+        // Get the ViewModel and fix what happens when the focused question changes
         model = new ViewModelProvider(requireActivity()).get(EditionViewModel.class);
-
         model.getFocusedQuestion()
                 .observe(
                         getViewLifecycleOwner(),
@@ -56,21 +55,23 @@ public class EditPreviewFragment extends Fragment {
         Quiz.Builder quizBuilder = model.getQuizBuilder();
 
         if (index == null || index < 0 || index >= quizBuilder.size()) {
+            // Show nothing
             questionTitle.setText(null);
             questionDisplay.setText(null);
             return;
         }
 
+        // Get resources from the ViewModel
         Question question = quizBuilder.getQuestions().get(index);
         StringPool stringPool = model.getStringPool();
 
-        // We have to change the question title and text
+        // Update the title of the question
         String key =
                 question.getTitle(); // TODO Support old questions that store the strings directly
-        // as well
         String text = stringPool.get(key);
         questionTitle.setText((text == null) ? key : text);
 
+        // Update the text of the question
         key = question.getText();
         text = stringPool.get(key);
         questionDisplay.setText((text == null) ? key : text);

@@ -37,6 +37,7 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_new_quiz_settings);
 
+        // Initialize a new QuizBuilder and new StringPool
         quizBuilder = new Quiz.Builder(createTestQuiz());
         stringPool = new StringPool();
 
@@ -53,17 +54,19 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
         // Set listener
         languageSelectionSpinner.setOnItemSelectedListener(this);
 
+        // Set the EditText for the title
         editTitle = findViewById(R.id.edit_quiz_title);
     }
 
     public void startEditing(View view) {
+        // Add the title and two strings for new empty questions to the StringPool
         stringPool.put(TITLE_ID, editTitle.getText().toString());
-
         stringPool.put(
                 NO_QUESTION_TITLE_ID, getResources().getString(R.string.no_question_title_message));
         stringPool.put(
                 NO_QUESTION_TEXT_ID, getResources().getString(R.string.no_question_text_message));
 
+        // Launch the EditQuizActivity
         Intent intent = new Intent(EditNewQuizSettingsActivity.this, EditQuizActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZ_BUILDER, quizBuilder);
@@ -74,7 +77,7 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
 
     /** Remove in next sprint */
     private Quiz createTestQuiz() {
-        // TODO Test edit existing quiz, move to new activity in next sprint
+        // TODO Test editing existing quiz, move to new activity in next sprint
         return new Quiz(
                 "Test",
                 Arrays.asList(

@@ -66,17 +66,21 @@ public class EditOverviewFragment extends Fragment {
 
         if (requestCode == EDIT_QUESTION_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+                // Get the question and the extended StringPool from the return data
                 Question filledOutQuestion = (Question) data.getExtras().getSerializable(QUESTION);
                 StringPool extendedStringPool =
                         (StringPool) data.getExtras().getSerializable(STRING_POOL);
+
+                // Update the StringPool of the ViewModel
                 model.setStringPool(extendedStringPool);
 
+                // Update the question that was empty before by the filled out question
                 int position = model.getFocusedQuestion().getValue();
                 model.getQuizBuilder().update(position, filledOutQuestion);
                 titles.set(position, extendedStringPool.get(filledOutQuestion.getTitle()));
                 adapter.updateItem(position);
 
-                // Trigger the question fragment to draw the updated title and text
+                // Trigger the preview fragment to draw the updated title and text
                 model.getFocusedQuestion().postValue(position);
             }
         }
@@ -85,6 +89,7 @@ public class EditOverviewFragment extends Fragment {
     private void prepareTitles() {
         titles = new ArrayList<>();
 
+        // Add the titles of all question already in the builder to a list
         for (Question question : model.getQuizBuilder().getQuestions()) {
             String key = question.getTitle();
             String text = model.getStringPool().get(key);

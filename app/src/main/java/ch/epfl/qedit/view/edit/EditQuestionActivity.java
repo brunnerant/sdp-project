@@ -32,9 +32,11 @@ public class EditQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_question);
 
+        // Initialize the EditText fields
         editTitle = findViewById(R.id.edit_question_title);
         editText = findViewById(R.id.edit_question_text);
 
+        // Initialize the button that allows to add an Answer
         ImageButton addButton = (ImageButton) findViewById(R.id.add_button);
         addButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -43,6 +45,7 @@ public class EditQuestionActivity extends AppCompatActivity {
                     }
                 });
 
+        // Get the prepared QuestionBuilder and the StringPool from the Intent
         Intent intent = getIntent();
         questionBuilder =
                 (Question.Builder)
@@ -52,7 +55,9 @@ public class EditQuestionActivity extends AppCompatActivity {
                 (StringPool)
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
 
+        // Return dummy result (temporarily)
         setupDummyResult();
+        returnResult();
     }
 
     /** Remove when the real question is ready */
@@ -62,6 +67,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
     }
 
+    /** Builds the Question and returns it with the extended StringPool to the callee activity */
     private void returnResult() {
         Intent intent = new Intent();
         intent.putExtra(QUESTION, questionBuilder.build());
