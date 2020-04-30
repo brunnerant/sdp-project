@@ -22,7 +22,6 @@ import java.util.List;
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
     public static final int EDIT_QUESTION_ACTIVITY_REQUEST_CODE = 0;
-    public static final String QUESTION_BUILDER = "ch.epfl.qedit.view.edit.QUESTION_BUILDER";
 
     private ListEditView.Adapter<String> adapter;
     private EditionViewModel model;
@@ -149,7 +148,6 @@ public class EditOverviewFragment extends Fragment {
     private void launchEditQuestionActivity() {
         Intent intent = new Intent(requireActivity(), EditQuestionActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(QUESTION_BUILDER, new Question.Builder());
         bundle.putSerializable(STRING_POOL, model.getStringPool());
         intent.putExtras(bundle);
         startActivityForResult(intent, EDIT_QUESTION_ACTIVITY_REQUEST_CODE);

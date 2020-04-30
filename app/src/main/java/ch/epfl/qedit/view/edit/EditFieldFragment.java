@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
@@ -23,11 +22,8 @@ public class EditFieldFragment extends DialogFragment {
     private static final String IS_TEXT_ARG = "ch.epfl.qedit.view.edit.IS_TEXT_ARG";
 
     /** State variables, we determine the correct type of Field to create from this variable */
-    private int maxCharLimit;
-
-    private int minLimit;
-
     private boolean isSigned;
+
     private boolean isDecimal;
     private boolean isText;
     private boolean isPreFilled;
@@ -39,7 +35,6 @@ public class EditFieldFragment extends DialogFragment {
     private CheckBox signCheckbox;
     private EditText preview;
     private Spinner typesSpinner;
-    private NumberPicker limitPicker;
 
     /** Index in the spinner of the different types */
     public static final int NUMBER_TYPE_IDX = 0;
@@ -48,8 +43,6 @@ public class EditFieldFragment extends DialogFragment {
     public static final int PRE_FILLED_TYPE_IDX = 2;
 
     public EditFieldFragment() {
-        maxCharLimit = NO_LIMIT;
-        minLimit = 1;
         isText = false;
         isSigned = false;
         isDecimal = false;
@@ -107,14 +100,12 @@ public class EditFieldFragment extends DialogFragment {
         signCheckbox = view.findViewById(R.id.signCheckBox);
         preview = view.findViewById(R.id.field_preview);
         typesSpinner = view.findViewById(R.id.field_types_selection);
-        limitPicker = view.findViewById(R.id.limitPicker);
 
         // create listeners for each check box
         setDecimalCheckboxListener();
         setSignCheckboxListener();
 
         setTypesSpinnerListener();
-        setLimitPickerListener();
 
         // set spinner to initial value
         int selectSpinner =
@@ -122,17 +113,6 @@ public class EditFieldFragment extends DialogFragment {
         typesSpinner.setSelection(selectSpinner);
 
         updateLayout();
-    }
-
-    /** Helper methods that create listeners for several layout component */
-    private void setLimitPickerListener() {
-        limitPicker.setOnValueChangedListener(
-                new NumberPicker.OnValueChangeListener() {
-                    @Override
-                    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                        maxCharLimit = (newVal == 0) ? NO_LIMIT : newVal + minLimit - 1;
-                    }
-                });
     }
 
     private void setTypesSpinnerListener() {
@@ -181,8 +161,8 @@ public class EditFieldFragment extends DialogFragment {
      */
     private Field getResultingField() {
         if (isPreFilled) return Field.preFilledField(preFilledText);
-        if (isText) return Field.textField(getHint(), maxCharLimit);
-        else return Field.numericField(isDecimal, isDecimal, getHint(), maxCharLimit);
+        if (isText) return Field.textField(getHint(), NO_LIMIT);
+        else return Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
     }
 
     /**
@@ -203,55 +183,11 @@ public class EditFieldFragment extends DialogFragment {
         int checkBoxVisibility = isNumber() ? View.VISIBLE : View.GONE;
         decimalCheckbox.setVisibility(checkBoxVisibility);
         signCheckbox.setVisibility(checkBoxVisibility);
-
-        // update maxNbOfChar and limitPicker
-        updatePickers();
-    }
-
-    /**
-     * update the number picker of limit character number it also update the minLimit and the
-     * maxCharLimit parameter if necessary i.e. if maxCharLimit < minLimit
-     */
-    private void updatePickers() {
-        setMinCharLimit();
-        int size = 256 - minLimit;
-        String[] values = new String[size + 1]; // +1 for the no limit part
-        values[0] = getString(R.string.no_limit);
-        for (int i = 0; i < size; ++i) {
-            values[i + 1] = Integer.toString(minLimit + i);
-        }
-        limitPicker.setMinValue(0);
-
-        // avoid an index out of bound
-        if (size > limitPicker.getMaxValue()) {
-            limitPicker.setDisplayedValues(values);
-            limitPicker.setMaxValue(size);
-        } else {
-            limitPicker.setMaxValue(size);
-            limitPicker.setDisplayedValues(values);
-        }
-
-        int idx = (maxCharLimit == NO_LIMIT) ? 0 : maxCharLimit - minLimit + 1;
-        limitPicker.setValue(idx);
     }
 
     /** @return true if the field want a number answer, False otherwise */
     private boolean isNumber() {
         return !isText && !isPreFilled;
-    }
-
-    /** @return the minimum character limit acceptable regarding the type of this field */
-    private void setMinCharLimit() {
-        // text or pre filled: 'A'
-        minLimit = 1;
-        if (isNumber()) {
-            // signed: '-1'
-            // decimal: '1.0'
-            // decimal and signed: '-1.0'
-            minLimit = isSigned ? minLimit + 1 : minLimit;
-            minLimit = isDecimal ? minLimit + 2 : minLimit;
-        }
-        maxCharLimit = (maxCharLimit == NO_LIMIT) ? NO_LIMIT : Math.max(maxCharLimit, minLimit);
     }
 
     /**

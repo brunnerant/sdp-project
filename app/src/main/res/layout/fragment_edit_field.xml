@@ -30,20 +30,6 @@
                 android:inputType="text"/>
 
             <TextView
-                android:id="@+id/max_char_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/max_char"
-                android:textSize="@dimen/sub_title_text_size"
-                android:textColor="@color/colorSubTitle"
-                android:textStyle="bold"/>
-
-            <NumberPicker
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/limitPicker"/>
-
-            <TextView
                 android:id="@+id/selectTypeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

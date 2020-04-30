@@ -73,30 +73,21 @@ public class EditAnswerActivityTest {
                 .check(matches(isDisplayed()));
     }
 
+    private void checkTypeInSpinner(int typeIdx) {
+        onView(withId(R.id.field_types_selection))
+                .inRoot(isDialog())
+                .check(matches(withSpinnerText(containsString(getFieldTypes()[typeIdx]))));
+    }
+
     @Test
     public void textButtonOnClick() {
         openFieldEdition(R.id.text_button);
-        onView(withId(R.id.field_types_selection))
-                .inRoot(isDialog())
-                .check(
-                        matches(
-                                withSpinnerText(
-                                        containsString(
-                                                getFieldTypes()[
-                                                        EditFieldFragment.TEXT_TYPE_IDX]))));
+        checkTypeInSpinner(EditFieldFragment.TEXT_TYPE_IDX);
     }
 
     @Test
     public void numberButtonOnClick() {
         openFieldEdition(R.id.number_button);
-
-        onView(withId(R.id.field_types_selection))
-                .inRoot(isDialog())
-                .check(
-                        matches(
-                                withSpinnerText(
-                                        containsString(
-                                                getFieldTypes()[
-                                                        EditFieldFragment.NUMBER_TYPE_IDX]))));
+        checkTypeInSpinner(EditFieldFragment.NUMBER_TYPE_IDX);
     }
 }

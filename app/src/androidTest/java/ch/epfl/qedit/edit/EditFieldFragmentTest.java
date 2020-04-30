@@ -71,11 +71,6 @@ public class EditFieldFragmentTest {
                 .check(matches(withText(R.string.preview_title)))
                 .check(matches(isDisplayed()));
 
-        onView(withId(R.id.max_char_text))
-                .inRoot(isDialog())
-                .check(matches(withText(R.string.max_char)))
-                .check(matches(isDisplayed()));
-
         onView(withId(R.id.selectTypeText))
                 .inRoot(isDialog())
                 .check(matches(withText(R.string.select_field_type)))
@@ -133,10 +128,5 @@ public class EditFieldFragmentTest {
         onView(withId(R.id.decimalCheckBox)).inRoot(isDialog()).perform(click());
 
         checkHint("±0");
-    }
-
-    @Test
-    public void testNumberPicker() {
-        onView(withId(R.id.limitPicker)).perform(click());
     }
 }

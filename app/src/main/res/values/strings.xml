@@ -103,8 +103,6 @@
     <string name="hint_text_field">Enter a text answer here.</string>
     <string name="check_box_sign">Can be negative</string>
     <string name="check_box_decimal">Can be decimal</string>
-    <string name="max_char">Maximum number of character</string>
-    <string name="no_limit">No limit</string>
     <!-- Type selection -->
     <string name="select_field_type">Type of this field</string>
     <string-array name="field_types_list">

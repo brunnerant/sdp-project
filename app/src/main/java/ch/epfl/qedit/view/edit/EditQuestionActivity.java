@@ -1,7 +1,6 @@
 package ch.epfl.qedit.view.edit;
 
 import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
-import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION_BUILDER;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,9 +21,11 @@ import java.util.Objects;
 public class EditQuestionActivity extends AppCompatActivity {
     public static final String QUESTION = "ch.epfl.qedit.view.edit.QUESTION";
 
+    private String title;
+    private String text;
+
     private EditText editTitle;
     private EditText editText;
-    private Question.Builder questionBuilder;
     private StringPool stringPool;
     private AnswerFormat answerFormat;
 
@@ -40,12 +41,8 @@ public class EditQuestionActivity extends AppCompatActivity {
         // Initialize buttons
         initializeButtons();
 
-        // Get the prepared QuestionBuilder and the StringPool from the Intent
+        // Get the StringPool from the Intent
         Intent intent = getIntent();
-        questionBuilder =
-                (Question.Builder)
-                        Objects.requireNonNull(intent.getExtras())
-                                .getSerializable(QUESTION_BUILDER);
         stringPool =
                 (StringPool)
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
@@ -76,15 +73,15 @@ public class EditQuestionActivity extends AppCompatActivity {
 
     /** Remove when the real question is ready */
     private void setupDummyResult() {
-        questionBuilder.setTitleID(stringPool.add("This is a new title"));
-        questionBuilder.setTextID(stringPool.add("This is a new text"));
-        questionBuilder.setFormat(MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
+        title = stringPool.add("This is a new title");
+        text = stringPool.add("This is a new text");
+        answerFormat = MatrixFormat.singleField(MatrixFormat.Field.textField("", 25));
     }
 
     /** Builds the Question and returns it with the extended StringPool to the callee activity */
     private void returnResult() {
         Intent intent = new Intent();
-        intent.putExtra(QUESTION, questionBuilder.build());
+        intent.putExtra(QUESTION, new Question(title, text, answerFormat));
         intent.putExtra(STRING_POOL, stringPool);
         setResult(RESULT_OK, intent);
         finish();
