@@ -42,10 +42,10 @@ public class EditFieldFragment extends DialogFragment {
     private NumberPicker limitPicker;
 
     /** Index in the spinner of the different types */
-    private final int NUMBER_TYPE_IDX = 0;
+    public static final int NUMBER_TYPE_IDX = 0;
 
-    private final int TEXT_TYPE_IDX = 1;
-    private final int PRE_FILLED_TYPE_IDX = 2;
+    public static final int TEXT_TYPE_IDX = 1;
+    public static final int PRE_FILLED_TYPE_IDX = 2;
 
     public EditFieldFragment() {
         maxCharLimit = NO_LIMIT;
