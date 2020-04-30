@@ -46,9 +46,9 @@ public class TokenLogInActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_token_log_in);
 
-        tokenText = findViewById(R.id.log_in_token);
-        loginButton = findViewById(R.id.log_in_button);
-        progressBar = findViewById(R.id.log_in_token_progress_bar);
+        tokenText = findViewById(R.id.field_token);
+        loginButton = findViewById(R.id.button_log_in_token);
+        progressBar = findViewById(R.id.progress_bar_log_in_token);
 
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
@@ -58,7 +58,7 @@ public class TokenLogInActivity extends AppCompatActivity
 
         /* Language selection */
         // Create spinner (language list)
-        Spinner languageSelectionSpinner = findViewById(R.id.language_selection);
+        Spinner languageSelectionSpinner = findViewById(R.id.language_selection_log_in_token);
 
         // Find app's current language position in languages list
         String currentLanguage = Locale.getDefault().getLanguage();

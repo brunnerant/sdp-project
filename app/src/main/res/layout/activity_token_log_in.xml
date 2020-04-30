@@ -12,7 +12,7 @@
     tools:context=".view.login.TokenLogInActivity">
 
     <EditText
-        android:id="@+id/log_in_token"
+        android:id="@+id/field_token"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
@@ -24,32 +24,32 @@
         android:maxLines="1"
         android:backgroundTint="@color/colorLogInBar"
         android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toStartOf="@+id/log_in_button"
+        app:layout_constraintEnd_toStartOf="@+id/button_log_in_token"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qedit_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/qedit_logo_log_in_token" />
 
     <Button style="@style/Widget.AppCompat.Button.Colored"
-        android:id="@+id/log_in_button"
+        android:id="@+id/button_log_in_token"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="handleLogin"
         android:text="@string/log_in_button_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qedit_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/qedit_logo_log_in_token" />
 
     <ProgressBar
-        android:id="@+id/log_in_token_progress_bar"
+        android:id="@+id/progress_bar_log_in_token"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/log_in_button" />
+        app:layout_constraintTop_toBottomOf="@+id/button_log_in_token" />
 
     <ImageView
-        android:id="@+id/qedit_logo"
+        android:id="@+id/qedit_logo_log_in_token"
         android:layout_width="374dp"
         android:layout_height="166dp"
         android:contentDescription="@string/qedit_logo_description"
@@ -62,7 +62,7 @@
         app:srcCompat="@mipmap/qedit_light" />
 
     <Spinner
-        android:id="@+id/language_selection"
+        android:id="@+id/language_selection_log_in_token"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:entries="@array/languages_list"
@@ -73,7 +73,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/log_in_token_progress_bar"
+        app:layout_constraintTop_toTopOf="@id/progress_bar_log_in_token"
         app:layout_constraintVertical_bias="0.492" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

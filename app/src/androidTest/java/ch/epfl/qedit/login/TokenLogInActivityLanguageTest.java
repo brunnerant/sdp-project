@@ -66,9 +66,9 @@ public class TokenLogInActivityLanguageTest {
         }
 
         onView(ViewMatchers.withId(R.id.login_button)).perform(closeSoftKeyboard());
-        onView(withId(R.id.language_selection)).perform(click());
+        onView(withId(R.id.language_selection_log_in_token)).perform(click());
         onData(anything()).atPosition(pos).perform(click());
-        onView(withId(R.id.language_selection)).check(matches(withSpinnerText(language)));
+        onView(withId(R.id.language_selection_log_in_token)).check(matches(withSpinnerText(language)));
         onView(withId(R.id.login_button)).check(matches(withText(loginString)));
 
         // Test toast
