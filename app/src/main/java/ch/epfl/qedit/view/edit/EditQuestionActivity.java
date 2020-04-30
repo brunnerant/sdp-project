@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +46,17 @@ public class EditQuestionActivity extends AppCompatActivity {
                     }
                 });
 
+        // Initialize the button that allows to stop editing the question
+        Button doneButton = findViewById(R.id.button_done_editing);
+        doneButton.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // Setup dummy result (temporarily)
+                        setupDummyResult();
+                        returnResult();
+                    }
+                });
+
         // Get the prepared QuestionBuilder and the StringPool from the Intent
         Intent intent = getIntent();
         questionBuilder =
@@ -54,10 +66,6 @@ public class EditQuestionActivity extends AppCompatActivity {
         stringPool =
                 (StringPool)
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
-
-        // Return dummy result (temporarily)
-        setupDummyResult();
-        returnResult();
     }
 
     /** Remove when the real question is ready */

@@ -7,8 +7,10 @@
     tools:context=".view.edit.EditQuestionActivity">
 
     <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        app:layout_constraintStart_toStartOf="parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,10 +20,10 @@
                 android:id="@+id/edit_question_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:layout_gravity="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:layout_marginTop="32dp"
                 android:hint="@string/edit_question_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -30,8 +32,8 @@
                 android:id="@+id/edit_question_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="32dp"
                 android:hint="@string/edit_question_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -39,12 +41,12 @@
 
             <TextView
                 android:id="@+id/choose_answer_text"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="@dimen/answer_text_helper_padding"
-                android:textSize="@dimen/helper_text_size"
-                android:text="@string/add_answer_helper_text" />
+                android:text="@string/add_answer_helper_text"
+                android:textSize="@dimen/helper_text_size" />
 
             <TableLayout
                 android:id="@+id/answers_table"
@@ -64,10 +66,18 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorButton"
                         android:padding="@dimen/answer_button_padding"
-                        app:srcCompat="@drawable/ic_add_black"/>
+                        app:srcCompat="@drawable/ic_add_black" />
                 </TableRow>
 
             </TableLayout>
+            <Button
+                android:id="@+id/button_done_editing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_done_editing_message"
+                android:background="@color/colorButton"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp" />
         </LinearLayout>
     </ScrollView>
 
