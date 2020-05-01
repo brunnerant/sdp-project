@@ -8,6 +8,7 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import ch.epfl.qedit.view.sensor.ScannerActivity;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -25,6 +26,14 @@ public class ScannerActivityTest {
     @Before
     public void init() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    }
+
+    @After
+    public void cleanup() {
+        InstrumentationRegistry.getInstrumentation()
+                .getUiAutomation()
+                .executeShellCommand(
+                        "pm revoke ${getTargetContext().packageName} android.permission.CAMERA");
     }
 
     public static void assertPermissionRequestIsVisible(UiDevice device, String text) {
