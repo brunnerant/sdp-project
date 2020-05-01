@@ -196,9 +196,8 @@ public class EditFieldFragment extends DialogFragment {
     private String getHint() {
         if (isNumber()) {
             String hint = "0";
-            if (isSigned && isDecimal) hint = "±0.0";
-            if (isDecimal) hint = "0.0";
-            if (isSigned) hint = "±0";
+            if (isDecimal) hint = hint + ".0";
+            if (isSigned) hint = "±" + hint;
             return hint;
         } else {
             return isPreFilled ? getString(R.string.hint_pre_filled_field) : "???";
