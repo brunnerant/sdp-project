@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ch.epfl.qedit">
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera2"/>
+    <uses-feature android:name="android.hardware.camera2.params."/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -12,11 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".view.sensor.ScannerActivity"
+            android:label="Scanner"
+            android:parentActivityName=".view.home.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.home.HomeActivity"/>
+        </activity>
         <activity
             android:name=".view.edit.EditQuizActivity"
             android:label="@string/title_activity_edit_quiz"
             android:parentActivityName=".view.home.HomeActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
 
@@ -37,7 +46,6 @@
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"
             android:parentActivityName=".view.LoginActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW_ROLE" />
 
@@ -47,7 +55,6 @@
         <activity
             android:name=".view.quiz.QuizActivity"
             android:parentActivityName=".view.home.HomeActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
 
