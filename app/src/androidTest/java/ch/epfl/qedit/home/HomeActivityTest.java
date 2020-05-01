@@ -141,6 +141,8 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         onView(withId(R.id.burger_view))
                 .perform(NavigationViewActions.navigateTo(R.id.online_quizzes));
         onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.my_account));
+        onView(withId(R.id.burger_view))
+                .perform(NavigationViewActions.navigateTo(R.id.qr_code_burger));
         onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.settings));
         onView(withId(R.id.drawer_layout))
                 .check(matches(isOpen(Gravity.START)))
