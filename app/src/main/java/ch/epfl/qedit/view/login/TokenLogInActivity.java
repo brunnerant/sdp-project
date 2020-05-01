@@ -139,7 +139,7 @@ public class TokenLogInActivity extends AppCompatActivity
                 .show();
     }
 
-    public void handleLogin(View view) {
+    public void handleLogIn(View view) {
         String token = tokenText.getText().toString();
         // Sanitize token
         if (token.isEmpty()) {

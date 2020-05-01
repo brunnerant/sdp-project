@@ -20,6 +20,7 @@
     <string name="sign_up_action_label">Inscription</string>
     <string name="hint_email">Mail</string>
     <string name="hint_password">Mot de passe</string>
+    <string name="hint_password_verification">Vérification du mot de passe</string>
     <string name="hint_token">Token</string>
     <string name="wrong_email_message">Mail invalide</string>
     <string name="empty_email_message">Mail vide</string>

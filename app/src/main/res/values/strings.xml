@@ -48,6 +48,7 @@
     <string name="sign_up_action_label">Sign up</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_password_verification">Verify password</string>
     <string name="hint_token">Token</string>
     <string name="wrong_email_message">Invalid email</string>
     <string name="empty_email_message">Empty email</string>
