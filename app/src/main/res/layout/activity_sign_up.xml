@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:autofillHints=""
         android:backgroundTint="@color/colorLogInFields"
-        android:hint="@string/hint_password_verification"
+        android:hint="@string/hint_password_confirmation"
         android:imeActionLabel="@string/sign_up_action_label"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
