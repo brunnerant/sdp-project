@@ -195,14 +195,13 @@ public class EditFieldFragment extends DialogFragment {
      */
     private String getHint() {
         if (isNumber()) {
-            String hint = "0";
-            if (isDecimal) hint = hint + ".0";
-            if (isSigned) hint = "±" + hint;
-            return hint;
-        } else if (isPreFilled) {
-            return getString(R.string.hint_pre_filled_field);
+            // signed: ±0
+            // decimal: 0.0
+            // decimal and signed: ±0.0
+            String hint = isSigned ? "±0" : "0";
+            return isDecimal ? hint + ".0" : hint;
         } else {
-            return "???";
+            return isPreFilled ? getString(R.string.hint_pre_filled_field) : "???";
         }
     }
 }
