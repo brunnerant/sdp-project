@@ -29,7 +29,7 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
-script:
+script: travis_wait mvn script
   # Launch the android tests and build the test report
   - ./gradlew build connectedCheck jacocoTestReport
 after_script:
