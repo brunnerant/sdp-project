@@ -36,6 +36,14 @@
     <string name="menu_previous">Précédent</string>
     <string name="menu_next">Suivant</string>
 
+    <!-- Burger Menu -->
+    <string name="menu_home">ACCUEIL</string>
+    <string name="menu_qr">QR CODE</string>
+    <string name="menu_quiz_list">MES QUIZ</string>
+    <string name="menu_person">MON COMPTE</string>
+    <string name="menu_search">QUIZ EN LIGNE</string>
+    <string name="menu_settings">PARAMÈTRES</string>
+
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Édition</string>
 
