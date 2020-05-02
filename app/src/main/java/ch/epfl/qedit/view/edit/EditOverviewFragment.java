@@ -65,7 +65,7 @@ public class EditOverviewFragment extends Fragment {
 
         if (requestCode == EDIT_QUESTION_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // Get the question and the extended StringPool from the return data
+                // Get the question and the extended StringPool from the returned data
                 Question filledOutQuestion = (Question) data.getExtras().getSerializable(QUESTION);
                 StringPool extendedStringPool =
                         (StringPool) data.getExtras().getSerializable(STRING_POOL);

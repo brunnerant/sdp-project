@@ -154,7 +154,7 @@ public class EditFieldFragment extends DialogFragment {
     }
 
     /**
-     * This method is call when we need to return the Field constructed with this dialogue fragment
+     * This method is called when we need to return the Field constructed with this dialog fragment
      *
      * @return MatrixFormat.Field corresponding to the current state of the parameter of this
      *     fragment
@@ -185,7 +185,7 @@ public class EditFieldFragment extends DialogFragment {
         signCheckbox.setVisibility(checkBoxVisibility);
     }
 
-    /** @return true if the field want a number answer, False otherwise */
+    /** @return true if the field wants a number answer, False otherwise */
     private boolean isNumber() {
         return !isText && !isPreFilled;
     }

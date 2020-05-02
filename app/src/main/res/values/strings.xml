@@ -124,8 +124,6 @@
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
     <string name="empty_answer_format_message">This is empty!</string>
-    <string name="test_answer_format_message">This is just a test!</string>
+    <string name="test_answer_format_message" translatable="false">This is just a test!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
