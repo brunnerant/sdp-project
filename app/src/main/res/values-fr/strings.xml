@@ -47,6 +47,13 @@
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Édition</string>
 
+    <!-- Edit New Quiz Settings -->
+    <string name="edit_quiz_title">Entrer le titre du quiz</string>
+    <string name="button_start_editing_message">Démarrer l\'édition</string>
+    <string name="no_question_title_message">Pas de titre</string>
+    <string name="no_question_text_message">Pas de texte</string>
+
+
     <!-- Edit -->
     <string name="delete">Supprimer</string>
     <string name="edit">Éditer</string>
@@ -60,12 +67,37 @@
     <string name="edit_title">Renommer</string>
     <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
     <string name="add_quiz">Ajouter</string>
+    <string name="new_empty_question">Nouvelle question vide</string>
+
+    <!-- Edit Question -->
+    <string name="edit_question_title">Entrer le titre de la question ici.</string>
+    <string name="edit_question_text">Entrer le texte de la question ici.</string>
+    <string name="add_answer_helper_text">Ajouter un champ de réponse en pressant sur le button \'+\'.</string>
+    <string name="button_done_editing_message">Terminer</string>
+
+    <!-- Edit Answer -->
+    <string name="choose_answer_format">Choisir un type de réponse tel que TEXTE, NOMBRE, MATRICE et ANNOTATION DE GRAPHE.</string>
+
+    <!-- Edit Field -->
+    <string name="edit_field_title">Edition de champ</string>
+    <string name="preview_title">Aperçu</string>
+    <string name="hint_pre_filled_field">Entrer le texte de ce champ pré-rempli.</string>
+    <string name="hint_text_field">Entrer une réponse textuelle ici.</string>
+    <string name="check_box_sign">Peut être négatif</string>
+    <string name="check_box_decimal">Peut être décimal</string>
+    <!-- Type selection -->
+    <string name="select_field_type">Type de ce champ</string>
+    <string-array name="field_types_list">
+        <item>Nombre</item>
+        <item>Texte</item>
+        <item>Pré-rempli</item>
+    </string-array>
 
     <!-- Miscellaneous -->
     <!-- In French, there is a space before the exclammation point.
          Since we cannot have leading and trailing spaces in string resources,
          we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
-    <string name="test_answer_format_message">Ceci est juste un test !</string>
+    <string name="empty_answer_format_message">Ceci est vide !</string>
 
 </resources>

@@ -64,7 +64,7 @@ public abstract class AnswerFormat implements Serializable {
         AnswerFormat answerFormat = MatrixFormat.parse(format, text);
 
         if (answerFormat == null) {
-            answerFormat = TestAnswerFormat.parse(format, text);
+            answerFormat = EmptyAnswerFormat.parse(format, text);
         }
 
         return answerFormat;

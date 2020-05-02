@@ -1,6 +1,10 @@
 package ch.epfl.qedit.model;
 
+import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
+import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
+
 import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.EmptyAnswerFormat;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -48,5 +52,20 @@ public class Question implements Serializable {
                     && this.format.equals(other.format);
         }
         return false;
+    }
+
+    public boolean isEmpty() {
+        return false;
+    }
+
+    public static class Empty extends Question {
+        public Empty() {
+            super(NO_QUESTION_TITLE_ID, NO_QUESTION_TEXT_ID, new EmptyAnswerFormat(null));
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return true;
+        }
     }
 }

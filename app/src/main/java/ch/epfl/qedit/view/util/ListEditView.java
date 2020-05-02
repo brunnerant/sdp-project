@@ -211,6 +211,15 @@ public class ListEditView extends RecyclerView {
         }
 
         /**
+         * Updates an item in the list.
+         *
+         * @param position of the item in the list that will be updated
+         */
+        public void updateItem(int position) {
+            notifyItemChanged(position);
+        }
+
+        /**
          * Registers an event listener for the items of the list. It can be used to be notified when
          * an item is selected, removed, or when the user clicked on the edit button.
          *

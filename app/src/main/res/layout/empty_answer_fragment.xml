@@ -5,13 +5,13 @@
     android:id="@+id/answer_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.answer.TestAnswerFragment">
+    tools:context=".view.answer.EmptyAnswerFragment">
 
     <TextView
         android:id="@+id/testAnswerFormatTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/test_answer_format_message"
+        android:text="@string/empty_answer_format_message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
