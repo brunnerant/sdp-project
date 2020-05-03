@@ -42,12 +42,23 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: ${{ runner.os }}-gradle-
-      - name: Testing and sending the coverage report to Codeclimate
+      - name: Executing unit and android tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 24
+          arch: x86_64
+          disable-animations: true
+          script: ./gradlew build connectedCheck jacocoTestReport
+      - name: Uploading the coverage report to GitHub
+        uses: actions/upload-artifact@v1
+          with:
+            name: coverage_report
+            path: app/build/reports/jacoco/jacocoTestReport/jacocoTestReport/html
+      - name: Uploading the coverage report to CodeClimate
         uses: paambaati/codeclimate-action@v2.5.6
         env:
           CC_TEST_REPORTER_ID: "9ec8fe9e3d205026fea4b49b8c7d660797eb52b0757cbbdede9630fc48550e43"
           JACOCO_SOURCE_PATH: "app/src/main/java/"
         with:
-          coverageCommand: ./gradlew build connectedCheck jacocoTestReport
+          coverageCommand: ""
           coverageLocations: "app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml:jacoco"
-          

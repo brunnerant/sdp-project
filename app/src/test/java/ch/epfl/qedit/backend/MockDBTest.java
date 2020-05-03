@@ -1,10 +1,14 @@
 package ch.epfl.qedit.backend;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.assertNull;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.backend.database.MockDBService;
@@ -13,14 +17,12 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Error;
 import ch.epfl.qedit.util.Response;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import org.junit.Test;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.Assert.assertNull;
 
 public class MockDBTest {
 
@@ -65,7 +67,7 @@ public class MockDBTest {
 
     private void lockWait() {
         try {
-            lock.await(2100, TimeUnit.MILLISECONDS);
+            lock.await(3000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
