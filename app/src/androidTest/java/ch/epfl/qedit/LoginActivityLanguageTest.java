@@ -1,21 +1,5 @@
 package ch.epfl.qedit;
 
-import android.content.Intent;
-
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.util.Locale;
-
-import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.view.LoginActivity;
-
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -29,6 +13,18 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
+
+import android.content.Intent;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.view.LoginActivity;
+import java.util.Locale;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class LoginActivityLanguageTest {
