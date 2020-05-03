@@ -1,14 +1,10 @@
 package ch.epfl.qedit.backend;
 
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.Assert.assertNull;
 
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.backend.database.MockDBService;
@@ -17,12 +13,14 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Error;
 import ch.epfl.qedit.util.Response;
-
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.assertNull;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import org.junit.Test;
 
 public class MockDBTest {
 

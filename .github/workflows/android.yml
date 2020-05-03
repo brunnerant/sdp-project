@@ -8,8 +8,8 @@ on:
     branches:
       - master
 jobs:
-  spotless:
-    name: Checking the formatting using spotless
+  formatting:
+    name: Formatting
     runs-on: ubuntu-latest
     steps:
       - name: Checking out repository
@@ -27,7 +27,7 @@ jobs:
       - name: Running spotless
         run: ./gradlew spotlessCheck
   tests:
-    name: Running the unit and android tests
+    name: Unit and android tests
     runs-on: macos-latest
     steps:
       - name: Checking out repository
