@@ -65,7 +65,7 @@ public class MockDBTest {
 
     private void lockWait() {
         try {
-            lock.await(2100, TimeUnit.MILLISECONDS);
+            lock.await(3000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
