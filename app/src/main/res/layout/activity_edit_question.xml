@@ -25,6 +25,8 @@
                 android:layout_marginTop="32dp"
                 android:hint="@string/edit_question_title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
+                android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -36,6 +38,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="32dp"
                 android:hint="@string/edit_question_text"
+                android:inputType="text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_question_title" />

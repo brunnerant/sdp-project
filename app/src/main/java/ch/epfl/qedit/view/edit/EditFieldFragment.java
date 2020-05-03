@@ -4,19 +4,24 @@ import static ch.epfl.qedit.model.answer.MatrixFormat.Field.NO_LIMIT;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
 import android.text.InputType;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat.Field;
 import java.util.Objects;
 
@@ -31,13 +36,13 @@ public class EditFieldFragment extends DialogFragment {
     private boolean isDecimal;
     private boolean isText;
     private boolean isPreFilled;
-    private String preFilledText;
+    private String solution;
 
     /** Layout component */
     private CheckBox decimalCheckbox;
 
     private CheckBox signCheckbox;
-    private EditText solution;
+    private EditText solutionView;
     private TextView preview;
     private Spinner typesSpinner;
 
@@ -52,7 +57,7 @@ public class EditFieldFragment extends DialogFragment {
         isSigned = false;
         isDecimal = false;
         isPreFilled = false;
-        preFilledText = null;
+        solution = null;
     }
 
     /**
@@ -92,11 +97,52 @@ public class EditFieldFragment extends DialogFragment {
                                 + "</font>");
         builder.setView(view)
                 .setTitle(title)
+                .setCancelable(true)
                 .setPositiveButton(R.string.done, null)
-                .setNegativeButton(R.string.cancel, null);
+                .setNegativeButton(R.string.cancel, cancelListener());
 
+        AlertDialog dialog = builder.create();
+        doneListener(dialog);
         // Create the AlertDialog object and return it
-        return builder.create();
+        return dialog;
+    }
+
+    private void doneListener(final AlertDialog dialog) {
+
+        dialog.setOnShowListener(
+                new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                        Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                        button.setOnClickListener(
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        returnResultIfNotEmpty();
+                                    }
+                                });
+                    }
+                });
+    }
+
+    private DialogInterface.OnClickListener cancelListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        };
+    }
+
+    private void returnResultIfNotEmpty() {
+        if (solution == null || solution.isEmpty()) {
+            solutionView.setError(getString(R.string.cannot_be_empty));
+        } else {
+            if (getActivity() instanceof EditQuestionActivity)
+                ((EditQuestionActivity) requireActivity())
+                        .setAnswerFormat(MatrixFormat.singleField(getResultingField()));
+            dismiss();
+        }
     }
 
     /**
@@ -109,7 +155,7 @@ public class EditFieldFragment extends DialogFragment {
         // find layout component in the layout
         decimalCheckbox = view.findViewById(R.id.decimalCheckBox);
         signCheckbox = view.findViewById(R.id.signCheckBox);
-        solution = view.findViewById(R.id.field_solution);
+        solutionView = view.findViewById(R.id.field_solution);
         preview = view.findViewById(R.id.field_hint_preview);
         typesSpinner = view.findViewById(R.id.field_types_selection);
 
@@ -118,6 +164,7 @@ public class EditFieldFragment extends DialogFragment {
         setSignCheckboxListener();
 
         setTypesSpinnerListener();
+        setSolutionViewListener();
 
         // set spinner to initial value
         int selectSpinner =
@@ -125,6 +172,23 @@ public class EditFieldFragment extends DialogFragment {
         typesSpinner.setSelection(selectSpinner);
 
         updateLayout();
+    }
+
+    private void setSolutionViewListener() {
+        solutionView.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        solution = s.toString();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                });
     }
 
     private void setTypesSpinnerListener() {
@@ -172,7 +236,7 @@ public class EditFieldFragment extends DialogFragment {
      *     fragment
      */
     private Field getResultingField() {
-        if (isPreFilled) return Field.preFilledField(preFilledText);
+        if (isPreFilled) return Field.preFilledField(solution);
         if (isText) return Field.textField(getHint(), NO_LIMIT);
         else return Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
     }
@@ -186,9 +250,9 @@ public class EditFieldFragment extends DialogFragment {
 
         // update solution hint
         int hintSolution = isPreFilled ? R.string.enter_pre_filled : R.string.enter_solution;
-        solution.setHint(hintSolution);
-        solution.setInputType(getInputType());
-        solution.setText("");
+        solutionView.setHint(hintSolution);
+        solutionView.setInputType(getInputType());
+        solutionView.setText("");
 
         Spanned previewHint =
                 Html.fromHtml("<b>" + getString(R.string.hint_preview) + ": </b>" + getHint());

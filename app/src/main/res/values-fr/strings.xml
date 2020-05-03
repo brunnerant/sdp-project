@@ -72,6 +72,7 @@
     <!-- Edit Question -->
     <string name="edit_question_title">Entrer le titre de la question ici.</string>
     <string name="edit_question_text">Entrer le texte de la question ici.</string>
+    <string name="cannot_be_empty">Ne peut pas être vide.</string>
 
     <!-- Edit Answer -->
     <string name="choose_answer_format">Choisir un type de réponse tel que TEXTE ou NOMBRE.</string>

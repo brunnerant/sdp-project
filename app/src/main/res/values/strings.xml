@@ -99,6 +99,7 @@
 
     <!-- Edit Question -->
     <string name="edit_question_title">Enter the title of the question here.</string>
+    <string name="cannot_be_empty">Cannot be empty.</string>
     <string name="edit_question_text">Enter the text of the question here.</string>
 
     <!-- Edit Answer -->
