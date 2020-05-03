@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
@@ -20,11 +22,15 @@ import ch.epfl.qedit.util.LocaleHelper;
 import java.util.Objects;
 
 public class EditQuestionActivity extends AppCompatActivity {
-    private String title;
-    private String text;
+
+    public static final String NUM_DIALOG_TAG = "ch.epfl.qedit.view.edit.NUM_DIALOG_TAG";
+    public static final String TEXT_DIALOG_TAG = "ch.epfl.qedit.view.edit.TEXT_DIALOG_TAG";
 
     private EditText editTitle;
     private EditText editText;
+
+    private String title;
+    private String text;
     private StringPool stringPool;
     private AnswerFormat answerFormat;
 
@@ -38,7 +44,9 @@ public class EditQuestionActivity extends AppCompatActivity {
         editText = findViewById(R.id.edit_question_text);
 
         // Initialize buttons
-        initializeButtons();
+        initDoneButton();
+        initNumButton();
+        initTextButton();
 
         // Get the StringPool from the Intent
         Intent intent = getIntent();
@@ -48,24 +56,37 @@ public class EditQuestionActivity extends AppCompatActivity {
     }
 
     /** Handles the setup of the two buttons of this activity */
-    private void initializeButtons() {
-        // Initialize the button that allows to add an Answer
-        ImageButton addButton = findViewById(R.id.add_button);
-        addButton.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-                        switchToEditAnswerActivity();
-                    }
-                });
-
+    private void initDoneButton() {
         // Initialize the button that allows to stop editing the question
-        Button doneButton = findViewById(R.id.button_done_editing);
+        Button doneButton = findViewById(R.id.button_done_question_editing);
         doneButton.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
                         // Setup dummy result (temporarily)
                         setupDummyResult();
                         returnResult();
+                    }
+                });
+    }
+
+    private void initNumButton() {
+        ImageButton numButton = findViewById(R.id.number_button);
+        numButton.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        DialogFragment editFieldFragment = EditFieldFragment.newInstance(false);
+                        editFieldFragment.show(getSupportFragmentManager(), NUM_DIALOG_TAG);
+                    }
+                });
+    }
+
+    private void initTextButton() {
+        ImageButton textButton = findViewById(R.id.text_button);
+        textButton.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+                        DialogFragment editFieldFragment = EditFieldFragment.newInstance(true);
+                        editFieldFragment.show(getSupportFragmentManager(), TEXT_DIALOG_TAG);
                     }
                 });
     }

@@ -14,6 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="vertical">
 
             <EditText
@@ -45,40 +46,68 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="@dimen/answer_text_helper_padding"
-                android:text="@string/add_answer_helper_text"
+                android:text="@string/choose_answer_format"
                 android:textSize="@dimen/helper_text_size" />
 
-            <TableLayout
-                android:id="@+id/answers_table"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"> <!-- stretch the second column of the layout-->
-
-                <TableRow
-
-                    android:id="@+id/row0"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageButton
-                        android:id="@+id/add_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorButton"
-                        android:padding="@dimen/answer_button_padding"
-                        app:srcCompat="@drawable/ic_add_black" />
-                </TableRow>
-
-            </TableLayout>
-            <Button
-                android:id="@+id/button_done_editing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/button_done_editing_message"
-                android:background="@color/colorButton"
                 android:layout_gravity="center"
-                android:layout_marginTop="32dp" />
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/text_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:padding="@dimen/regular_padding"
+                    app:srcCompat="@mipmap/text_answer" />
+
+                <ImageButton
+                    android:id="@+id/number_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:padding="@dimen/regular_padding"
+                    app:srcCompat="@mipmap/number_answer" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+            />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_cancel_question_editing"
+                    android:background="@color/transparent"
+                    android:textColor="@color/colorAccent"
+                    android:layout_marginTop="@dimen/regular_padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:layout_gravity="bottom|center"/>
+
+                <Button
+                    android:id="@+id/button_done_question_editing"
+                    android:background="@color/transparent"
+                    android:textColor="@color/colorAccent"
+                    android:layout_marginTop="@dimen/regular_padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/done"
+                    android:layout_gravity="bottom|center"/>
+
+            </LinearLayout>
         </LinearLayout>
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

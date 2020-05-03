@@ -5,12 +5,17 @@ import static ch.epfl.qedit.model.answer.MatrixFormat.Field.NO_LIMIT;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.InputType;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.MatrixFormat.Field;
@@ -33,7 +38,8 @@ public class EditFieldFragment extends DialogFragment {
     private CheckBox decimalCheckbox;
 
     private CheckBox signCheckbox;
-    private EditText preview;
+    private EditText solution;
+    private TextView preview;
     private Spinner typesSpinner;
 
     /** Index in the spinner of the different types */
@@ -79,8 +85,13 @@ public class EditFieldFragment extends DialogFragment {
 
         initLayoutComponent(view);
 
+        // set title red. Because it's nice.
+        Spanned title = Html.fromHtml(
+                "<font color='#FF0000'>"
+                + getString(R.string.edit_field_title)
+                +"</font>");
         builder.setView(view)
-                .setTitle(R.string.edit_field_title)
+                .setTitle(title)
                 .setPositiveButton(R.string.done, null)
                 .setNegativeButton(R.string.cancel, null);
 
@@ -98,7 +109,8 @@ public class EditFieldFragment extends DialogFragment {
         // find layout component in the layout
         decimalCheckbox = view.findViewById(R.id.decimalCheckBox);
         signCheckbox = view.findViewById(R.id.signCheckBox);
-        preview = view.findViewById(R.id.field_preview);
+        solution = view.findViewById(R.id.field_solution);
+        preview = view.findViewById(R.id.field_hint_preview);
         typesSpinner = view.findViewById(R.id.field_types_selection);
 
         // create listeners for each check box
@@ -172,17 +184,33 @@ public class EditFieldFragment extends DialogFragment {
      */
     private void updateLayout() {
 
-        // update preview
-        preview.setHint(getHint());
-        // the preview allow the user to enter some text
-        // only if it is a pre filled field
-        preview.setEnabled(isPreFilled);
-        preview.setText(""); // empty the previous to see the hint if is not pre filled
+        // update solution hint
+        int hintSolution = isPreFilled? R.string.enter_pre_filled : R.string.enter_solution;
+        solution.setHint(hintSolution);
+        solution.setInputType(getInputType());
+        solution.setText("");
+
+
+        Spanned previewHint = Html.fromHtml( "<b>" + getString(R.string.hint_preview) + ": </b>" + getHint());
+        preview.setText(previewHint);
 
         // update checkbox visibility
         int checkBoxVisibility = isNumber() ? View.VISIBLE : View.GONE;
         decimalCheckbox.setVisibility(checkBoxVisibility);
         signCheckbox.setVisibility(checkBoxVisibility);
+    }
+
+    private int getInputType(){
+        if(isNumber()){
+            int type = InputType.TYPE_CLASS_NUMBER;
+            if(isDecimal)
+                type |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
+            if(isSigned)
+                type |= InputType.TYPE_NUMBER_FLAG_SIGNED;
+            return type;
+        }else{
+            return InputType.TYPE_CLASS_TEXT;
+        }
     }
 
     /** @return true if the field wants a number answer, False otherwise */
@@ -201,7 +229,7 @@ public class EditFieldFragment extends DialogFragment {
             String hint = isSigned ? "±0" : "0";
             return isDecimal ? hint + ".0" : hint;
         } else {
-            return isPreFilled ? getString(R.string.hint_pre_filled_field) : "???";
+            return "???";
         }
     }
 }
