@@ -201,14 +201,10 @@ public class EditFieldFragment extends DialogFragment {
     }
 
     private int getInputType() {
-        if (isNumber()) {
-            int type = InputType.TYPE_CLASS_NUMBER;
-            if (isDecimal) type |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
-            if (isSigned) type |= InputType.TYPE_NUMBER_FLAG_SIGNED;
-            return type;
-        } else {
-            return InputType.TYPE_CLASS_TEXT;
-        }
+        int type = InputType.TYPE_CLASS_NUMBER;
+        if (isDecimal) type |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
+        if (isSigned) type |= InputType.TYPE_NUMBER_FLAG_SIGNED;
+        return isNumber() ? type : InputType.TYPE_CLASS_TEXT;
     }
 
     /** @return true if the field wants a number answer, False otherwise */

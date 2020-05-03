@@ -22,8 +22,7 @@ import java.util.Objects;
 
 public class EditQuestionActivity extends AppCompatActivity {
 
-    public static final String NUM_DIALOG_TAG = "ch.epfl.qedit.view.edit.NUM_DIALOG_TAG";
-    public static final String TEXT_DIALOG_TAG = "ch.epfl.qedit.view.edit.TEXT_DIALOG_TAG";
+    public static final String SOL_DIALOG_TAG = "ch.epfl.qedit.view.edit.EDIT_SOL_DIALOG_TAG";
 
     private EditText editTitle;
     private EditText editText;
@@ -43,9 +42,15 @@ public class EditQuestionActivity extends AppCompatActivity {
         editText = findViewById(R.id.edit_question_text);
 
         // Initialize buttons
-        initDoneButton();
-        initNumButton();
-        initTextButton();
+        ImageButton numButton = findViewById(R.id.number_button);
+        ImageButton textButton = findViewById(R.id.text_button);
+        setSolutionButtonListener(numButton, false);
+        setSolutionButtonListener(textButton, true);
+
+        Button doneButton = findViewById(R.id.button_done_question_editing);
+        Button cancelButton = findViewById(R.id.button_cancel_question_editing);
+        setDoneButtonListener(doneButton);
+        setCancelButtonListener(cancelButton);
 
         // Get the StringPool from the Intent
         Intent intent = getIntent();
@@ -55,37 +60,36 @@ public class EditQuestionActivity extends AppCompatActivity {
     }
 
     /** Handles the setup of the two buttons of this activity */
-    private void initDoneButton() {
+    private void setDoneButtonListener(Button button) {
         // Initialize the button that allows to stop editing the question
-        Button doneButton = findViewById(R.id.button_done_question_editing);
-        doneButton.setOnClickListener(
+        button.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
-                        // Setup dummy result (temporarily)
+                        // Setup dummy result (temporarily) TODO
                         setupDummyResult();
                         returnResult();
                     }
                 });
     }
 
-    private void initNumButton() {
-        ImageButton numButton = findViewById(R.id.number_button);
-        numButton.setOnClickListener(
+    private void setCancelButtonListener(Button button) {
+        // Initialize the button that allows to stop editing the question
+        button.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
-                        DialogFragment editFieldFragment = EditFieldFragment.newInstance(false);
-                        editFieldFragment.show(getSupportFragmentManager(), NUM_DIALOG_TAG);
+                        // Setup dummy result (temporarily) TODO
+                        setupDummyResult();
+                        returnResult();
                     }
                 });
     }
 
-    private void initTextButton() {
-        ImageButton textButton = findViewById(R.id.text_button);
-        textButton.setOnClickListener(
+    private void setSolutionButtonListener(ImageButton button, final boolean text) {
+        button.setOnClickListener(
                 new View.OnClickListener() {
                     public void onClick(View v) {
-                        DialogFragment editFieldFragment = EditFieldFragment.newInstance(true);
-                        editFieldFragment.show(getSupportFragmentManager(), TEXT_DIALOG_TAG);
+                        DialogFragment editFieldFragment = EditFieldFragment.newInstance(text);
+                        editFieldFragment.show(getSupportFragmentManager(), SOL_DIALOG_TAG);
                     }
                 });
     }
@@ -104,11 +108,6 @@ public class EditQuestionActivity extends AppCompatActivity {
         intent.putExtra(STRING_POOL, stringPool);
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-    private void switchToEditAnswerActivity() {
-        Intent intent = new Intent(EditQuestionActivity.this, EditAnswerActivity.class);
-        startActivity(intent);
     }
 
     @Override
