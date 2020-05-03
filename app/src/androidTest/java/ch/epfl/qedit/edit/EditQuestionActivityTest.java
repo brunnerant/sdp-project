@@ -70,9 +70,11 @@ public class EditQuestionActivityTest {
     }
 
     private void checkTypeInSpinner(int typeIdx) {
-        String type = testRule.getActivity().getResources().getStringArray(R.array.field_types_list)[typeIdx];
-        onDialog(R.id.field_types_selection)
-                .check(matches(withSpinnerText(containsString(type))));
+        String type =
+                testRule.getActivity()
+                        .getResources()
+                        .getStringArray(R.array.field_types_list)[typeIdx];
+        onDialog(R.id.field_types_selection).check(matches(withSpinnerText(containsString(type))));
     }
 
     @Test

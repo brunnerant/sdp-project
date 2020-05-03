@@ -24,7 +24,6 @@ import static org.hamcrest.core.IsNot.not;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
@@ -32,7 +31,6 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.edit.EditQuestionActivity;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

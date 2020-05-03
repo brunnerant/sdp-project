@@ -15,7 +15,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.MatrixFormat.Field;
@@ -86,10 +85,11 @@ public class EditFieldFragment extends DialogFragment {
         initLayoutComponent(view);
 
         // set title red. Because it's nice.
-        Spanned title = Html.fromHtml(
-                "<font color='#FF0000'>"
-                + getString(R.string.edit_field_title)
-                +"</font>");
+        Spanned title =
+                Html.fromHtml(
+                        "<font color='#FF0000'>"
+                                + getString(R.string.edit_field_title)
+                                + "</font>");
         builder.setView(view)
                 .setTitle(title)
                 .setPositiveButton(R.string.done, null)
@@ -185,13 +185,13 @@ public class EditFieldFragment extends DialogFragment {
     private void updateLayout() {
 
         // update solution hint
-        int hintSolution = isPreFilled? R.string.enter_pre_filled : R.string.enter_solution;
+        int hintSolution = isPreFilled ? R.string.enter_pre_filled : R.string.enter_solution;
         solution.setHint(hintSolution);
         solution.setInputType(getInputType());
         solution.setText("");
 
-
-        Spanned previewHint = Html.fromHtml( "<b>" + getString(R.string.hint_preview) + ": </b>" + getHint());
+        Spanned previewHint =
+                Html.fromHtml("<b>" + getString(R.string.hint_preview) + ": </b>" + getHint());
         preview.setText(previewHint);
 
         // update checkbox visibility
@@ -200,15 +200,13 @@ public class EditFieldFragment extends DialogFragment {
         signCheckbox.setVisibility(checkBoxVisibility);
     }
 
-    private int getInputType(){
-        if(isNumber()){
+    private int getInputType() {
+        if (isNumber()) {
             int type = InputType.TYPE_CLASS_NUMBER;
-            if(isDecimal)
-                type |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
-            if(isSigned)
-                type |= InputType.TYPE_NUMBER_FLAG_SIGNED;
+            if (isDecimal) type |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
+            if (isSigned) type |= InputType.TYPE_NUMBER_FLAG_SIGNED;
             return type;
-        }else{
+        } else {
             return InputType.TYPE_CLASS_TEXT;
         }
     }
