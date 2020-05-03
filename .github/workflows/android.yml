@@ -60,5 +60,5 @@ jobs:
           CC_TEST_REPORTER_ID: "9ec8fe9e3d205026fea4b49b8c7d660797eb52b0757cbbdede9630fc48550e43"
           JACOCO_SOURCE_PATH: "app/src/main/java/"
         with:
-          coverageCommand: ""
+          coverageCommand: ":" # This is a no-op command, since the report was already generated at the previous step
           coverageLocations: "app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml:jacoco"
