@@ -98,11 +98,8 @@
          Since we cannot have leading and trailing spaces in string resources,
          we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
-<<<<<<< HEAD
     <string name="test_answer_format_message">Ceci est juste un test !</string>
     <string name="database_error">Une erreur s\'est produite lors de la connexion à la base de donnée</string>
-=======
     <string name="empty_answer_format_message">Ceci est vide !</string>
->>>>>>> master
 
 </resources>
