@@ -18,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import ch.epfl.qedit.R;
@@ -52,6 +53,11 @@ public class EditFieldFragment extends DialogFragment {
     public static final int TEXT_TYPE_IDX = 1;
     public static final int PRE_FILLED_TYPE_IDX = 2;
 
+    /** @return true if the field wants a number answer, False otherwise */
+    private boolean isNumber() {
+        return !isText && !isPreFilled;
+    }
+
     /**
      * static factory method that create a new instance of an EditFieldFragment
      *
@@ -67,6 +73,7 @@ public class EditFieldFragment extends DialogFragment {
         return dialog;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -99,20 +106,20 @@ public class EditFieldFragment extends DialogFragment {
         return dialog;
     }
 
-    private void doneListener(final AlertDialog dialog) {
-        dialog.setOnShowListener(
-                dialogInterface -> {
-                    Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                    button.setOnClickListener(v -> returnResult());
-                });
+    // HELPER METHODS THAT HANDLE THE RESULT OF THIS DIALOG //
+
+    /** return Field resulting of the current state of the parameter of this fragment */
+    private Field result() {
+        if (isPreFilled) return Field.preFilledField(solution);
+        else if (isText) return Field.textField(getHint(), NO_LIMIT);
+        else return Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
     }
 
+    /** Return result of this dialog in the callee activity if solution is non-empty */
     private void returnResult() {
         if (solution == null || solution.isEmpty()) {
             solutionView.setError(getString(R.string.cannot_be_empty));
         } else {
-            // get Field corresponding to the current state of the parameter of this fragment
-
             // Check if the parent is a EditQuestionActivity, if yes, use the setAnswerFormat of the
             // parent
             FragmentActivity parent = requireActivity();
@@ -122,13 +129,55 @@ public class EditFieldFragment extends DialogFragment {
         }
     }
 
-    private Field result() {
-        Field field;
-        if (isPreFilled) field = Field.preFilledField(solution);
-        if (isText) field = Field.textField(getHint(), NO_LIMIT);
-        else field = Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
-        return field;
+    // HELPER METHODS THAT CREATE LISTENERS //
+
+    /**
+     * We define the done listener in this weird way because otherwise, the click on the 'done'
+     * button dismiss automatically the dialog and we don't want that (i.e. if the solution is
+     * empty)
+     */
+    private void doneListener(final AlertDialog dialog) {
+        dialog.setOnShowListener(
+                dialogInterface -> {
+                    Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setOnClickListener(v -> returnResult());
+                });
     }
+
+    private void setSolutionViewListener() {
+        solutionView.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        solution = s.toString();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                });
+    }
+
+    private void setTypesSpinnerListener() {
+        typesSpinner.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(
+                            AdapterView<?> parent, View view, int position, long id) {
+                        isText = position == TEXT_TYPE_IDX;
+                        isPreFilled = position == PRE_FILLED_TYPE_IDX;
+                        updateLayout();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
+    }
+
+    // METHODS THAT HANDLE THE LAYOUT //
 
     /**
      * Init all the layout component with listener and default parameters
@@ -167,39 +216,6 @@ public class EditFieldFragment extends DialogFragment {
         updateLayout();
     }
 
-    private void setSolutionViewListener() {
-        solutionView.addTextChangedListener(
-                new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(
-                            CharSequence s, int start, int count, int after) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        solution = s.toString();
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {}
-                });
-    }
-
-    private void setTypesSpinnerListener() {
-        typesSpinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(
-                            AdapterView<?> parent, View view, int position, long id) {
-                        isText = position == TEXT_TYPE_IDX;
-                        isPreFilled = position == PRE_FILLED_TYPE_IDX;
-                        updateLayout();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {}
-                });
-    }
-
     /**
      * Update the layout in function of the current state of the fragment, the update concern: - the
      * hint in the preview - if the preview is usable - the visibility of the decimal and sign
@@ -223,16 +239,12 @@ public class EditFieldFragment extends DialogFragment {
         signCheckbox.setVisibility(checkBoxVisibility);
     }
 
+    /** return the input type of the solutionView EditText */
     private int getInputType() {
         int type = InputType.TYPE_CLASS_NUMBER;
         if (isDecimal) type |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
         if (isSigned) type |= InputType.TYPE_NUMBER_FLAG_SIGNED;
         return isNumber() ? type : InputType.TYPE_CLASS_TEXT;
-    }
-
-    /** @return true if the field wants a number answer, False otherwise */
-    private boolean isNumber() {
-        return !isText && !isPreFilled;
     }
 
     /**
