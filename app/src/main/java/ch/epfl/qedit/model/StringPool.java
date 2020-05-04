@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** A String Pool containing mapping from ID to String values */
+/**
+ * This class is just a lightweight wrapper around a map to add support for string addition with
+ * unique keys, update and retrieval.
+ */
 public class StringPool implements Serializable {
 
     public static final String TITLE_ID = "title";
@@ -54,8 +57,19 @@ public class StringPool implements Serializable {
         return stringPool.put(id, text);
     }
 
-    /** Simply get the String value that map from 'id' in the String Pool */
+    /**
+     * Retrieves a string in the pool by its id, and returns the string unchanged if it was not
+     * found in the pool. This behaviour allows some strings to be the same for all the languages,
+     * which could potentially ease the creation of quizzes.
+     *
+     * @param id the id of the string
+     * @return the string corresponding to the given id
+     */
     public String get(String id) {
+        // If the pool does not contain the id, we assume that it is because the string
+        // should be the same for all the languages, and so we return it as is.
+        if (!stringPool.containsKey(id)) return id;
+
         return stringPool.get(id);
     }
 }

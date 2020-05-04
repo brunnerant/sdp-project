@@ -2,12 +2,10 @@ package ch.epfl.qedit.backend.database;
 
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
-import ch.epfl.qedit.util.Callback;
-import ch.epfl.qedit.util.Error;
-import ch.epfl.qedit.util.Response;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -15,146 +13,180 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /** This class contains static methods useful to implements database interface */
 public final class Util {
 
+    // This class is only a namespace for helper functions, so it should not be instantiable
     private Util() {};
 
-    // CONVERSION METHODS FROM FIRESTORE TO SPECIALIZE OBJECTS
-
     /**
-     * Convert a document to a MatrixFormat
-     *
-     * @param doc a map containing the parameter useful for a initialize a MatrixFormat
-     * @return a MatrixFormat or null if doc is not a valid description of a MatrixFormat
+     * This type of exception indicates that a request couldn't be answered, either because of a
+     * connection error, or a malformed request.
      */
-    private static MatrixFormat matrixConvert(Map<String, Object> doc) {
-        // TODO fill correctly this function in a later PR, MatrixFormat is currently changing
-        return MatrixFormat.singleField(
-                MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
-    }
-
-    /**
-     * Convert a document to an AnswerFormat
-     *
-     * @param doc a map containing the parameter useful for a initialize an AnswerFormat
-     * @return a AnswerFormat or null if doc is not a valid description of any AnswerFormat
-     */
-    private static AnswerFormat convertToAnswerFormat(Map<String, Object> doc) {
-        if (doc.containsKey("matrix")) {
-            return matrixConvert(doc);
-        } else {
-            return null;
+    static class RequestException extends Exception {
+        public RequestException(String message) {
+            super(message);
         }
     }
 
     /**
-     * Convert a document to an AnswerFormat, if there is more than one element in the docs list,
-     * return a MultiFieldAnswerFormat
-     *
-     * @param docs a list of documents retrieve from firestore
-     * @return a AnswerFormat or null if docs contains invalid description of AnswerFormat
+     * This type of exception indicates that the data from the database has the wrong format. In
+     * practice, it should never happen, but can be used to debug the database.
      */
-    public static AnswerFormat convertToAnswerFormat(List<Map<String, Object>> docs) {
-
-        if (docs == null || docs.isEmpty()) {
-            return null;
-        } else if (docs.size() == 1) {
-            // If there is only one document in the list, then we don't return a
-            // multiField
-            return convertToAnswerFormat(docs.get(0));
+    public static class FormatException extends Exception {
+        public FormatException(String message) {
+            super(message);
         }
-
-        ArrayList<AnswerFormat> answers = new ArrayList<>();
-
-        // Convert each document into a AnswerFormat
-        for (Map<String, Object> doc : docs) {
-            AnswerFormat answerFormat = convertToAnswerFormat(doc);
-
-            // If a conversion has failed, the conversion of the entire list fails
-            if (answerFormat == null) {
-                return null;
-            }
-            answers.add(answerFormat);
-        }
-
-        return new MultiFieldFormat(answers);
     }
 
-    /**
-     * Convert a document snapshot from firestore to a Question object
-     *
-     * @param doc document retrieve from firestore database
-     * @return a Question object, convert from doc
-     */
-    public static Question convertToQuestion(QueryDocumentSnapshot doc) {
-        ArrayList<Map<String, Object>> answers = cast(doc.get("answers"));
-        return new Question(
-                doc.getString("title"), doc.getString("text"), convertToAnswerFormat(answers));
+    /** Completes the given future with an exception */
+    static <T> void error(CompletableFuture<T> future, String error) {
+        future.completeExceptionally(new FormatException(error));
     }
 
-    /**
-     * Convert a query snapshot from firestore to a Quiz object
-     *
-     * @param docs list of documents retrieve from firestore database
-     * @return a Quiz object, convert from docs
-     */
-    public static Quiz convertToQuiz(QuerySnapshot docs) {
-        ArrayList<Question> questions = new ArrayList<>();
-        for (QueryDocumentSnapshot doc : docs) {
-            questions.add(convertToQuestion(doc));
+    /** Extracts the list of languages from a Firestore document */
+    static void extractLanguages(CompletableFuture<List<String>> future, DocumentSnapshot doc) {
+        Object languages = doc.get("languages");
+
+        if (languages == null)
+            error(future, "The quiz should contain a list of supported languages");
+
+        future.complete((List<String>) languages);
+    }
+
+    /** Extracts the quiz from a Firestore document */
+    static void extractQuiz(CompletableFuture<Quiz> future, QuerySnapshot query) {
+        List<Question> questions = new ArrayList<>();
+
+        try {
+            for (QueryDocumentSnapshot doc : query) questions.add(extractQuestion(doc));
+        } catch (FormatException e) {
+            future.completeExceptionally(e);
+            return;
         }
-        return new Quiz("main_title", questions);
+
+        future.complete(new Quiz("main_title", questions));
     }
 
-    /**
-     * Convert a document snapshot from firestore to a Map<String, String>
-     *
-     * @param doc document retrieve from firestore database
-     * @return a string pool in a form of map Map<String, String>
-     */
-    public static Map<String, String> convertToStringPool(DocumentSnapshot doc) {
-        HashMap<String, String> map = new HashMap<>();
+    private static Question extractQuestion(QueryDocumentSnapshot doc) throws FormatException {
+        String title = doc.getString("title");
+        String text = doc.getString("text");
+        List<Object> answers = (List<Object>) doc.get("answers");
+
+        if (title == null || text == null || answers == null)
+            throw new FormatException("Invalid question: missing title, text or answers");
+
+        return new Question(title, text, extractAnswerFormats(answers));
+    }
+
+    public static AnswerFormat extractAnswerFormats(List<Object> docs) throws FormatException {
+        if (docs.isEmpty())
+            throw new FormatException("Invalid question: it should contain at least one answer");
+        else if (docs.size() == 1) return extractAnswerFormat((Map<String, Object>) docs.get(0));
+
+        List<AnswerFormat> formats = new ArrayList<>();
+
+        for (Object doc : docs) formats.add(extractAnswerFormat((Map<String, Object>) doc));
+
+        return new MultiFieldFormat(formats);
+    }
+
+    public static AnswerFormat extractAnswerFormat(Map<String, Object> doc) throws FormatException {
+        String type = (String) doc.get("type");
+
+        if (type == null) throw new FormatException("Invalid answer format: missing type");
+        else if (type.equals("matrix")) return extractMatrixFormat(doc);
+        else throw new FormatException("Invalid answer format");
+    }
+
+    public static MatrixFormat extractMatrixFormat(Map<String, Object> doc) throws FormatException {
+        Integer rows = (Integer) doc.get("rows");
+        Integer columns = (Integer) doc.get("columns");
+        Map<String, Object> matrix = (Map<String, Object>) doc.get("matrix");
+
+        if (rows == null || columns == null || matrix == null)
+            throw new FormatException("Invalid matrix format: missing rows, columns or matrix");
+
+        MatrixFormat.Builder builder = new MatrixFormat.Builder(rows, columns);
+
+        for (Map.Entry<String, Object> entry : matrix.entrySet()) {
+            int[] index = extractFieldIndex(entry.getKey(), rows, columns);
+            MatrixFormat.Field field = extractField((Map<String, Object>) entry.getValue());
+            builder.withField(index[0], index[1], field);
+        }
+
+        return builder.build();
+    }
+
+    public static int[] extractFieldIndex(String key, int rows, int cols) throws FormatException {
+        String[] parts = key.split(",");
+
+        if (parts.length != 2) throw new FormatException("Illegal field index format");
+
+        int row, col;
+        try {
+            row = Integer.parseInt(parts[0]);
+            col = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            throw new FormatException("Illegal field index format: the indices should be integers");
+        }
+
+        if (row < 0 || row >= rows || col < 0 || col >= cols)
+            throw new FormatException("Illegal field index format: index out of bound");
+
+        return new int[] {row, col};
+    }
+
+    public static MatrixFormat.Field extractField(Map<String, Object> field)
+            throws FormatException {
+        String typeString = (String) field.get("type");
+        String text = (String) field.get("text");
+        Integer maxCharacters = (Integer) field.get("max_characters");
+
+        if (typeString == null || text == null || maxCharacters == null)
+            throw new FormatException(
+                    "Invalid field for matrix format: missing type, text or max_characters");
+
+        return new MatrixFormat.Field(extractFieldType(typeString), maxCharacters, text);
+    }
+
+    public static MatrixFormat.Field.Type extractFieldType(String type) throws FormatException {
+        switch (type) {
+            case "pre_filled":
+                return MatrixFormat.Field.Type.PreFilled;
+            case "text":
+                return MatrixFormat.Field.Type.Text;
+            case "unsigned_int":
+                return MatrixFormat.Field.Type.UnsignedInt;
+            case "signed_int":
+                return MatrixFormat.Field.Type.SignedInt;
+            case "unsigned_float":
+                return MatrixFormat.Field.Type.UnsignedFloat;
+            case "signed_float":
+                return MatrixFormat.Field.Type.SignedFloat;
+            default:
+                throw new FormatException("Unknown field type");
+        }
+    }
+
+    /** Extracts the string pool from a Firestore document */
+    static void extractStringPool(CompletableFuture<StringPool> future, DocumentSnapshot doc) {
         Map<String, Object> data = doc.getData();
-        if (data == null) {
-            return map;
-        }
+        Map<String, String> result = new HashMap<>();
+
         for (Map.Entry<String, Object> entry : data.entrySet()) {
-            if (entry.getValue() instanceof String) {
-                map.put(entry.getKey(), (String) entry.getValue());
+            Object value = entry.getValue();
+
+            if (value instanceof String) {
+                result.put(entry.getKey(), (String) value);
+            } else {
+                error(future, "A string pool should only contain string values");
+                return;
             }
         }
-        return map;
-    }
 
-    // SOME OTHER USEFUL METHODS TO IMPLEMENT THE BACKEND INTERFACE
-
-    /**
-     * Check if the condition pass as argument is true. If not, the response callback is triggered
-     * with an error. This function is an helper function.
-     *
-     * @param condition boolean that need to be true, otherwise the responseCallback is triggered
-     *     with an error
-     * @param responseCallback Callback function triggered with an error if the condition is not
-     *     respected
-     * @param error Error with which we triggered the responseCallback if needed
-     * @param <T> This function is generic because we don't really need to know the type of response
-     * @return condition
-     */
-    public static <T> boolean require(
-            boolean condition, Callback<Response<T>> responseCallback, Error error) {
-        if (condition) {
-            return true;
-        } else {
-            Response<T> response = Response.error(error);
-            responseCallback.onReceive(response);
-            return false;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T cast(Object object) {
-        return (T) object;
+        future.complete(new StringPool(result));
     }
 }
