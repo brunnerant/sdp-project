@@ -28,6 +28,7 @@ import static org.hamcrest.core.IsNot.not;
 
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
@@ -59,6 +60,7 @@ public class EditFieldFragmentTest {
         intent.putExtras(bundle);
 
         testRule.launchActivity(intent);
+        Espresso.closeSoftKeyboard();
         clickOn(R.id.text_button, true);
     }
 
@@ -148,7 +150,7 @@ public class EditFieldFragmentTest {
 
     private void testResult() {
         onDialog(R.id.field_solution).perform(typeText("1"));
-        onView(withText(R.string.done)).inRoot(isDialog()).perform(scrollTo()).perform(click());
+        onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
     }
 
     @Test

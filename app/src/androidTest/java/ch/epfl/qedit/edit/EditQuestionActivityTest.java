@@ -150,7 +150,7 @@ public class EditQuestionActivityTest {
 
     private void hasErrorEmpty(int id) {
         String errorMsg = testRule.getActivity().getString(R.string.cannot_be_empty);
-        onView(withId(id)).perform(scrollTo()).check(matches(hasErrorText(errorMsg)));
+        onView(withId(id)).check(matches(hasErrorText(errorMsg)));
     }
 
     @Test

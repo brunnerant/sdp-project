@@ -18,7 +18,7 @@
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <!-- App and logo -->
-    <string name="app_name" translatable="false">QED<font color="#FF0000" tools:ignore="UnusedResources">it</font></string>
+    <string name="app_name" translatable="false"><b>QED<font color="#FF0000" tools:ignore="UnusedResources">it</font></b></string>
     <string name="qedit_logo_description">QEDit Logo</string>
 
     <!-- Language selection -->
