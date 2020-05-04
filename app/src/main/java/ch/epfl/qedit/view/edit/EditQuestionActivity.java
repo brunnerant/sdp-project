@@ -123,9 +123,14 @@ public class EditQuestionActivity extends AppCompatActivity {
      */
     private void returnResult() {
         // test if title, text and answerFormat are non-empty
-        boolean noError = setErrorIfEmpty(title, R.id.edit_question_title, title.isEmpty());
-        noError = noError && setErrorIfEmpty(text, R.id.edit_question_text, text.isEmpty());
-        noError = noError && setErrorIfEmpty(answerFormat, R.id.choose_answer_text, false);
+        // use & operator because we want to evaluate both side
+        boolean noError = setErrorIfEmpty(title, R.id.edit_question_title);
+        noError &= setErrorIfEmpty(text, R.id.edit_question_text);
+        if (answerFormat == null) {
+            noError = false;
+            TextView answerView = findViewById(R.id.choose_answer_text);
+            answerView.setError(getString(R.string.cannot_be_empty));
+        }
         if (noError) {
             // return the Question created by this activity to the callee activity
             Question question =
@@ -140,20 +145,19 @@ public class EditQuestionActivity extends AppCompatActivity {
     }
 
     /**
-     * Set an error to the view of an object if object is null or the additional condition is false
+     * Set an error to the view of a string if it is empty
      *
-     * @param obj object on which we test if its null
-     * @param objViewId View attached to the object tested
-     * @param additionalCondition set an error only if the additional condition is false
+     * @param str string on which we test if its empty
+     * @param strViewId View attached to the object tested
      * @return true if there is no error set, false otherwise
      */
-    private boolean setErrorIfEmpty(Object obj, int objViewId, boolean additionalCondition) {
-        boolean error = obj == null || additionalCondition;
-        if (error) {
-            EditText objView = findViewById(objViewId);
-            objView.setError(getString(R.string.cannot_be_empty));
+    private boolean setErrorIfEmpty(String str, int strViewId) {
+        if (str == null || str.isEmpty()) {
+            EditText strView = findViewById(strViewId);
+            strView.setError(getString(R.string.cannot_be_empty));
+            return false;
         }
-        return !error;
+        return true;
     }
 
     @Override
