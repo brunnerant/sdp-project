@@ -148,7 +148,7 @@ public class EditFieldFragmentTest {
 
     private void testResult() {
         onDialog(R.id.field_solution).perform(typeText("1"));
-        onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
+        onView(withText(R.string.done)).inRoot(isDialog()).perform(scrollTo()).perform(click());
     }
 
     @Test

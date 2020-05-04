@@ -155,7 +155,7 @@ public class EditQuestionActivityTest {
 
     @Test
     public void testReturnResultFail() {
-        clickOn(R.id.button_done_question_editing, true);
+        clickOn(R.id.button_done_question_editing, false);
         hasErrorEmpty(R.id.edit_question_title);
         hasErrorEmpty(R.id.edit_question_text);
     }
