@@ -1,10 +1,14 @@
 package ch.epfl.qedit.edit;
 
 import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
@@ -140,5 +144,38 @@ public class EditFieldFragmentTest {
 
         onDialogScroll(R.id.decimalCheckBox).perform(click());
         checkHintPreview("±0");
+    }
+
+    @Test
+    public void testReturnNumberResult() {
+        changeType(NUMBER_TYPE_IDX);
+        onDialog(R.id.field_solution).perform(typeText("1"));
+        onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
+    }
+
+    @Test
+    public void testReturnTextResult() {
+        changeType(TEXT_TYPE_IDX);
+        onDialogScroll(R.id.field_solution).perform(typeText("A"));
+        onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
+    }
+
+    @Test
+    public void testReturnPreFilledResult() {
+        changeType(PRE_FILLED_TYPE_IDX);
+        onDialogScroll(R.id.field_solution).perform(typeText("A"));
+        onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
+    }
+
+    @Test
+    public void testCancel() {
+        onView(withText(R.string.cancel)).inRoot(isDialog()).perform(click());
+    }
+
+    @Test
+    public void testDoneFail() {
+        String errorMsg = testRule.getActivity().getString(R.string.cannot_be_empty);
+        onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
+        onDialogScroll(R.id.field_solution).check(matches(hasErrorText(errorMsg)));
     }
 }
