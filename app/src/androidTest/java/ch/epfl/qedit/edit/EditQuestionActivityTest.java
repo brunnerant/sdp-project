@@ -1,13 +1,11 @@
 package ch.epfl.qedit.edit;
 
 import static android.app.Activity.RESULT_OK;
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -57,13 +55,13 @@ public class EditQuestionActivityTest {
 
     @Test
     public void testAddAnswerButton() {
-        onView(withId(R.id.add_button)).perform(click());
+        clickOn(R.id.add_button, true);
         intended(allOf(hasComponent(EditAnswerActivity.class.getName())));
     }
 
     @Test
     public void testReturnResult() {
-        onView(withId(R.id.button_done_editing)).perform(click());
+        clickOn(R.id.button_done_editing, true);
 
         assertThat(testRule.getActivityResult(), hasResultCode(RESULT_OK));
         assertThat(

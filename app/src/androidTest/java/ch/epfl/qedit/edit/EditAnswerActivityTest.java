@@ -1,16 +1,15 @@
 package ch.epfl.qedit.edit;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.isDialog;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.util.Util.clickOn;
+import static ch.epfl.qedit.util.Util.isDisplayed;
+import static ch.epfl.qedit.util.Util.onDialog;
 import static org.hamcrest.Matchers.containsString;
 
 import android.content.Intent;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.edit.EditAnswerActivity;
@@ -42,40 +41,38 @@ public class EditAnswerActivityTest {
 
     @Test
     public void helperTextIsDisplay() {
-        onView(withId(R.id.choose_answer_text)).check(matches(isDisplayed()));
+        isDisplayed(R.id.choose_answer_text, true);
     }
 
     @Test
     public void buttonAreDisplay() {
-        onView(withId(R.id.text_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.graph_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.number_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.matrix_button)).check(matches(isDisplayed()));
+        isDisplayed(R.id.text_button, true);
+        isDisplayed(R.id.graph_button, true);
+        isDisplayed(R.id.number_button, true);
+        isDisplayed(R.id.matrix_button, true);
     }
 
     @Test
     public void buttonOnClick() {
         // just print a toast for now
-        onView(withId(R.id.graph_button)).perform(click());
-        onView(withId(R.id.matrix_button)).perform(click());
+        clickOn(R.id.graph_button, true);
+        clickOn(R.id.matrix_button, true);
     }
 
     private void openFieldEdition(int buttonId) {
 
-        onView(withId(buttonId)).perform(click());
+        clickOn(buttonId, true);
 
         int titleId =
                 testRule.getActivity().getResources().getIdentifier("alertTitle", "id", "android");
 
-        onView(withId(titleId))
-                .inRoot(isDialog())
+        onDialog(titleId)
                 .check(matches(withText(R.string.edit_field_title)))
-                .check(matches(isDisplayed()));
+                .check(matches(ViewMatchers.isDisplayed()));
     }
 
     private void checkTypeInSpinner(int typeIdx) {
-        onView(withId(R.id.field_types_selection))
-                .inRoot(isDialog())
+        onDialog(R.id.field_types_selection)
                 .check(matches(withSpinnerText(containsString(getFieldTypes()[typeIdx]))));
     }
 

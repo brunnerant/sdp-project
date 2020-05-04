@@ -14,7 +14,9 @@
      Locale.getDefault().getLanguage())
      will return the language code (e.g. "en" for English, "fr" for French) -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
-
+    <!-- Navigation drawer compulsory strings-->
+    <string name="navigation_drawer_open" translatable="false">Open navigaton drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigaton drawer</string>
     <!-- App and logo -->
     <string name="app_name" translatable="false">QED<font color="#FF0000" tools:ignore="UnusedResources">it</font></string>
     <string name="qedit_logo_description">QEDit Logo</string>
@@ -61,6 +63,14 @@
     <string name="menu_timer">Timer</string>
     <string name="menu_previous">Previous</string>
     <string name="menu_next">Next</string>
+
+    <!-- Burger Menu -->
+    <string name="menu_home">HOME</string>
+    <string name="menu_qr">QR CODE</string>
+    <string name="menu_quiz_list">MY QUIZZES</string>
+    <string name="menu_person">MY ACCOUNT</string>
+    <string name="menu_search">ONLINE QUZZES</string>
+    <string name="menu_settings">SETTINGS</string>
 
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Edit</string>
@@ -114,5 +124,6 @@
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
     <string name="empty_answer_format_message">This is empty!</string>
+    <string name="test_answer_format_message" translatable="false">This is just a test!</string>
 
 </resources>

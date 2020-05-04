@@ -36,14 +36,22 @@
     <string name="menu_previous">Précédent</string>
     <string name="menu_next">Suivant</string>
 
+    <!-- Burger Menu -->
+    <string name="menu_home">ACCUEIL</string>
+    <string name="menu_qr">QR CODE</string>
+    <string name="menu_quiz_list">MES QUIZ</string>
+    <string name="menu_person">MON COMPTE</string>
+    <string name="menu_search">QUIZ EN LIGNE</string>
+    <string name="menu_settings">PARAMÈTRES</string>
+
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Édition</string>
 
     <!-- Edit New Quiz Settings -->
-    <string name="edit_quiz_title">Entrez le titre du quiz</string>
+    <string name="edit_quiz_title">Entrer le titre du quiz</string>
     <string name="button_start_editing_message">Démarrer l\'édition</string>
     <string name="no_question_title_message">Pas de titre</string>
-    <string name="no_question_text_message">Pas de text</string>
+    <string name="no_question_text_message">Pas de texte</string>
 
 
     <!-- Edit -->
@@ -76,7 +84,7 @@
     <string name="hint_pre_filled_field">Entrer le texte de ce champ pré-rempli.</string>
     <string name="hint_text_field">Entrer une réponse textuelle ici.</string>
     <string name="check_box_sign">Peut être négatif</string>
-    <string name="check_box_decimal">Peut être decimal</string>
+    <string name="check_box_decimal">Peut être décimal</string>
     <!-- Type selection -->
     <string name="select_field_type">Type de ce champ</string>
     <string-array name="field_types_list">
