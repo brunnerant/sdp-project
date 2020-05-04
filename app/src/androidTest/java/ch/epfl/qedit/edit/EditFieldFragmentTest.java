@@ -146,25 +146,27 @@ public class EditFieldFragmentTest {
         checkHintPreview("±0");
     }
 
-    @Test
-    public void testReturnNumberResult() {
-        changeType(NUMBER_TYPE_IDX);
+    private void testResult() {
         onDialog(R.id.field_solution).perform(typeText("1"));
         onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
     }
 
     @Test
+    public void testReturnNumberResult() {
+        changeType(NUMBER_TYPE_IDX);
+        testResult();
+    }
+
+    @Test
     public void testReturnTextResult() {
         changeType(TEXT_TYPE_IDX);
-        onDialogScroll(R.id.field_solution).perform(typeText("A"));
-        onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
+        testResult();
     }
 
     @Test
     public void testReturnPreFilledResult() {
         changeType(PRE_FILLED_TYPE_IDX);
-        onDialogScroll(R.id.field_solution).perform(typeText("A"));
-        onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
+        testResult();
     }
 
     @Test
