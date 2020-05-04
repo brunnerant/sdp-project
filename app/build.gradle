@@ -26,7 +26,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "ch.epfl.qedit"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -49,6 +49,10 @@ android {
         language {
             enableSplit = false
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -112,9 +116,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
-    implementation 'com.google.firebase:firebase-analytics:17.3.0'
-    implementation 'com.google.firebase:firebase-auth:19.3.0'
-    implementation 'com.google.firebase:firebase-firestore:21.4.2'
+    implementation 'com.google.firebase:firebase-analytics:17.4.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
     testImplementation 'junit:junit:4.13'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation 'org.mockito:mockito-core:2.19.0'
