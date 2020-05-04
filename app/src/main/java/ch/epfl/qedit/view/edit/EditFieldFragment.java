@@ -4,7 +4,6 @@ import static ch.epfl.qedit.model.answer.MatrixFormat.Field.NO_LIMIT;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -20,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat.Field;
@@ -51,14 +51,6 @@ public class EditFieldFragment extends DialogFragment {
 
     public static final int TEXT_TYPE_IDX = 1;
     public static final int PRE_FILLED_TYPE_IDX = 2;
-
-    public EditFieldFragment() {
-        isText = false;
-        isSigned = false;
-        isDecimal = false;
-        isPreFilled = false;
-        solution = null;
-    }
 
     /**
      * static factory method that create a new instance of an EditFieldFragment
@@ -99,7 +91,7 @@ public class EditFieldFragment extends DialogFragment {
                 .setTitle(title)
                 .setCancelable(true)
                 .setPositiveButton(R.string.done, null)
-                .setNegativeButton(R.string.cancel, cancelListener());
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel());
 
         AlertDialog dialog = builder.create();
         doneListener(dialog);
@@ -108,39 +100,28 @@ public class EditFieldFragment extends DialogFragment {
     }
 
     private void doneListener(final AlertDialog dialog) {
-
         dialog.setOnShowListener(
-                new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialogInterface) {
-                        Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                        button.setOnClickListener(
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        returnResultIfNotEmpty();
-                                    }
-                                });
-                    }
+                dialogInterface -> {
+                    Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setOnClickListener(v -> returnResult());
                 });
     }
 
-    private DialogInterface.OnClickListener cancelListener() {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        };
-    }
-
-    private void returnResultIfNotEmpty() {
+    private void returnResult() {
         if (solution == null || solution.isEmpty()) {
             solutionView.setError(getString(R.string.cannot_be_empty));
         } else {
-            if (getActivity() instanceof EditQuestionActivity)
-                ((EditQuestionActivity) requireActivity())
-                        .setAnswerFormat(MatrixFormat.singleField(getResultingField()));
+            // get Field corresponding to the current state of the parameter of this fragment
+            Field field;
+            if (isPreFilled) field = Field.preFilledField(solution);
+            if (isText) field = Field.textField(getHint(), NO_LIMIT);
+            else field = Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
+
+            // Check if the parent is a EditQuestionActivity, if yes, use the setAnswerFormat of the
+            // parent
+            FragmentActivity parent = requireActivity();
+            if (parent instanceof EditQuestionActivity)
+                ((EditQuestionActivity) parent).setAnswerFormat(MatrixFormat.singleField(field));
             dismiss();
         }
     }
@@ -160,8 +141,16 @@ public class EditFieldFragment extends DialogFragment {
         typesSpinner = view.findViewById(R.id.field_types_selection);
 
         // create listeners for each check box
-        setDecimalCheckboxListener();
-        setSignCheckboxListener();
+        decimalCheckbox.setOnClickListener(
+                v -> {
+                    isDecimal = ((CheckBox) v).isChecked();
+                    updateLayout();
+                });
+        signCheckbox.setOnClickListener(
+                v -> {
+                    isSigned = ((CheckBox) v).isChecked();
+                    updateLayout();
+                });
 
         setTypesSpinnerListener();
         setSolutionViewListener();
@@ -205,40 +194,6 @@ public class EditFieldFragment extends DialogFragment {
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {}
                 });
-    }
-
-    private void setDecimalCheckboxListener() {
-        decimalCheckbox.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        isDecimal = ((CheckBox) v).isChecked();
-                        updateLayout();
-                    }
-                });
-    }
-
-    private void setSignCheckboxListener() {
-        signCheckbox.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        isSigned = ((CheckBox) v).isChecked();
-                        updateLayout();
-                    }
-                });
-    }
-
-    /**
-     * This method is called when we need to return the Field constructed with this dialog fragment
-     *
-     * @return MatrixFormat.Field corresponding to the current state of the parameter of this
-     *     fragment
-     */
-    private Field getResultingField() {
-        if (isPreFilled) return Field.preFilledField(solution);
-        if (isText) return Field.textField(getHint(), NO_LIMIT);
-        else return Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
     }
 
     /**

@@ -19,7 +19,6 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.util.LocaleHelper;
 import java.util.Objects;
 
@@ -57,6 +56,11 @@ public class EditQuestionActivity extends AppCompatActivity {
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
     }
 
+    /**
+     * Create a listener for either the title view or the text view
+     *
+     * @param setTitle select if we set listener for title or text
+     */
     private void setEditTextListener(final boolean setTitle) {
         int id = setTitle ? R.id.edit_question_title : R.id.edit_question_text;
         EditText editTitle = findViewById(id);
@@ -82,39 +86,29 @@ public class EditQuestionActivity extends AppCompatActivity {
     private void setDoneButtonListener() {
         // Initialize the button that allows to stop editing the question
         Button button = findViewById(R.id.button_done_question_editing);
-        button.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        returnResultIfNotEmpty();
-                    }
-                });
+        button.setOnClickListener(v -> returnResult());
     }
 
     private void setCancelButtonListener() {
         // Initialize the button that allows to stop editing the question
         Button button = findViewById(R.id.button_cancel_question_editing);
         button.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setResult(RESULT_CANCELED);
-                        finish();
-                    }
+                v -> {
+                    setResult(RESULT_CANCELED);
+                    finish();
                 });
     }
 
+    /** Handles the setup of choose answer type button */
     private void setSolutionButtonListener(ImageButton button, final boolean text) {
         button.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DialogFragment editFieldFragment = EditFieldFragment.newInstance(text);
-                        editFieldFragment.show(getSupportFragmentManager(), SOL_DIALOG_TAG);
-                    }
+                v -> {
+                    DialogFragment editFieldFragment = EditFieldFragment.newInstance(text);
+                    editFieldFragment.show(getSupportFragmentManager(), SOL_DIALOG_TAG);
                 });
     }
 
+    /** This function is call in the dialog open when we click on a solution button */
     public void setAnswerFormat(AnswerFormat answerFormat) {
         if (answerFormat != null) {
             TextView helper = findViewById(R.id.choose_answer_text);
@@ -123,35 +117,43 @@ public class EditQuestionActivity extends AppCompatActivity {
         }
     }
 
-    private void returnResultIfNotEmpty() {
-        boolean noError = true;
-        if (title == null || title.isEmpty()) {
-            noError = false;
-            EditText titleView = findViewById(R.id.edit_question_title);
-            titleView.setError(getString(R.string.cannot_be_empty));
+    /**
+     * Builds the Question and returns it with the extended StringPool to the callee activity.
+     * Return only if title and text are non-empty and answer format is not null.
+     */
+    private void returnResult() {
+        // test if title, text and answerFormat are non-empty
+        boolean noError = setErrorIfEmpty(title, R.id.edit_question_title, title.isEmpty());
+        noError = noError && setErrorIfEmpty(text, R.id.edit_question_text, text.isEmpty());
+        noError = noError && setErrorIfEmpty(answerFormat, R.id.choose_answer_text, false);
+        if (noError) {
+            // return the Question created by this activity to the callee activity
+            Question question =
+                    new Question(stringPool.add(title), stringPool.add(text), answerFormat);
+            Intent intent = new Intent();
+            intent.putExtra(QUESTION, question);
+            intent.putExtra(STRING_POOL, stringPool);
+            setResult(RESULT_OK, intent);
+            finish();
         }
-        if (text == null || text.isEmpty()) {
-            noError = false;
-            EditText textView = findViewById(R.id.edit_question_text);
-            textView.setError(getString(R.string.cannot_be_empty));
-        }
-        if (answerFormat == null) {
-            noError = false;
-            TextView answerView = findViewById(R.id.choose_answer_text);
-            answerView.setError(getString(R.string.cannot_be_empty));
-        }
-        if (noError) returnResult();
+        ;
     }
 
-    /** Builds the Question and returns it with the extended StringPool to the callee activity */
-    private void returnResult() {
-        answerFormat = MatrixFormat.singleField(MatrixFormat.Field.textField("", 25));
-        Question question = new Question(stringPool.add(title), stringPool.add(text), answerFormat);
-        Intent intent = new Intent();
-        intent.putExtra(QUESTION, question);
-        intent.putExtra(STRING_POOL, stringPool);
-        setResult(RESULT_OK, intent);
-        finish();
+    /**
+     * Set an error to the view of an object if object is null or the additional condition is false
+     *
+     * @param obj object on which we test if its null
+     * @param objViewId View attached to the object tested
+     * @param additionalCondition set an error only if the additional condition is false
+     * @return true if there is no error set, false otherwise
+     */
+    private boolean setErrorIfEmpty(Object obj, int objViewId, boolean additionalCondition) {
+        boolean error = obj == null || additionalCondition;
+        if (error) {
+            EditText objView = findViewById(objViewId);
+            objView.setError(getString(R.string.cannot_be_empty));
+        }
+        return !error;
     }
 
     @Override
