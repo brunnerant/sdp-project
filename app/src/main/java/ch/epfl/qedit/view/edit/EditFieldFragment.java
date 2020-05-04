@@ -112,18 +112,22 @@ public class EditFieldFragment extends DialogFragment {
             solutionView.setError(getString(R.string.cannot_be_empty));
         } else {
             // get Field corresponding to the current state of the parameter of this fragment
-            Field field;
-            if (isPreFilled) field = Field.preFilledField(solution);
-            if (isText) field = Field.textField(getHint(), NO_LIMIT);
-            else field = Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
 
             // Check if the parent is a EditQuestionActivity, if yes, use the setAnswerFormat of the
             // parent
             FragmentActivity parent = requireActivity();
             if (parent instanceof EditQuestionActivity)
-                ((EditQuestionActivity) parent).setAnswerFormat(MatrixFormat.singleField(field));
+                ((EditQuestionActivity) parent).setAnswerFormat(MatrixFormat.singleField(result()));
             dismiss();
         }
+    }
+
+    private Field result() {
+        Field field;
+        if (isPreFilled) field = Field.preFilledField(solution);
+        if (isText) field = Field.textField(getHint(), NO_LIMIT);
+        else field = Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
+        return field;
     }
 
     /**
