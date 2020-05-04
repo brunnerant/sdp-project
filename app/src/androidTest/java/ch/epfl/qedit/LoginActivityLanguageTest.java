@@ -63,6 +63,9 @@ public class LoginActivityLanguageTest {
             pos = 0;
         }
 
+        onView(withId(R.id.language_selection)).perform(click());
+        onData(anything()).atPosition(1 - pos).perform(click());
+
         onView(withId(R.id.login_button)).perform(closeSoftKeyboard());
         onView(withId(R.id.language_selection)).perform(click());
         onData(anything()).atPosition(pos).perform(click());
