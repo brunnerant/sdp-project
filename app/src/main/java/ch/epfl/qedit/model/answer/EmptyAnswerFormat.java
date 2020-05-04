@@ -1,5 +1,6 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.answer.AnswerFragment;
 import ch.epfl.qedit.view.answer.EmptyAnswerFragment;
 
@@ -27,5 +28,10 @@ public class EmptyAnswerFormat extends AnswerFormat {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public AnswerFormat instantiateLanguage(StringPool pool) {
+        return this;
     }
 }

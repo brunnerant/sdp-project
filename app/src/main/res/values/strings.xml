@@ -124,6 +124,7 @@
 
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
+    <string name="database_error">An error occurred connecting to the database</string>
     <string name="empty_answer_format_message">This is empty!</string>
 
 </resources>
