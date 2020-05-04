@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
@@ -26,12 +27,15 @@ public class EditOverviewFragment extends Fragment {
     private ListEditView.Adapter<String> adapter;
     private EditionViewModel model;
     private List<String> titles;
+    private TextView emptyHint;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
+
+        emptyHint = view.findViewById(R.id.empty_list_hint);
 
         model = new ViewModelProvider(requireActivity()).get(EditionViewModel.class);
 
@@ -53,6 +57,7 @@ public class EditOverviewFragment extends Fragment {
                                 model.getQuizBuilder().addEmptyQuestion();
                                 adapter.addItem(
                                         getResources().getString(R.string.new_empty_question));
+                                removeHint();
                             }
                         });
 
@@ -96,6 +101,8 @@ public class EditOverviewFragment extends Fragment {
             // TODO Support old questions that store the strings directly as well
             titles.add((text == null) ? key : text);
         }
+
+        showHintWhenEmpty();
     }
 
     private void createAdapter() {
@@ -124,6 +131,7 @@ public class EditOverviewFragment extends Fragment {
                                 model.getFocusedQuestion().postValue(null);
                                 model.getQuizBuilder().remove(position);
                                 adapter.removeItem(position);
+                                showHintWhenEmpty();
                                 break;
                             case EditRequest:
                                 launchEditQuestionActivity();
@@ -143,6 +151,18 @@ public class EditOverviewFragment extends Fragment {
                         model.getQuizBuilder().swap(from, to);
                     }
                 });
+    }
+
+    private void showHintWhenEmpty() {
+        if (titles.size() == 0) {
+            emptyHint.setText(getResources().getString(R.string.empty_question_list_hint_text));
+        } else {
+            removeHint();
+        }
+    }
+
+    private void removeHint() {
+        emptyHint.setText(null);
     }
 
     private void launchEditQuestionActivity() {

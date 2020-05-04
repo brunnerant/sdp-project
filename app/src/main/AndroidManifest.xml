@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".view.edit.EditModifyQuizSettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".view.edit.EditNewQuizSettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />

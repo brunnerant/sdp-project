@@ -28,12 +28,12 @@ public class EditNewQuizSettingsTest {
 
     @Test
     public void testEnterTitle() {
-        onView(withId(R.id.edit_quiz_title)).check(matches(withText("")));
+        onView(withId(R.id.edit_new_quiz_title)).check(matches(withText("")));
 
-        onView(withId(R.id.edit_quiz_title))
+        onView(withId(R.id.edit_new_quiz_title))
                 .perform((typeText("Title")))
                 .perform(closeSoftKeyboard());
-        onView(withId(R.id.edit_quiz_title)).check(matches(withText("Title")));
+        onView(withId(R.id.edit_new_quiz_title)).check(matches(withText("Title")));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class EditNewQuizSettingsTest {
 
     @Test
     public void testButtonsIntent() {
-        onView(withId(R.id.edit_quiz_title))
+        onView(withId(R.id.edit_new_quiz_title))
                 .perform((typeText("Title")))
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.button_start_editing)).perform(click());

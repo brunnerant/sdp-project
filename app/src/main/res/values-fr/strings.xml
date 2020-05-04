@@ -68,6 +68,7 @@
     <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
     <string name="add_quiz">Ajouter</string>
     <string name="new_empty_question">Nouvelle question vide</string>
+    <string name="empty_question_list_hint_text">Cliquez ici pour ajouter une nouvelle question</string>
 
     <!-- Edit Question -->
     <string name="edit_question_title">Entrer le titre de la question ici.</string>

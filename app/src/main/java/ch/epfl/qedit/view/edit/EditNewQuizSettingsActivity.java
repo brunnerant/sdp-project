@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.LocaleHelper;
@@ -38,7 +37,7 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
         setContentView(R.layout.activity_edit_new_quiz_settings);
 
         // Initialize a new QuizBuilder and new StringPool
-        quizBuilder = new Quiz.Builder(createTestQuiz());
+        quizBuilder = new Quiz.Builder();
         stringPool = new StringPool();
 
         // Create spinner (language list)
@@ -55,7 +54,7 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
         languageSelectionSpinner.setOnItemSelectedListener(this);
 
         // Set the EditText for the title
-        editTitle = findViewById(R.id.edit_quiz_title);
+        editTitle = findViewById(R.id.edit_new_quiz_title);
     }
 
     public void startEditing(View view) {
@@ -73,28 +72,6 @@ public class EditNewQuizSettingsActivity extends AppCompatActivity
         bundle.putSerializable(STRING_POOL, stringPool);
         intent.putExtras(bundle);
         startActivity(intent);
-    }
-
-    /** Remove in next sprint */
-    private Quiz createTestQuiz() {
-        // TODO Test editing existing quiz, move to new activity in next sprint
-        return new Quiz(
-                "Test",
-                Arrays.asList(
-                        new Question(
-                                "The matches problem",
-                                "How many matches can fit in a shoe of size 43?",
-                                "matrix3x3"),
-                        new Question(
-                                "Pigeons",
-                                "How many pigeons are there on Earth? (Hint: do not count yourself)",
-                                "matrix1x1"),
-                        new Question("KitchenBu", "Oyster", "matrix1x1"),
-                        new Question(
-                                "Everything",
-                                "What is the answer to life the universe and everything?",
-                                "matrix3x3"),
-                        new Question("Banane", "Combien y a-t-il de bananes ?", "matrix1x1")));
     }
 
     @Override
