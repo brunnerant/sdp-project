@@ -5,10 +5,13 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.AllOf.allOf;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.view.edit.EditAnswerActivity;
 import ch.epfl.qedit.view.edit.EditQuestionActivity;
 import org.junit.After;
 import org.junit.Before;
@@ -54,7 +58,7 @@ public class EditQuestionActivityTest {
     @Test
     public void testAddAnswerButton() {
         onView(withId(R.id.add_button)).perform(click());
-        // intended(allOf(hasComponent(EditAnswerActivity.class.getName()))); TODO
+        intended(allOf(hasComponent(EditAnswerActivity.class.getName())));
     }
 
     @Test

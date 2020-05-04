@@ -6,14 +6,18 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.core.AllOf.allOf;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity;
+import ch.epfl.qedit.view.edit.EditQuizActivity;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -45,6 +49,6 @@ public class EditNewQuizSettingsTest {
                 .perform((typeText("Title")))
                 .perform(closeSoftKeyboard());
         onView(withId(R.id.button_start_editing)).perform(click());
-        // intended(allOf(hasComponent(EditQuizActivity.class.getName()))); TODO
+        intended(allOf(hasComponent(EditQuizActivity.class.getName())));
     }
 }
