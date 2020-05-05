@@ -62,6 +62,7 @@ public class EditFieldFragmentTest {
         testRule.launchActivity(intent);
         Espresso.closeSoftKeyboard();
         clickOn(R.id.text_button, true);
+        Espresso.closeSoftKeyboard();
     }
 
     @After

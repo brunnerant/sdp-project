@@ -4,9 +4,6 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData;
@@ -16,6 +13,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.clickOn;
+import static ch.epfl.qedit.util.Util.inputSolutionText;
+import static ch.epfl.qedit.util.Util.inputText;
 import static ch.epfl.qedit.util.Util.isDisplayed;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
@@ -26,6 +25,7 @@ import static org.hamcrest.Matchers.not;
 
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -59,6 +59,7 @@ public class EditQuestionActivityTest {
         intent.putExtras(bundle);
 
         testRule.launchActivity(intent);
+        Espresso.closeSoftKeyboard();
     }
 
     @After
@@ -124,18 +125,12 @@ public class EditQuestionActivityTest {
     public void testReturnResult() {
         // answer
         openFieldEdition(R.id.text_button);
-        onDialog(R.id.field_solution).perform(typeText("A"));
+        inputSolutionText("A");
         onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
 
         // text and title
-        onView(withId(R.id.edit_question_title))
-                .perform(scrollTo())
-                .perform(typeText("Title"))
-                .perform(closeSoftKeyboard());
-        onView(withId(R.id.edit_question_text))
-                .perform(scrollTo())
-                .perform(typeText("Text"))
-                .perform(closeSoftKeyboard());
+        inputText(R.id.edit_question_title, "Title");
+        inputText(R.id.edit_question_text, "Text text");
 
         clickOn(R.id.button_done_question_editing, true);
 
@@ -155,7 +150,7 @@ public class EditQuestionActivityTest {
 
     @Test
     public void testReturnResultFail() {
-        clickOn(R.id.button_done_question_editing, false);
+        clickOn(R.id.button_done_question_editing, true);
         hasErrorEmpty(R.id.edit_question_title);
         hasErrorEmpty(R.id.edit_question_text);
     }
