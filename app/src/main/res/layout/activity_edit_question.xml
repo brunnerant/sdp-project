@@ -9,12 +9,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical">
 
             <EditText
@@ -77,37 +77,29 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_height="0dp"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-            />
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/button_cancel_question_editing"
                     android:background="@color/transparent"
                     android:textColor="@color/colorAccent"
-                    android:layout_marginTop="@dimen/regular_padding"
+                    android:layout_margin="@dimen/regular_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/cancel"
-                    android:layout_gravity="bottom|center"/>
+                    android:text="@string/cancel" />
 
                 <Button
                     android:id="@+id/button_done_question_editing"
                     android:background="@color/transparent"
                     android:textColor="@color/colorAccent"
-                    android:layout_marginTop="@dimen/regular_padding"
+                    android:layout_margin="@dimen/regular_padding"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/done"
-                    android:layout_gravity="bottom|center"/>
+                    android:text="@string/done" />
 
             </LinearLayout>
         </LinearLayout>

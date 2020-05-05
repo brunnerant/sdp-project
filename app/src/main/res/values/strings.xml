@@ -104,6 +104,7 @@
 
     <!-- Edit Answer -->
     <string name="choose_answer_format">Choose a type of answer among TEXT and NUMBER.</string>
+    <string name="correct_answer_specified"><b>A correct answer has been specified <font color="#00FF00">✔</font></b></string>
 
     <!-- Edit Field -->
     <string name="edit_field_title">Solution</string>

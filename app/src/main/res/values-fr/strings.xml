@@ -76,6 +76,7 @@
 
     <!-- Edit Answer -->
     <string name="choose_answer_format">Choisir un type de réponse tel que TEXTE ou NOMBRE.</string>
+    <string name="correct_answer_specified"><b>Un type de réponse correct a été spécifié <font color="#00FF00">✔</font></b></string>
 
     <!-- Edit Field -->
     <string name="edit_field_title">Solution</string>
