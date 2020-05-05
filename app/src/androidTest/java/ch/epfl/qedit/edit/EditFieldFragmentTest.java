@@ -4,7 +4,6 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
@@ -14,6 +13,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.clickOn;
+import static ch.epfl.qedit.util.Util.inputSolutionText;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditFieldFragment.NUMBER_TYPE_IDX;
 import static ch.epfl.qedit.view.edit.EditFieldFragment.PRE_FILLED_TYPE_IDX;
@@ -150,7 +150,7 @@ public class EditFieldFragmentTest {
     }
 
     private void testResult() {
-        onDialog(R.id.field_solution).perform(typeText("1"));
+        inputSolutionText("1");
         onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
     }
 
