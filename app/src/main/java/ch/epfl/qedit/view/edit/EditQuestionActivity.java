@@ -86,18 +86,23 @@ public class EditQuestionActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (title) {
-                    if (titleId == null) titleId = stringPool.add(s.toString());
-                    else stringPool.update(titleId, s.toString());
-                } else {
-                    if (textId == null) textId = stringPool.add(s.toString());
-                    else stringPool.update(textId, s.toString());
-                }
+                if (title) updateTitle(s.toString());
+                else updateText(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {}
         };
+    }
+
+    private void updateTitle(String str) {
+        if (titleId == null) titleId = stringPool.add(str);
+        else stringPool.update(titleId, str);
+    }
+
+    private void updateText(String str) {
+        if (textId == null) textId = stringPool.add(str);
+        else stringPool.update(textId, str);
     }
 
     /** Handles the setup of the two buttons of this activity */

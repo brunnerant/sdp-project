@@ -187,8 +187,8 @@ public class EditFieldFragment extends DialogFragment {
     private void initLayoutComponent(View view) {
 
         // find layout component in the layout
-        decimalCheckbox = view.findViewById(R.id.decimalCheckBox);
-        signCheckbox = view.findViewById(R.id.signCheckBox);
+        decimalCheckbox = view.findViewById(R.id.decimal_checkbox);
+        signCheckbox = view.findViewById(R.id.sign_checkbox);
         solutionView = view.findViewById(R.id.field_solution);
         preview = view.findViewById(R.id.field_hint_preview);
         typesSpinner = view.findViewById(R.id.field_types_selection);

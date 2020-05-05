@@ -105,7 +105,7 @@ public class EditFieldFragmentTest {
                 .check(matches(withText(containsString(hint_preview))))
                 .check(matches(isDisplayed()));
 
-        onDialogScroll(R.id.selectTypeText)
+        onDialogScroll(R.id.select_types_text)
                 .check(matches(withText(R.string.select_field_type)))
                 .check(matches(isDisplayed()));
     }
@@ -126,12 +126,12 @@ public class EditFieldFragmentTest {
     @Test
     public void testCheckboxDisplay() {
         changeType(PRE_FILLED_TYPE_IDX);
-        onDialog(R.id.decimalCheckBox).check(matches(not(isDisplayed())));
-        onDialog(R.id.signCheckBox).check(matches(not(isDisplayed())));
+        onDialog(R.id.decimal_checkbox).check(matches(not(isDisplayed())));
+        onDialog(R.id.sign_checkbox).check(matches(not(isDisplayed())));
 
         changeType(NUMBER_TYPE_IDX);
-        onDialog(R.id.decimalCheckBox).perform(scrollTo()).check(matches(isDisplayed()));
-        onDialog(R.id.signCheckBox).perform(scrollTo()).check(matches(isDisplayed()));
+        onDialog(R.id.decimal_checkbox).perform(scrollTo()).check(matches(isDisplayed()));
+        onDialog(R.id.sign_checkbox).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
@@ -139,13 +139,13 @@ public class EditFieldFragmentTest {
         changeType(NUMBER_TYPE_IDX);
         checkHintPreview("0");
 
-        onDialogScroll(R.id.decimalCheckBox).perform(click());
+        onDialogScroll(R.id.decimal_checkbox).perform(click());
         checkHintPreview("0.0");
 
-        onDialogScroll(R.id.signCheckBox).perform(click());
+        onDialogScroll(R.id.sign_checkbox).perform(click());
         checkHintPreview("±0.0");
 
-        onDialogScroll(R.id.decimalCheckBox).perform(click());
+        onDialogScroll(R.id.decimal_checkbox).perform(click());
         checkHintPreview("±0");
     }
 

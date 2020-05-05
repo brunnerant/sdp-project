@@ -36,7 +36,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/selectTypeText"
+                    android:id="@+id/select_types_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/select_field_type"
@@ -50,8 +50,9 @@
                     android:entries="@array/field_types_list"/>
 
             </LinearLayout>
+
             <CheckBox
-                android:id="@+id/signCheckBox"
+                android:id="@+id/sign_checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/regular_padding"
@@ -59,7 +60,7 @@
                 android:textSize="@dimen/text_size"/>
 
             <CheckBox
-                android:id="@+id/decimalCheckBox"
+                android:id="@+id/decimal_checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/regular_padding"
