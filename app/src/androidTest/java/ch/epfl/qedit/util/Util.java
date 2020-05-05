@@ -48,7 +48,7 @@ public final class Util {
     }
 
     public static void clickOn(int id, boolean scrollTo) {
-        if (scrollTo) onView(withId(id)).perform(scrollTo()).perform(click());
+        if (scrollTo) onScrollView(id).perform(click());
         else onView(withId(id)).perform(click());
     }
 
@@ -61,10 +61,11 @@ public final class Util {
         Espresso.closeSoftKeyboard();
     }
 
+    public static ViewInteraction onScrollView(int id) {
+        return onView(withId(id)).perform(scrollTo());
+    }
+
     public static void inputText(int viewId, String str) {
-        onView(withId(viewId))
-                .perform(scrollTo())
-                .perform(typeText(str))
-                .perform(closeSoftKeyboard());
+        onScrollView(viewId).perform(typeText(str)).perform(closeSoftKeyboard());
     }
 }

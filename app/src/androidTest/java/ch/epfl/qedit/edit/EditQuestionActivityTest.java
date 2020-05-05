@@ -12,11 +12,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.model.answer.MatrixFormat.Field.NO_LIMIT;
+import static ch.epfl.qedit.model.answer.MatrixFormat.Field.textField;
+import static ch.epfl.qedit.model.answer.MatrixFormat.singleField;
 import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.inputSolutionText;
 import static ch.epfl.qedit.util.Util.inputText;
 import static ch.epfl.qedit.util.Util.isDisplayed;
 import static ch.epfl.qedit.util.Util.onDialog;
+import static ch.epfl.qedit.util.Util.onScrollView;
 import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,7 +35,9 @@ import androidx.test.espresso.intent.matcher.IntentMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.edit.EditFieldFragment;
 import ch.epfl.qedit.view.edit.EditQuestionActivity;
 import org.junit.After;
@@ -44,19 +50,26 @@ public class EditQuestionActivityTest {
     public final ActivityTestRule<EditQuestionActivity> testRule =
             new ActivityTestRule<>(EditQuestionActivity.class, false, false);
 
-    @Before
-    public void setUp() {
+    private void setUp(boolean question) {
         Intents.init();
-        StringPool stringPool = new StringPool();
-
-        Intent intent;
-        intent = new Intent();
+        Intent intent = new Intent();
         Bundle bundle = new Bundle();
+        StringPool stringPool = new StringPool();
         bundle.putSerializable(STRING_POOL, stringPool);
+        if (question) {
+            MatrixFormat answer = singleField(textField("???", NO_LIMIT));
+            Question q =
+                    new Question(stringPool.add("Test"), stringPool.add("Test question"), answer);
+            bundle.putSerializable(QUESTION, q);
+        }
         intent.putExtras(bundle);
-
         testRule.launchActivity(intent);
         Espresso.closeSoftKeyboard();
+    }
+
+    @Before
+    public void setUp() {
+        setUp(false);
     }
 
     @After
@@ -86,7 +99,13 @@ public class EditQuestionActivityTest {
     }
 
     @Test
-    public void testChangeQuestion() {}
+    public void testChangeQuestion() {
+        cleanUp();
+        setUp(true);
+        onScrollView(R.id.edit_question_title).check(matches(withText(containsString("Test"))));
+        onScrollView(R.id.edit_question_text)
+                .check(matches(withText(containsString("Test question"))));
+    }
 
     @Test
     public void textButtonOnClick() {
