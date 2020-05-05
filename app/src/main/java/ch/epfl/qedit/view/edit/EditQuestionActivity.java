@@ -108,7 +108,7 @@ public class EditQuestionActivity extends AppCompatActivity {
                 });
     }
 
-    /** This function is call in the dialog open when we click on a solution button */
+    /** This function is called in the open dialog when we click on a solution button */
     public void setAnswerFormat(AnswerFormat answerFormat) {
         if (answerFormat != null) {
             TextView helper = findViewById(R.id.choose_answer_text);
