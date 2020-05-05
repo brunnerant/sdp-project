@@ -13,47 +13,57 @@
             android:orientation="vertical"
             android:padding="@dimen/activity_margin">
 
-            <TextView
-                android:id="@+id/field_preview_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/preview_title"
-                android:textSize="@dimen/sub_title_text_size"
-                android:textColor="@color/colorSubTitle"
-                android:textStyle="bold"/>
-
             <EditText
-                android:id="@+id/field_preview"
+                android:id="@+id/field_solution"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/regular_padding"
                 android:textSize="@dimen/text_size"
                 android:inputType="text"/>
 
             <TextView
-                android:id="@+id/selectTypeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/select_field_type"
-                android:textSize="@dimen/sub_title_text_size"
-                android:textColor="@color/colorSubTitle"
-                android:textStyle="bold"/>
-            <Spinner
-                android:id="@+id/field_types_selection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/field_types_list"/>
-
-            <CheckBox
-                android:id="@+id/signCheckBox"
+                android:id="@+id/field_hint_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/regular_padding"
+                android:textSize="@dimen/sub_title_text_size"
+                android:textColor="@color/colorSubTitle"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/regular_padding"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/select_types_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_field_type"
+                    android:textSize="@dimen/sub_title_text_size"
+                    android:textColor="@color/colorSubTitle"
+                    android:textStyle="bold"/>
+                <Spinner
+                    android:id="@+id/field_types_selection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/field_types_list"/>
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/sign_checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/regular_padding"
                 android:text="@string/check_box_sign"
                 android:textSize="@dimen/text_size"/>
 
             <CheckBox
-                android:id="@+id/decimalCheckBox"
+                android:id="@+id/decimal_checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/regular_padding"
                 android:text="@string/check_box_decimal"
                 android:textSize="@dimen/text_size"/>
 

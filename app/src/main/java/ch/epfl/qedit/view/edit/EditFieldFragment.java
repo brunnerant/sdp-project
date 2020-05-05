@@ -5,14 +5,24 @@ import static ch.epfl.qedit.model.answer.MatrixFormat.Field.NO_LIMIT;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Html;
+import android.text.InputType;
+import android.text.Spanned;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat.Field;
 import java.util.Objects;
 
@@ -27,13 +37,14 @@ public class EditFieldFragment extends DialogFragment {
     private boolean isDecimal;
     private boolean isText;
     private boolean isPreFilled;
-    private String preFilledText;
+    private String solution;
 
     /** Layout component */
     private CheckBox decimalCheckbox;
 
     private CheckBox signCheckbox;
-    private EditText preview;
+    private EditText solutionView;
+    private TextView preview;
     private Spinner typesSpinner;
 
     /** Index in the spinner of the different types */
@@ -42,12 +53,9 @@ public class EditFieldFragment extends DialogFragment {
     public static final int TEXT_TYPE_IDX = 1;
     public static final int PRE_FILLED_TYPE_IDX = 2;
 
-    public EditFieldFragment() {
-        isText = false;
-        isSigned = false;
-        isDecimal = false;
-        isPreFilled = false;
-        preFilledText = null;
+    /** @return true if the field wants a number answer, False otherwise */
+    private boolean isNumber() {
+        return !isText && !isPreFilled;
     }
 
     /**
@@ -65,6 +73,7 @@ public class EditFieldFragment extends DialogFragment {
         return dialog;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -79,40 +88,77 @@ public class EditFieldFragment extends DialogFragment {
 
         initLayoutComponent(view);
 
+        // set title red. Because it's nice.
+        Spanned title =
+                Html.fromHtml(
+                        "<font color='#FF0000'>"
+                                + getString(R.string.edit_field_title)
+                                + "</font>");
         builder.setView(view)
-                .setTitle(R.string.edit_field_title)
+                .setTitle(title)
+                .setCancelable(true)
                 .setPositiveButton(R.string.done, null)
-                .setNegativeButton(R.string.cancel, null);
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel());
 
+        AlertDialog dialog = builder.create();
+        doneListener(dialog);
         // Create the AlertDialog object and return it
-        return builder.create();
+        return dialog;
     }
 
+    // HELPER METHODS THAT HANDLE THE RESULT OF THIS DIALOG //
+
+    /** return Field resulting of the current state of the parameter of this fragment */
+    private Field result() {
+        if (isPreFilled) return Field.preFilledField(solution);
+        else if (isText) return Field.textField(getHint(), NO_LIMIT);
+        else return Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
+    }
+
+    /** Return result of this dialog in the callee activity if solution is non-empty */
+    private void returnResult() {
+        if (solution == null || solution.isEmpty()) {
+            solutionView.setError(getString(R.string.cannot_be_empty));
+        } else {
+            // Check if the parent is a EditQuestionActivity, if yes, use the setAnswerFormat of the
+            // parent
+            FragmentActivity parent = requireActivity();
+            if (parent instanceof EditQuestionActivity)
+                ((EditQuestionActivity) parent).setAnswerFormat(MatrixFormat.singleField(result()));
+            dismiss();
+        }
+    }
+
+    // HELPER METHODS THAT CREATE LISTENERS //
+
     /**
-     * Init all the layout component with listener and default parameters
-     *
-     * @param view View from which we retrieve layout component
+     * We define the done listener in this weird way because otherwise, the click on the 'done'
+     * button dismiss automatically the dialog and we don't want that (i.e. if the solution is
+     * empty)
      */
-    private void initLayoutComponent(View view) {
+    private void doneListener(final AlertDialog dialog) {
+        dialog.setOnShowListener(
+                dialogInterface -> {
+                    Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setOnClickListener(v -> returnResult());
+                });
+    }
 
-        // find layout component in the layout
-        decimalCheckbox = view.findViewById(R.id.decimalCheckBox);
-        signCheckbox = view.findViewById(R.id.signCheckBox);
-        preview = view.findViewById(R.id.field_preview);
-        typesSpinner = view.findViewById(R.id.field_types_selection);
+    private void setSolutionViewListener() {
+        solutionView.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s, int start, int count, int after) {}
 
-        // create listeners for each check box
-        setDecimalCheckboxListener();
-        setSignCheckboxListener();
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        solution = s.toString();
+                    }
 
-        setTypesSpinnerListener();
-
-        // set spinner to initial value
-        int selectSpinner =
-                isNumber() ? NUMBER_TYPE_IDX : isPreFilled ? PRE_FILLED_TYPE_IDX : TEXT_TYPE_IDX;
-        typesSpinner.setSelection(selectSpinner);
-
-        updateLayout();
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                });
     }
 
     private void setTypesSpinnerListener() {
@@ -131,38 +177,43 @@ public class EditFieldFragment extends DialogFragment {
                 });
     }
 
-    private void setDecimalCheckboxListener() {
-        decimalCheckbox.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        isDecimal = ((CheckBox) v).isChecked();
-                        updateLayout();
-                    }
-                });
-    }
-
-    private void setSignCheckboxListener() {
-        signCheckbox.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        isSigned = ((CheckBox) v).isChecked();
-                        updateLayout();
-                    }
-                });
-    }
+    // METHODS THAT HANDLE THE LAYOUT //
 
     /**
-     * This method is called when we need to return the Field constructed with this dialog fragment
+     * Init all the layout component with listener and default parameters
      *
-     * @return MatrixFormat.Field corresponding to the current state of the parameter of this
-     *     fragment
+     * @param view View from which we retrieve layout component
      */
-    private Field getResultingField() {
-        if (isPreFilled) return Field.preFilledField(preFilledText);
-        if (isText) return Field.textField(getHint(), NO_LIMIT);
-        else return Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
+    private void initLayoutComponent(View view) {
+
+        // find layout component in the layout
+        decimalCheckbox = view.findViewById(R.id.decimal_checkbox);
+        signCheckbox = view.findViewById(R.id.sign_checkbox);
+        solutionView = view.findViewById(R.id.field_solution);
+        preview = view.findViewById(R.id.field_hint_preview);
+        typesSpinner = view.findViewById(R.id.field_types_selection);
+
+        // create listeners for each check box
+        decimalCheckbox.setOnClickListener(
+                v -> {
+                    isDecimal = ((CheckBox) v).isChecked();
+                    updateLayout();
+                });
+        signCheckbox.setOnClickListener(
+                v -> {
+                    isSigned = ((CheckBox) v).isChecked();
+                    updateLayout();
+                });
+
+        setTypesSpinnerListener();
+        setSolutionViewListener();
+
+        // set spinner to initial value
+        int selectSpinner =
+                isNumber() ? NUMBER_TYPE_IDX : isPreFilled ? PRE_FILLED_TYPE_IDX : TEXT_TYPE_IDX;
+        typesSpinner.setSelection(selectSpinner);
+
+        updateLayout();
     }
 
     /**
@@ -172,12 +223,15 @@ public class EditFieldFragment extends DialogFragment {
      */
     private void updateLayout() {
 
-        // update preview
-        preview.setHint(getHint());
-        // the preview allow the user to enter some text
-        // only if it is a pre filled field
-        preview.setEnabled(isPreFilled);
-        preview.setText(""); // empty the previous to see the hint if is not pre filled
+        // update solution hint
+        int hintSolution = isPreFilled ? R.string.enter_pre_filled : R.string.enter_solution;
+        solutionView.setHint(hintSolution);
+        solutionView.setInputType(getInputType());
+        solutionView.setText("");
+
+        Spanned previewHint =
+                Html.fromHtml("<b>" + getString(R.string.hint_preview) + ": </b>" + getHint());
+        preview.setText(previewHint);
 
         // update checkbox visibility
         int checkBoxVisibility = isNumber() ? View.VISIBLE : View.GONE;
@@ -185,9 +239,12 @@ public class EditFieldFragment extends DialogFragment {
         signCheckbox.setVisibility(checkBoxVisibility);
     }
 
-    /** @return true if the field wants a number answer, False otherwise */
-    private boolean isNumber() {
-        return !isText && !isPreFilled;
+    /** return the input type of the solutionView EditText */
+    private int getInputType() {
+        int type = InputType.TYPE_CLASS_NUMBER;
+        if (isDecimal) type |= InputType.TYPE_NUMBER_FLAG_DECIMAL;
+        if (isSigned) type |= InputType.TYPE_NUMBER_FLAG_SIGNED;
+        return isNumber() ? type : InputType.TYPE_CLASS_TEXT;
     }
 
     /**
@@ -201,7 +258,7 @@ public class EditFieldFragment extends DialogFragment {
             String hint = isSigned ? "±0" : "0";
             return isDecimal ? hint + ".0" : hint;
         } else {
-            return isPreFilled ? getString(R.string.hint_pre_filled_field) : "???";
+            return "???";
         }
     }
 }
