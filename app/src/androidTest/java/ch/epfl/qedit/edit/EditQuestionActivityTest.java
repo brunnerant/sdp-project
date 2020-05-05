@@ -31,7 +31,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.edit.EditFieldFragment;
 import ch.epfl.qedit.view.edit.EditQuestionActivity;
@@ -48,13 +47,11 @@ public class EditQuestionActivityTest {
     @Before
     public void setUp() {
         Intents.init();
-        Question question = new Question.Empty();
         StringPool stringPool = new StringPool();
 
         Intent intent;
         intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(QUESTION, question);
         bundle.putSerializable(STRING_POOL, stringPool);
         intent.putExtras(bundle);
 
@@ -87,6 +84,9 @@ public class EditQuestionActivityTest {
                         .getStringArray(R.array.field_types_list)[typeIdx];
         onDialog(R.id.field_types_selection).check(matches(withSpinnerText(containsString(type))));
     }
+
+    @Test
+    public void testChangeQuestion() {}
 
     @Test
     public void textButtonOnClick() {
