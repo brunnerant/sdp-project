@@ -294,6 +294,17 @@ public class ListEditView extends RecyclerView {
             return items.size();
         }
 
+        private void subFilter(List<T> filtered, CharSequence constraint) {
+            String pattern = constraint.toString().toLowerCase().trim();
+
+            for(int i = 0; i < e.e.size(); ++i) {
+                T searched = e.search(pattern, i);
+
+                if (searched != null) {
+                    filtered.add(searched);
+                }
+            }
+        }
         @Override
         public Filter getFilter() {
             return new Filter() {
@@ -305,15 +316,16 @@ public class ListEditView extends RecyclerView {
                 if (constraint == null || constraint.length() == 0) {
                     filtered.addAll(e.e);
                 } else {
-                    String pattern = constraint.toString().toLowerCase().trim();
-
-                    for(int i = 0; i < e.e.size(); ++i) {
-                        T searched = e.search(pattern, i);
-
-                        if (searched != null) {
-                            filtered.add(searched);
-                        }
-                    }
+                    subFilter(filtered, constraint);
+//                    String pattern = constraint.toString().toLowerCase().trim();
+//
+//                    for(int i = 0; i < e.e.size(); ++i) {
+//                        T searched = e.search(pattern, i);
+//
+//                        if (searched != null) {
+//                            filtered.add(searched);
+//                        }
+//                    }
                 }
 
                 FilterResults r = new FilterResults();

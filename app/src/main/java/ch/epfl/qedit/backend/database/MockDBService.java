@@ -216,7 +216,7 @@ public class MockDBService implements DatabaseService {
                             list.add(s);
                         }
                     }
-                    
+
                     wait2second();
                     future.complete(list);
                     idlingResource.decrement();
