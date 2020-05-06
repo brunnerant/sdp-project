@@ -15,10 +15,10 @@
      will return the language code (e.g. "en" for English, "fr" for French) -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
     <!-- Navigation drawer compulsory strings-->
-    <string name="navigation_drawer_open" translatable="false">Open navigaton drawer</string>
-    <string name="navigation_drawer_close" translatable="false">Close navigaton drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <!-- App and logo -->
-    <string name="app_name" translatable="false">QED<font color="#FF0000" tools:ignore="UnusedResources">it</font></string>
+    <string name="app_name" translatable="false"><b>QED<font color="#FF0000" tools:ignore="UnusedResources">it</font></b></string>
     <string name="qedit_logo_description">QEDit Logo</string>
 
     <!-- Language selection -->
@@ -69,7 +69,7 @@
     <string name="menu_qr">QR CODE</string>
     <string name="menu_quiz_list">MY QUIZZES</string>
     <string name="menu_person">MY ACCOUNT</string>
-    <string name="menu_search">ONLINE QUZZES</string>
+    <string name="menu_search">ONLINE QUIZZES</string>
     <string name="menu_settings">SETTINGS</string>
 
     <!-- Quiz -->
@@ -100,22 +100,22 @@
 
     <!-- Edit Question -->
     <string name="edit_question_title">Enter the title of the question here.</string>
+    <string name="cannot_be_empty">Cannot be empty.</string>
     <string name="edit_question_text">Enter the text of the question here.</string>
-    <string name="add_answer_helper_text">Add a type of answer field by pressing the \'+\' button.</string>
-    <string name="button_done_editing_message">Done</string>
 
     <!-- Edit Answer -->
-    <string name="choose_answer_format">Choose a type of answer among TEXT, NUMBER, MATRIX and ANNOTATED GRAPH.</string>
+    <string name="choose_answer_format">Choose a type of answer among TEXT and NUMBER.</string>
+    <string name="correct_answer_specified"><b>A correct answer has been specified <font color="#00FF00">✔</font></b></string>
 
     <!-- Edit Field -->
-    <string name="edit_field_title">Field edition</string>
-    <string name="preview_title">Preview</string>
-    <string name="hint_pre_filled_field">Enter here the text of this pre-filled field.</string>
-    <string name="hint_text_field">Enter a text answer here.</string>
+    <string name="edit_field_title">Solution</string>
+    <string name="hint_preview">The hint will be</string>
+    <string name="enter_solution">Enter here the solution of this question.</string>
+    <string name="enter_pre_filled">Enter here the text of this pre-filled field.</string>
     <string name="check_box_sign">Can be negative</string>
     <string name="check_box_decimal">Can be decimal</string>
     <!-- Type selection -->
-    <string name="select_field_type">Type of this field</string>
+    <string name="select_field_type">Type of this solution</string>
     <string-array name="field_types_list">
         <item>Number</item>
         <item>Text</item>

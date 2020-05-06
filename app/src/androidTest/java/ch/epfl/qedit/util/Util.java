@@ -2,13 +2,17 @@ package ch.epfl.qedit.util;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
+import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import java.util.Arrays;
@@ -44,11 +48,24 @@ public final class Util {
     }
 
     public static void clickOn(int id, boolean scrollTo) {
-        if (scrollTo) onView(withId(id)).perform(scrollTo()).perform(click());
+        if (scrollTo) onScrollView(id).perform(click());
         else onView(withId(id)).perform(click());
     }
 
     public static ViewInteraction onDialog(int id) {
         return onView(withId(id)).inRoot(isDialog());
+    }
+
+    public static void inputSolutionText(String sol) {
+        onDialog(R.id.field_solution).perform(typeText(sol));
+        Espresso.closeSoftKeyboard();
+    }
+
+    public static ViewInteraction onScrollView(int id) {
+        return onView(withId(id)).perform(scrollTo());
+    }
+
+    public static void inputText(int viewId, String str) {
+        onScrollView(viewId).perform(typeText(str)).perform(closeSoftKeyboard());
     }
 }

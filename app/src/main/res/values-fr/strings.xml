@@ -73,21 +73,21 @@
     <!-- Edit Question -->
     <string name="edit_question_title">Entrer le titre de la question ici.</string>
     <string name="edit_question_text">Entrer le texte de la question ici.</string>
-    <string name="add_answer_helper_text">Ajouter un champ de réponse en pressant sur le button \'+\'.</string>
-    <string name="button_done_editing_message">Terminer</string>
+    <string name="cannot_be_empty">Ne peut pas être vide.</string>
 
     <!-- Edit Answer -->
-    <string name="choose_answer_format">Choisir un type de réponse tel que TEXTE, NOMBRE, MATRICE et ANNOTATION DE GRAPHE.</string>
+    <string name="choose_answer_format">Choisir un type de réponse tel que TEXTE ou NOMBRE.</string>
+    <string name="correct_answer_specified"><b>Un type de réponse correct a été spécifié <font color="#00FF00">✔</font></b></string>
 
     <!-- Edit Field -->
-    <string name="edit_field_title">Edition de champ</string>
-    <string name="preview_title">Aperçu</string>
-    <string name="hint_pre_filled_field">Entrer le texte de ce champ pré-rempli.</string>
-    <string name="hint_text_field">Entrer une réponse textuelle ici.</string>
+    <string name="edit_field_title">Solution</string>
+    <string name="hint_preview">L\'aperçu sera</string>
+    <string name="enter_solution">Entrer la solution de cette question.</string>
+    <string name="enter_pre_filled">Entrer le texte de ce champ pré-rempli.</string>
     <string name="check_box_sign">Peut être négatif</string>
     <string name="check_box_decimal">Peut être décimal</string>
     <!-- Type selection -->
-    <string name="select_field_type">Type de ce champ</string>
+    <string name="select_field_type">Type de cette solution</string>
     <string-array name="field_types_list">
         <item>Nombre</item>
         <item>Texte</item>
