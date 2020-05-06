@@ -43,7 +43,7 @@ public class EditQuizActivity extends AppCompatActivity {
                 (StringPool)
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
 
-        overviewActive = true;
+        overviewActive = false;
         handleToggleOverview();
 
         // Initialize the ViewModel

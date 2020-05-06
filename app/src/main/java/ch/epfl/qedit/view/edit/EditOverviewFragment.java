@@ -51,10 +51,7 @@ public class EditOverviewFragment extends Fragment {
 
         // Configure the add button
         view.findViewById(R.id.add_question_button)
-                .setOnClickListener(
-                        v -> {
-                            launchEditQuestionActivity(null);
-                        });
+                .setOnClickListener(v -> launchEditQuestionActivity(null));
 
         return view;
     }

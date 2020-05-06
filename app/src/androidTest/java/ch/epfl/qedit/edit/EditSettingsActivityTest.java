@@ -21,7 +21,7 @@ import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class EditNewQuizSettingsTest {
+public class EditSettingsActivityTest {
     @Rule
     public final IntentsTestRule<EditSettingsActivity> testRule =
             new IntentsTestRule<>(EditSettingsActivity.class);

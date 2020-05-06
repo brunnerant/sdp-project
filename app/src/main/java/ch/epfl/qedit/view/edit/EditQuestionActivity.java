@@ -164,7 +164,6 @@ public class EditQuestionActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent);
             finish();
         }
-        ;
     }
 
     /**
