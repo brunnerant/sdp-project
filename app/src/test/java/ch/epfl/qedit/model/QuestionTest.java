@@ -1,7 +1,9 @@
 package ch.epfl.qedit.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
@@ -11,6 +13,10 @@ public class QuestionTest {
 
     private MatrixFormat format =
             MatrixFormat.singleField(MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
+
+    private final String TITLE_ID = "ID0", TEXT_ID = "ID1", PRE_FILLED_ID = "ID2";
+    private final MatrixFormat answer =
+            MatrixFormat.singleField(MatrixFormat.Field.preFilledField(PRE_FILLED_ID));
 
     @Test
     public void questionConstructorIsCorrect() {
@@ -39,6 +45,15 @@ public class QuestionTest {
         assertEquals(q1, q2);
         assertNotEquals(q1, "Pomme de Terre");
         assertNotEquals(q1, q4);
+    }
+
+    @Test
+    public void isEmptyTest() {
+        Question nonEmpty = new Question("Non empty", "This question is not empty", "matrix1x1");
+        Question empty = new Question.Empty();
+
+        assertFalse(nonEmpty.isEmpty());
+        assertTrue(empty.isEmpty());
     }
 
     @Test(expected = NullPointerException.class)

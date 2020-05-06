@@ -1,5 +1,9 @@
 package ch.epfl.qedit.view.edit;
 
+import static android.app.Activity.RESULT_OK;
+import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,79 +13,122 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.Search.PairQuestions;
 import ch.epfl.qedit.model.Question;
-import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.MatrixFormat;
-import ch.epfl.qedit.view.quiz.QuestionFragment;
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.util.ListEditView;
-import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.LinkedList;
+import ch.epfl.qedit.viewmodel.EditionViewModel;
+import java.util.ArrayList;
 import java.util.List;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
     private PairQuestions questions;
-    private int numQuestions;
+    public static final String QUESTION = "ch.epfl.qedit.view.edit.QUESTION";
+    public static final int EDIT_QUESTION_ACTIVITY_REQUEST_CODE = 0;
     private ListEditView.Adapter<Question, PairQuestions> adapter;
-    private QuizViewModel model;
+    //private ListEditView.Adapter<String> adapter;
+    private EditionViewModel model;
+    private List<String> titles;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
-        model = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+
+        model = new ViewModelProvider(requireActivity()).get(EditionViewModel.class);
+
+        prepareTitles();
+
         // Retrieve and configure the recycler view
-        ListEditView listEditView = view.findViewById(R.id.question_list);
+        final ListEditView listEditView = view.findViewById(R.id.question_list);
         createAdapter();
-        setListener();
+        setItemListener();
+        setMoveListener();
         listEditView.setAdapter(adapter);
 
-        // Configure the add button
-        view.findViewById(R.id.add_question_button)
-                .setOnClickListener(
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                numQuestions++;
-                                adapter.addItem(createDummyQuestion(numQuestions));
-                            }
-                        });
+//        // Configure the add button
+//        view.findViewById(R.id.add_question_button)
+//                .setOnClickListener(
+//                        new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                model.getQuizBuilder().addEmptyQuestion();
+//                                adapter.addItem(
+//                                        getResources().getString(R.string.new_empty_question));
+//                            }
+//                        });
 
         return view;
     }
 
-    private void createAdapter() {
-        addDummyQuestions();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        // Create an adapter for the question list
-        adapter =
-                new ListEditView.Adapter<>(
-                        questions,
-                        new ListEditView.GetItemText<Question>() {
-                            @Override
-                            public String getText(Question item) {
-                                return item.getTitle();
-                            }
-                        });
+        if (requestCode == EDIT_QUESTION_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Get the question and the extended StringPool from the returned data
+                Question filledOutQuestion = (Question) data.getExtras().getSerializable(QUESTION);
+                StringPool extendedStringPool =
+                        (StringPool) data.getExtras().getSerializable(STRING_POOL);
+
+                // Update the StringPool of the ViewModel
+                model.setStringPool(extendedStringPool);
+
+                // Update the question that was empty before by the filled out question
+                int position = model.getFocusedQuestion().getValue();
+                model.getQuizBuilder().update(position, filledOutQuestion);
+                titles.set(position, extendedStringPool.get(filledOutQuestion.getTitle()));
+                adapter.updateItem(position);
+
+                // Trigger the preview fragment to draw the updated title and text
+                model.getFocusedQuestion().postValue(position);
+            }
+        }
     }
 
-    private void setListener() {
+    private void prepareTitles() {
+        titles = new ArrayList<>();
+
+        // Add the titles of all question already in the builder to a list
+        for (Question question : model.getQuizBuilder().getQuestions()) {
+            String key = question.getTitle();
+            String text = model.getStringPool().get(key);
+
+            // TODO Support old questions that store the strings directly as well
+            titles.add((text == null) ? key : text);
+        }
+    }
+
+    private void createAdapter() {
+        // Create an adapter for the title list
+//        adapter =
+//                new ListEditView.Adapter<String>(
+//                        titles,
+//                        new ListEditView.GetItemText<String>() {
+//                            @Override
+//                            public String getText(String item) {
+//                                return item;
+//                            }
+//                        });
+    }
+
+    private void setItemListener() {
         adapter.setItemListener(
                 new ListEditView.ItemListener() {
                     @Override
                     public void onItemEvent(int position, ListEditView.EventType type) {
                         switch (type) {
                             case Select:
-                                setFragment(new QuestionFragment());
                                 model.getFocusedQuestion().postValue(position);
                                 break;
                             case RemoveRequest:
+                                model.getFocusedQuestion().postValue(null);
+                                model.getQuizBuilder().remove(position);
                                 adapter.removeItem(position);
-                                model.getQuiz().removeQuestionOnIndex(position);
-                                model.getAnswers().getValue().remove(position);
                                 break;
                             case EditRequest:
-                                setFragment(new EditQuestionFragment());
+                                launchEditQuestionActivity();
                                 break;
                             default:
                                 break;
@@ -90,23 +137,21 @@ public class EditOverviewFragment extends Fragment {
                 });
     }
 
-    private void setFragment(Fragment fragment) {
-        requireActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.question_details_container, fragment)
-                .commit();
+    private void setMoveListener() {
+        adapter.setMoveListener(
+                new ListEditView.MoveListener() {
+                    @Override
+                    public void onItemMoved(int from, int to) {
+                        model.getQuizBuilder().swap(from, to);
+                    }
+                });
     }
 
-    private void addDummyQuestions() {
-        // For now, we just add dummy questions to the quiz
-        questions.e = new LinkedList<>();
-        for (numQuestions = 0; numQuestions < 5; numQuestions++)
-            questions.e.add(createDummyQuestion(numQuestions + 1));
-    }
-
-    private static Question createDummyQuestion(int i) {
-        AnswerFormat format = MatrixFormat.singleField(MatrixFormat.Field.textField("abc", 3));
-        return new Question("Q" + i, "it it " + i + "?", format);
+    private void launchEditQuestionActivity() {
+        Intent intent = new Intent(requireActivity(), EditQuestionActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(STRING_POOL, model.getStringPool());
+        intent.putExtras(bundle);
+        startActivityForResult(intent, EDIT_QUESTION_ACTIVITY_REQUEST_CODE);
     }
 }

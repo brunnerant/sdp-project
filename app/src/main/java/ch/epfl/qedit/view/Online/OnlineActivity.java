@@ -106,16 +106,16 @@ public class OnlineActivity extends AppCompatActivity{
 
     private void createAdapter(User user) {
         all.e = new ArrayList<>();
-
-        // Create the list adapter
-        listAdapter =
-                new ListEditView.Adapter<>(
-                        all,
-                        new ListEditView.GetItemText<Map.Entry<String, String>>() {
-                            @Override
-                            public String getText(Map.Entry<String, String> item) {
-                                return item.getValue();
-                            }
-                        });
+//
+//        // Create the list adapter
+//        listAdapter =
+//                new ListEditView.Adapter<>(
+//                        all,
+//                        new ListEditView.GetItemText<Map.Entry<String, String>>() {
+//                            @Override
+//                            public String getText(Map.Entry<String, String> item) {
+//                                return item.getValue();
+//                            }
+//                        });
     }
 }

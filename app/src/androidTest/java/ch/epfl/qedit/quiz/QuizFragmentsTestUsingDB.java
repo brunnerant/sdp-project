@@ -1,5 +1,7 @@
 package ch.epfl.qedit.quiz;
 
+import static ch.epfl.qedit.model.answer.EmptyAnswerFormat.EMPTY_FORMAT;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
@@ -37,8 +39,7 @@ public class QuizFragmentsTestUsingDB {
                                         "The matches problem",
                                         "How many matches can fit in a shoe of size 43 ?",
                                         "matrix3x3"),
-                                new Question(
-                                        "Title 2", "Test answer format", "testAnswerFormat"))));
+                                new Question("Title 2", "Empty answer format", EMPTY_FORMAT))));
 
         testRule.launchFragment(fragment);
 

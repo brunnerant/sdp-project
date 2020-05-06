@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
@@ -22,9 +22,9 @@ import ch.epfl.qedit.Search.SearchableMapEntry;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Callback;
-import ch.epfl.qedit.util.Response;
+import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.EditTextDialog;
@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditTextDialog.SubmissionListener {
@@ -185,27 +186,42 @@ public class HomeQuizListFragment extends Fragment
 
     // Handles when a user clicked on the button to edit a quiz
     private void editQuiz(int position) {
-        String quizID = quizzes.e.get(position).getKey();
+        final String quizID = quizzes.e.get(position).getKey();
         progressBar.setVisibility(View.VISIBLE);
 
-        // Query quiz questions from the database
-        db.getQuiz(
-                quizID,
-                new Callback<Response<Quiz>>() {
-                    @Override
-                    public void onReceive(final Response<Quiz> response) {
-                        handler.post(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // Determine what to do when the quiz is loaded or not
-                                        progressBar.setVisibility(View.GONE);
-                                        if (response.getError().noError(getContext()))
-                                            launchQuizActivity(response.getData());
-                                    }
-                                });
-                    }
-                });
+        CompletableFuture<StringPool> stringPool =
+                db.getQuizLanguages(quizID)
+                        .thenCompose(
+                                languages ->
+                                        db.getQuizStringPool(quizID, getBestLanguage(languages)));
+
+        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
+
+        CompletableFuture.allOf(stringPool, quizStructure)
+                .whenComplete(
+                        (aVoid, throwable) -> {
+                            if (throwable != null)
+                                Toast.makeText(
+                                                requireContext(),
+                                                R.string.database_error,
+                                                Toast.LENGTH_SHORT)
+                                        .show();
+                            else
+                                launchQuizActivity(
+                                        quizStructure
+                                                .join()
+                                                .instantiateLanguage(stringPool.join()));
+                        });
+    }
+
+    private String getBestLanguage(List<String> languages) {
+        String appLanguage = LocaleHelper.getLanguage(requireContext());
+
+        // If the quiz was translated in the application language, pick that version,
+        // otherwise we pick the first one. Note that we could have some more complex logic
+        // here, for example trying english first, and then falling back.
+        if (languages.contains(appLanguage)) return appLanguage;
+        else return languages.get(0);
     }
 
     // Launches the quiz activity with the given quiz. This is used when a quiz is selected.
