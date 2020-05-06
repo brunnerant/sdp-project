@@ -4,8 +4,8 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.QUIZ_BUILDER;
-import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
+import static ch.epfl.qedit.view.edit.EditSettingsActivity.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.edit.EditSettingsActivity.STRING_POOL;
 
 import android.content.Intent;
 import android.os.Bundle;

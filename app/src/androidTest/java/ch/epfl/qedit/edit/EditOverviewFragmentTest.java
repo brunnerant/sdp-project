@@ -11,14 +11,12 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
-import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
 import static ch.epfl.qedit.util.Util.createMockQuiz;
-import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
-import static ch.epfl.qedit.view.edit.EditOverviewFragment.EDIT_QUESTION_ACTIVITY_REQUEST_CODE;
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.NEW_QUESTION_REQUEST_CODE;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
+import static ch.epfl.qedit.view.edit.EditSettingsActivity.STRING_POOL;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 
@@ -60,8 +58,6 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
 
         StringPool stringPool = new StringPool();
         stringPool.update(TITLE_ID, mockQuiz.getTitle());
-        stringPool.update(NO_QUESTION_TITLE_ID, "testNoTitle");
-        stringPool.update(NO_QUESTION_TEXT_ID, "testNoText");
 
         EditionViewModel model =
                 new ViewModelProvider(testRule.getActivity()).get(EditionViewModel.class);
@@ -178,7 +174,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
                 .getActivity()
                 .startActivityForResult(
                         new Intent(testRule.getFragment().getContext(), EditQuestionActivity.class),
-                        EDIT_QUESTION_ACTIVITY_REQUEST_CODE);
+                        NEW_QUESTION_REQUEST_CODE);
     }
 
     @Test

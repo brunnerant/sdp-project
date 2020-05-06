@@ -16,15 +16,15 @@ import static org.hamcrest.core.AllOf.allOf;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
+import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import org.junit.Rule;
 import org.junit.Test;
 
 public class EditNewQuizSettingsTest {
     @Rule
-    public final IntentsTestRule<EditNewQuizSettingsActivity> testRule =
-            new IntentsTestRule<>(EditNewQuizSettingsActivity.class);
+    public final IntentsTestRule<EditSettingsActivity> testRule =
+            new IntentsTestRule<>(EditSettingsActivity.class);
 
     @Test
     public void testEnterTitle() {

@@ -6,8 +6,8 @@ import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultDat
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static ch.epfl.qedit.util.Util.clickOn;
-import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
+import static ch.epfl.qedit.view.edit.EditSettingsActivity.STRING_POOL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
 
@@ -34,7 +34,7 @@ public class EditQuestionActivityTest {
     @Before
     public void setUp() {
         Intents.init();
-        Question question = new Question.Empty();
+        Question question = null;
         StringPool stringPool = new StringPool();
 
         Intent intent;

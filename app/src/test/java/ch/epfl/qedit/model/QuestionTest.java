@@ -1,9 +1,7 @@
 package ch.epfl.qedit.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
@@ -45,15 +43,6 @@ public class QuestionTest {
         assertEquals(q1, q2);
         assertNotEquals(q1, "Pomme de Terre");
         assertNotEquals(q1, q4);
-    }
-
-    @Test
-    public void isEmptyTest() {
-        Question nonEmpty = new Question("Non empty", "This question is not empty", "matrix1x1");
-        Question empty = new Question.Empty();
-
-        assertFalse(nonEmpty.isEmpty());
-        assertTrue(empty.isEmpty());
     }
 
     @Test(expected = NullPointerException.class)

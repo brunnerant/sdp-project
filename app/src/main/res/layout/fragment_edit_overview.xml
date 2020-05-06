@@ -22,9 +22,19 @@
         android:layout_height="wrap_content"
         android:text="@string/empty_question_list_hint_text"
         app:layout_constraintBottom_toTopOf="@+id/add_question_button"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/down_arrow"-->
+<!--        android:layout_width="374dp"-->
+<!--        android:layout_height="166dp"-->
+<!--        android:contentDescription="@string/qedit_logo_description"-->
+<!--        app:layout_constraintBottom_toTopOf="add_question_button"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:srcCompat="@drawable/ic_arrow_downward" />-->
 
     <ImageButton
         android:id="@+id/add_question_button"
