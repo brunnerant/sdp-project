@@ -67,8 +67,8 @@ public class MatrixModelTest {
     public void testEqualsWorksForSameModels() {
         MatrixModel matrixModel1 = new MatrixModel(1, 1);
         MatrixModel matrixModel2 = new MatrixModel(1, 1);
-        matrixModel1.updateAnswer(1, 1, "test");
-        matrixModel2.updateAnswer(1, 1, "test");
+        matrixModel1.updateAnswer(0, 0, "test");
+        matrixModel2.updateAnswer(0, 0, "test");
 
         assertEquals(true, matrixModel1.equals(matrixModel2));
         assertEquals(true, matrixModel2.equals(matrixModel1));
@@ -78,8 +78,8 @@ public class MatrixModelTest {
     public void testDifferentModelsNotEqual() {
         MatrixModel matrixModel1 = new MatrixModel(1, 1);
         MatrixModel matrixModel2 = new MatrixModel(1, 1);
-        matrixModel1.updateAnswer(1, 1, "test1");
-        matrixModel2.updateAnswer(1, 1, "test2");
+        matrixModel1.updateAnswer(0, 0, "test1");
+        matrixModel2.updateAnswer(0, 0, "test2");
         assertEquals(false, matrixModel1.equals(matrixModel2));
         assertEquals(false, matrixModel2.equals(matrixModel1));
     }
@@ -89,9 +89,9 @@ public class MatrixModelTest {
         MatrixModel matrixModel1 = new MatrixModel(1, 1);
         MatrixModel matrixModel2 = new MatrixModel(1, 2);
 
-        matrixModel1.updateAnswer(1, 1, "test");
-        matrixModel2.updateAnswer(1, 1, "test");
-        matrixModel2.updateAnswer(1, 2, "test");
+        matrixModel1.updateAnswer(0, 0, "test");
+        matrixModel2.updateAnswer(0, 0, "test");
+        matrixModel2.updateAnswer(0, 1, "test");
         assertEquals(false, matrixModel1.equals(matrixModel2));
         assertEquals(false, matrixModel2.equals(matrixModel1));
     }
