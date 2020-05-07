@@ -18,6 +18,17 @@ public abstract class AnswerFormat implements Serializable {
      */
     private String text;
 
+    /** The correct answer */
+    private AnswerModel questionAnswer;
+
+    public void setCorrectAnswer(AnswerModel correctAnswer) {
+        this.questionAnswer = correctAnswer;
+    }
+
+    public boolean correct(AnswerModel participantAnswer) {
+        if (participantAnswer == null || questionAnswer == null) return false;
+        return questionAnswer.equals(participantAnswer);
+    }
     // Package-private constructor, to be used by subclasses
     AnswerFormat(String text) {
         this.text = text;
