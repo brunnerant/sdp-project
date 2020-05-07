@@ -211,8 +211,13 @@ public class MockDBService implements DatabaseService {
         new Thread(
                 () -> {
                     ArrayList<String> list = new ArrayList<>();
+                    int i = 0;
                     for(String s: quizzes.keySet()) {
-                        if(s.contains(search)) {
+                        if (s.contains(search)) {
+                            ++i;
+                            if(i == number) {
+                                break;
+                            }
                             list.add(s);
                         }
                     }
