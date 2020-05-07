@@ -27,7 +27,6 @@ import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.edit.EditSettingsActivity;
-import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.EditTextDialog;
 import ch.epfl.qedit.view.util.ListEditView;
@@ -155,36 +154,37 @@ public class HomeQuizListFragment extends Fragment
     }
 
     // Handles when a user clicked on the button to show a quiz
-    private void showQuiz(int position) { // TODO next sprint
-        final String quizID = quizzes.get(position).getKey();
-        progressBar.setVisibility(VISIBLE);
-
-        CompletableFuture<StringPool> stringPool =
-                db.getQuizLanguages(quizID)
-                        .thenCompose(
-                                languages ->
-                                        db.getQuizStringPool(quizID, getBestLanguage(languages)));
-
-        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
-
-        CompletableFuture.allOf(stringPool, quizStructure)
-                .whenComplete(
-                        (aVoid, throwable) -> {
-                            if (throwable != null)
-                                Toast.makeText(
-                                                requireContext(),
-                                                R.string.database_error,
-                                                Toast.LENGTH_SHORT)
-                                        .show();
-                            else
-                                launchQuizActivity(
-                                        quizStructure
-                                                .join()
-                                                .instantiateLanguage(stringPool.join()));
-                        });
-
-        progressBar.setVisibility(INVISIBLE);
-    }
+    //    private void showQuiz(int position) { // TODO next sprint
+    //        final String quizID = quizzes.get(position).getKey();
+    //        progressBar.setVisibility(VISIBLE);
+    //
+    //        CompletableFuture<StringPool> stringPool =
+    //                db.getQuizLanguages(quizID)
+    //                        .thenCompose(
+    //                                languages ->
+    //                                        db.getQuizStringPool(quizID,
+    // getBestLanguage(languages)));
+    //
+    //        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
+    //
+    //        CompletableFuture.allOf(stringPool, quizStructure)
+    //                .whenComplete(
+    //                        (aVoid, throwable) -> {
+    //                            if (throwable != null)
+    //                                Toast.makeText(
+    //                                                requireContext(),
+    //                                                R.string.database_error,
+    //                                                Toast.LENGTH_SHORT)
+    //                                        .show();
+    //                            else
+    //                                launchQuizActivity(
+    //                                        quizStructure
+    //                                                .join()
+    //                                                .instantiateLanguage(stringPool.join()));
+    //                        });
+    //
+    //        progressBar.setVisibility(INVISIBLE);
+    //    }
 
     // Handles when a user clicked on the button to edit a quiz
     private void editQuiz(int position) {
@@ -226,13 +226,13 @@ public class HomeQuizListFragment extends Fragment
     }
 
     // Launches the quiz activity with the given quiz. This is used when a quiz is selected.
-    private void launchQuizActivity(Quiz quiz) {
-        Intent intent = new Intent(requireActivity(), QuizActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(QUIZ_ID, quiz);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
+    //    private void launchQuizActivity(Quiz quiz) { TODO next sprint
+    //        Intent intent = new Intent(requireActivity(), QuizActivity.class);
+    //        Bundle bundle = new Bundle();
+    //        bundle.putSerializable(QUIZ_ID, quiz);
+    //        intent.putExtras(bundle);
+    //        startActivity(intent);
+    //    }
 
     // Launches the EditSettingsActivity with the given quiz. This is used when a quiz is either
     // added or modified.
