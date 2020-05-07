@@ -13,8 +13,8 @@ public class searchTest {
 
     @Test
     public void search() throws ExecutionException, InterruptedException {
-        assertFalse(db.searchDatabase(2, "quiz").get().isEmpty());
-        assertTrue(db.searchDatabase(2, "qsdvsuiz").get().isEmpty());
+        assertFalse(db.searchDatabase(2, 10, "Title").get().isEmpty());
+        assertTrue(db.searchDatabase(2,  10, "qsdvsuiz").get().isEmpty());
     }
 
 
