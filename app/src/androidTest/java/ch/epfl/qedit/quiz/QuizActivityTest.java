@@ -5,6 +5,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -130,6 +131,28 @@ public class QuizActivityTest {
         launchActivity();
         onView(withId(R.id.time)).perform(click());
         onView(withText("Unimplemented Feature"))
+                .inRoot(
+                        withDecorView(
+                                Matchers.not(
+                                        is(testRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+        finishActivity();
+    }
+
+    @Test
+    public void testDoneNoCLicked() {
+        launchActivity();
+        onView(withId(R.id.validate)).perform(click());
+        onView(withText("No")).inRoot(isDialog()).perform(click());
+        finishActivity();
+    }
+
+    @Test
+    public void testDoneYesClicked() {
+        launchActivity();
+        onView(withId(R.id.validate)).perform(click());
+        onView(withText("Yes")).inRoot(isDialog()).perform(click());
+        onView(withText("number of good answers = 0"))
                 .inRoot(
                         withDecorView(
                                 Matchers.not(

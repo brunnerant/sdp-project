@@ -55,4 +55,44 @@ public class MatrixModelTest {
         assertEquals("test", matrixModel.getAnswer(0, 0));
         assertEquals("", matrixModel.getAnswer(0, 1));
     }
+
+    @Test
+    public void testEqualsReturnsFalseWithNonMatrixModel() {
+        MatrixModel matrix1 = new MatrixModel(1, 1);
+        String test = "test";
+        assertEquals(false, matrix1.equals(test));
+    }
+
+    @Test
+    public void testEqualsWorksForSameModels() {
+        MatrixModel matrixModel1 = new MatrixModel(1, 1);
+        MatrixModel matrixModel2 = new MatrixModel(1, 1);
+        matrixModel1.updateAnswer(1, 1, "test");
+        matrixModel2.updateAnswer(1, 1, "test");
+
+        assertEquals(true, matrixModel1.equals(matrixModel2));
+        assertEquals(true, matrixModel2.equals(matrixModel1));
+    }
+
+    @Test
+    public void testDifferentModelsNotEqual() {
+        MatrixModel matrixModel1 = new MatrixModel(1, 1);
+        MatrixModel matrixModel2 = new MatrixModel(1, 1);
+        matrixModel1.updateAnswer(1, 1, "test1");
+        matrixModel2.updateAnswer(1, 1, "test2");
+        assertEquals(false, matrixModel1.equals(matrixModel2));
+        assertEquals(false, matrixModel2.equals(matrixModel1));
+    }
+
+    @Test
+    public void testDifferentSizeOfModelNotEqual() {
+        MatrixModel matrixModel1 = new MatrixModel(1, 1);
+        MatrixModel matrixModel2 = new MatrixModel(1, 2);
+
+        matrixModel1.updateAnswer(1, 1, "test");
+        matrixModel2.updateAnswer(1, 1, "test");
+        matrixModel2.updateAnswer(1, 2, "test");
+        assertEquals(false, matrixModel1.equals(matrixModel2));
+        assertEquals(false, matrixModel2.equals(matrixModel1));
+    }
 }

@@ -3,7 +3,6 @@ package ch.epfl.qedit.view.quiz;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,6 +18,7 @@ import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
@@ -87,38 +86,31 @@ public class QuizActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.validate:
-                new AlertDialog.Builder(this)
-                        .setTitle("Finish Quiz")
-                        .setMessage("Are you sure you want to correct this quiz ?")
-                        .setPositiveButton(
-                                R.string.yes,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ImmutableList<Question> questions = quiz.getQuestions();
-                                        HashMap<Integer, AnswerModel> answers =
-                                                model.getAnswers().getValue();
-                                        int goodAnswers = 0;
-                                        for (int i = 0; i < questions.size(); i++) {
-                                            if (questions
-                                                    .get(i)
-                                                    .getFormat()
-                                                    .correct(answers.get(i))) goodAnswers++;
-                                        }
-                                        Toast.makeText(
-                                                        getApplicationContext(),
-                                                        "number of good answers = " + goodAnswers,
-                                                        Toast.LENGTH_SHORT)
-                                                .show();
-                                    }
-                                })
-                        .setNegativeButton(R.string.no, null)
-                        .show();
+                validateQuz();
         }
 
         return true;
     }
 
+    private void validateQuz() {
+        ConfirmDialog.create(
+                "Are you sure you want to correct this quiz ?",
+                (ConfirmDialog.ConfirmationListener)
+                        dialog -> {
+                            ImmutableList<Question> questions = quiz.getQuestions();
+                            HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
+                            int goodAnswers = 0;
+                            for (int i = 0; i < questions.size(); i++) {
+                                if (questions.get(i).getFormat().correct(answers.get(i)))
+                                    goodAnswers++;
+                            }
+                            Toast.makeText(
+                                            getApplicationContext(),
+                                            "number of good answers = " + goodAnswers,
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+                        });
+    }
     /** This function handles navigating back and forth between questions */
     private void handleNavigation(int offset) {
 

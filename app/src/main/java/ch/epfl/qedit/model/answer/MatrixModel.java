@@ -38,19 +38,20 @@ public class MatrixModel extends AnswerModel {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (o instanceof MatrixModel) {
-            for (int i = 0; i < numRows; ++i) {
-                for (int j = 0; j < numCols; ++j) {
-                    try {
-                        if (!(matrix[i][j].trim().toLowerCase()
-                                == ((MatrixModel) o).getAnswer(i, j).trim().toLowerCase()))
-                            return false;
-                    } catch (IndexOutOfBoundsException e) {
+        if (!(o instanceof MatrixModel)) return false;
+
+        for (int i = 0; i < numRows; ++i) {
+            for (int j = 0; j < numCols; ++j) {
+                try {
+                    if (!(matrix[i][j].trim().toLowerCase()
+                            == ((MatrixModel) o).getAnswer(i, j).trim().toLowerCase()))
                         return false;
-                    }
+                } catch (IndexOutOfBoundsException e) {
+                    return false;
                 }
             }
         }
+
         return true;
     }
 }
