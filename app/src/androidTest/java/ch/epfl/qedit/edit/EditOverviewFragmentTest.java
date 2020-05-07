@@ -27,7 +27,7 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -51,8 +51,8 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
             FragmentTestRule.create(EditOverviewFragment.class, false, false);
 
     @Rule
-    public final ActivityTestRule<EditQuestionActivity> resultTestRule =
-            new ActivityTestRule<>(EditQuestionActivity.class, false, false);
+    public final IntentsTestRule<EditQuestionActivity> resultTestRule =
+            new IntentsTestRule<>(EditQuestionActivity.class, false, false);
 
     @Before
     public void setUp() {
@@ -189,5 +189,17 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
                 allOf(
                         hasComponent(EditQuestionActivity.class.getName()),
                         hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
+    }
+
+    @Test
+    public void testEmptyHint() {
+        onView(withId(R.id.empty_list_hint)).check(matches(not(isDisplayed())));
+
+        for (int i = 0; i < mockQuiz.getQuestions().size(); ++i) {
+            item(0).perform(click());
+            itemView(0, R.id.delete_button).perform(click());
+        }
+
+        onView(withId(R.id.empty_list_hint)).check(matches(isDisplayed()));
     }
 }
