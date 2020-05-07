@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 
 import android.content.Intent;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.util.LocaleHelper;
@@ -36,6 +37,7 @@ public class LoginActivityLanguageTest {
     public void launchActivity() {
         Intent intent = new Intent();
         testRule.launchActivity(intent);
+        Espresso.closeSoftKeyboard();
     }
 
     @After
@@ -62,6 +64,9 @@ public class LoginActivityLanguageTest {
         } else {
             pos = 0;
         }
+
+        onView(withId(R.id.language_selection)).perform(click());
+        onData(anything()).atPosition(1 - pos).perform(click());
 
         onView(withId(R.id.login_button)).perform(closeSoftKeyboard());
         onView(withId(R.id.language_selection)).perform(click());

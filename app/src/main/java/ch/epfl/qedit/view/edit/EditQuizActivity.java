@@ -1,50 +1,55 @@
 package ch.epfl.qedit.view.edit;
 
+import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
+
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.view.quiz.QuestionFragment;
-import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.Arrays;
-import java.util.List;
+import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.viewmodel.EditionViewModel;
+import java.util.Objects;
 
+/**
+ * This class prepares the ViewModel and launches the Overview and the Preview fragment used for
+ * editing quizzes
+ */
 public class EditQuizActivity extends AppCompatActivity {
-    private QuizViewModel model;
-    private Quiz quiz;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        tempQuiz();
-        // For now, we inflate the quiz edit overview fragment
-        model = new ViewModelProvider(this).get(QuizViewModel.class);
-        model.setQuiz(quiz);
+        // Get the QuizBuilder and the StringPool from the intent
+        Intent intent = getIntent();
+        Quiz.Builder quizBuilder =
+                (Quiz.Builder)
+                        Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_BUILDER);
+        StringPool stringPool =
+                (StringPool)
+                        Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
 
+        // Initialize the ViewModel
+        EditionViewModel model = new ViewModelProvider(this).get(EditionViewModel.class);
+        model.setQuizBuilder(quizBuilder);
+        model.setStringPool(stringPool);
+
+        // Launch the the two fragments in this activity
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.quiz_overview_container, new EditOverviewFragment())
-                .replace(R.id.question_details_container, new QuestionFragment())
+                .replace(R.id.question_details_container, new EditPreviewFragment())
                 .commit();
     }
 
-    // TODO: Delete when we connect the rest of the app
-    private void tempQuiz() {
-        Question question1 =
-                new Question("Bananas", "How many bananas are there on Earth.", "matrix1x1");
-        Question question2 =
-                new Question("Apples", "How many apples are there on Earth.", "matrix1x1");
-        Question question4 = new Question("Vectors", "Give a unit vector.", "matrix1x3");
-        Question question5 =
-                new Question("Operations", "What is the results of 1 + 10.", "matrix1x1");
-        Question question6 = new Question("Matrices", "Fill those matrix.", "matrix3x3");
-        List<Question> quizzes =
-                Arrays.asList(question2, question1, question4, question5, question6);
-
-        quiz = new Quiz("I am a Quiz!", quizzes);
+    @Override
+    /* This method is needed to apply the desired language at the activity startup */
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 }
