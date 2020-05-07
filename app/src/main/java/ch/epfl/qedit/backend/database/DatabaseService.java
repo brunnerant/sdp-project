@@ -46,5 +46,5 @@ public interface DatabaseService {
      */
     CompletableFuture<StringPool> getQuizStringPool(String quizId, String language);
 
-    CompletableFuture<List<String>> searchDatabase(int number, String search);
+    CompletableFuture<List<String>> searchDatabase(int start, int end, String search);
 }

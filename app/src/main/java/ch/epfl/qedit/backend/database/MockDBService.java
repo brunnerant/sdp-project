@@ -11,6 +11,8 @@ import ch.epfl.qedit.model.answer.MatrixFormat;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -204,26 +206,26 @@ public class MockDBService implements DatabaseService {
 
 
     @Override
-    public CompletableFuture<List<String>> searchDatabase(int number, String search) {
+    public CompletableFuture<List<String>> searchDatabase(int start, int end, String search) {
         CompletableFuture<List<String>> future = new CompletableFuture<>();
         idlingResource.increment();
 
         new Thread(
                 () -> {
-                    ArrayList<String> list = new ArrayList<>();
-                    int i = 0;
-                    for(String s: quizzes.keySet()) {
-                        if (s.contains(search)) {
-                            ++i;
-                            if(i == number) {
-                                break;
-                            }
-                            list.add(s);
+                    ArrayList<String> list = new ArrayList<>(quizzes.keySet());
+                    ArrayList<String> list2 = new ArrayList<>();
+                    Collections.sort(list);
+                    int startR = start < list.size() ? start: list.size();
+                    int endR = end < list.size() ? end: list.size();
+                    System.out.println("adiubvaiudvb avbdkjb vakjdv bkjadbv kjadb kj vka dvbk b " + endR);
+                    for(int i = startR; i < endR; ++i) {
+                        if (list.get(i).contains(search)) {
+                            list2.add(list.get(i));
                         }
                     }
 
                     wait2second();
-                    future.complete(list);
+                    future.complete(list2);
                     idlingResource.decrement();
                 })
                 .run();

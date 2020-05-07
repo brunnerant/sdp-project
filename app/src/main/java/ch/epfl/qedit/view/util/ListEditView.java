@@ -340,6 +340,10 @@ public class ListEditView extends RecyclerView {
         };
         }
 
+        public void clear() {
+            items.clear();
+        }
+
         // This handles items being moved around
         private void moveItem(int from, int to) {
             if (from == to) return;

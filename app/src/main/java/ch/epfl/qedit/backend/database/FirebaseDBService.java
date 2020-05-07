@@ -75,15 +75,15 @@ public class FirebaseDBService implements DatabaseService {
     }
 
     @Override
-    public CompletableFuture<List<String>> searchDatabase(int number, String search) {
+    public CompletableFuture<List<String>> searchDatabase(int start, int end, String search) {
         CompletableFuture<List<String>> future = new CompletableFuture<>();
         db.collection("quizzes").get().getResult().getDocuments();
-//        for (DocumentSnapshot document : db.collection("quizzes").get().getResult().getDocuments()) {
+        for (DocumentSnapshot document : db.collection("quizzes").get().getResult().getDocuments()) {
 //            System.out.println(document.getId());
 //            for(String s: document.getData().keySet()) {
 //                System.out.println(s);
 //            }
-//        }
+        }
         return future;
     }
 }

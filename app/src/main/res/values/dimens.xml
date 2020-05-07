@@ -11,5 +11,6 @@
     <dimen name="answer_text_helper_padding">30dp</dimen>
 
     <dimen name="helper_text_size">20sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
 
