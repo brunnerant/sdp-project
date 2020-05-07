@@ -114,10 +114,10 @@ public class EditQuizActivity extends AppCompatActivity {
         overviewActive = !overviewActive;
     }
 
-    /** TODO */
+    /** This method builds the quiz and returns it along with string pool */
     private void returnResult() {
         Intent intent = new Intent();
-        intent.putExtra(QUIZ_ID, model.getQuizBuilder().build()); // TODO check that non empty
+        intent.putExtra(QUIZ_ID, model.getQuizBuilder().build());
         intent.putExtra(STRING_POOL, model.getStringPool());
         setResult(RESULT_OK, intent);
         finish();

@@ -155,7 +155,7 @@ public class HomeQuizListFragment extends Fragment
     }
 
     // Handles when a user clicked on the button to show a quiz
-    private void showQuiz(int position) { // TODO
+    private void showQuiz(int position) { // TODO next sprint
         final String quizID = quizzes.get(position).getKey();
         progressBar.setVisibility(VISIBLE);
 

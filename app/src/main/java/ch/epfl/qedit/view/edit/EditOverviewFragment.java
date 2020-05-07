@@ -32,8 +32,6 @@ public class EditOverviewFragment extends Fragment {
     private List<String> titles;
     private TextView emptyHint;
 
-    // TODO title in topbar, confirmation dialog when deleting, return result
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,8 +64,7 @@ public class EditOverviewFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            // Get the question and the extended StringPool from the returned data //TODO no other
-            // withResults in the children activities
+            // Get the question and the extended StringPool from the returned data
             Question question = (Question) data.getExtras().getSerializable(QUESTION);
             StringPool extendedStringPool =
                     (StringPool) data.getExtras().getSerializable(STRING_POOL);

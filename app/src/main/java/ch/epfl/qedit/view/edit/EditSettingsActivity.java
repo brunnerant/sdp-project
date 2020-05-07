@@ -80,7 +80,7 @@ public class EditSettingsActivity extends AppCompatActivity
 
     public void startEditing(View view) {
         // Update the title in the StringPool and the languageCode
-        stringPool.update(TITLE_ID, editTitle.getText().toString()); // TODO check title
+        stringPool.update(TITLE_ID, editTitle.getText().toString());
         stringPool.setLanguageCode(languageCode);
 
         // Launch the EditQuizActivity

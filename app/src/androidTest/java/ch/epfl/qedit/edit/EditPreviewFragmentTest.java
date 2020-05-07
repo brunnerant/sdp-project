@@ -65,11 +65,4 @@ public class EditPreviewFragmentTest {
         onView(withId(R.id.question_title)).check(matches(withText(question.getTitle())));
         onView(withId(R.id.question_display)).check(matches(withText(question.getText())));
     }
-
-    // @Test TODO
-    public void testFragmentDisplaysEmptyQuestionCorrectly() {
-        model.getFocusedQuestion().postValue(5);
-        onView(withId(R.id.question_title)).check(matches(withText(testNoTitle)));
-        onView(withId(R.id.question_display)).check(matches(withText(testNoText)));
-    }
 }

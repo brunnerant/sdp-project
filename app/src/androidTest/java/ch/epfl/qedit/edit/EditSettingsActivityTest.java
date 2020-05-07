@@ -7,12 +7,16 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
+import static ch.epfl.qedit.view.edit.EditSettingsActivity.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.AllOf.allOf;
 
 import android.content.Intent;
@@ -20,6 +24,7 @@ import android.os.Bundle;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.edit.EditSettingsActivity;
@@ -72,6 +77,10 @@ public class EditSettingsActivityTest {
         onView(withId(R.id.edit_quiz_title)).perform((typeText("tle")));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_start_editing)).perform(click());
-        intended(allOf(hasComponent(EditQuizActivity.class.getName())));
+        intended(
+                allOf(
+                        hasComponent(EditQuizActivity.class.getName()),
+                        hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class)),
+                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
     }
 }

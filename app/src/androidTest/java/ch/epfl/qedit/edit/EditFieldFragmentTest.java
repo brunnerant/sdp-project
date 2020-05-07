@@ -18,7 +18,6 @@ import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditFieldFragment.NUMBER_TYPE_IDX;
 import static ch.epfl.qedit.view.edit.EditFieldFragment.PRE_FILLED_TYPE_IDX;
 import static ch.epfl.qedit.view.edit.EditFieldFragment.TEXT_TYPE_IDX;
-import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
@@ -33,7 +32,6 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.edit.EditQuestionActivity;
 import org.junit.After;
@@ -49,13 +47,11 @@ public class EditFieldFragmentTest {
     @Before
     public void setUp() {
         Intents.init();
-        Question question = null;
         StringPool stringPool = new StringPool();
 
         Intent intent;
         intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(QUESTION, question); // TODO
         bundle.putSerializable(STRING_POOL, stringPool);
         intent.putExtras(bundle);
 

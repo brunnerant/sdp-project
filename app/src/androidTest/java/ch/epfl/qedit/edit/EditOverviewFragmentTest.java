@@ -8,6 +8,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -17,6 +18,8 @@ import static ch.epfl.qedit.util.Util.createMockQuiz;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.NEW_QUESTION_REQUEST_CODE;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 
@@ -108,15 +111,14 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         assertOverlayAt(-1, 4);
     }
 
-    // @Test TODO
-    public void testCanAddItem() {
-        //        String newQuestion =
-        //
-        // testRule.getActivity().getResources().getString(R.string.new_empty_question);
+    @Test
+    public void testCanAddButton() {
+        onView(withId(R.id.add_question_button)).perform(click());
 
-        //        onView(withText(newQuestion)).check(doesNotExist());
-        //        onView(withId(R.id.add_question_button)).perform(click());
-        //        onView(withText(newQuestion)).check(matches(isDisplayed()));
+        intended(
+                allOf(
+                        hasComponent(EditQuestionActivity.class.getName()),
+                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
     }
 
     @Test
@@ -183,6 +185,9 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         item(0).perform(click());
         itemView(0, R.id.edit_button).perform(click());
 
-        intended(allOf(hasComponent(EditQuestionActivity.class.getName())));
+        intended(
+                allOf(
+                        hasComponent(EditQuestionActivity.class.getName()),
+                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
     }
 }

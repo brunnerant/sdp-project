@@ -54,29 +54,4 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
                 .check(matches(withText("How many matches can fit in a shoe of size 43?")));
         onView(withId(R.id.answer_table)).check(matches(isDisplayed()));
     }
-
-    // @Test TODO
-    public void testAnswerFormatDispatch() {
-        model.getFocusedQuestion().postValue(0);
-
-        onView(withId(R.id.question_title))
-                .check(matches(withText("Question 1 - The matches problem")));
-        onView(withId(R.id.question_display))
-                .check(matches(withText("How many matches can fit in a shoe of size 43 ?")));
-        onView(withId(R.id.answer_table)).check(matches(isDisplayed()));
-
-        model.getFocusedQuestion().postValue(1);
-
-        onView(withId(R.id.question_title)).check(matches(withText("Question 2 - Title 2")));
-        onView(withId(R.id.question_display)).check(matches(withText("Empty answer format")));
-        //        onView(withId(R.id.testAnswerFormatTextView)).check(matches(isDisplayed()));
-        //        onView(withId(R.id.testAnswerFormatTextView))
-        //                .check(
-        //                        matches(
-        //                                withText(
-        //                                        testRule.getFragment()
-        //                                                .getResources()
-        //
-        // .getString(R.string.empty_answer_format_message))));
-    }
 }
