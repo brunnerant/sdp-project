@@ -314,6 +314,7 @@ public class ListEditView extends RecyclerView {
                     filtered.addAll(e.e);
                 } else {
                     subFilter(filtered, constraint);
+                    // TODO: Delete below
 //                    String pattern = constraint.toString().toLowerCase().trim();
 //
 //                    for(int i = 0; i < e.e.size(); ++i) {

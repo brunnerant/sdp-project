@@ -159,6 +159,8 @@ public class EditQuestionActivity extends AppCompatActivity {
             // return the Question created by this activity to the callee activity
             Question question = new Question(titleId, textId, answerFormat);
             Intent intent = new Intent();
+
+            // TODO This below doesn't work and I don't understand why
             intent.putExtra(QUESTION, question);
             intent.putExtra(STRING_POOL, stringPool);
             setResult(RESULT_OK, intent);

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.Search.PairQuestions;
+import ch.epfl.qedit.Search.StringSearchable;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.util.ListEditView;
@@ -21,13 +22,13 @@ import java.util.List;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
-    private PairQuestions questions;
+    private StringSearchable titles;
     public static final String QUESTION = "ch.epfl.qedit.view.edit.QUESTION";
     public static final int EDIT_QUESTION_ACTIVITY_REQUEST_CODE = 0;
-    private ListEditView.Adapter<Question, PairQuestions> adapter;
+    private ListEditView.Adapter<String, StringSearchable> adapter;
     //private ListEditView.Adapter<String> adapter;
     private EditionViewModel model;
-    private List<String> titles;
+    //private List<String> titles;
 
     @Override
     public View onCreateView(
@@ -46,17 +47,17 @@ public class EditOverviewFragment extends Fragment {
         setMoveListener();
         listEditView.setAdapter(adapter);
 
-//        // Configure the add button
-//        view.findViewById(R.id.add_question_button)
-//                .setOnClickListener(
-//                        new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                model.getQuizBuilder().addEmptyQuestion();
-//                                adapter.addItem(
-//                                        getResources().getString(R.string.new_empty_question));
-//                            }
-//                        });
+        // Configure the add button
+        view.findViewById(R.id.add_question_button)
+                .setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                model.getQuizBuilder().addEmptyQuestion();
+                                adapter.addItem(
+                                        getResources().getString(R.string.new_empty_question));
+                            }
+                        });
 
         return view;
     }
@@ -78,7 +79,7 @@ public class EditOverviewFragment extends Fragment {
                 // Update the question that was empty before by the filled out question
                 int position = model.getFocusedQuestion().getValue();
                 model.getQuizBuilder().update(position, filledOutQuestion);
-                titles.set(position, extendedStringPool.get(filledOutQuestion.getTitle()));
+                titles.e.set(position, extendedStringPool.get(filledOutQuestion.getTitle()));
                 adapter.updateItem(position);
 
                 // Trigger the preview fragment to draw the updated title and text
@@ -88,7 +89,7 @@ public class EditOverviewFragment extends Fragment {
     }
 
     private void prepareTitles() {
-        titles = new ArrayList<>();
+        titles.e = new ArrayList<>();
 
         // Add the titles of all question already in the builder to a list
         for (Question question : model.getQuizBuilder().getQuestions()) {
@@ -96,21 +97,21 @@ public class EditOverviewFragment extends Fragment {
             String text = model.getStringPool().get(key);
 
             // TODO Support old questions that store the strings directly as well
-            titles.add((text == null) ? key : text);
+            titles.e.add((text == null) ? key : text);
         }
     }
 
     private void createAdapter() {
         // Create an adapter for the title list
-//        adapter =
-//                new ListEditView.Adapter<String>(
-//                        titles,
-//                        new ListEditView.GetItemText<String>() {
-//                            @Override
-//                            public String getText(String item) {
-//                                return item;
-//                            }
-//                        });
+        adapter =
+                new ListEditView.Adapter<String, StringSearchable>(
+                        titles,
+                        new ListEditView.GetItemText<String>() {
+                            @Override
+                            public String getText(String item) {
+                                return item;
+                            }
+                        });
     }
 
     private void setItemListener() {
