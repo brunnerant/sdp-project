@@ -76,6 +76,18 @@ public class FirebaseDBService implements DatabaseService {
         return future;
     }
 
+    public void tryy(List<Map.Entry<String, String>> list, String s, CompletableFuture<List<Map.Entry<String, String>>> future) {
+        try {
+            list.add(
+                    new AbstractMap.SimpleEntry<String, String>(
+                            s, getQuizStructure(s).get().getTitle()));
+        } catch (ExecutionException e) {
+            future.completeExceptionally(e);
+        } catch (InterruptedException e) {
+            future.completeExceptionally(e);
+        }
+    }
+
     @Override
     public CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(
             int start, int end, String search) {
@@ -86,15 +98,7 @@ public class FirebaseDBService implements DatabaseService {
                 db.collection("quizzes").get().getResult().getDocuments()) {
             for (String s : document.getData().keySet()) {
                 if (s.contains(search)) {
-                    try {
-                        list.add(
-                                new AbstractMap.SimpleEntry<String, String>(
-                                        s, getQuizStructure(s).get().getTitle()));
-                    } catch (ExecutionException e) {
-                        future.completeExceptionally(e);
-                    } catch (InterruptedException e) {
-                        future.completeExceptionally(e);
-                    }
+                    tryy(list, s, future);
                 }
             }
         }
