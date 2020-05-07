@@ -179,11 +179,11 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
                         EDIT_QUESTION_ACTIVITY_REQUEST_CODE);
     }
 
-    //    @Test
-    //    public void testLaunchesEditQuestionActivity() {
-    //        item(0).perform(click());
-    //        itemView(0, R.id.edit_button).perform(click());
-    //
-    //        // intended(allOf(hasComponent(EditQuestionActivity.class.getName()))); TODO
-    //    }
+    @Test
+    public void testLaunchesEditQuestionActivity() {
+        item(0).perform(click());
+        itemView(0, R.id.edit_button).perform(click());
+
+        // intended(allOf(hasComponent(EditQuestionActivity.class.getName()))); TODO
+    }
 }

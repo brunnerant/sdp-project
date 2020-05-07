@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
-    private StringSearchable titles;
+    private StringSearchable titles = new StringSearchable();;
     public static final String QUESTION = "ch.epfl.qedit.view.edit.QUESTION";
     public static final int EDIT_QUESTION_ACTIVITY_REQUEST_CODE = 0;
     private ListEditView.Adapter<String, StringSearchable> adapter;
@@ -35,7 +35,6 @@ public class EditOverviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
 
         model = new ViewModelProvider(requireActivity()).get(EditionViewModel.class);
-
         prepareTitles();
 
         // Retrieve and configure the recycler view
