@@ -78,8 +78,8 @@ public class HomeQuizListFragment extends Fragment
         // Instantiate Handler and the DatabaseService
         db = DatabaseFactory.getInstance();
         handler = new Handler();
-        HomeActivity homeActivity = (HomeActivity)getActivity();
-        //homeActivity.setAdapter(listAdapter);
+        HomeActivity homeActivity = (HomeActivity) getActivity();
+        // homeActivity.setAdapter(listAdapter);
         return view;
     }
 
@@ -141,24 +141,25 @@ public class HomeQuizListFragment extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.menu_editor_mode, menu);
+        // inflater.inflate(R.menu.menu_editor_mode, menu);
         inflater.inflate(R.menu.search, menu);
 
         MenuItem item = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) item.getActionView();
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                listAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        listAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
         super.onCreateOptionsMenu(menu, inflater);
     }
 

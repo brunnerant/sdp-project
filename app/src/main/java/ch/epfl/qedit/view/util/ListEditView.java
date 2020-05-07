@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.Search.SearchablePair;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -149,7 +148,8 @@ public class ListEditView extends RecyclerView {
      *
      * @param <T> the type of the underlying items
      */
-    public static class Adapter<T, E extends SearchablePair<T>> extends RecyclerView.Adapter<ItemHolder> implements Filterable {
+    public static class Adapter<T, E extends SearchablePair<T>>
+            extends RecyclerView.Adapter<ItemHolder> implements Filterable {
 
         private final E e;
         private List<T> items;
@@ -294,7 +294,7 @@ public class ListEditView extends RecyclerView {
         private void subFilter(List<T> filtered, CharSequence constraint) {
             String pattern = constraint.toString().toLowerCase().trim();
 
-            for(int i = 0; i < e.e.size(); ++i) {
+            for (int i = 0; i < e.e.size(); ++i) {
                 T searched = e.search(pattern, i);
 
                 if (searched != null) {
@@ -302,42 +302,44 @@ public class ListEditView extends RecyclerView {
                 }
             }
         }
+
         @Override
         public Filter getFilter() {
             return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                List<T> filtered = new ArrayList<>();
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    List<T> filtered = new ArrayList<>();
 
-                e.e = new ArrayList<>(backup);
-                if (constraint == null || constraint.length() == 0) {
-                    filtered.addAll(e.e);
-                } else {
-                    subFilter(filtered, constraint);
-                    // TODO: Delete below
-//                    String pattern = constraint.toString().toLowerCase().trim();
-//
-//                    for(int i = 0; i < e.e.size(); ++i) {
-//                        T searched = e.search(pattern, i);
-//
-//                        if (searched != null) {
-//                            filtered.add(searched);
-//                        }
-//                    }
+                    e.e = new ArrayList<>(backup);
+                    if (constraint == null || constraint.length() == 0) {
+                        filtered.addAll(e.e);
+                    } else {
+                        subFilter(filtered, constraint);
+                        // TODO: Delete below
+                        //                    String pattern =
+                        // constraint.toString().toLowerCase().trim();
+                        //
+                        //                    for(int i = 0; i < e.e.size(); ++i) {
+                        //                        T searched = e.search(pattern, i);
+                        //
+                        //                        if (searched != null) {
+                        //                            filtered.add(searched);
+                        //                        }
+                        //                    }
+                    }
+
+                    FilterResults r = new FilterResults();
+                    r.values = new ArrayList<>(filtered);
+                    return r;
                 }
 
-                FilterResults r = new FilterResults();
-                r.values = new ArrayList<>(filtered);
-                return r;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                items.clear();
-                items.addAll((List) results.values);
-                notifyDataSetChanged();
-            }
-        };
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    items.clear();
+                    items.addAll((List) results.values);
+                    notifyDataSetChanged();
+                }
+            };
         }
 
         public void clear() {

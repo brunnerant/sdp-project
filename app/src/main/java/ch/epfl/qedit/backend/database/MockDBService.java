@@ -1,24 +1,17 @@
 package ch.epfl.qedit.backend.database;
 
-import android.util.Pair;
-
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-
-import ch.epfl.qedit.Search.Searchable;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import com.google.common.collect.ImmutableList;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -207,32 +200,34 @@ public class MockDBService implements DatabaseService {
         return future;
     }
 
-
-
     @Override
-    public CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(int start, int end, String search) {
+    public CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(
+            int start, int end, String search) {
         CompletableFuture<List<Map.Entry<String, String>>> future = new CompletableFuture<>();
         idlingResource.increment();
 
         new Thread(
-                () -> {
-                    ArrayList<String> list = new ArrayList<>(quizzes.keySet());
-                    List<Map.Entry<String, String>> list2 = new ArrayList<>();
-                    Collections.sort(list);
+                        () -> {
+                            ArrayList<String> list = new ArrayList<>(quizzes.keySet());
+                            List<Map.Entry<String, String>> list2 = new ArrayList<>();
+                            Collections.sort(list);
 
-                    int startR = start < list.size() ? start: list.size();
-                    int endR = end < list.size() ? end: list.size();
-                    for(int i = startR; i < endR; ++i) {
-                        MockQuiz quiz = quizzes.get(list.get(i));
-                        if(quiz.getStringPool("en").get("main_title").contains(search)) {
-                            list2.add(new AbstractMap.SimpleEntry<String, String>(list.get(i), quiz.getStringPool("en").get("main_title")));
-                        }
-                    }
+                            int startR = start < list.size() ? start : list.size();
+                            int endR = end < list.size() ? end : list.size();
+                            for (int i = startR; i < endR; ++i) {
+                                MockQuiz quiz = quizzes.get(list.get(i));
+                                if (quiz.getStringPool("en").get("main_title").contains(search)) {
+                                    list2.add(
+                                            new AbstractMap.SimpleEntry<String, String>(
+                                                    list.get(i),
+                                                    quiz.getStringPool("en").get("main_title")));
+                                }
+                            }
 
-                    wait2second();
-                    future.complete(list2);
-                    idlingResource.decrement();
-                })
+                            wait2second();
+                            future.complete(list2);
+                            idlingResource.decrement();
+                        })
                 .run();
         return future;
     }

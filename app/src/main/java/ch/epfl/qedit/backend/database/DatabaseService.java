@@ -1,12 +1,7 @@
 package ch.epfl.qedit.backend.database;
 
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.Search.Searchable;
-import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -49,5 +44,6 @@ public interface DatabaseService {
      */
     CompletableFuture<StringPool> getQuizStringPool(String quizId, String language);
 
-    CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(int start, int end, String search);
+    CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(
+            int start, int end, String search);
 }

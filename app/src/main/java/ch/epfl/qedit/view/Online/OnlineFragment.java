@@ -12,35 +12,25 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.Search.SearchableMapEntry;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.EditTextDialog;
 import ch.epfl.qedit.view.util.ListEditView;
-
-import static ch.epfl.qedit.view.LoginActivity.USER;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class OnlineFragment extends Fragment {
     public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
@@ -70,28 +60,30 @@ public class OnlineFragment extends Fragment {
         // Build the top bar and the dialogs
         setHasOptionsMenu(true);
         // Get user from the bundle created by the parent activity
-        //user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
-        //quizzes.e = new ArrayList<>(user.getQuizzes().entrySet().asList());
+        // user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
+        // quizzes.e = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter and bind it to the list edit view
         createAdapter();
         listEditView = view.findViewById(R.id.home_quiz_list);
         listEditView.setAdapter(listAdapter);
-        listEditView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+        listEditView.addOnScrollListener(
+                new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                    }
 
-            }
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    System.out.println("Wiuaebiuaeb iaeub aieubaeiub aeivu aviuae vbieau beieua bib iuv iav bia vbeai eavie aaei bveuiae iae beaieb i");
-                }
-            }
-        });
+                    @Override
+                    public void onScrollStateChanged(
+                            @NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            System.out.println(
+                                    "Wiuaebiuaeb iaeub aieubaeiub aeivu aviuae vbieau beieua bib iuv iav bia vbeai eavie aaei bveuiae iae beaieb i");
+                        }
+                    }
+                });
         // The progress bar is needed while waiting from the database
         progressBar = view.findViewById(R.id.quiz_loading);
 
@@ -138,35 +130,36 @@ public class OnlineFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.menu_editor_mode, menu);
+        // inflater.inflate(R.menu.menu_editor_mode, menu);
         inflater.inflate(R.menu.search, menu);
 
         MenuItem item = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) item.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                try {
-                    listAdapter.clear();
-                    quizzes2 = db.searchDatabase(load, load + 10, query).get();
-                    for(Map.Entry<String, String> e: quizzes2) {
-                        listAdapter.addItem(e);
+        searchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        try {
+                            listAdapter.clear();
+                            quizzes2 = db.searchDatabase(load, load + 10, query).get();
+                            for (Map.Entry<String, String> e : quizzes2) {
+                                listAdapter.addItem(e);
+                            }
+                            load = 10;
+                            searchView.clearFocus();
+                        } catch (ExecutionException e) {
+                        } catch (InterruptedException e) {
+                        }
+
+                        return false;
                     }
-                    load = 10;
-                    searchView.clearFocus();
-                } catch (ExecutionException e) {
-                } catch (InterruptedException e) {
-                }
 
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                load = 0;
-                return false;
-            }
-        });
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        load = 0;
+                        return false;
+                    }
+                });
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -209,9 +202,9 @@ public class OnlineFragment extends Fragment {
                         (aVoid, throwable) -> {
                             if (throwable != null)
                                 Toast.makeText(
-                                        requireContext(),
-                                        R.string.database_error,
-                                        Toast.LENGTH_SHORT)
+                                                requireContext(),
+                                                R.string.database_error,
+                                                Toast.LENGTH_SHORT)
                                         .show();
                             else
                                 launchQuizActivity(

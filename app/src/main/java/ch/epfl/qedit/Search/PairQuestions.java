@@ -6,7 +6,7 @@ public class PairQuestions extends SearchablePair<Question> {
 
     @Override
     public Question search(String string, int position) {
-        if(position >= e.size()) {
+        if (position >= e.size()) {
             throw new IllegalArgumentException();
         }
 

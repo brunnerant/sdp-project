@@ -5,9 +5,7 @@ import static ch.epfl.qedit.view.LoginActivity.USER;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.MenuItem;
-
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,14 +16,12 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.Online.OnlineActivity;
-
-import java.util.Objects;
-
 import com.google.android.material.navigation.NavigationView;
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    //private ListEditView.Adapter<Map.Entry<String, String>, SearchableMapEntry> listAdapter;
+    // private ListEditView.Adapter<Map.Entry<String, String>, SearchableMapEntry> listAdapter;
     private DrawerLayout drawer;
 
     @Override
@@ -66,10 +62,11 @@ public class HomeActivity extends AppCompatActivity
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
-//
-//    public void setAdapter(ListEditView.Adapter<Map.Entry<String, String>, SearchableMapEntry> listAdapter) {
-//        this.listAdapter = listAdapter;
-//    }
+    //
+    //    public void setAdapter(ListEditView.Adapter<Map.Entry<String, String>, SearchableMapEntry>
+    // listAdapter) {
+    //        this.listAdapter = listAdapter;
+    //    }
 
     @Override
     public void onBackPressed() {

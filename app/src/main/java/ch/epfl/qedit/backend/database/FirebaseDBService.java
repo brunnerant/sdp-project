@@ -5,11 +5,8 @@ import ch.epfl.qedit.model.StringPool;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -80,15 +77,19 @@ public class FirebaseDBService implements DatabaseService {
     }
 
     @Override
-    public CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(int start, int end, String search) {
+    public CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(
+            int start, int end, String search) {
         CompletableFuture<List<Map.Entry<String, String>>> future = new CompletableFuture<>();
         List<Map.Entry<String, String>> list = new ArrayList<>();
 
-        for (DocumentSnapshot document : db.collection("quizzes").get().getResult().getDocuments()) {
-            for(String s: document.getData().keySet()) {
-                if(s.contains(search)) {
+        for (DocumentSnapshot document :
+                db.collection("quizzes").get().getResult().getDocuments()) {
+            for (String s : document.getData().keySet()) {
+                if (s.contains(search)) {
                     try {
-                        list.add(new AbstractMap.SimpleEntry<String, String>(s, getQuizStructure(s).get().getTitle()));
+                        list.add(
+                                new AbstractMap.SimpleEntry<String, String>(
+                                        s, getQuizStructure(s).get().getTitle()));
                     } catch (ExecutionException e) {
                         future.completeExceptionally(e);
                     } catch (InterruptedException e) {
