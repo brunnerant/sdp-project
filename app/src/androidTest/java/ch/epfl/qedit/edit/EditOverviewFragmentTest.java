@@ -5,26 +5,29 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
-import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
 import static ch.epfl.qedit.util.Util.createMockQuiz;
-import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
-import static ch.epfl.qedit.view.edit.EditOverviewFragment.EDIT_QUESTION_ACTIVITY_REQUEST_CODE;
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.NEW_QUESTION_REQUEST_CODE;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.AllOf.allOf;
 
 import android.app.Instrumentation;
 import android.content.Intent;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -48,8 +51,8 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
             FragmentTestRule.create(EditOverviewFragment.class, false, false);
 
     @Rule
-    public final ActivityTestRule<EditQuestionActivity> resultTestRule =
-            new ActivityTestRule<>(EditQuestionActivity.class, false, false);
+    public final IntentsTestRule<EditQuestionActivity> resultTestRule =
+            new IntentsTestRule<>(EditQuestionActivity.class, false, false);
 
     @Before
     public void setUp() {
@@ -58,8 +61,6 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
 
         StringPool stringPool = new StringPool();
         stringPool.update(TITLE_ID, mockQuiz.getTitle());
-        stringPool.update(NO_QUESTION_TITLE_ID, "testNoTitle");
-        stringPool.update(NO_QUESTION_TEXT_ID, "testNoText");
 
         EditionViewModel model =
                 new ViewModelProvider(testRule.getActivity()).get(EditionViewModel.class);
@@ -111,13 +112,13 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     }
 
     @Test
-    public void testCanAddItem() {
-        String newQuestion =
-                testRule.getActivity().getResources().getString(R.string.new_empty_question);
-
-        onView(withText(newQuestion)).check(doesNotExist());
+    public void testCanAddButton() {
         onView(withId(R.id.add_question_button)).perform(click());
-        onView(withText(newQuestion)).check(matches(isDisplayed()));
+
+        intended(
+                allOf(
+                        hasComponent(EditQuestionActivity.class.getName()),
+                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
     }
 
     @Test
@@ -176,7 +177,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
                 .getActivity()
                 .startActivityForResult(
                         new Intent(testRule.getFragment().getContext(), EditQuestionActivity.class),
-                        EDIT_QUESTION_ACTIVITY_REQUEST_CODE);
+                        NEW_QUESTION_REQUEST_CODE);
     }
 
     @Test
@@ -184,6 +185,21 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         item(0).perform(click());
         itemView(0, R.id.edit_button).perform(click());
 
-        // intended(allOf(hasComponent(EditQuestionActivity.class.getName()))); TODO
+        intended(
+                allOf(
+                        hasComponent(EditQuestionActivity.class.getName()),
+                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
+    }
+
+    @Test
+    public void testEmptyHint() {
+        onView(withId(R.id.empty_list_hint)).check(matches(not(isDisplayed())));
+
+        for (int i = 0; i < mockQuiz.getQuestions().size(); ++i) {
+            item(0).perform(click());
+            itemView(0, R.id.delete_button).perform(click());
+        }
+
+        onView(withId(R.id.empty_list_hint)).check(matches(isDisplayed()));
     }
 }

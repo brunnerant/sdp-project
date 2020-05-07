@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="@string/menu_overview"
+        android:id="@+id/overview"
+        android:icon="@drawable/ic_menu"
+        app:showAsAction="always"
+        />
+    <item
+        android:title="@string/menu_timer"
+        android:id="@+id/time"
+        android:icon="@drawable/ic_timer"
+        app:showAsAction="always"
+        />
+    <item
+        android:title="@string/menu_previous"
+        android:id="@+id/previous"
+        android:icon="@drawable/ic_arrow_back"
+        app:showAsAction="always"
+        />
+    <item
+        android:title="@string/menu_next"
+        android:id="@+id/next"
+        android:icon="@drawable/ic_arrow_forward"
+        app:showAsAction="always"
+        />
+<<<<<<< HEAD:app/src/main/res/menu/menu.xml
+    <item
+        android:title="Validate"
+        android:id="@+id/validate"
+        android:icon="@drawable/ic_check_black"
+        app:showAsAction="always"
+        />
+
+
+=======
+>>>>>>> master:app/src/main/res/menu/quiz_menu.xml
+</menu>

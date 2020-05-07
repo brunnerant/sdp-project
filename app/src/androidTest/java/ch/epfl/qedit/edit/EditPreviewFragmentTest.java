@@ -4,8 +4,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
-import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.util.Util.createMockQuiz;
 
@@ -38,11 +36,8 @@ public class EditPreviewFragmentTest {
     public void setUp() {
         StringPool stringPool = new StringPool();
         stringPool.update(TITLE_ID, testTitle);
-        stringPool.update(NO_QUESTION_TITLE_ID, testNoTitle);
-        stringPool.update(NO_QUESTION_TEXT_ID, testNoText);
 
         Quiz.Builder quizBuilder = new Quiz.Builder(mockQuiz);
-        quizBuilder.addEmptyQuestion();
 
         model = new ViewModelProvider(testRule.getActivity()).get(EditionViewModel.class);
 
@@ -69,12 +64,5 @@ public class EditPreviewFragmentTest {
         model.getFocusedQuestion().postValue(0);
         onView(withId(R.id.question_title)).check(matches(withText(question.getTitle())));
         onView(withId(R.id.question_display)).check(matches(withText(question.getText())));
-    }
-
-    @Test
-    public void testFragmentDisplaysEmptyQuestionCorrectly() {
-        model.getFocusedQuestion().postValue(5);
-        onView(withId(R.id.question_title)).check(matches(withText(testNoTitle)));
-        onView(withId(R.id.question_display)).check(matches(withText(testNoText)));
     }
 }

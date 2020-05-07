@@ -44,8 +44,9 @@ public class MatrixModel extends AnswerModel {
         for (int i = 0; i < numRows; ++i) {
             for (int j = 0; j < numCols; ++j) {
                 try {
-                    toRet &=matrix[i][j].trim().toLowerCase()
-                            == ((MatrixModel) o).getAnswer(i, j).trim().toLowerCase();
+                    toRet &=
+                            matrix[i][j].trim().toLowerCase()
+                                    == ((MatrixModel) o).getAnswer(i, j).trim().toLowerCase();
 
                 } catch (IndexOutOfBoundsException e) {
                     return false;

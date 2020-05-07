@@ -191,7 +191,7 @@ public class QuizActivityTest {
         finishActivity();
     }
 
-    // @Test TODO
+    @Test
     public void testAnswersAreRestored() {
         launchActivity();
         onView(withId(R.id.next)).perform(click());

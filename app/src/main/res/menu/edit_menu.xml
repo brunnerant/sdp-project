@@ -7,13 +7,6 @@
         android:id="@+id/overview"
         android:icon="@drawable/ic_menu"
         app:showAsAction="always"
-
-        />
-    <item
-        android:title="@string/menu_timer"
-        android:id="@+id/time"
-        android:icon="@drawable/ic_timer"
-        app:showAsAction="always"
         />
     <item
         android:title="@string/menu_previous"
@@ -28,11 +21,9 @@
         app:showAsAction="always"
         />
     <item
-        android:title="Validate"
-        android:id="@+id/validate"
-        android:icon="@drawable/ic_check_black"
-        app:showAsAction="always"
-        />
-
+        android:id="@+id/done"
+        android:orderInCategory="100"
+        android:title="@string/menu_done"
+        app:showAsAction="always"/>
 
 </menu>

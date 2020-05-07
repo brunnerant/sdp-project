@@ -56,19 +56,10 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
             return this;
         }
 
-        /** Append an empty question to the Quiz */
-        public Builder addEmptyQuestion() {
-            checkState();
-            questions.add(new Question.Empty());
-            return this;
-        }
-
         /** Change the question at a certain index */
         public Builder update(int index, Question question) {
             checkState();
-            if (!question.isEmpty()) {
-                questions.set(index, question);
-            }
+            questions.set(index, question);
             return this;
         }
 
