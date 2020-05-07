@@ -104,13 +104,7 @@ public class ListEditView extends RecyclerView {
 
             itemView.findViewById(R.id.delete_button)
                     .setOnClickListener(
-                            new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    adapter.notifyItem(
-                                            getLayoutPosition(), EventType.RemoveRequest);
-                                }
-                            });
+                            v -> adapter.notifyItem(getLayoutPosition(), EventType.RemoveRequest));
         }
 
         // This changes the text of an item when the recycler view wants to reuse it

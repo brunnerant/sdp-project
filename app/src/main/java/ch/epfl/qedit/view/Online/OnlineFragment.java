@@ -160,10 +160,9 @@ public class OnlineFragment extends Fragment {
         return true;
     }
 
-    // Handles when a user clicked on the button to remove a quiz
-    private void deleteConfirmation(int position) {
-        deleteDialog.show(getParentFragmentManager(), "delete_confirmation");
-        deleteIndex = position;
+    private CompletableFuture<StringPool> stringPool(String string) {
+        return db.getQuizLanguages(string)
+                .thenCompose(languages -> db.getQuizStringPool(string, getBestLanguage(languages)));
     }
 
     // Handles when a user clicked on the button to edit a quiz
@@ -171,15 +170,9 @@ public class OnlineFragment extends Fragment {
         final String quizID = quizzes2.get(position).getKey();
         progressBar.setVisibility(View.VISIBLE);
 
-        CompletableFuture<StringPool> stringPool =
-                db.getQuizLanguages(quizID)
-                        .thenCompose(
-                                languages ->
-                                        db.getQuizStringPool(quizID, getBestLanguage(languages)));
-
         CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
 
-        CompletableFuture.allOf(stringPool, quizStructure)
+        CompletableFuture.allOf(stringPool(quizID), quizStructure)
                 .whenComplete(
                         (aVoid, throwable) -> {
                             if (throwable != null)
@@ -192,7 +185,7 @@ public class OnlineFragment extends Fragment {
                                 launchActivity(
                                         quizStructure
                                                 .join()
-                                                .instantiateLanguage(stringPool.join()));
+                                                .instantiateLanguage(stringPool(quizID).join()));
                         });
     }
 
