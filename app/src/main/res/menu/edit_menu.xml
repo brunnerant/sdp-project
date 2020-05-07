@@ -6,18 +6,18 @@
         android:title="@string/menu_overview"
         android:id="@+id/overview"
         android:icon="@drawable/ic_menu"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
     <item
         android:title="@string/menu_previous"
         android:id="@+id/previous"
         android:icon="@drawable/ic_arrow_back"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
     <item
         android:title="@string/menu_next"
         android:id="@+id/next"
         android:icon="@drawable/ic_arrow_forward"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 </menu>

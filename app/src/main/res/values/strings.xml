@@ -78,11 +78,8 @@
     <!-- Edit New Quiz Settings -->
     <string name="edit_quiz_title">Enter the quiz title</string>
     <string name="button_start_editing_message">Start editing</string>
-    <string name="no_question_title_message">No title</string>
-    <string name="no_question_text_message">No text</string>
 
     <!-- Edit -->
-    <string name="text_view" translatable="false">TextView</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="dup_quiz_name_error">A quiz with the same name already exists</string>
@@ -95,7 +92,6 @@
     <string name="edit_title">Rename</string>
     <string name="warning_delete">Are you sure you want to delete this quiz? It will delete all questions from this quiz.</string>
     <string name="add_quiz">Add</string>
-    <string name="new_empty_question">New empty question</string>
     <string name="empty_question_list_hint_text">Click here to add a new question</string>
 
     <!-- Edit Question -->
@@ -125,6 +121,5 @@
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
     <string name="database_error">An error occurred connecting to the database</string>
-    <string name="empty_answer_format_message">This is empty!</string>
 
 </resources>

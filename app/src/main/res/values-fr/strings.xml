@@ -50,8 +50,6 @@
     <!-- Edit New Quiz Settings -->
     <string name="edit_quiz_title">Entrer le titre du quiz</string>
     <string name="button_start_editing_message">Démarrer l\'édition</string>
-    <string name="no_question_title_message">Pas de titre</string>
-    <string name="no_question_text_message">Pas de texte</string>
 
 
     <!-- Edit -->
@@ -67,7 +65,6 @@
     <string name="edit_title">Renommer</string>
     <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
     <string name="add_quiz">Ajouter</string>
-    <string name="new_empty_question">Nouvelle question vide</string>
     <string name="empty_question_list_hint_text">Cliquez ici pour ajouter une nouvelle question</string>
 
     <!-- Edit Question -->
@@ -100,6 +97,5 @@
          we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
     <string name="database_error">Une erreur s\'est produite lors de la connexion à la base de donnée</string>
-    <string name="empty_answer_format_message">Ceci est vide !</string>
 
 </resources>

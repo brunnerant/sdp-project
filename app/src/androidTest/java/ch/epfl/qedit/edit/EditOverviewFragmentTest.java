@@ -110,12 +110,13 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
 
     // @Test TODO
     public void testCanAddItem() {
-        String newQuestion =
-                testRule.getActivity().getResources().getString(R.string.new_empty_question);
+        //        String newQuestion =
+        //
+        // testRule.getActivity().getResources().getString(R.string.new_empty_question);
 
-        onView(withText(newQuestion)).check(doesNotExist());
-        onView(withId(R.id.add_question_button)).perform(click());
-        onView(withText(newQuestion)).check(matches(isDisplayed()));
+        //        onView(withText(newQuestion)).check(doesNotExist());
+        //        onView(withId(R.id.add_question_button)).perform(click());
+        //        onView(withText(newQuestion)).check(matches(isDisplayed()));
     }
 
     @Test
