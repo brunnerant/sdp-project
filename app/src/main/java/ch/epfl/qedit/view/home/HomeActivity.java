@@ -62,12 +62,6 @@ public class HomeActivity extends AppCompatActivity
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
-    //
-    //    public void setAdapter(ListEditView.Adapter<Map.Entry<String, String>, SearchableMapEntry>
-    // listAdapter) {
-    //        this.listAdapter = listAdapter;
-    //    }
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
