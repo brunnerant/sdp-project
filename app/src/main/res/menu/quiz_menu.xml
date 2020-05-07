@@ -26,7 +26,7 @@
         android:icon="@drawable/ic_arrow_forward"
         app:showAsAction="always"
         />
-<<<<<<< HEAD:app/src/main/res/menu/menu.xml
+
     <item
         android:title="Validate"
         android:id="@+id/validate"
@@ -35,6 +35,4 @@
         />
 
 
-=======
->>>>>>> master:app/src/main/res/menu/quiz_menu.xml
 </menu>

@@ -43,17 +43,21 @@ public class MatrixModel extends AnswerModel {
 
         for (int i = 0; i < numRows; ++i) {
             for (int j = 0; j < numCols; ++j) {
-                try {
-                    toRet &=
-                            matrix[i][j].trim().toLowerCase()
-                                    == ((MatrixModel) o).getAnswer(i, j).trim().toLowerCase();
-
-                } catch (IndexOutOfBoundsException e) {
-                    return false;
-                }
+                toRet &= checkFieldEquals(matrix[i][j], (MatrixModel) o, i, j);
             }
         }
 
         return toRet;
+    }
+
+    private boolean checkFieldEquals(
+            String matrixField, MatrixModel objectMatrixModel, int row, int col) {
+
+        try {
+            return matrixField.trim().toLowerCase()
+                    == objectMatrixModel.getAnswer(row, col).trim().toLowerCase();
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        }
     }
 }
