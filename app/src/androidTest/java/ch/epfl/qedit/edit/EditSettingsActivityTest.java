@@ -69,7 +69,7 @@ public class EditSettingsActivityTest {
 
     @Test
     public void testButtonsIntent() {
-        onView(withId(R.id.edit_quiz_title)).perform((typeText("Title")));
+        onView(withId(R.id.edit_quiz_title)).perform((typeText("tle")));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.button_start_editing)).perform(click());
         intended(allOf(hasComponent(EditQuizActivity.class.getName())));

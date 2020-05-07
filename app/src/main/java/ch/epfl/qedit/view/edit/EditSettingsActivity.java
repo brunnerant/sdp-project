@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.LocaleHelper;
@@ -43,7 +42,6 @@ public class EditSettingsActivity extends AppCompatActivity
 
         stringPool = (StringPool) bundle.getSerializable(STRING_POOL);
         Quiz quiz = (Quiz) bundle.getSerializable(QUIZ_ID);
-        // quiz = createTestQuiz();
 
         if (quiz != null) {
             setContentView(R.layout.activity_edit_modify_quiz_settings);
@@ -115,32 +113,5 @@ public class EditSettingsActivity extends AppCompatActivity
     /* This method is needed to apply the desired language at the activity startup */
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
-    }
-
-    private Quiz createTestQuiz() {
-        // TODO remove, only for testing
-        Quiz quiz =
-                new Quiz(
-                        "Test Title",
-                        Arrays.asList(
-                                new Question(
-                                        "The matches problem",
-                                        "How many matches can fit in a shoe of size 43?",
-                                        "matrix3x3"),
-                                new Question(
-                                        "Pigeons",
-                                        "How many pigeons are there on Earth? (Hint: do not count yourself)",
-                                        "matrix1x1"),
-                                new Question("KitchenBu", "Oyster", "matrix1x1"),
-                                new Question(
-                                        "Everything",
-                                        "What is the answer to life the universe and everything?",
-                                        "matrix3x3"),
-                                new Question(
-                                        "Banane", "Combien y a-t-il de bananes ?", "matrix1x1")));
-
-        stringPool.update(TITLE_ID, quiz.getTitle());
-
-        return quiz;
     }
 }
