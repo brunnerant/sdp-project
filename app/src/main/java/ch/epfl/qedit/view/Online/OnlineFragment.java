@@ -79,8 +79,6 @@ public class OnlineFragment extends Fragment {
                             @NonNull RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
                         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                            System.out.println(
-                                    "Wiuaebiuaeb iaeub aieubaeiub aeivu aviuae vbieau beieua bib iuv iav bia vbeai eavie aaei bveuiae iae beaieb i");
                         }
                     }
                 });
@@ -99,31 +97,20 @@ public class OnlineFragment extends Fragment {
         quizzes.e = new ArrayList<>();
 
         // Create the list adapter
-        listAdapter =
-                new ListEditView.Adapter<>(
-                        quizzes,
-                        new ListEditView.GetItemText<Map.Entry<String, String>>() {
-                            @Override
-                            public String getText(Map.Entry<String, String> item) {
-                                return item.getValue();
-                            }
-                        });
+        listAdapter = new ListEditView.Adapter<>(quizzes, item -> item.getValue());
 
         // Listen to the data changes
         listAdapter.setItemListener(
-                new ListEditView.ItemListener() {
-                    @Override
-                    public void onItemEvent(int position, ListEditView.EventType type) {
-                        switch (type) {
-                            case RemoveRequest:
-                                deleteConfirmation(position);
-                                break;
-                            case EditRequest:
-                                editQuiz(position);
-                                break;
-                            default:
-                                break;
-                        }
+                (position, type) -> {
+                    switch (type) {
+                        case RemoveRequest:
+                            deleteConfirmation(position);
+                            break;
+                        case EditRequest:
+                            editQuiz(position);
+                            break;
+                        default:
+                            break;
                     }
                 });
     }
@@ -141,10 +128,8 @@ public class OnlineFragment extends Fragment {
                     public boolean onQueryTextSubmit(String query) {
                         try {
                             listAdapter.clear();
-                            quizzes2 = db.searchDatabase(load, load + 10, query).get();
-                            for (Map.Entry<String, String> e : quizzes2) {
+                            for (Map.Entry<String, String> e : db.searchDatabase(load, load + 10, query).get())
                                 listAdapter.addItem(e);
-                            }
                             load = 10;
                             searchView.clearFocus();
                         } catch (ExecutionException e) {

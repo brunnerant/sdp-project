@@ -26,7 +26,6 @@ public class OnlineActivity extends AppCompatActivity {
         // Prepare a bundle that contains the user and create a new HomeInfoFragment
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
-        // bundle.putSerializable(USER, user);
         HomeInfoFragment homeInfoFragment = new HomeInfoFragment();
         homeInfoFragment.setArguments(bundle);
 
