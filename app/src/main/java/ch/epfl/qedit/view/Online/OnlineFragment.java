@@ -59,7 +59,7 @@ public class OnlineFragment extends Fragment {
     private int load = 0;
 
     private SearchableMapEntry quizzes = new SearchableMapEntry();
-    private HashMap<String, String> quizzes2 = new HashMap<>();
+    private List<Map.Entry<String, String>> quizzes2 = new ArrayList<>();
 
     @Override
     public View onCreateView(
@@ -149,7 +149,7 @@ public class OnlineFragment extends Fragment {
                 try {
                     listAdapter.clear();
                     quizzes2 = db.searchDatabase(load, load + 10, query).get();
-                    for(Map.Entry<String, String> e: quizzes2.entrySet()) {
+                    for(Map.Entry<String, String> e: quizzes2) {
                         listAdapter.addItem(e);
                     }
                     load = 10;
@@ -193,7 +193,7 @@ public class OnlineFragment extends Fragment {
 
     // Handles when a user clicked on the button to edit a quiz
     private void editQuiz(int position) {
-        final String quizID = quizzes2.get(position);
+        final String quizID = quizzes2.get(position).getKey();
         progressBar.setVisibility(View.VISIBLE);
 
         CompletableFuture<StringPool> stringPool =
