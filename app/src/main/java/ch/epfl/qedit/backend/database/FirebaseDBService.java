@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 /**
  * This class is a database service that connects to the real Firestore backend. To have more
@@ -81,13 +80,21 @@ public class FirebaseDBService implements DatabaseService {
             String s,
             CompletableFuture<List<Map.Entry<String, String>>> future) {
         try {
-            list.add(
-                    new AbstractMap.SimpleEntry<String, String>(
-                            s, getQuizStructure(s).get().getTitle()));
-        } catch (ExecutionException e) {
+            list.add(new AbstractMap.SimpleEntry<>(s, getQuizStructure(s).get().getTitle()));
+        } catch (Exception e) {
             future.completeExceptionally(e);
-        } catch (InterruptedException e) {
-            future.completeExceptionally(e);
+        }
+    }
+
+    private void search(
+            List<Map.Entry<String, String>> list,
+            CompletableFuture<List<Map.Entry<String, String>>> future,
+            DocumentSnapshot document,
+            String search) {
+        for (String s : document.getData().keySet()) {
+            if (s.contains(search)) {
+                tryy(list, s, future);
+            }
         }
     }
 
@@ -99,11 +106,7 @@ public class FirebaseDBService implements DatabaseService {
 
         for (DocumentSnapshot document :
                 db.collection("quizzes").get().getResult().getDocuments()) {
-            for (String s : document.getData().keySet()) {
-                if (s.contains(search)) {
-                    tryy(list, s, future);
-                }
-            }
+            search(list, future, document, search);
         }
 
         future.complete(list);
