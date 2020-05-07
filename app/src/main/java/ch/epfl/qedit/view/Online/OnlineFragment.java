@@ -185,12 +185,17 @@ public class OnlineFragment extends Fragment {
         else return languages.get(0);
     }
 
-    // Launches the quiz activity with the given quiz. This is used when a quiz is selected.
-    private void launchActivity(Quiz q) {
+    private Intent save(Bundle b, Quiz q) {
         Intent i = new Intent(requireActivity(), QuizActivity.class);
-        Bundle b = new Bundle();
         b.putSerializable(QUIZ_ID, q);
         i.putExtras(b);
-        startActivity(i);
+        return i;
+    }
+
+    // Launches the quiz activity with the given quiz. This is used when a quiz is selected.
+    private void launchActivity(Quiz q) {
+        Bundle b = new Bundle();
+        b.putSerializable(QUIZ_ID, q);
+        startActivity(save(b, q));
     }
 }
