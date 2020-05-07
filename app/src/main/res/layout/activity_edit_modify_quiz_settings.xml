@@ -7,7 +7,7 @@
     tools:context=".view.edit.EditSettingsActivity">
 
     <EditText
-        android:id="@+id/edit_modify_quiz_title"
+        android:id="@+id/edit_quiz_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -34,6 +34,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_modify_quiz_title" />
+        app:layout_constraintTop_toBottomOf="@id/edit_quiz_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

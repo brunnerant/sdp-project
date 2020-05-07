@@ -1,7 +1,8 @@
 package ch.epfl.qedit.view.edit;
 
 import static ch.epfl.qedit.view.edit.EditSettingsActivity.QUIZ_BUILDER;
-import static ch.epfl.qedit.view.edit.EditSettingsActivity.STRING_POOL;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 import android.content.Context;
 import android.content.Intent;
@@ -87,7 +88,7 @@ public class EditQuizActivity extends AppCompatActivity {
                 handleToggleOverview();
                 break;
             case R.id.done:
-                sendResult();
+                returnResult();
                 break;
         }
 
@@ -114,5 +115,11 @@ public class EditQuizActivity extends AppCompatActivity {
     }
 
     /** TODO */
-    private void sendResult() {}
+    private void returnResult() {
+        Intent intent = new Intent();
+        intent.putExtra(QUIZ_ID, model.getQuizBuilder().build()); // TODO check that non empty
+        intent.putExtra(STRING_POOL, model.getStringPool());
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 }

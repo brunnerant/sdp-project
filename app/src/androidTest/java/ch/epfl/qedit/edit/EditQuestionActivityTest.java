@@ -22,7 +22,7 @@ import static ch.epfl.qedit.util.Util.isDisplayed;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.util.Util.onScrollView;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
-import static ch.epfl.qedit.view.edit.EditSettingsActivity.STRING_POOL;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;

@@ -14,6 +14,7 @@ public class StringPool implements Serializable {
     public static final String TITLE_ID = "title";
 
     private Map<String, String> stringPool;
+    private String languageCode;
 
     public StringPool() {
         stringPool = new HashMap<>();
@@ -21,6 +22,7 @@ public class StringPool implements Serializable {
 
     public StringPool(Map<String, String> stringPool) {
         this.stringPool = new HashMap<>(stringPool);
+        this.languageCode = languageCode;
     }
 
     /** Create a unique id relative to the already existing id in this String Pool */
@@ -69,5 +71,13 @@ public class StringPool implements Serializable {
         if (!stringPool.containsKey(id)) return id;
 
         return stringPool.get(id);
+    }
+
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 }

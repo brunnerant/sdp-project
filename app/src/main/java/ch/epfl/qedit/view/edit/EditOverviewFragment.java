@@ -3,7 +3,7 @@ package ch.epfl.qedit.view.edit;
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
-import static ch.epfl.qedit.view.edit.EditSettingsActivity.STRING_POOL;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +31,8 @@ public class EditOverviewFragment extends Fragment {
     private EditionViewModel model;
     private List<String> titles;
     private TextView emptyHint;
+
+    // TODO title in topbar, confirmation dialog when deleting, return result
 
     @Override
     public View onCreateView(

@@ -2,6 +2,7 @@ package ch.epfl.qedit.view.edit;
 
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +19,11 @@ import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.LocaleHelper;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 public class EditSettingsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
     public static final String QUIZ_BUILDER = "ch.epfl.qedit.model.QUIZ_BUILDER";
-    public static final String STRING_POOL = "ch.epfl.qedit.model.STRING_POOL";
 
     private Quiz.Builder quizBuilder;
     private StringPool stringPool;
@@ -38,29 +39,23 @@ public class EditSettingsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         // Get the Quiz and the StringPool from the intent
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
 
-        if (bundle != null) {
-            Quiz quiz = (Quiz) bundle.getSerializable(QUIZ_ID);
-            // quiz = createTestQuiz();
-            stringPool = (StringPool) bundle.getSerializable(STRING_POOL);
+        stringPool = (StringPool) bundle.getSerializable(STRING_POOL);
+        Quiz quiz = (Quiz) bundle.getSerializable(QUIZ_ID);
+        // quiz = createTestQuiz();
 
-            if (quiz != null && stringPool != null) {
-                setContentView(R.layout.activity_edit_modify_quiz_settings);
+        if (quiz != null) {
+            setContentView(R.layout.activity_edit_modify_quiz_settings);
 
-                // Initialize the builder with the existing quiz
-                quizBuilder = new Quiz.Builder(quiz);
+            // Initialize the builder with the existing quiz
+            quizBuilder = new Quiz.Builder(quiz);
 
-                // Set the EditText for the title
-                editTitle = findViewById(R.id.edit_modify_quiz_title);
-                editTitle.setText(stringPool.get(TITLE_ID));
-            }
         } else {
             setContentView(R.layout.activity_edit_new_quiz_settings);
 
-            // Initialize a new QuizBuilder and new StringPool
+            // Initialize a new empty QuizBuilder
             quizBuilder = new Quiz.Builder();
-            stringPool = new StringPool();
 
             // Create spinner (language list)
             languageSelectionSpinner = findViewById(R.id.edit_language_selection);
@@ -75,15 +70,20 @@ public class EditSettingsActivity extends AppCompatActivity
 
             // Set listener
             languageSelectionSpinner.setOnItemSelectedListener(this);
-
-            // Set the EditText for the title
-            editTitle = findViewById(R.id.edit_new_quiz_title);
         }
+
+        // Set the EditText for the title
+        editTitle = findViewById(R.id.edit_quiz_title);
+
+        String title = stringPool.get(TITLE_ID);
+        // TODO Support old questions that store the strings directly as well
+        editTitle.setText((title == null) ? quiz.getTitle() : title);
     }
 
     public void startEditing(View view) {
-        // Update the title in the StringPool
+        // Update the title in the StringPool and the languageCode
         stringPool.update(TITLE_ID, editTitle.getText().toString()); // TODO check title
+        stringPool.setLanguageCode(languageCode);
 
         // Launch the EditQuizActivity
         Intent intent = new Intent(EditSettingsActivity.this, EditQuizActivity.class);

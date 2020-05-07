@@ -1,7 +1,7 @@
 package ch.epfl.qedit.view.edit;
 
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
-import static ch.epfl.qedit.view.edit.EditSettingsActivity.STRING_POOL;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 import android.content.Context;
 import android.content.Intent;

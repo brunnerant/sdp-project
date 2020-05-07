@@ -19,7 +19,7 @@ import static ch.epfl.qedit.view.edit.EditFieldFragment.NUMBER_TYPE_IDX;
 import static ch.epfl.qedit.view.edit.EditFieldFragment.PRE_FILLED_TYPE_IDX;
 import static ch.epfl.qedit.view.edit.EditFieldFragment.TEXT_TYPE_IDX;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
-import static ch.epfl.qedit.view.edit.EditSettingsActivity.STRING_POOL;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -55,7 +55,7 @@ public class EditFieldFragmentTest {
         Intent intent;
         intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(QUESTION, question);
+        bundle.putSerializable(QUESTION, question); // TODO
         bundle.putSerializable(STRING_POOL, stringPool);
         intent.putExtras(bundle);
 
