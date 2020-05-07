@@ -78,8 +78,7 @@ public class OnlineFragment extends Fragment {
                     public void onScrollStateChanged(
                             @NonNull RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
-                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        }
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {}
                     }
                 });
         // The progress bar is needed while waiting from the database
@@ -103,9 +102,6 @@ public class OnlineFragment extends Fragment {
         listAdapter.setItemListener(
                 (position, type) -> {
                     switch (type) {
-                        case RemoveRequest:
-                            deleteConfirmation(position);
-                            break;
                         case EditRequest:
                             editQuiz(position);
                             break;
@@ -128,7 +124,8 @@ public class OnlineFragment extends Fragment {
                     public boolean onQueryTextSubmit(String query) {
                         try {
                             listAdapter.clear();
-                            for (Map.Entry<String, String> e : db.searchDatabase(load, load + 10, query).get())
+                            for (Map.Entry<String, String> e :
+                                    db.searchDatabase(load, load + 10, query).get())
                                 listAdapter.addItem(e);
                             load = 10;
                             searchView.clearFocus();
@@ -192,7 +189,7 @@ public class OnlineFragment extends Fragment {
                                                 Toast.LENGTH_SHORT)
                                         .show();
                             else
-                                launchQuizActivity(
+                                launchActivity(
                                         quizStructure
                                                 .join()
                                                 .instantiateLanguage(stringPool.join()));
@@ -210,11 +207,11 @@ public class OnlineFragment extends Fragment {
     }
 
     // Launches the quiz activity with the given quiz. This is used when a quiz is selected.
-    private void launchQuizActivity(Quiz quiz) {
-        Intent intent = new Intent(requireActivity(), QuizActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(QUIZ_ID, quiz);
-        intent.putExtras(bundle);
-        startActivity(intent);
+    private void launchActivity(Quiz q) {
+        Intent i = new Intent(requireActivity(), QuizActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable(QUIZ_ID, q);
+        i.putExtras(b);
+        startActivity(i);
     }
 }

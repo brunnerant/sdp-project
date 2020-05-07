@@ -76,7 +76,10 @@ public class FirebaseDBService implements DatabaseService {
         return future;
     }
 
-    public void tryy(List<Map.Entry<String, String>> list, String s, CompletableFuture<List<Map.Entry<String, String>>> future) {
+    public void tryy(
+            List<Map.Entry<String, String>> list,
+            String s,
+            CompletableFuture<List<Map.Entry<String, String>>> future) {
         try {
             list.add(
                     new AbstractMap.SimpleEntry<String, String>(
