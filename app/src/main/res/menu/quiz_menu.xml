@@ -7,7 +7,6 @@
         android:id="@+id/overview"
         android:icon="@drawable/ic_menu"
         app:showAsAction="always"
-
         />
     <item
         android:title="@string/menu_timer"
@@ -27,6 +26,4 @@
         android:icon="@drawable/ic_arrow_forward"
         app:showAsAction="always"
         />
-
-
 </menu>

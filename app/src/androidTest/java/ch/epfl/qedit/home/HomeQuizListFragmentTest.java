@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -20,8 +21,9 @@ import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
-import ch.epfl.qedit.view.quiz.QuizActivity;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
 import org.junit.Before;
@@ -79,12 +81,13 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
     }
 
     @Test
-    public void testClickOnQuizLaunchesQuizActivity() {
+    public void testClickOnEditLaunchesEditSettingsActivity() {
         item(0).perform(click());
         itemView(0, R.id.edit_button).perform(click());
         intended(
                 allOf(
-                        hasComponent(QuizActivity.class.getName()),
-                        hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class))));
+                        hasComponent(EditSettingsActivity.class.getName()),
+                        hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class)),
+                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
     }
 }

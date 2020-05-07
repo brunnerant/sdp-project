@@ -62,13 +62,7 @@ public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Seria
         String format = formatAndText[0];
         String text = (formatAndText.length == 2) ? formatAndText[1].trim() : null;
 
-        AnswerFormat answerFormat = MatrixFormat.parse(format, text);
-
-        if (answerFormat == null) {
-            answerFormat = EmptyAnswerFormat.parse(format, text);
-        }
-
-        return answerFormat;
+        return MatrixFormat.parse(format, text);
     }
 
     /**

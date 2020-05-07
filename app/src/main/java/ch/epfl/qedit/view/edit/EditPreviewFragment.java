@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
@@ -37,15 +36,7 @@ public class EditPreviewFragment extends Fragment {
 
         // Get the ViewModel and fix what happens when the focused question changes
         model = new ViewModelProvider(requireActivity()).get(EditionViewModel.class);
-        model.getFocusedQuestion()
-                .observe(
-                        getViewLifecycleOwner(),
-                        new Observer<Integer>() {
-                            @Override
-                            public void onChanged(Integer index) {
-                                onQuestionChanged(index);
-                            }
-                        });
+        model.getFocusedQuestion().observe(getViewLifecycleOwner(), this::onQuestionChanged);
 
         return view;
     }

@@ -65,7 +65,8 @@
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
                     android:padding="@dimen/regular_padding"
-                    app:srcCompat="@mipmap/text_answer" />
+                    app:srcCompat="@mipmap/text_answer"
+                    android:contentDescription="TODO" />
 
                 <ImageButton
                     android:id="@+id/number_button"
@@ -73,7 +74,8 @@
                     android:layout_height="wrap_content"
                     android:background="@color/transparent"
                     android:padding="@dimen/regular_padding"
-                    app:srcCompat="@mipmap/number_answer" />
+                    app:srcCompat="@mipmap/number_answer"
+                    android:contentDescription="TODO" />
 
             </LinearLayout>
 
