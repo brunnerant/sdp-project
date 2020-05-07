@@ -1,7 +1,7 @@
 package ch.epfl.qedit.view.home;
 
 import static android.app.Activity.RESULT_OK;
-import static android.view.View.INVISIBLE;
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.LoginActivity.USER;
@@ -183,7 +183,6 @@ public class HomeQuizListFragment extends Fragment
     //                                                .instantiateLanguage(stringPool.join()));
     //                        });
     //
-    //        progressBar.setVisibility(INVISIBLE);
     //    }
 
     // Handles when a user clicked on the button to edit a quiz
@@ -211,8 +210,6 @@ public class HomeQuizListFragment extends Fragment
                             else
                                 launchEditSettingsActivity(quizStructure.join(), stringPool.join());
                         });
-
-        progressBar.setVisibility(INVISIBLE);
     }
 
     private String getBestLanguage(List<String> languages) {
@@ -259,6 +256,8 @@ public class HomeQuizListFragment extends Fragment
                 StringPool extendedStringPool =
                         (StringPool) data.getExtras().getSerializable(STRING_POOL);
 
+                // Hide progress bar
+                progressBar.setVisibility(GONE);
                 // TODO send back to data base etc.
             }
         }

@@ -34,7 +34,7 @@ public class StringPool implements Serializable {
     }
 
     /**
-     * Put a new value inside the string pull
+     * Put a new value inside the string pool
      *
      * @param text the String value added to the string pool
      * @return the new UID created that map to text in this string pool

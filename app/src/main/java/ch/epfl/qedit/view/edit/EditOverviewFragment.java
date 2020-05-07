@@ -1,7 +1,7 @@
 package ch.epfl.qedit.view.edit;
 
 import static android.app.Activity.RESULT_OK;
-import static android.view.View.INVISIBLE;
+import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
@@ -145,7 +145,7 @@ public class EditOverviewFragment extends Fragment {
         if (titles.size() == 0) {
             emptyHint.setVisibility(VISIBLE);
         } else {
-            emptyHint.setVisibility(INVISIBLE);
+            emptyHint.setVisibility(GONE);
         }
     }
 
