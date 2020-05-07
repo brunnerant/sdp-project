@@ -23,14 +23,11 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.quiz.QuizActivity;
-import ch.epfl.qedit.view.util.ConfirmDialog;
-import ch.epfl.qedit.view.util.EditTextDialog;
 import ch.epfl.qedit.view.util.ListEditView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class OnlineFragment extends Fragment {
     public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
@@ -42,10 +39,7 @@ public class OnlineFragment extends Fragment {
 
     private ListEditView.Adapter<Map.Entry<String, String>, SearchableMapEntry> listAdapter;
 
-    private ConfirmDialog deleteDialog;
-    private EditTextDialog addDialog;
     private ListEditView listEditView;
-    private int deleteIndex;
     private int load = 0;
 
     private SearchableMapEntry quizzes = new SearchableMapEntry();
@@ -60,8 +54,6 @@ public class OnlineFragment extends Fragment {
         // Build the top bar and the dialogs
         setHasOptionsMenu(true);
         // Get user from the bundle created by the parent activity
-        // user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
-        // quizzes.e = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter and bind it to the list edit view
         createAdapter();
@@ -113,9 +105,7 @@ public class OnlineFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // inflater.inflate(R.menu.menu_editor_mode, menu);
         inflater.inflate(R.menu.search, menu);
-
         MenuItem item = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setOnQueryTextListener(
@@ -129,8 +119,7 @@ public class OnlineFragment extends Fragment {
                                 listAdapter.addItem(e);
                             load = 10;
                             searchView.clearFocus();
-                        } catch (ExecutionException e) {
-                        } catch (InterruptedException e) {
+                        } catch (Exception e) {
                         }
 
                         return false;
@@ -149,9 +138,6 @@ public class OnlineFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.add:
-                addDialog.show(getParentFragmentManager(), "add_dialog");
-                break;
             case android.R.id.home:
                 requireActivity().onBackPressed();
                 break;
