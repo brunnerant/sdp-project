@@ -1,5 +1,7 @@
 package ch.epfl.qedit.backend.database;
 
+import android.util.Pair;
+
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 
@@ -9,6 +11,8 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import com.google.common.collect.ImmutableList;
+
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -206,14 +210,14 @@ public class MockDBService implements DatabaseService {
 
 
     @Override
-    public CompletableFuture<List<String>> searchDatabase(int start, int end, String search) {
-        CompletableFuture<List<String>> future = new CompletableFuture<>();
+    public CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(int start, int end, String search) {
+        CompletableFuture<List<Map.Entry<String, String>>> future = new CompletableFuture<>();
         idlingResource.increment();
 
         new Thread(
                 () -> {
                     ArrayList<String> list = new ArrayList<>(quizzes.keySet());
-                    ArrayList<String> list2 = new ArrayList<>();
+                    List<Map.Entry<String, String>> list2 = new ArrayList<>();
                     Collections.sort(list);
 
                     int startR = start < list.size() ? start: list.size();
@@ -222,7 +226,7 @@ public class MockDBService implements DatabaseService {
                     for(int i = startR; i < endR; ++i) {
                         MockQuiz quiz = quizzes.get(list.get(i));
                         if(quiz.getStringPool("en").get("main_title").contains(search)) {
-                            list2.add(list.get(i));
+                            list2.add(new AbstractMap.SimpleEntry<String, String>(list.get(i), quiz.getStringPool("en").get("main_title")));
                         }
                     }
 

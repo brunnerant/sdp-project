@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -57,9 +58,8 @@ public class OnlineFragment extends Fragment {
     private int deleteIndex;
     private int load = 0;
 
-    private User user;
     private SearchableMapEntry quizzes = new SearchableMapEntry();
-    private List<String> quizzes2 = new ArrayList<>();
+    private HashMap<String, String> quizzes2 = new HashMap<>();
 
     @Override
     public View onCreateView(
@@ -136,27 +136,6 @@ public class OnlineFragment extends Fragment {
                 });
     }
 
-    // This is used to create the warning and add dialog
-//    private void createDialogs() {
-//        deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete), this);
-//        addDialog = EditTextDialog.create(getString(R.string.add_quiz_message), this);
-//        addDialog.setTextFilter(
-//                new EditTextDialog.TextFilter() {
-//                    @Override
-//                    public String isAllowed(String text) {
-//                        if (text.trim().length() == 0)
-//                            return getString(R.string.empty_quiz_name_error);
-//
-//                        for (Map.Entry<String, String> entry : quizzes.e) {
-//                            if (entry.getValue().equals(text))
-//                                return getString(R.string.dup_quiz_name_error);
-//                        }
-//
-//                        return null;
-//                    }
-//                });
-//    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //inflater.inflate(R.menu.menu_editor_mode, menu);
@@ -170,15 +149,13 @@ public class OnlineFragment extends Fragment {
                 try {
                     listAdapter.clear();
                     quizzes2 = db.searchDatabase(load, load + 10, query).get();
-                    for(String e: quizzes2) {
-                        listAdapter.addItem(new AbstractMap.SimpleEntry<>("key" + e, e));
+                    for(Map.Entry<String, String> e: quizzes2.entrySet()) {
+                        listAdapter.addItem(e);
                     }
                     load = 10;
                     searchView.clearFocus();
                 } catch (ExecutionException e) {
-                    //e.printStackTrace();
                 } catch (InterruptedException e) {
-                    //e.printStackTrace();
                 }
 
                 return false;
@@ -187,19 +164,6 @@ public class OnlineFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 load = 0;
-//                try {
-//                    load = 0;
-//                    List<String> list = db.searchDatabase(0, 10, newText).get();
-//                    load = 10;
-////                    for(String e: list) {
-////                        listAdapter.addItem(new AbstractMap.SimpleEntry<>("key" + e, e));
-////                    }
-//                } catch (ExecutionException e) {
-//                    //e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    //e.printStackTrace();
-//                }
-
                 return false;
             }
         });

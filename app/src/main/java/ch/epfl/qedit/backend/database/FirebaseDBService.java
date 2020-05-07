@@ -7,9 +7,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * This class is a database service that connects to the real Firestore backend. To have more
@@ -76,14 +80,20 @@ public class FirebaseDBService implements DatabaseService {
     }
 
     @Override
-    public CompletableFuture<List<String>> searchDatabase(int start, int end, String search) {
-        CompletableFuture<List<String>> future = new CompletableFuture<>();
-        List<String> list = new ArrayList<>();
+    public CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(int start, int end, String search) {
+        CompletableFuture<List<Map.Entry<String, String>>> future = new CompletableFuture<>();
+        List<Map.Entry<String, String>> list = new ArrayList<>();
 
         for (DocumentSnapshot document : db.collection("quizzes").get().getResult().getDocuments()) {
             for(String s: document.getData().keySet()) {
                 if(s.contains(search)) {
-                    list.add(s);
+                    try {
+                        list.add(new AbstractMap.SimpleEntry<String, String>(s, getQuizStructure(s).get().getTitle()));
+                    } catch (ExecutionException e) {
+                        future.completeExceptionally(e);
+                    } catch (InterruptedException e) {
+                        future.completeExceptionally(e);
+                    }
                 }
             }
         }

@@ -38,13 +38,12 @@ public class OnlineActivity extends AppCompatActivity {
         homeInfoFragment.setArguments(bundle);
 
         // Create a new HomeQuizListFragment with the user in its Arguments
-        OnlineFragment homeQuizListFragment = new OnlineFragment();
-        //homeQuizListFragment.setArguments(bundle);
-        // Start the two fragments that are contained in this activity
+        OnlineFragment onlineFragment = new OnlineFragment();
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.home_info_container, homeInfoFragment)
-                .replace(R.id.home_quiz_list_container, homeQuizListFragment)
+                .replace(R.id.home_quiz_list_container, onlineFragment)
                 .commit();
         // Set page title to display it in the right language
 
