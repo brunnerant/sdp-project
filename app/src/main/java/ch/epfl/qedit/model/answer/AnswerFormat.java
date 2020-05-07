@@ -20,15 +20,15 @@ public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Seria
     private String text;
 
     /** The correct answer */
-    private AnswerModel questionAnswer;
+    private AnswerModel solution;
 
     public void setCorrectAnswer(AnswerModel correctAnswer) {
-        this.questionAnswer = correctAnswer;
+        this.solution = correctAnswer;
     }
 
     public boolean correct(AnswerModel participantAnswer) {
-        if (participantAnswer == null || questionAnswer == null) return false;
-        return questionAnswer.equals(participantAnswer);
+        if (participantAnswer == null || solution == null) return false;
+        return solution.equals(participantAnswer);
     }
     // Package-private constructor, to be used by subclasses
     AnswerFormat(String text) {

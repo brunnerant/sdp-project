@@ -38,20 +38,21 @@ public class MatrixModel extends AnswerModel {
 
     @Override
     public boolean equals(@Nullable Object o) {
+        Boolean toRet = true;
         if (!(o instanceof MatrixModel)) return false;
 
         for (int i = 0; i < numRows; ++i) {
             for (int j = 0; j < numCols; ++j) {
                 try {
-                    if (!(matrix[i][j].trim().toLowerCase()
-                            == ((MatrixModel) o).getAnswer(i, j).trim().toLowerCase()))
-                        return false;
+                    toRet &=matrix[i][j].trim().toLowerCase()
+                            == ((MatrixModel) o).getAnswer(i, j).trim().toLowerCase();
+
                 } catch (IndexOutOfBoundsException e) {
                     return false;
                 }
             }
         }
 
-        return true;
+        return toRet;
     }
 }

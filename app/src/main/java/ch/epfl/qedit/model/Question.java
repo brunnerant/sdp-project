@@ -4,7 +4,7 @@ import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
 import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
 
 import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.EmptyAnswerFormat;
+
 import java.io.Serializable;
 import java.util.Objects;
 

@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.answer.EmptyAnswerFormat;
-import ch.epfl.qedit.model.answer.EmptyAnswerModel;
 
 /** Allows to show the empty format to the user */
 public class EmptyAnswerFragment extends AnswerFragment<EmptyAnswerFormat, EmptyAnswerModel> {
