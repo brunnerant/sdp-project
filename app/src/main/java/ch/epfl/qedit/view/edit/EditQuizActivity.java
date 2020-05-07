@@ -43,8 +43,11 @@ public class EditQuizActivity extends AppCompatActivity {
                 (StringPool)
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
 
-        overviewActive = false;
-        handleToggleOverview();
+        // Show the overview
+        overviewActive = true;
+
+        // Hide up navigation
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
         // Initialize the ViewModel
         model = new ViewModelProvider(this).get(EditionViewModel.class);
@@ -83,8 +86,8 @@ public class EditQuizActivity extends AppCompatActivity {
             case R.id.overview:
                 handleToggleOverview();
                 break;
-            case android.R.id.home:
-                onBackPressed();
+            case R.id.done:
+                sendResult();
                 break;
         }
 
@@ -109,4 +112,7 @@ public class EditQuizActivity extends AppCompatActivity {
                 .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
         overviewActive = !overviewActive;
     }
+
+    /** TODO */
+    private void sendResult() {}
 }

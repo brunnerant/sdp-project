@@ -35,6 +35,7 @@
     <string name="menu_timer">Minuteur</string>
     <string name="menu_previous">Précédent</string>
     <string name="menu_next">Suivant</string>
+    <string name="menu_done">Terminer</string>
 
     <!-- Burger Menu -->
     <string name="menu_home">ACCUEIL</string>
@@ -47,10 +48,9 @@
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Édition</string>
 
-    <!-- Edit New Quiz Settings -->
+    <!-- Edit Settings -->
     <string name="edit_quiz_title">Entrer le titre du quiz</string>
     <string name="button_start_editing_message">Démarrer l\'édition</string>
-
 
     <!-- Edit -->
     <string name="delete">Supprimer</string>
@@ -65,7 +65,7 @@
     <string name="edit_title">Renommer</string>
     <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
     <string name="add_quiz">Ajouter</string>
-    <string name="empty_question_list_hint_text">Cliquez ici pour ajouter une nouvelle question</string>
+    <string name="empty_question_list_hint_text">Ajouter une question</string>
 
     <!-- Edit Question -->
     <string name="edit_question_title">Entrer le titre de la question ici.</string>

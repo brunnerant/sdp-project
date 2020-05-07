@@ -1,6 +1,8 @@
 package ch.epfl.qedit.view.edit;
 
 import static android.app.Activity.RESULT_OK;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.view.edit.EditSettingsActivity.STRING_POOL;
 
 import android.content.Intent;
@@ -37,6 +39,7 @@ public class EditOverviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_overview, container, false);
 
         emptyHint = view.findViewById(R.id.empty_list_hint);
+        emptyHint.setText(getResources().getString(R.string.empty_question_list_hint_text));
 
         model = new ViewModelProvider(requireActivity()).get(EditionViewModel.class);
 
@@ -71,11 +74,12 @@ public class EditOverviewFragment extends Fragment {
             model.setStringPool(extendedStringPool);
 
             if (requestCode == NEW_QUESTION_REQUEST_CODE) {
+                int position = model.getQuizBuilder().size();
                 model.getQuizBuilder().append(question);
-                // titles.add();
                 adapter.addItem(extendedStringPool.get(question.getTitle()));
 
-                model.getFocusedQuestion().postValue(model.getQuizBuilder().size());
+                handleEmptyHint();
+                model.getFocusedQuestion().postValue(position);
             } else if (requestCode == MODIFY_QUESTION_REQUEST_CODE) {
                 // Update the already existing question
                 int position = model.getFocusedQuestion().getValue();
@@ -101,7 +105,7 @@ public class EditOverviewFragment extends Fragment {
             titles.add((text == null) ? key : text);
         }
 
-        showHintWhenEmpty();
+        handleEmptyHint();
     }
 
     private void createAdapter() {
@@ -120,7 +124,7 @@ public class EditOverviewFragment extends Fragment {
                             model.getFocusedQuestion().postValue(null);
                             model.getQuizBuilder().remove(position);
                             adapter.removeItem(position);
-                            showHintWhenEmpty();
+                            handleEmptyHint();
                             break;
                         case EditRequest:
                             launchEditQuestionActivity(
@@ -138,16 +142,12 @@ public class EditOverviewFragment extends Fragment {
         adapter.setMoveListener((from, to) -> model.getQuizBuilder().swap(from, to));
     }
 
-    private void showHintWhenEmpty() {
+    private void handleEmptyHint() {
         if (titles.size() == 0) {
-            emptyHint.setText(getResources().getString(R.string.empty_question_list_hint_text));
+            emptyHint.setVisibility(VISIBLE);
         } else {
-            removeHint();
+            emptyHint.setVisibility(INVISIBLE);
         }
-    }
-
-    private void removeHint() {
-        emptyHint.setText(null);
     }
 
     private void launchEditQuestionActivity(Question question) {
