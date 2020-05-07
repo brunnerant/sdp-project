@@ -28,7 +28,7 @@ public class OnlineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online2);
 
-        User user = new User("Online", "", User.Role.Administrator);
+        User user = new User(", you are Online. You can Search the database", "", User.Role.Administrator);
 
         // Prepare a bundle that contains the user and create a new HomeInfoFragment
         Bundle bundle = new Bundle();

@@ -215,11 +215,13 @@ public class MockDBService implements DatabaseService {
                     ArrayList<String> list = new ArrayList<>(quizzes.keySet());
                     ArrayList<String> list2 = new ArrayList<>();
                     Collections.sort(list);
+
                     int startR = start < list.size() ? start: list.size();
                     int endR = end < list.size() ? end: list.size();
                     System.out.println("adiubvaiudvb avbdkjb vakjdv bkjadbv kjadb kj vka dvbk b " + endR);
                     for(int i = startR; i < endR; ++i) {
-                        if (list.get(i).contains(search)) {
+                        MockQuiz quiz = quizzes.get(list.get(i));
+                        if(quiz.getStringPool("en").get("main_title").contains(search)) {
                             list2.add(list.get(i));
                         }
                     }

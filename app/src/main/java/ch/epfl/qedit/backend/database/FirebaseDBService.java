@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -77,13 +78,17 @@ public class FirebaseDBService implements DatabaseService {
     @Override
     public CompletableFuture<List<String>> searchDatabase(int start, int end, String search) {
         CompletableFuture<List<String>> future = new CompletableFuture<>();
-        db.collection("quizzes").get().getResult().getDocuments();
+        List<String> list = new ArrayList<>();
+
         for (DocumentSnapshot document : db.collection("quizzes").get().getResult().getDocuments()) {
-//            System.out.println(document.getId());
-//            for(String s: document.getData().keySet()) {
-//                System.out.println(s);
-//            }
+            for(String s: document.getData().keySet()) {
+                if(s.contains(search)) {
+                    list.add(s);
+                }
+            }
         }
+
+        future.complete(list);
         return future;
     }
 }
