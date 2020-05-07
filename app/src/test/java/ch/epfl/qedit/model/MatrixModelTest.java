@@ -92,7 +92,6 @@ public class MatrixModelTest {
         matrixModel1.updateAnswer(0, 0, "test");
         matrixModel2.updateAnswer(0, 0, "test");
         matrixModel2.updateAnswer(0, 1, "test");
-        assertEquals(false, matrixModel1.equals(matrixModel2));
         assertEquals(false, matrixModel2.equals(matrixModel1));
     }
 }
