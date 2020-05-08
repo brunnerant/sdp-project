@@ -14,15 +14,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import com.google.common.collect.ImmutableList;
+import java.util.HashMap;
 import java.util.Objects;
 
-public class QuizActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity implements ConfirmDialog.ConfirmationListener {
     private QuizViewModel model;
     private Boolean overviewActive;
 
+    private ConfirmDialog validateDialog;
     private Quiz quiz;
 
     @Override
@@ -39,6 +45,8 @@ public class QuizActivity extends AppCompatActivity {
 
         overviewActive = false;
         handleToggleOverview();
+
+        validateDialog = ConfirmDialog.create("Are you sure you want to correct this quiz ?", this);
 
         QuestionFragment questionFragment = new QuestionFragment();
         QuizOverviewFragment overview = new QuizOverviewFragment();
@@ -80,6 +88,9 @@ public class QuizActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.validate:
+                validateDialog.show(getSupportFragmentManager(), null);
+                break;
         }
 
         return true;
@@ -103,5 +114,20 @@ public class QuizActivity extends AppCompatActivity {
         findViewById(R.id.quiz_overview_container)
                 .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
         overviewActive = !overviewActive;
+    }
+
+    @Override
+    public void onConfirm(ConfirmDialog dialog) {
+        ImmutableList<Question> questions = quiz.getQuestions();
+        HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
+        int goodAnswers = 0;
+        for (int i = 0; i < questions.size(); i++) {
+            if (questions.get(i).getFormat().correct(answers.get(i))) goodAnswers++;
+        }
+        Toast.makeText(
+                        getApplicationContext(),
+                        "number of good answers = " + goodAnswers,
+                        Toast.LENGTH_SHORT)
+                .show();
     }
 }

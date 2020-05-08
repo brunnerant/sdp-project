@@ -26,4 +26,13 @@
         android:icon="@drawable/ic_arrow_forward"
         app:showAsAction="always"
         />
+
+    <item
+        android:title="Validate"
+        android:id="@+id/validate"
+        android:icon="@drawable/ic_check_black"
+        app:showAsAction="always"
+        />
+
+
 </menu>
