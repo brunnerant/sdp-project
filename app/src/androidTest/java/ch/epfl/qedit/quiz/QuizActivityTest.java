@@ -145,7 +145,7 @@ public class QuizActivityTest {
         finishActivity();
     }
 
-    /* @Test
+    @Test
     public void testDoneNoCLicked() {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
@@ -167,7 +167,7 @@ public class QuizActivityTest {
                                         is(testRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
         finishActivity();
-    }*/
+    }
 
     @Test
     public void quizOverviewIsDisplayed() {

@@ -24,10 +24,11 @@ import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class QuizActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity implements ConfirmDialog.ConfirmationListener {
     private QuizViewModel model;
     private Boolean overviewActive;
 
+    private ConfirmDialog validateDialog;
     private Quiz quiz;
 
     @Override
@@ -44,6 +45,8 @@ public class QuizActivity extends AppCompatActivity {
 
         overviewActive = false;
         handleToggleOverview();
+
+        validateDialog = ConfirmDialog.create("Are you sure you want to correct this quiz ?", this);
 
         QuestionFragment questionFragment = new QuestionFragment();
         QuizOverviewFragment overview = new QuizOverviewFragment();
@@ -86,31 +89,13 @@ public class QuizActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.validate:
-                validateQuz();
+                validateDialog.show(getSupportFragmentManager(), null);
+                break;
         }
 
         return true;
     }
 
-    private void validateQuz() {
-        ConfirmDialog.create(
-                "Are you sure you want to correct this quiz ?",
-                (ConfirmDialog.ConfirmationListener)
-                        dialog -> {
-                            ImmutableList<Question> questions = quiz.getQuestions();
-                            HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
-                            int goodAnswers = 0;
-                            for (int i = 0; i < questions.size(); i++) {
-                                if (questions.get(i).getFormat().correct(answers.get(i)))
-                                    goodAnswers++;
-                            }
-                            Toast.makeText(
-                                            getApplicationContext(),
-                                            "number of good answers = " + goodAnswers,
-                                            Toast.LENGTH_SHORT)
-                                    .show();
-                        });
-    }
     /** This function handles navigating back and forth between questions */
     private void handleNavigation(int offset) {
 
@@ -129,5 +114,20 @@ public class QuizActivity extends AppCompatActivity {
         findViewById(R.id.quiz_overview_container)
                 .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
         overviewActive = !overviewActive;
+    }
+
+    @Override
+    public void onConfirm(ConfirmDialog dialog) {
+        ImmutableList<Question> questions = quiz.getQuestions();
+        HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
+        int goodAnswers = 0;
+        for (int i = 0; i < questions.size(); i++) {
+            if (questions.get(i).getFormat().correct(answers.get(i))) goodAnswers++;
+        }
+        Toast.makeText(
+                        getApplicationContext(),
+                        "number of good answers = " + goodAnswers,
+                        Toast.LENGTH_SHORT)
+                .show();
     }
 }
