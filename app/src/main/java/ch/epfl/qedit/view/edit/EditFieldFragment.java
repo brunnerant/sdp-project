@@ -126,7 +126,7 @@ public class EditFieldFragment extends DialogFragment {
             FragmentActivity parent = requireActivity();
             if (parent instanceof EditQuestionActivity) {
                 MatrixModel solutionModel = new MatrixModel(1, 1);
-                solutionModel.updateAnswer(1, 1, solution);
+                solutionModel.updateAnswer(0, 0, solution);
                 MatrixFormat solutionAnswerFormat = MatrixFormat.singleField(result());
                 solutionAnswerFormat.setCorrectAnswer(solutionModel);
                 ((EditQuestionActivity) parent).setAnswerFormat(solutionAnswerFormat);
