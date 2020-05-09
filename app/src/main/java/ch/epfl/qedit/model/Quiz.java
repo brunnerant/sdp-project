@@ -15,9 +15,19 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
 
     private final String title;
 
-    public Quiz(String title, List<Question> questions) {
+    /** This flag indicates whether the quiz is a treasure hunt quiz */
+    private final boolean treasureHunt;
+
+    /** This can be used to construct generic quizzes */
+    public Quiz(List<Question> questions, String title, boolean treasureHunt) {
         this.questions = new ArrayList<>(questions);
         this.title = title;
+        this.treasureHunt = treasureHunt;
+    }
+
+    /** This constructs a non treasure-hunt quiz */
+    public Quiz(String title, List<Question> questions) {
+        this(questions, title, false);
     }
 
     public String getTitle() {
@@ -28,23 +38,38 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         return ImmutableList.copyOf(questions);
     }
 
+    public boolean isTreasureHunt() {
+        return treasureHunt;
+    }
+
     /** A Quiz Builder use to build a Quiz step by step, essentially useful in Quiz edition */
     public static class Builder implements Serializable {
 
         private List<Question> questions;
+        private boolean treasureHunt;
 
+        /** This is the used to create a generic quiz builder */
+        public Builder(boolean treasureHunt) {
+            this.questions = new ArrayList<>();
+            this.treasureHunt = treasureHunt;
+        }
+
+        /** This is used to create a non treasure-hunt quiz builder */
         public Builder() {
-            questions = new ArrayList<>();
+            this(false);
         }
 
         /** Useful when we want to modify a quiz already existent */
         public Builder(Quiz quiz) {
-            questions = new ArrayList<>(quiz.getQuestions());
+            this.questions = new ArrayList<>(quiz.getQuestions());
+            this.treasureHunt = quiz.treasureHunt;
         }
 
         /** Append a question the quiz's list of question */
         public Builder append(Question question) {
             checkState();
+            checkQuestion(question);
+
             questions.add(question);
             return this;
         }
@@ -52,6 +77,8 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** Put a question at a certain index in the quiz */
         public Builder insert(int index, Question question) {
             checkState();
+            checkQuestion(question);
+
             questions.add(index, question);
             return this;
         }
@@ -59,6 +86,8 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** Change the question at a certain index */
         public Builder update(int index, Question question) {
             checkState();
+            checkQuestion(question);
+
             questions.set(index, question);
             return this;
         }
@@ -66,6 +95,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** swap questions at index index1 and index2 */
         public Builder swap(int index1, int index2) {
             checkState();
+
             Question tmp = questions.get(index1);
             questions.set(index1, questions.get(index2));
             questions.set(index2, tmp);
@@ -75,6 +105,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** remove question from the quiz */
         public Builder remove(int index) {
             checkState();
+
             if (index >= 0 && index < questions.size()) {
                 questions.remove(index);
             }
@@ -84,12 +115,14 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** return the current list of question in the builder */
         public ImmutableList<Question> getQuestions() {
             checkState();
+
             return ImmutableList.copyOf(questions);
         }
 
         /** return the current number of question in the Quiz */
         public int size() {
             checkState();
+
             return questions.size();
         }
 
@@ -99,16 +132,25 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
          */
         public Quiz build() {
             checkState();
+
             List<Question> quizQuestion = questions;
             questions = null;
             return new Quiz(StringPool.TITLE_ID, quizQuestion);
         }
 
-        /** check if the builder is valid i.e. build() has not been called yet */
+        /** Checks if the builder is valid i.e. build() has not been called yet */
         private void checkState() {
             if (questions == null) {
                 throw new IllegalStateException("Builder already build once.");
             }
+        }
+
+        /** Checks that the question has the same treasure-hunt settings as the quiz */
+        private void checkQuestion(Question question) {
+            boolean questionTreasureHunt = question.getLocation() != null;
+            if (questionTreasureHunt != treasureHunt)
+                throw new IllegalArgumentException(
+                        "Cannot mix treasure-hunt and non treasure-hunt questions");
         }
     }
 
