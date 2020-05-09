@@ -1,15 +1,13 @@
 package ch.epfl.qedit.model;
 
-import android.location.Location;
-
-import org.junit.Test;
-
-import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.MatrixFormat;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
+
+import android.location.Location;
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat;
+import org.junit.Test;
 
 public class QuestionTest {
 

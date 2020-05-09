@@ -1,19 +1,16 @@
 package ch.epfl.qedit.model;
 
-import android.location.Location;
-
-import org.junit.Test;
-import org.junit.function.ThrowingRunnable;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.MatrixFormat;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
+
+import android.location.Location;
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 
 public class QuizTest {
 

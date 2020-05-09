@@ -1,11 +1,9 @@
 package ch.epfl.qedit.model;
 
 import android.location.Location;
-
+import ch.epfl.qedit.model.answer.AnswerFormat;
 import java.io.Serializable;
 import java.util.Objects;
-
-import ch.epfl.qedit.model.answer.AnswerFormat;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
 public final class Question implements MultiLanguage<Question>, Serializable {
