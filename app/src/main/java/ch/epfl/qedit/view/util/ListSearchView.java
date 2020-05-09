@@ -26,7 +26,7 @@ public class ListSearchView {
          * @param e the list of items to display
          * @param getText        a function to retrieve the text from one item
          */
-        public Adapter(E e, ListEditView.GetItemText getText) {
+        public Adapter(E e, ListEditView.GetItemText<T> getText) {
             super(e.e, getText);
             //this.items = searchablePair.e;
             this.e = e;

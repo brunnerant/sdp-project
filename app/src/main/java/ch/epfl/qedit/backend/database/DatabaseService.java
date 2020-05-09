@@ -44,6 +44,13 @@ public interface DatabaseService {
      */
     CompletableFuture<StringPool> getQuizStringPool(String quizId, String language);
 
+    /**
+     *
+     * @param start start of query
+     * @param end end of query
+     * @param search search string
+     * @return List of entries : string -> string
+     */
     CompletableFuture<List<Map.Entry<String, String>>> searchDatabase(
             int start, int end, String search);
 }

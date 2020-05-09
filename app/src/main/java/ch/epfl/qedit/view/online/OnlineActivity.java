@@ -15,7 +15,7 @@ public class OnlineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_online2);
+        setContentView(R.layout.activity_online);
 
         User user =
                 new User(
@@ -29,13 +29,13 @@ public class OnlineActivity extends AppCompatActivity {
         HomeInfoFragment homeInfoFragment = new HomeInfoFragment();
         homeInfoFragment.setArguments(bundle);
 
-        // Create a new HomeQuizListFragment with the user in its Arguments
+        // Create a new OnlineFragment with the user in its Arguments
         OnlineFragment onlineFragment = new OnlineFragment();
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.home_info_container, homeInfoFragment)
-                .replace(R.id.home_quiz_list_container, onlineFragment)
+                .replace(R.id.online_info_container, homeInfoFragment)
+                .replace(R.id.online_quiz_list_container, onlineFragment)
                 .commit();
         // Set page title to display it in the right language
 

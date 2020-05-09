@@ -24,6 +24,8 @@ import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ListEditView;
+import ch.epfl.qedit.view.util.ListSearchView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class OnlineFragment extends Fragment {
 
     private ProgressBar progressBar;
 
-    private ListEditView.Adapter<Map.Entry<String, String>, SearchableMapEntry> listAdapter;
+    private ListSearchView.Adapter<Map.Entry<String, String>, SearchableMapEntry> listAdapter;
 
     private ListEditView listEditView;
     private int load = 0;
@@ -88,19 +90,19 @@ public class OnlineFragment extends Fragment {
         quizzes.e = new ArrayList<>();
 
         // Create the list adapter
-        listAdapter = new ListEditView.Adapter<>(quizzes, item -> item.getValue());
+        listAdapter = new ListSearchView.Adapter<>(quizzes, item -> item.getValue());
 
         // Listen to the data changes
-        listAdapter.setItemListener(
-                (position, type) -> {
-                    switch (type) {
-                        case EditRequest:
-                            editQuiz(position);
-                            break;
-                        default:
-                            break;
-                    }
-                });
+//        listAdapter.setItemListener(
+//                (position, type) -> {
+//                    switch (type) {
+//                        case EditRequest:
+//                            editQuiz(position);
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                });
     }
 
     @Override
@@ -151,29 +153,29 @@ public class OnlineFragment extends Fragment {
                 .thenCompose(languages -> db.getQuizStringPool(string, getBestLanguage(languages)));
     }
 
-    // Handles when a user clicked on the button to edit a quiz
-    private void editQuiz(int position) {
-        final String quizID = quizzes2.get(position).getKey();
-        progressBar.setVisibility(View.VISIBLE);
-
-        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
-
-        CompletableFuture.allOf(stringPool(quizID), quizStructure)
-                .whenComplete(
-                        (aVoid, throwable) -> {
-                            if (throwable != null)
-                                Toast.makeText(
-                                                requireContext(),
-                                                R.string.database_error,
-                                                Toast.LENGTH_SHORT)
-                                        .show();
-                            else
-                                launchActivity(
-                                        quizStructure
-                                                .join()
-                                                .instantiateLanguage(stringPool(quizID).join()));
-                        });
-    }
+//    // Handles when a user clicked on the button to edit a quiz
+//    private void editQuiz(int position) {
+//        final String quizID = quizzes2.get(position).getKey();
+//        progressBar.setVisibility(View.VISIBLE);
+//
+//        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
+//
+//        CompletableFuture.allOf(stringPool(quizID), quizStructure)
+//                .whenComplete(
+//                        (aVoid, throwable) -> {
+//                            if (throwable != null)
+//                                Toast.makeText(
+//                                                requireContext(),
+//                                                R.string.database_error,
+//                                                Toast.LENGTH_SHORT)
+//                                        .show();
+//                            else
+//                                launchActivity(
+//                                        quizStructure
+//                                                .join()
+//                                                .instantiateLanguage(stringPool(quizID).join()));
+//                        });
+//    }
 
     private String getBestLanguage(List<String> languages) {
         String appLanguage = LocaleHelper.getLanguage(requireContext());

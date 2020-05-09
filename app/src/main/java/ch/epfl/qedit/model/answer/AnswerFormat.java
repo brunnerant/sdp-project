@@ -19,6 +19,17 @@ public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Seria
      */
     private String text;
 
+    /** The correct answer */
+    private AnswerModel solution;
+
+    public void setCorrectAnswer(AnswerModel correctAnswer) {
+        this.solution = correctAnswer;
+    }
+
+    public boolean correct(AnswerModel participantAnswer) {
+        if (participantAnswer == null || solution == null) return false;
+        return solution.equals(participantAnswer);
+    }
     // Package-private constructor, to be used by subclasses
     AnswerFormat(String text) {
         this.text = text;
@@ -62,13 +73,7 @@ public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Seria
         String format = formatAndText[0];
         String text = (formatAndText.length == 2) ? formatAndText[1].trim() : null;
 
-        AnswerFormat answerFormat = MatrixFormat.parse(format, text);
-
-        if (answerFormat == null) {
-            answerFormat = EmptyAnswerFormat.parse(format, text);
-        }
-
-        return answerFormat;
+        return MatrixFormat.parse(format, text);
     }
 
     /**

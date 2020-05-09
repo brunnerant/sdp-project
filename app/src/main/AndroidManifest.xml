@@ -31,7 +31,8 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".view.edit.EditNewQuizSettingsActivity">
+
+        <activity android:name=".view.edit.EditSettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
 

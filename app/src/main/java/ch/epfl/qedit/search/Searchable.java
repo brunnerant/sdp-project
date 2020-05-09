@@ -1,5 +1,6 @@
 package ch.epfl.qedit.search;
 
+// Interface to implement a function search.
 public interface Searchable<T> {
     /**
      * @param string the string to be searched (e.g string)

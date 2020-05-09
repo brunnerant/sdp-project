@@ -1,35 +1,51 @@
 package ch.epfl.qedit.model;
 
-import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TEXT_ID;
-import static ch.epfl.qedit.model.StringPool.NO_QUESTION_TITLE_ID;
-
-import ch.epfl.qedit.search.Searchable;
+import android.location.Location;
 import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.EmptyAnswerFormat;
 import java.io.Serializable;
 import java.util.Objects;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
-public class Question implements MultiLanguage<Question>, Searchable<Question>, Serializable {
-    /** For now, a question consists of a number, a title, and a text */
+public final class Question implements MultiLanguage<Question>, Serializable {
+    /** A question consists of a title, and a text */
     private final String title;
 
     private final String text;
 
+    /**
+     * Treasure hunt questions also have a location and a radius within which they can be answered.
+     */
+    private final Location location;
+
+    private final int radius;
+
     /** The answer format for this question */
     private final AnswerFormat format;
 
+    // This constructor is for treasure hunt questions
+    public Question(String title, String text, AnswerFormat format, Location location, int radius) {
+        this.title = Objects.requireNonNull(title);
+        this.text = Objects.requireNonNull(text);
+        this.format = Objects.requireNonNull(format);
+        this.location = Objects.requireNonNull(location);
+        this.radius = radius;
+
+        if (radius <= 0)
+            throw new IllegalArgumentException("Treasure hunt radius has to be positive");
+    }
+
+    // This constructor is for normal questions
     public Question(String title, String text, AnswerFormat format) {
         this.title = Objects.requireNonNull(title);
         this.text = Objects.requireNonNull(text);
         this.format = Objects.requireNonNull(format);
+        this.location = null;
+        this.radius = -1;
     }
 
     /** Construct a question with a string to parse for the answer_format */
-    public Question(String title, String text, String answer_format) {
-        this.title = Objects.requireNonNull(title);
-        this.text = Objects.requireNonNull(text);
-        this.format = Objects.requireNonNull(AnswerFormat.parse(answer_format));
+    public Question(String title, String text, String answerFormat) {
+        this(title, text, AnswerFormat.parse(answerFormat));
     }
 
     public String getTitle() {
@@ -44,42 +60,33 @@ public class Question implements MultiLanguage<Question>, Searchable<Question>, 
         return format;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Question) {
             Question other = (Question) o;
             return this.title.equals(other.title)
                     && this.text.equals(other.text)
-                    && this.format.equals(other.format);
+                    && this.format.equals(other.format)
+                    && Objects.equals(this.location, other.location)
+                    && this.radius == other.radius;
         }
         return false;
     }
 
     @Override
-    public Question search(String string, int position) {
-        return null;
-    }
-
     public Question instantiateLanguage(StringPool pool) {
         String newTitle = pool.get(title);
         String newText = pool.get(text);
         AnswerFormat newFormat = format.instantiateLanguage(pool);
 
         return new Question(newTitle, newText, newFormat);
-    }
-
-    public boolean isEmpty() {
-        return false;
-    }
-
-    public static class Empty extends Question {
-        public Empty() {
-            super(NO_QUESTION_TITLE_ID, NO_QUESTION_TEXT_ID, new EmptyAnswerFormat(null));
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return true;
-        }
     }
 }

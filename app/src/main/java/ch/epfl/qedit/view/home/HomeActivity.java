@@ -21,7 +21,6 @@ import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    // private ListEditView.Adapter<Map.Entry<String, String>, SearchableMapEntry> listAdapter;
     private DrawerLayout drawer;
 
     @Override

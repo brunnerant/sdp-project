@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat.Field;
+import ch.epfl.qedit.model.answer.MatrixModel;
 import java.util.Objects;
 
 public class EditFieldFragment extends DialogFragment {
@@ -123,8 +124,13 @@ public class EditFieldFragment extends DialogFragment {
             // Check if the parent is a EditQuestionActivity, if yes, use the setAnswerFormat of the
             // parent
             FragmentActivity parent = requireActivity();
-            if (parent instanceof EditQuestionActivity)
-                ((EditQuestionActivity) parent).setAnswerFormat(MatrixFormat.singleField(result()));
+            if (parent instanceof EditQuestionActivity) {
+                MatrixModel solutionModel = new MatrixModel(1, 1);
+                solutionModel.updateAnswer(0, 0, solution);
+                MatrixFormat solutionAnswerFormat = MatrixFormat.singleField(result());
+                solutionAnswerFormat.setCorrectAnswer(solutionModel);
+                ((EditQuestionActivity) parent).setAnswerFormat(solutionAnswerFormat);
+            }
             dismiss();
         }
     }

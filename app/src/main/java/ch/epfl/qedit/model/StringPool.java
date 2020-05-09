@@ -12,10 +12,9 @@ import java.util.UUID;
 public class StringPool implements Serializable {
 
     public static final String TITLE_ID = "title";
-    public static final String NO_QUESTION_TITLE_ID = "noQuestionTitle";
-    public static final String NO_QUESTION_TEXT_ID = "noQuestionText";
 
     private Map<String, String> stringPool;
+    private String languageCode;
 
     public StringPool() {
         stringPool = new HashMap<>();
@@ -35,7 +34,7 @@ public class StringPool implements Serializable {
     }
 
     /**
-     * Put a new value inside the string pull
+     * Put a new value inside the string pool
      *
      * @param text the String value added to the string pool
      * @return the new UID created that map to text in this string pool
@@ -71,5 +70,14 @@ public class StringPool implements Serializable {
         if (!stringPool.containsKey(id)) return id;
 
         return stringPool.get(id);
+    }
+
+    /** Getter and setter for the language code */
+    public String getLanguageCode() {
+        return languageCode;
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 }

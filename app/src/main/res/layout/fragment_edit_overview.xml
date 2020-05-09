@@ -16,6 +16,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:dragAndDrop="true" />
 
+    <TextView
+        android:id="@+id/empty_list_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:text="@string/empty_question_list_hint_text"
+        android:padding="@dimen/regular_padding"
+
+        app:layout_constraintBottom_toTopOf="@+id/add_question_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ImageButton
         android:id="@+id/add_question_button"
         android:layout_width="wrap_content"
@@ -28,6 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/question_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="TODO" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

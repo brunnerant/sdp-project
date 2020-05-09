@@ -8,6 +8,9 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.contrib.DrawerMatchers.isOpen;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -15,6 +18,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
 import android.app.Activity;
@@ -30,9 +37,11 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.LoginActivity;
+import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.Collection;
 import org.junit.After;
@@ -106,7 +115,10 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         closeSoftKeyboard();
 
         onView(withId(android.R.id.button1)).perform(click());
-        itemView(1, android.R.id.text1).check(matches(withText("New quiz")));
+        intended(
+                allOf(
+                        hasComponent(EditSettingsActivity.class.getName()),
+                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
     }
 
     @Test

@@ -1,7 +1,7 @@
 package ch.epfl.qedit.view.edit;
 
-import static ch.epfl.qedit.view.edit.EditNewQuizSettingsActivity.STRING_POOL;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 import android.content.Context;
 import android.content.Intent;
@@ -166,7 +166,6 @@ public class EditQuestionActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent);
             finish();
         }
-        ;
     }
 
     /**
