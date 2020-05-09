@@ -17,7 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.Search.SearchableMapEntry;
+import ch.epfl.qedit.search.SearchableMapEntry;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.model.Quiz;

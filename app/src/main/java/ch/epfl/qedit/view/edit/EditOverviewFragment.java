@@ -8,25 +8,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.Search.StringSearchable;
+import ch.epfl.qedit.search.StringSearchable;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.util.ListEditView;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 import java.util.ArrayList;
+import java.util.List;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
-    private StringSearchable titles = new StringSearchable();;
     public static final String QUESTION = "ch.epfl.qedit.view.edit.QUESTION";
-    public static final int EDIT_QUESTION_ACTIVITY_REQUEST_CODE = 0;
-    private ListEditView.Adapter<String, StringSearchable> adapter;
-    // private ListEditView.Adapter<String> adapter;
+    public static final int NEW_QUESTION_REQUEST_CODE = 0;
+    public static final int MODIFY_QUESTION_REQUEST_CODE = 1;
+
+    private ListEditView.Adapter<String> adapter;
     private EditionViewModel model;
-    // private List<String> titles;
+    private List<String> titles;
+    private TextView emptyHint;
 
     @Override
     public View onCreateView(

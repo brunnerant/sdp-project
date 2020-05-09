@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.Online.OnlineActivity"
+            android:name=".view.online.OnlineActivity"
             android:label="@string/title_activity_online"
             android:parentActivityName=".view.home.HomeActivity">
             <!-->

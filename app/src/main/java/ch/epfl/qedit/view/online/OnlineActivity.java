@@ -1,4 +1,4 @@
-package ch.epfl.qedit.view.Online;
+package ch.epfl.qedit.view.online;
 
 import static ch.epfl.qedit.view.LoginActivity.USER;
 
@@ -19,7 +19,7 @@ public class OnlineActivity extends AppCompatActivity {
 
         User user =
                 new User(
-                        ", you are Online. You can Search the database",
+                        "you are Online. You can Search the database",
                         "",
                         User.Role.Administrator);
 

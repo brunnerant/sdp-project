@@ -15,7 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.view.Online.OnlineActivity;
+import ch.epfl.qedit.view.online.OnlineActivity;
 import com.google.android.material.navigation.NavigationView;
 import java.util.Objects;
 

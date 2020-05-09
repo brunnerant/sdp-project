@@ -1,4 +1,4 @@
-package ch.epfl.qedit.view.Online;
+package ch.epfl.qedit.view.online;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.Search.SearchableMapEntry;
+import ch.epfl.qedit.search.SearchableMapEntry;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.model.Quiz;

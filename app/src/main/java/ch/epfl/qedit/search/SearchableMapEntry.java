@@ -1,8 +1,8 @@
-package ch.epfl.qedit.Search;
+package ch.epfl.qedit.search;
 
 import java.util.Map;
 
-public class SearchableMapEntry extends SearchablePair<Map.Entry<String, String>> {
+public class SearchableMapEntry extends SearchableList<Map.Entry<String, String>> {
 
     @Override
     public Map.Entry<String, String> search(String string, int position) {

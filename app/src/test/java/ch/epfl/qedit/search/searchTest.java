@@ -1,4 +1,4 @@
-package ch.epfl.qedit.Search;
+package ch.epfl.qedit.search;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;

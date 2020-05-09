@@ -1,6 +1,6 @@
-package ch.epfl.qedit.Search;
+package ch.epfl.qedit.search;
 
-public class StringSearchable extends SearchablePair<String> {
+public class StringSearchable extends SearchableList<String> {
     @Override
     public String search(String string, int position) {
         if (position >= e.size()) {

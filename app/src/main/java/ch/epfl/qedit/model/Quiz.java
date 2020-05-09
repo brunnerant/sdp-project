@@ -1,6 +1,6 @@
 package ch.epfl.qedit.model;
 
-import ch.epfl.qedit.Search.Searchable;
+import ch.epfl.qedit.search.Searchable;
 import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.ArrayList;

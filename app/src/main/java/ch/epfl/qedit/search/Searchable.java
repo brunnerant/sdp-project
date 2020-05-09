@@ -1,4 +1,4 @@
-package ch.epfl.qedit.Search;
+package ch.epfl.qedit.search;
 
 public interface Searchable<T> {
     /**
