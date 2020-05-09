@@ -1,9 +1,11 @@
 package ch.epfl.qedit.model;
 
 import android.location.Location;
-import ch.epfl.qedit.model.answer.AnswerFormat;
+
 import java.io.Serializable;
 import java.util.Objects;
+
+import ch.epfl.qedit.model.answer.AnswerFormat;
 
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
 public final class Question implements MultiLanguage<Question>, Serializable {
@@ -36,7 +38,11 @@ public final class Question implements MultiLanguage<Question>, Serializable {
 
     // This constructor is for normal questions
     public Question(String title, String text, AnswerFormat format) {
-        this(title, text, format, null, -1);
+        this.title = Objects.requireNonNull(title);
+        this.text = Objects.requireNonNull(text);
+        this.format = Objects.requireNonNull(format);
+        this.location = null;
+        this.radius = -1;
     }
 
     /** Construct a question with a string to parse for the answer_format */
@@ -71,7 +77,7 @@ public final class Question implements MultiLanguage<Question>, Serializable {
             return this.title.equals(other.title)
                     && this.text.equals(other.text)
                     && this.format.equals(other.format)
-                    && this.location.equals(other.location)
+                    && Objects.equals(this.location, other.location)
                     && this.radius == other.radius;
         }
         return false;
