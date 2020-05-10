@@ -1,25 +1,22 @@
 package ch.epfl.qedit.backend;
 
-import android.content.Context;
-import android.location.LocationListener;
-
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import ch.epfl.qedit.backend.location.MockLocService;
-import ch.epfl.qedit.util.LocationHelper;
-
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+import android.content.Context;
+import android.location.LocationListener;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.backend.location.MockLocService;
+import ch.epfl.qedit.util.LocationHelper;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MockLocTest extends LocationHelper {
@@ -55,6 +52,8 @@ public class MockLocTest extends LocationHelper {
         locService.setLocation(13, 14);
 
         verify(listener).onLocationChanged(any());
-        verify(listener).onLocationChanged(argThat(loc -> (loc.getLongitude() == 11) && (loc.getLatitude() == 12)));
+        verify(listener)
+                .onLocationChanged(
+                        argThat(loc -> (loc.getLongitude() == 11) && (loc.getLatitude() == 12)));
     }
 }

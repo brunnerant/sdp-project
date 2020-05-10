@@ -4,6 +4,8 @@
     package="ch.epfl.qedit">
 
     <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- The app needs those permissions to access the device's location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -31,13 +33,6 @@
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".view.sensor.ScannerActivity"
-            android:label="Scanner"
-            android:parentActivityName=".view.home.HomeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.home.HomeActivity"/>
         </activity>
         <activity
             android:name=".view.edit.EditQuizActivity"

@@ -6,8 +6,8 @@ import android.location.LocationManager;
 import ch.epfl.qedit.backend.location.MockLocService;
 
 /**
- * This class is used in test cases to initialize the mock location provider. This is useful
- * to test activities that depend on the phone's location.
+ * This class is used in test cases to initialize the mock location provider. This is useful to test
+ * activities that depend on the phone's location.
  */
 public class LocationHelper {
     /**
@@ -35,8 +35,8 @@ public class LocationHelper {
     }
 
     /**
-     * This method must be called after the tests. It removes the mock location provider
-     * from the phone.
+     * This method must be called after the tests. It removes the mock location provider from the
+     * phone.
      */
     public static void cleanupLocationProvider(Context context) {
         LocationManager manager =
