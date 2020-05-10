@@ -3,13 +3,10 @@ package ch.epfl.qedit.backend.location;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
-
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * This class is used to write tests for the parts of the app that need the location service.
- */
+/** This class is used to write tests for the parts of the app that need the location service. */
 public class MockLocService implements LocationService {
     /** This is the id of the mock location provider */
     public static final String LOCATION_PROVIDER = "mock_provider";
@@ -35,6 +32,7 @@ public class MockLocService implements LocationService {
 
     /**
      * Sets the location of the service, updating all the subscribed location listeners
+     *
      * @param longitude the longitude of the new location
      * @param latitude the latitude of the new location
      */
@@ -45,7 +43,6 @@ public class MockLocService implements LocationService {
         location.setLatitude(latitude);
 
         // And then we trigger the listeners
-        for (LocationListener listener : listeners)
-            listener.onLocationChanged(location);
+        for (LocationListener listener : listeners) listener.onLocationChanged(location);
     }
 }
