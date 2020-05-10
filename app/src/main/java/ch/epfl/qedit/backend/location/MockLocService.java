@@ -14,15 +14,23 @@ public class MockLocService implements LocationService {
     // This is the set of listeners that need to be updated.
     private final Set<LocationListener> listeners;
 
+    // This indicates whether the user has permissions to access this service.
+    // Note that this is for test purposes. It allows to test how the UI reacts when the user
+    // doesn't have the access to the location.
+    private boolean permission;
+
     public MockLocService(Context context) {
         listeners = new HashSet<>();
+        permission = false;
     }
 
     @Override
-    public void subscribe(LocationListener listener, int interval) {
+    public boolean subscribe(LocationListener listener, int interval) {
         // In the mock, we will not take into account the interval, because the goal
         // is just to test how the UI responds to the location updates.
-        listeners.add(listener);
+        if (permission) listeners.add(listener);
+
+        return permission;
     }
 
     @Override
@@ -44,5 +52,10 @@ public class MockLocService implements LocationService {
 
         // And then we trigger the listeners
         for (LocationListener listener : listeners) listener.onLocationChanged(location);
+    }
+
+    /** Sets the permission to access the location service. */
+    public void setPermission(boolean permission) {
+        this.permission = permission;
     }
 }

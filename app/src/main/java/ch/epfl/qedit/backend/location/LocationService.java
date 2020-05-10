@@ -13,8 +13,9 @@ public interface LocationService {
      *
      * @param listener the listener that will be subscribed.
      * @param interval the interval at which updates should be received.
+     * @return true if the permissions were granted for the location service, false otherwise.
      */
-    void subscribe(LocationListener listener, int interval);
+    boolean subscribe(LocationListener listener, int interval);
 
     /**
      * Unsubscribe the given listener, meaning that it will stop receiving updates.
