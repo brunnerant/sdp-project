@@ -38,7 +38,7 @@ public class EditFieldFragment extends DialogFragment {
     private boolean isDecimal;
     private boolean isText;
     private boolean isPreFilled;
-    private boolean hasLocation;
+    private boolean hasTreasureHunt;
 
     private String solution;
 
@@ -46,7 +46,7 @@ public class EditFieldFragment extends DialogFragment {
     private CheckBox decimalCheckbox;
 
     private CheckBox signCheckbox;
-    private CheckBox locationCheckbox;
+    private CheckBox treasureHuntCheckbox;
 
     private EditText solutionView;
     private TextView preview;
@@ -201,9 +201,9 @@ public class EditFieldFragment extends DialogFragment {
                     updateLayout();
                 });
 
-        locationCheckbox.setOnClickListener(
+        treasureHuntCheckbox.setOnClickListener(
                 v -> {
-                    hasLocation = ((CheckBox) v).isChecked();
+                    hasTreasureHunt = ((CheckBox) v).isChecked();
                     updateLayout();
                 });
     }
@@ -218,7 +218,7 @@ public class EditFieldFragment extends DialogFragment {
         // find layout component in the layout
         decimalCheckbox = view.findViewById(R.id.decimal_checkbox);
         signCheckbox = view.findViewById(R.id.sign_checkbox);
-        locationCheckbox = view.findViewById(R.id.location_checkbox);
+        treasureHuntCheckbox = view.findViewById(R.id.treasure_hunt_checkbox);
 
         solutionView = view.findViewById(R.id.field_solution);
         preview = view.findViewById(R.id.field_hint_preview);

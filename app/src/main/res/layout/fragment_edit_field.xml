@@ -29,6 +29,14 @@
                 android:textSize="@dimen/sub_title_text_size"
                 android:textColor="@color/colorSubTitle"/>
 
+            <CheckBox
+                android:id="@+id/treasure_hunt_checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/regular_padding"
+                android:text="@string/treasureHunt"
+                android:textSize="@dimen/text_size"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,14 +58,6 @@
                     android:entries="@array/field_types_list"/>
 
             </LinearLayout>
-
-            <CheckBox
-                android:id="@+id/location_checkbox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/regular_padding"
-                android:text="@string/location"
-                android:textSize="@dimen/text_size"/>
 
             <CheckBox
                 android:id="@+id/sign_checkbox"

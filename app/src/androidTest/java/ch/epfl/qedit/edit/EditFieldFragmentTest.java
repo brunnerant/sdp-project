@@ -124,12 +124,12 @@ public class EditFieldFragmentTest {
     @Test
     public void testCheckboxDisplay() {
         changeType(PRE_FILLED_TYPE_IDX);
-        onDialog(R.id.location_checkbox).check(matches(isDisplayed()));
+        onDialog(R.id.treasure_hunt_checkbox).check(matches(isDisplayed()));
         onDialog(R.id.decimal_checkbox).check(matches(not(isDisplayed())));
         onDialog(R.id.sign_checkbox).check(matches(not(isDisplayed())));
 
         changeType(NUMBER_TYPE_IDX);
-        onDialog(R.id.location_checkbox).check(matches(isDisplayed()));
+        onDialog(R.id.treasure_hunt_checkbox).check(matches(isDisplayed()));
         onDialog(R.id.decimal_checkbox).perform(scrollTo()).check(matches(isDisplayed()));
         onDialog(R.id.sign_checkbox).perform(scrollTo()).check(matches(isDisplayed()));
     }
@@ -186,7 +186,7 @@ public class EditFieldFragmentTest {
 
     @Test
     public void locationCheckbox() {
-        clickOn(R.id.location_checkbox, true);
-        onView(withId(R.id.location_checkbox)).check(matches(isChecked()));
+        clickOn(R.id.treasure_hunt_checkbox, true);
+        onView(withId(R.id.treasure_hunt_checkbox)).check(matches(isChecked()));
     }
 }
