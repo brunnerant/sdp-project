@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -94,7 +94,7 @@ public class OnlineFragment extends Fragment {
     // This function is used to create the list of quizzes for the given user
     private void createAdapter() {
         // Retrieve the quizzes from the user
-        quizzes.e = new ArrayList<>();
+        quizzes.list = new ArrayList<>();
 
         // Create the list adapter
         listAdapter = new ListSearchView.Adapter<>(quizzes, item -> item.getValue());

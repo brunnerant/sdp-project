@@ -2,7 +2,6 @@ package ch.epfl.qedit.view.home;
 
 import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.LoginActivity.USER;
 
@@ -73,7 +72,7 @@ public class HomeQuizListFragment extends Fragment
 
         // Get user from the bundle created by the parent activity
         user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
-        quizzes.e = new ArrayList<>(user.getQuizzes().entrySet().asList());
+        quizzes.list = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter and bind it to the list edit view
         createAdapter(user);
@@ -93,7 +92,7 @@ public class HomeQuizListFragment extends Fragment
     // This function is used to create the list of quizzes for the given user
     private void createAdapter(User user) {
         // Retrieve the quizzes from the user
-        quizzes.e = new ArrayList<>(user.getQuizzes().entrySet().asList());
+        quizzes.list = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter
         listAdapter =
@@ -130,7 +129,7 @@ public class HomeQuizListFragment extends Fragment
                 text -> {
                     if (text.trim().length() == 0) return getString(R.string.empty_quiz_name_error);
 
-                    for (Map.Entry<String, String> entry : quizzes.e) {
+                    for (Map.Entry<String, String> entry : quizzes.list) {
                         if (entry.getValue().equals(text))
                             return getString(R.string.dup_quiz_name_error);
                     }
@@ -217,7 +216,7 @@ public class HomeQuizListFragment extends Fragment
 
     // Handles when a user clicked on the button to edit a quiz
     private void editQuiz(int position) {
-        final String quizID = quizzes.e.get(position).getKey();
+        final String quizID = quizzes.list.get(position).getKey();
         progressBar.setVisibility(View.VISIBLE);
 
         CompletableFuture<StringPool> stringPool =
