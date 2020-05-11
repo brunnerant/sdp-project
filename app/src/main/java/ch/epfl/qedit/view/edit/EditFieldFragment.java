@@ -34,6 +34,7 @@ public class EditFieldFragment extends DialogFragment {
 
     /** State variables, we determine the correct type of Field to create from this variable */
     private boolean isSigned;
+
     private boolean isDecimal;
     private boolean isText;
     private boolean isPreFilled;
@@ -43,6 +44,7 @@ public class EditFieldFragment extends DialogFragment {
 
     /** Layout component */
     private CheckBox decimalCheckbox;
+
     private CheckBox signCheckbox;
     private CheckBox locationCheckbox;
 
@@ -216,10 +218,11 @@ public class EditFieldFragment extends DialogFragment {
                     updateLayout();
                 });
 
-        locationCheckbox.setOnClickListener(v-> {
-            hasLocation = ((CheckBox) v).isChecked();
-            updateLayout();
-        });
+        locationCheckbox.setOnClickListener(
+                v -> {
+                    hasLocation = ((CheckBox) v).isChecked();
+                    updateLayout();
+                });
 
         setTypesSpinnerListener();
         setSolutionViewListener();
