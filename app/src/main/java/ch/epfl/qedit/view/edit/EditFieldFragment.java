@@ -218,12 +218,11 @@ public class EditFieldFragment extends DialogFragment {
         // find layout component in the layout
         decimalCheckbox = view.findViewById(R.id.decimal_checkbox);
         signCheckbox = view.findViewById(R.id.sign_checkbox);
+        locationCheckbox = view.findViewById(R.id.location_checkbox);
+
         solutionView = view.findViewById(R.id.field_solution);
         preview = view.findViewById(R.id.field_hint_preview);
         typesSpinner = view.findViewById(R.id.field_types_selection);
-
-        // TODO
-        locationCheckbox = view.findViewById(R.id.location_checkbox);
 
         // create listeners for each check box
         setCheckBoxesOnClickListener();

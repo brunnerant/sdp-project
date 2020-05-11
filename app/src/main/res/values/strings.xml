@@ -105,6 +105,7 @@
     <string name="correct_answer_specified"><b>A correct answer has been specified <font color="#00FF00">✔</font></b></string>
 
     <!-- Edit Field -->
+    <string name="location">Location</string>
     <string name="edit_field_title">Solution</string>
     <string name="hint_preview">The hint will be</string>
     <string name="enter_solution">Enter here the solution of this question.</string>
@@ -122,6 +123,5 @@
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
     <string name="database_error">An error occurred connecting to the database</string>
-    <string name="Location">location</string>
 
 </resources>

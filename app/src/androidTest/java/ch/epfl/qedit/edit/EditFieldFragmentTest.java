@@ -122,10 +122,12 @@ public class EditFieldFragmentTest {
     @Test
     public void testCheckboxDisplay() {
         changeType(PRE_FILLED_TYPE_IDX);
+        onDialog(R.id.location_checkbox).check(matches(isDisplayed()));
         onDialog(R.id.decimal_checkbox).check(matches(not(isDisplayed())));
         onDialog(R.id.sign_checkbox).check(matches(not(isDisplayed())));
 
         changeType(NUMBER_TYPE_IDX);
+        onDialog(R.id.location_checkbox).check(matches(isDisplayed()));
         onDialog(R.id.decimal_checkbox).perform(scrollTo()).check(matches(isDisplayed()));
         onDialog(R.id.sign_checkbox).perform(scrollTo()).check(matches(isDisplayed()));
     }

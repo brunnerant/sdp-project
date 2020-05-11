@@ -77,6 +77,7 @@
     <string name="correct_answer_specified"><b>Un type de réponse correct a été spécifié <font color="#00FF00">✔</font></b></string>
 
     <!-- Edit Field -->
+    <string name="location">Location</string>
     <string name="edit_field_title">Solution</string>
     <string name="hint_preview">L\'aperçu sera</string>
     <string name="enter_solution">Entrer la solution de cette question.</string>
@@ -97,6 +98,5 @@
          we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
     <string name="database_error">Une erreur s\'est produite lors de la connexion à la base de donnée</string>
-    <string name="Location">location</string>
 
 </resources>

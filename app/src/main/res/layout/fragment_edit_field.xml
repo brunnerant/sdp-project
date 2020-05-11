@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/regular_padding"
-                android:text="@string/Location"
+                android:text="@string/location"
                 android:textSize="@dimen/text_size"/>
 
             <CheckBox
