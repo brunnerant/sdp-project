@@ -141,7 +141,7 @@ public class HomeQuizListFragment extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_editor_mode, menu);
+        inflater.inflate(R.menu.home_menu, menu);
 
         MenuItem item = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) item.getActionView();
