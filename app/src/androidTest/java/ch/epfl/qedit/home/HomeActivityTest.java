@@ -30,6 +30,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -182,19 +184,19 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         return currentActivity;
     }
 
-    @Test
-    public void testSearchEmpty() {
-        ListEditView recyclerView = testRule.getActivity().findViewById(R.id.home_quiz_list);
-        onView(withId(R.id.app_bar_search)).perform(typeText("Not working"));
-        assertEquals(recyclerView.getAdapter().getItemCount(), 0);
+    private ListEditView getEditView() {
+        return testRule.getActivity().findViewById(R.id.home_quiz_list);
     }
 
-
+    @Test
+    public void testSearchEmpty() {
+        onView(withId(R.id.app_bar_search)).perform(typeText("Not working"));
+        assertEquals(getEditView().getAdapter().getItemCount(), 0);
+    }
 
     @Test
     public void testSearchNoneEmpty() {
-        ListEditView recyclerView = testRule.getActivity().findViewById(R.id.home_quiz_list);
         onView(withId(R.id.app_bar_search)).perform(typeText("Qual"));
-        assertEquals(recyclerView.getAdapter().getItemCount(), 1);
+        assertEquals(getEditView().getAdapter().getItemCount(), 1);
     }
 }
