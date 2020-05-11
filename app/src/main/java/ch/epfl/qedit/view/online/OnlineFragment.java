@@ -33,6 +33,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class OnlineFragment extends Fragment {
     public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
+    private static final String SEARCH_KEY = "SEARCH_KEY";
 
     private DatabaseService db;
     private Handler handler;
@@ -43,6 +44,8 @@ public class OnlineFragment extends Fragment {
 
     private ListEditView listEditView;
     private int load = 0;
+
+    private String search = "";
 
     private SearchableMapEntry quizzes = new SearchableMapEntry();
     private List<Map.Entry<String, String>> quizzes2 = new ArrayList<>();
@@ -56,6 +59,10 @@ public class OnlineFragment extends Fragment {
         // Build the top bar and the dialogs
         setHasOptionsMenu(true);
         // Get user from the bundle created by the parent activity
+
+        if(savedInstanceState != null) {
+            search = savedInstanceState.getString(SEARCH_KEY);
+        }
 
         // Create the list adapter and bind it to the list edit view
         createAdapter();
@@ -110,11 +117,13 @@ public class OnlineFragment extends Fragment {
         inflater.inflate(R.menu.search, menu);
         MenuItem item = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQuery(search, false);
         searchView.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
                         try {
+                            search = query;
                             listAdapter.clear();
                             for (Map.Entry<String, String> e :
                                     db.searchDatabase(load, load + 10, query).get())
@@ -192,6 +201,12 @@ public class OnlineFragment extends Fragment {
         b.putSerializable(QUIZ_ID, q);
         i.putExtras(b);
         return i;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(SEARCH_KEY, search);
     }
 
     // Launches the quiz activity with the given quiz. This is used when a quiz is selected.
