@@ -75,7 +75,7 @@ public class FirebaseDBService implements DatabaseService {
         return future;
     }
 
-    public void tryy(
+    private void testForException(
             List<Map.Entry<String, String>> list,
             String s,
             CompletableFuture<List<Map.Entry<String, String>>> future) {
@@ -93,7 +93,7 @@ public class FirebaseDBService implements DatabaseService {
             String search) {
         for (String s : document.getData().keySet()) {
             if (s.contains(search)) {
-                tryy(list, s, future);
+                testForException(list, s, future);
             }
         }
     }
