@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -23,6 +24,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -43,7 +45,11 @@ import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.LoginActivity;
 import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
+import ch.epfl.qedit.view.util.ListEditView;
+
 import java.util.Collection;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -177,5 +183,19 @@ public class HomeActivityTest extends RecyclerViewHelpers {
                             }
                         });
         return currentActivity;
+    }
+
+    @Test
+    public void testSearchEmpty() {
+        ListEditView recyclerView = testRule.getActivity().findViewById(R.id.home_quiz_list);
+        onView(withId(R.id.app_bar_search)).perform(typeText("Not working"));
+        assertEquals(recyclerView.getAdapter().getItemCount(), 0);
+    }
+
+    @Test
+    public void testSearchNoneEmpty() {
+        ListEditView recyclerView = testRule.getActivity().findViewById(R.id.home_quiz_list);
+        onView(withId(R.id.app_bar_search)).perform(typeText("Qual"));
+        assertEquals(recyclerView.getAdapter().getItemCount(), 1);
     }
 }

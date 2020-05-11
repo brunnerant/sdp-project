@@ -27,10 +27,10 @@ public class ListSearchView {
          * @param getText        a function to retrieve the text from one item
          */
         public Adapter(E e, ListEditView.GetItemText<T> getText) {
-            super(e.e, getText);
+            super(e.list, getText);
             //this.items = searchablePair.e;
             this.e = e;
-            backup = new ArrayList<>(e.e);
+            backup = new ArrayList<>(e.list);
             //this.items = Objects.requireNonNull(e.e);
 
         }
@@ -64,7 +64,7 @@ public class ListSearchView {
         private void subFilter(List<T> filtered, CharSequence constraint) {
             String pattern = constraint.toString().toLowerCase().trim();
 
-            for (int i = 0; i < e.e.size(); ++i) {
+            for (int i = 0; i < e.list.size(); ++i) {
                 T searched = e.search(pattern, i);
 
                 if (searched != null) {
@@ -80,9 +80,9 @@ public class ListSearchView {
                 protected FilterResults performFiltering(CharSequence constraint) {
                     List<T> filtered = new ArrayList<>();
 
-                    e.e = new ArrayList<>(backup);
+                    e.list = new ArrayList<>(backup);
                     if (constraint == null || constraint.length() == 0) {
-                        filtered.addAll(e.e);
+                        filtered.addAll(e.list);
                     } else {
                         subFilter(filtered, constraint);
                     }

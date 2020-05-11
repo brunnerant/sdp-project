@@ -16,13 +16,13 @@ public class OnlineFragmentTest {
     public final FragmentTestRule<?, OnlineFragment> testRule =
             FragmentTestRule.create(OnlineFragment.class, false, false);
 
-    public OnlineFragmentTest() {
-        super(R.id.home_quiz_list);
-    }
-
-    @Before
-    public void setup() {
-        Intents.init();
-        setup(testRule, new HomeQuizListFragment());
-    }
+//    public OnlineFragmentTest() {
+//        super(R.id.home_quiz_list);
+//    }
+//
+//    @Before
+//    public void setup() {
+//        Intents.init();
+//        setup(testRule, new HomeQuizListFragment());
+//    }
 }
