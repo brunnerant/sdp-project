@@ -185,7 +185,7 @@ public class EditFieldFragmentTest {
     }
 
     @Test
-    public void locationCheckbox() {
+    public void treasureHuntCheckbox() {
         clickOn(R.id.treasure_hunt_checkbox, true);
         onView(withId(R.id.treasure_hunt_checkbox)).check(matches(isChecked()));
     }
