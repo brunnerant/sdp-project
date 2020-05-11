@@ -112,6 +112,19 @@ public class OnlineFragment extends Fragment {
 //                });
     }
 
+    private void onTextSubmit(SearchView searchView, String query) {
+        try {
+            search = query;
+            listAdapter.clear();
+            for (Map.Entry<String, String> e :
+                    db.searchDatabase(load, load + 10, query).get())
+                listAdapter.addItem(e);
+            load = 10;
+            searchView.clearFocus();
+        } catch (Exception e) {
+        }
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search, menu);
@@ -122,16 +135,7 @@ public class OnlineFragment extends Fragment {
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-                        try {
-                            search = query;
-                            listAdapter.clear();
-                            for (Map.Entry<String, String> e :
-                                    db.searchDatabase(load, load + 10, query).get())
-                                listAdapter.addItem(e);
-                            load = 10;
-                            searchView.clearFocus();
-                        } catch (Exception e) {
-                        }
+                        onTextSubmit(searchView, query);
 
                         return false;
                     }
