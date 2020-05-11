@@ -189,6 +189,25 @@ public class EditFieldFragment extends DialogFragment {
 
     // METHODS THAT HANDLE THE LAYOUT //
 
+    private void setCheckBoxesOnClickListener() {
+        decimalCheckbox.setOnClickListener(
+                v -> {
+                    isDecimal = ((CheckBox) v).isChecked();
+                    updateLayout();
+                });
+        signCheckbox.setOnClickListener(
+                v -> {
+                    isSigned = ((CheckBox) v).isChecked();
+                    updateLayout();
+                });
+
+        locationCheckbox.setOnClickListener(
+                v -> {
+                    hasLocation = ((CheckBox) v).isChecked();
+                    updateLayout();
+                });
+    }
+
     /**
      * Init all the layout component with listener and default parameters
      *
@@ -207,22 +226,7 @@ public class EditFieldFragment extends DialogFragment {
         locationCheckbox = view.findViewById(R.id.location_checkbox);
 
         // create listeners for each check box
-        decimalCheckbox.setOnClickListener(
-                v -> {
-                    isDecimal = ((CheckBox) v).isChecked();
-                    updateLayout();
-                });
-        signCheckbox.setOnClickListener(
-                v -> {
-                    isSigned = ((CheckBox) v).isChecked();
-                    updateLayout();
-                });
-
-        locationCheckbox.setOnClickListener(
-                v -> {
-                    hasLocation = ((CheckBox) v).isChecked();
-                    updateLayout();
-                });
+        setCheckBoxesOnClickListener();
 
         setTypesSpinnerListener();
         setSolutionViewListener();
