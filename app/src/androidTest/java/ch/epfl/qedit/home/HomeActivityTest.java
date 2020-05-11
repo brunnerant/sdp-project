@@ -191,6 +191,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         onView(withId(R.id.app_bar_search)).perform(typeText("Not working"));
         assertEquals(recyclerView.getAdapter().getItemCount(), 0);
     }
+    
 
     @Test
     public void testSearchNoneEmpty() {
