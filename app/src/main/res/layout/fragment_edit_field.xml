@@ -52,6 +52,14 @@
             </LinearLayout>
 
             <CheckBox
+                android:id="@+id/location_checkbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/regular_padding"
+                android:text="@string/Location"
+                android:textSize="@dimen/text_size"/>
+
+            <CheckBox
                 android:id="@+id/sign_checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

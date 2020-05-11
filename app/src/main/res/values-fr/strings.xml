@@ -97,5 +97,6 @@
          we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
     <string name="database_error">Une erreur s\'est produite lors de la connexion à la base de donnée</string>
+    <string name="Location">location</string>
 
 </resources>
