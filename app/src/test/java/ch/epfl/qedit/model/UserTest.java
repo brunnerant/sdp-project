@@ -17,8 +17,8 @@ public class UserTest {
         assertEquals(user.getLastName(), "Doe");
         assertEquals(user.getFullName(), "John Doe");
         assertEquals(0, user.getScore());
-        assertEquals(0, user.getSuccess());
-        assertEquals(0, user.getAttempt());
+        assertEquals(0, user.getSuccesses());
+        assertEquals(0, user.getAttempts());
 
         //noinspection SpellCheckingInspection
         assertNotEquals("salkdjf", user);
@@ -30,8 +30,8 @@ public class UserTest {
     public void testConstructor() {
         User user = new User("John", "Doe", 456, 7, 1);
         assertEquals(456, user.getScore());
-        assertEquals(7, user.getSuccess());
-        assertEquals(1, user.getAttempt());
+        assertEquals(7, user.getSuccesses());
+        assertEquals(1, user.getAttempts());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -55,12 +55,12 @@ public class UserTest {
         user.incrementAttempt();
         user.incrementAttempt();
         user.incrementAttempt();
-        assertEquals(3, user.getAttempt());
+        assertEquals(3, user.getAttempts());
 
         user.incrementSuccess();
         user.incrementSuccess();
-        assertEquals(2, user.getSuccess());
-        assertEquals(5, user.getAttempt());
+        assertEquals(2, user.getSuccesses());
+        assertEquals(5, user.getAttempts());
 
         user.incrementScore(45);
         assertEquals(45, user.getScore());

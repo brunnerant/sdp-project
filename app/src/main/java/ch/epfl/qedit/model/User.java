@@ -21,24 +21,24 @@ public class User implements Serializable {
     private final String lastName;
 
     private int score;
-    private int success;
-    private int attempt;
+    private int successes;
+    private int attempts;
 
     public User(String firstName, String lastName) {
         this(firstName, lastName, 0, 0, 0);
     }
 
-    public User(String firstName, String lastName, int score, int success, int attempt) {
+    public User(String firstName, String lastName, int score, int successes, int attempts) {
         if (score < 0) throw new IllegalArgumentException("User score has to be positive");
-        if (success < 0) throw new IllegalArgumentException("User success has to be positive");
-        if (attempt < 0) throw new IllegalArgumentException("User attempt has to be positive");
+        if (successes < 0) throw new IllegalArgumentException("User success has to be positive");
+        if (attempts < 0) throw new IllegalArgumentException("User attempt has to be positive");
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.quizzes = new LinkedHashMap<>();
         this.score = score;
-        this.success = success;
-        this.attempt = attempt;
+        this.successes = successes;
+        this.attempts = attempts;
     }
 
     public boolean canAdd(String string) {
@@ -98,12 +98,12 @@ public class User implements Serializable {
         return score;
     }
 
-    public int getSuccess() {
-        return success;
+    public int getSuccesses() {
+        return successes;
     }
 
-    public int getAttempt() {
-        return attempt;
+    public int getAttempts() {
+        return attempts;
     }
 
     public void incrementScore(int points) {
@@ -123,12 +123,12 @@ public class User implements Serializable {
     }
 
     public void incrementSuccess() {
-        ++success;
-        ++attempt;
+        ++successes;
+        ++attempts;
     }
 
     public void incrementAttempt() {
-        ++attempt;
+        ++attempts;
     }
 
     @Override
@@ -138,8 +138,8 @@ public class User implements Serializable {
         User user = (User) o;
         boolean equalStatistics =
                 this.score == user.score
-                        && this.success == user.success
-                        && this.attempt == user.attempt;
+                        && this.successes == user.successes
+                        && this.attempts == user.attempts;
         return firstName.equals(user.firstName)
                 && lastName.equals(user.lastName)
                 && equalStatistics;
