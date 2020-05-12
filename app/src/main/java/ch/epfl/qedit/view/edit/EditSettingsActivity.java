@@ -24,7 +24,6 @@ import java.util.Objects;
 public class EditSettingsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
     public static final String QUIZ_BUILDER = "ch.epfl.qedit.model.QUIZ_BUILDER";
-    public static final String TREASURE_HUNT = "ch.epfl.qedit.model.TREASURE_HUNT";
 
     private Quiz.Builder quizBuilder;
     private StringPool stringPool;
@@ -105,7 +104,6 @@ public class EditSettingsActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZ_BUILDER, quizBuilder);
         bundle.putSerializable(STRING_POOL, stringPool);
-        bundle.putSerializable(TREASURE_HUNT, hasTreasureHunt);
         intent.putExtras(bundle);
         startActivity(intent);
     }
