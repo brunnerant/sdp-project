@@ -93,13 +93,8 @@ public class EditSettingsActivityTest {
     @Test
     public void treasureHuntCheckbox() {
         onView(withId(R.id.treasure_hunt_checkbox));
-        clickOn(R.id.treasure_hunt_checkbox, true);
-        onView(withId(R.id.treasure_hunt_checkbox)).check(matches(isChecked()));
         onView(withId(R.id.treasure_hunt_checkbox)).perform(click());
-        onView(withId(R.id.treasure_hunt_checkbox))
-                .check(matches(isChecked()))
-                .perform(scrollTo(), click());
-        onDialog(R.id.treasure_hunt_checkbox).check(matches(isDisplayed()));
+        onView(withId(R.id.treasure_hunt_checkbox)).check(matches(isChecked()));
         onView(withId(R.id.treasure_hunt_checkbox)).perform(click());
     }
 }
