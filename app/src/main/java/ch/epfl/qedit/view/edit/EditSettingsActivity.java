@@ -37,6 +37,8 @@ public class EditSettingsActivity extends AppCompatActivity
     private boolean userHasInteracted = false;
     private String languageCode;
 
+    private Quiz quiz;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,19 +47,12 @@ public class EditSettingsActivity extends AppCompatActivity
         Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
 
         stringPool = (StringPool) bundle.getSerializable(STRING_POOL);
-        Quiz quiz = (Quiz) bundle.getSerializable(QUIZ_ID);
+        quiz = (Quiz) bundle.getSerializable(QUIZ_ID);
 
         if (quiz != null) {
             setContentView(R.layout.activity_edit_modify_quiz_settings);
-
-            // Initialize the builder with the existing quiz
-            quizBuilder = new Quiz.Builder(quiz);
-
         } else {
             setContentView(R.layout.activity_edit_new_quiz_settings);
-
-            // Initialize a new empty QuizBuilder
-            quizBuilder = new Quiz.Builder();
 
             // Create spinner (language list)
             languageSelectionSpinner = findViewById(R.id.edit_language_selection);
@@ -90,12 +85,18 @@ public class EditSettingsActivity extends AppCompatActivity
         treasureHuntCheckbox.setOnClickListener(
                 v -> {
                     hasTreasureHunt = ((CheckBox) v).isChecked();
-                    quizBuilder = quizBuilder.setTreasureHunt(hasTreasureHunt);
                 });
     }
 
     public void startEditing(View view) {
         // Update the title in the StringPool and the languageCode
+        if (quiz != null) {
+            // Initialize the builder with the existing quiz
+            quizBuilder = new Quiz.Builder(quiz);
+        } else {
+            quizBuilder = new Quiz.Builder(hasTreasureHunt);
+        }
+
         stringPool.update(TITLE_ID, editTitle.getText().toString());
         stringPool.setLanguageCode(languageCode);
 

@@ -65,11 +65,6 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
             this.treasureHunt = quiz.treasureHunt;
         }
 
-        public Builder setTreasureHunt(Boolean isTreasureHunt) {
-            this.treasureHunt = isTreasureHunt;
-            return this;
-        }
-
         /** Append a question the quiz's list of question */
         public Builder append(Question question) {
             checkState();

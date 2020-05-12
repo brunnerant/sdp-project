@@ -21,19 +21,6 @@
         app:layout_constraintBottom_toTopOf="@+id/button_start_editing"
         android:inputType="text" />
 
-    <CheckBox
-        android:id="@+id/treasure_hunt_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/regular_padding"
-        android:text="@string/treasureHunt"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_quiz_title"
-        />
-
     <Button
         android:id="@+id/button_start_editing"
         android:layout_width="wrap_content"
@@ -47,6 +34,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/treasure_hunt_checkbox" />
+        app:layout_constraintTop_toBottomOf="@id/edit_quiz_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
