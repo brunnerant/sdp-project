@@ -20,7 +20,7 @@ class HomeFragmentsTestUsingDB extends RecyclerViewHelpers {
     }
 
     public void setup(FragmentTestRule testRule, Fragment fragment) {
-        User user = new User("Jon", "Snow", User.Role.Participant);
+        User user = new User("Jon", "Snow");
         user.addQuiz("quiz0", "Qualification EPFL");
 
         Bundle bundle = new Bundle();
