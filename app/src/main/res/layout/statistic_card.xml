@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/regular_padding">
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/regular_padding"
+            tools:text="TITLE OF THE CARD" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/card_icon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                tools:src="@mipmap/ic_launcher"
+                android:contentDescription="@string/card_icon" />
+
+            <TextView
+                android:id="@+id/card_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="50sp"
+                android:layout_marginLeft="@dimen/regular_padding"
+                tools:text="788"/>
+
+        </LinearLayout>
+    </LinearLayout>
+    </merge>

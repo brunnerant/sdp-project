@@ -27,6 +27,11 @@
     <string name="title_activity_home">Accueil</string>
     <string name="welcome">Bienvenue,</string>
 
+    <string name="display">Afficher</string>
+    <string name="hide">Cacher</string>
+    <string name="score">QEDit SCORE</string>
+    <string name="successes">NOMBRE DE QUIZZES RÉUSSIS</string>
+    <string name="attempts">NOMBRE TOTAL D\'ESSAIS</string>
     <!-- Menu -->
     <string name="menu_overview">Aperçu</string>
     <string name="menu_timer">Minuteur</string>
@@ -94,5 +99,6 @@
          we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
     <string name="database_error">Une erreur s\'est produite lors de la connexion à la base de donnée</string>
+    <string name="card_icon">card icon</string>
 
 </resources>

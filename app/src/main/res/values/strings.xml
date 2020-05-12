@@ -55,6 +55,12 @@
     <string name="title_activity_home">Home</string>
     <string name="welcome">Welcome,</string>
 
+    <string name="display">Display</string>
+    <string name="hide">Hide</string>
+    <string name="score">QEDit SCORE</string>
+    <string name="successes">NUMBER OF QUIZZES SUCCEEDED</string>
+    <string name="attempts">TOTAL NUMBER OF ATTEMPT</string>
+
     <!-- Menu -->
     <string name="menu_overview">Overview</string>
     <string name="menu_timer">Timer</string>
@@ -119,5 +125,6 @@
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
     <string name="database_error">An error occurred connecting to the database</string>
+    <string name="card_icon">card icon</string>
 
 </resources>

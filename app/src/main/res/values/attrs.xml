@@ -3,4 +3,10 @@
     <declare-styleable name="ListEditView">
         <attr name="dragAndDrop" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="StatisticCardView">
+        <attr name="icon" format="reference"/>
+        <attr name="title" format="string"/>
+        <attr name="data" format="string"/>
+    </declare-styleable>
 </resources>
