@@ -54,9 +54,6 @@
     <!-- Home -->
     <string name="title_activity_home">Home</string>
     <string name="welcome">Welcome,</string>
-    <string name="role_administrator">You are an administrator.</string>
-    <string name="role_editor">You are an editor.</string>
-    <string name="role_participant">You are a participant.</string>
 
     <!-- Menu -->
     <string name="menu_overview">Overview</string>

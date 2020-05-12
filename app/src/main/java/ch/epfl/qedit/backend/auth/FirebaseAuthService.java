@@ -19,19 +19,8 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     private User getUserFromDocument(DocumentSnapshot document) {
-
-        String docRole = document.get("role", String.class);
-        User.Role role;
-
-        if (docRole == null || docRole.equals("participant")) role = User.Role.Participant;
-        else if (docRole.equals("admin")) role = User.Role.Administrator;
-        else if (docRole.equals("editor")) role = User.Role.Editor;
-        else role = User.Role.Participant;
-
         return new User(
-                document.get("first_name", String.class),
-                document.get("last_name", String.class),
-                role);
+                document.get("first_name", String.class), document.get("last_name", String.class));
     }
 
     @Override

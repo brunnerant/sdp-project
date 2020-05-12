@@ -62,7 +62,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
 
     @Before
     public void launchActivity() {
-        User user = new User("Marcel", "Doe", User.Role.Participant);
+        User user = new User("Marcel", "Doe");
         user.addQuiz("quiz0", "Qualification EPFL");
 
         Intent intent = new Intent();
@@ -161,7 +161,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
                 .perform(DrawerActions.close());
     }
 
-    Activity currentActivity = null;
+    private Activity currentActivity = null;
 
     public Activity getActivityInstance() {
         getInstrumentation()

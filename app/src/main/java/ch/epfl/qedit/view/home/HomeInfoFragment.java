@@ -36,29 +36,6 @@ public class HomeInfoFragment extends Fragment {
         TextView textViewWelcome = view.findViewById(R.id.greeting);
         textViewWelcome.setText(message);
 
-        TextView textViewRole = view.findViewById(R.id.role);
-
-        textViewRole.setText(getRoleText(user.getRole()));
-
         return view;
-    }
-
-    private String getRoleText(User.Role role) {
-        String roleText = "";
-        switch (role) {
-            case Administrator:
-                roleText = getResources().getString(R.string.role_administrator);
-                break;
-            case Editor:
-                roleText = getResources().getString(R.string.role_editor);
-                break;
-            case Participant:
-                roleText = getResources().getString(R.string.role_participant);
-                break;
-            default:
-                break;
-        }
-
-        return roleText;
     }
 }
