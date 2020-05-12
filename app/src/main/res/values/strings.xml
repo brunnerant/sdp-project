@@ -120,4 +120,7 @@
     <string name="exclamation_point">!</string>
     <string name="database_error">An error occurred connecting to the database</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
