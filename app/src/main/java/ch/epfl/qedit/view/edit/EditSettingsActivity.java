@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,10 +24,14 @@ import java.util.Objects;
 public class EditSettingsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
     public static final String QUIZ_BUILDER = "ch.epfl.qedit.model.QUIZ_BUILDER";
+    public static final String TREASURE_HUNT = "ch.epfl.qedit.model.TREASURE_HUNT";
 
     private Quiz.Builder quizBuilder;
     private StringPool stringPool;
     private EditText editTitle;
+
+    private boolean hasTreasureHunt;
+    private CheckBox treasureHuntCheckbox;
 
     // Only used for new quizzes
     private Spinner languageSelectionSpinner;
@@ -68,6 +73,14 @@ public class EditSettingsActivity extends AppCompatActivity
 
             // Set listener
             languageSelectionSpinner.setOnItemSelectedListener(this);
+
+            // Set treasure hunt
+            treasureHuntCheckbox = findViewById(R.id.treasure_hunt_checkbox);
+            treasureHuntCheckbox.setOnClickListener(
+                    v -> {
+                        hasTreasureHunt = ((CheckBox) v).isChecked();
+                        quizBuilder = quizBuilder.setTreasureHunt(hasTreasureHunt);
+                    });
         }
 
         // Set the EditText for the title
@@ -88,6 +101,7 @@ public class EditSettingsActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZ_BUILDER, quizBuilder);
         bundle.putSerializable(STRING_POOL, stringPool);
+        bundle.putSerializable(TREASURE_HUNT, hasTreasureHunt);
         intent.putExtras(bundle);
         startActivity(intent);
     }

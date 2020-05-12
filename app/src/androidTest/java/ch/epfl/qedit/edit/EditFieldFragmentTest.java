@@ -8,10 +8,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
-import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.clickOn;
@@ -124,12 +122,10 @@ public class EditFieldFragmentTest {
     @Test
     public void testCheckboxDisplay() {
         changeType(PRE_FILLED_TYPE_IDX);
-        onDialog(R.id.treasure_hunt_checkbox).check(matches(isDisplayed()));
         onDialog(R.id.decimal_checkbox).check(matches(not(isDisplayed())));
         onDialog(R.id.sign_checkbox).check(matches(not(isDisplayed())));
 
         changeType(NUMBER_TYPE_IDX);
-        onDialog(R.id.treasure_hunt_checkbox).check(matches(isDisplayed()));
         onDialog(R.id.decimal_checkbox).perform(scrollTo()).check(matches(isDisplayed()));
         onDialog(R.id.sign_checkbox).perform(scrollTo()).check(matches(isDisplayed()));
     }
@@ -182,11 +178,5 @@ public class EditFieldFragmentTest {
         String errorMsg = testRule.getActivity().getString(R.string.cannot_be_empty);
         onView(withText(R.string.done)).inRoot(isDialog()).perform(click());
         onDialogScroll(R.id.field_solution).check(matches(hasErrorText(errorMsg)));
-    }
-
-    @Test
-    public void treasureHuntCheckbox() {
-        clickOn(R.id.treasure_hunt_checkbox, true);
-        onView(withId(R.id.treasure_hunt_checkbox)).check(matches(isChecked()));
     }
 }

@@ -19,7 +19,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
     private final boolean treasureHunt;
 
     /** This can be used to construct generic quizzes */
-    public Quiz(List<Question> questions, String title, boolean treasureHunt) {
+    public Quiz(String title, List<Question> questions, boolean treasureHunt) {
         this.questions = new ArrayList<>(questions);
         this.title = title;
         this.treasureHunt = treasureHunt;
@@ -27,7 +27,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
 
     /** This constructs a non treasure-hunt quiz */
     public Quiz(String title, List<Question> questions) {
-        this(questions, title, false);
+        this(title, questions, false);
     }
 
     public String getTitle() {
@@ -63,6 +63,11 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         public Builder(Quiz quiz) {
             this.questions = new ArrayList<>(quiz.getQuestions());
             this.treasureHunt = quiz.treasureHunt;
+        }
+
+        public Builder setTreasureHunt(Boolean isTreasureHunt) {
+            this.treasureHunt = isTreasureHunt;
+            return this;
         }
 
         /** Append a question the quiz's list of question */
@@ -135,7 +140,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
 
             List<Question> quizQuestion = questions;
             questions = null;
-            return new Quiz(StringPool.TITLE_ID, quizQuestion);
+            return new Quiz(StringPool.TITLE_ID, quizQuestion, treasureHunt);
         }
 
         /** Checks if the builder is valid i.e. build() has not been called yet */
