@@ -8,6 +8,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -49,6 +50,7 @@ public class EditSettingsActivityTest {
         intent.putExtras(bundle);
 
         testRule.launchActivity(intent);
+        Espresso.closeSoftKeyboard();
     }
 
     @After
@@ -82,5 +84,13 @@ public class EditSettingsActivityTest {
                         hasComponent(EditQuizActivity.class.getName()),
                         hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class)),
                         hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
+    }
+
+    @Test
+    public void treasureHuntCheckbox() {
+        onView(withId(R.id.treasure_hunt_checkbox));
+        onView(withId(R.id.treasure_hunt_checkbox)).perform(click());
+        onView(withId(R.id.treasure_hunt_checkbox)).check(matches(isChecked()));
+        onView(withId(R.id.treasure_hunt_checkbox)).perform(click());
     }
 }
