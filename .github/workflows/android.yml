@@ -48,7 +48,10 @@ jobs:
           api-level: 24
           arch: x86_64
           disable-animations: true
-          script: ./gradlew build connectedCheck jacocoTestReport
+          script: |
+            ./gradlew installDebug
+            adb shell appops set ch.epfl.qedit android:mock_location allow
+            ./gradlew build connectedCheck jacocoTestReport
       - name: Uploading the coverage report to GitHub
         uses: actions/upload-artifact@v1
         with:

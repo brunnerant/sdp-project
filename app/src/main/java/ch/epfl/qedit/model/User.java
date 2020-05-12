@@ -9,11 +9,6 @@ import java.util.Map;
 
 /** Represents a user of the QEDit app. */
 public class User implements Serializable {
-    public enum Role {
-        Participant,
-        Editor,
-        Administrator
-    }
 
     /**
      * Table that contains quiz key of all the quizzes this user can attempt to we also store
@@ -24,13 +19,26 @@ public class User implements Serializable {
 
     private final String firstName;
     private final String lastName;
-    private final Role role;
 
-    public User(String firstName, String lastName, Role role) {
+    private int score;
+    private int successes;
+    private int attempts;
+
+    public User(String firstName, String lastName) {
+        this(firstName, lastName, 0, 0, 0);
+    }
+
+    public User(String firstName, String lastName, int score, int successes, int attempts) {
+        if (score < 0) throw new IllegalArgumentException("User score has to be positive");
+        if (successes < 0) throw new IllegalArgumentException("User success has to be positive");
+        if (attempts < 0) throw new IllegalArgumentException("User attempt has to be positive");
+
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
         this.quizzes = new LinkedHashMap<>();
+        this.score = score;
+        this.successes = successes;
+        this.attempts = attempts;
     }
 
     public boolean canAdd(String string) {
@@ -86,8 +94,41 @@ public class User implements Serializable {
         return firstName + " " + lastName;
     }
 
-    public Role getRole() {
-        return role;
+    public int getScore() {
+        return score;
+    }
+
+    public int getSuccesses() {
+        return successes;
+    }
+
+    public int getAttempts() {
+        return attempts;
+    }
+
+    public void incrementScore(int points) {
+        if (points < 0)
+            throw new IllegalArgumentException(
+                    "Cannot increment score with negative points: use decrementScore instead");
+        score += points;
+    }
+
+    public void decrementScore(int points) {
+        if (points < 0)
+            throw new IllegalArgumentException(
+                    "Cannot decrement score with negative points: use incrementScore instead");
+        if (score - points < 0)
+            throw new IllegalArgumentException("User cannot have a negative score");
+        score -= points;
+    }
+
+    public void incrementSuccess() {
+        ++successes;
+        ++attempts;
+    }
+
+    public void incrementAttempt() {
+        ++attempts;
     }
 
     @Override
@@ -95,8 +136,12 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
+        boolean equalStatistics =
+                this.score == user.score
+                        && this.successes == user.successes
+                        && this.attempts == user.attempts;
         return firstName.equals(user.firstName)
                 && lastName.equals(user.lastName)
-                && role == user.role;
+                && equalStatistics;
     }
 }

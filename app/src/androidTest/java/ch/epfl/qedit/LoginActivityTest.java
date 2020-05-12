@@ -95,19 +95,17 @@ public class LoginActivityTest {
     @Test
     public void testParticipantCanLogIn() {
         //noinspection SpellCheckingInspection
-        testLoginSuccessful(
-                "fjd4ywnzXCXLHaVb7oKg", new User("Marcel", "Doe", User.Role.Participant));
+        testLoginSuccessful("fjd4ywnzXCXLHaVb7oKg", new User("Marcel", "Doe"));
     }
 
     @Test
     public void testEditorCanLogIn() {
         //noinspection SpellCheckingInspection
-        testLoginSuccessful("R4rXRVU3EMkgm5YEW52Q", new User("Cosme", "Jordan", User.Role.Editor));
+        testLoginSuccessful("R4rXRVU3EMkgm5YEW52Q", new User("Cosme", "Jordan"));
     }
 
     @Test
     public void testAdministratorCanLogIn() {
-        testLoginSuccessful(
-                "v5ns9OMqV4hH7jwD8S5w", new User("Anthony", "Iozzia", User.Role.Administrator));
+        testLoginSuccessful("v5ns9OMqV4hH7jwD8S5w", new User("Anthony", "Iozzia"));
     }
 }
