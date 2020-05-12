@@ -75,12 +75,7 @@ public class EditSettingsActivity extends AppCompatActivity
             languageSelectionSpinner.setOnItemSelectedListener(this);
 
             // Set treasure hunt
-            treasureHuntCheckbox = findViewById(R.id.treasure_hunt_checkbox);
-            treasureHuntCheckbox.setOnClickListener(
-                    v -> {
-                        hasTreasureHunt = ((CheckBox) v).isChecked();
-                        quizBuilder = quizBuilder.setTreasureHunt(hasTreasureHunt);
-                    });
+            createTreasureHuntCheckbox();
         }
 
         // Set the EditText for the title
@@ -89,6 +84,15 @@ public class EditSettingsActivity extends AppCompatActivity
         String title = stringPool.get(TITLE_ID);
         // TODO Support old questions that store the strings directly as well
         editTitle.setText((title == null) ? quiz.getTitle() : title);
+    }
+
+    private void createTreasureHuntCheckbox() {
+        treasureHuntCheckbox = findViewById(R.id.treasure_hunt_checkbox);
+        treasureHuntCheckbox.setOnClickListener(
+                v -> {
+                    hasTreasureHunt = ((CheckBox) v).isChecked();
+                    quizBuilder = quizBuilder.setTreasureHunt(hasTreasureHunt);
+                });
     }
 
     public void startEditing(View view) {
