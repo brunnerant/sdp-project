@@ -72,6 +72,13 @@ public class UserTest {
     }
 
     @Test
+    public void testEquals() {
+        assertEquals(new User("D", "J", 0, 0, 0), new User("D", "J"));
+        assertNotEquals(new User("D", "J", 0, 1, 0), new User("D", "J"));
+        assertNotEquals(new User("D", "J", 0, 0, 1), new User("D", "J"));
+    }
+
+    @Test
     public void quizzesTest() {
         User user = new User("John", "Doe");
         user.addQuiz("q0", "First Quiz");

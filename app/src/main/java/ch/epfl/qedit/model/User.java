@@ -125,6 +125,12 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return firstName.equals(user.firstName) && lastName.equals(user.lastName);
+        boolean equalStatistics =
+                this.score == user.score
+                        && this.success == user.success
+                        && this.attempt == user.attempt;
+        return firstName.equals(user.firstName)
+                && lastName.equals(user.lastName)
+                && equalStatistics;
     }
 }
