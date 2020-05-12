@@ -102,6 +102,7 @@
     <string name="correct_answer_specified"><b>A correct answer has been specified <font color="#00FF00">✔</font></b></string>
 
     <!-- Edit Field -->
+    <string name="treasure_hunt">Treasure Hunt</string>
     <string name="edit_field_title">Solution</string>
     <string name="hint_preview">The hint will be</string>
     <string name="enter_solution">Enter here the solution of this question.</string>
