@@ -45,6 +45,12 @@
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Édition</string>
 
+    <!-- Treasure hunt -->
+    <string name="title_activity_question_locator">Localisation de la question</string>
+    <string name="question_locator_distance">Distance vers la prochaine question :</string>
+    <string name="question_locator_bearing">Orientation vers la prochaine question (depuis le nord) :</string>
+    <string name="question_locator_error">Please enable access to your location in order to locate the next question</string>
+
     <!-- Edit Settings -->
     <string name="edit_quiz_title">Entrer le titre du quiz</string>
     <string name="button_start_editing_message">Démarrer l\'édition</string>

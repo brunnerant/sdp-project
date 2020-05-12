@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.LocationListener;
 import android.location.LocationManager;
+
 import androidx.core.app.ActivityCompat;
 
 public class AndroidLocService implements LocationService {
@@ -24,7 +25,7 @@ public class AndroidLocService implements LocationService {
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
         criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
         criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
+        criteria.setBearingRequired(true);
         criteria.setCostAllowed(false);
         criteria.setSpeedRequired(false);
 
@@ -36,7 +37,7 @@ public class AndroidLocService implements LocationService {
                         != PackageManager.PERMISSION_GRANTED) return false;
 
         // Otherwise, we subscribe to the location service
-        manager.requestLocationUpdates(interval, 10, criteria, listener, null);
+        manager.requestLocationUpdates(interval, 0, criteria, listener, null);
         return true;
     }
 
