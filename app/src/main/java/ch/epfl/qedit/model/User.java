@@ -9,11 +9,6 @@ import java.util.Map;
 
 /** Represents a user of the QEDit app. */
 public class User implements Serializable {
-    public enum Role {
-        Participant,
-        Editor,
-        Administrator
-    }
 
     /**
      * Table that contains quiz key of all the quizzes this user can attempt to we also store
@@ -24,13 +19,26 @@ public class User implements Serializable {
 
     private final String firstName;
     private final String lastName;
-    private final Role role;
 
-    public User(String firstName, String lastName, Role role) {
+    private int score;
+    private int success;
+    private int attempt;
+
+    public User(String firstName, String lastName) {
+        this(firstName, lastName, 0, 0, 0);
+    }
+
+    public User(String firstName, String lastName, int score, int success, int attempt) {
+        if (score < 0) throw new IllegalArgumentException("User score has to be positive");
+        if (success < 0) throw new IllegalArgumentException("User success has to be positive");
+        if (attempt < 0) throw new IllegalArgumentException("User attempt has to be positive");
+
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
         this.quizzes = new LinkedHashMap<>();
+        this.score = score;
+        this.success = success;
+        this.attempt = attempt;
     }
 
     public boolean canAdd(String string) {
@@ -86,8 +94,30 @@ public class User implements Serializable {
         return firstName + " " + lastName;
     }
 
-    public Role getRole() {
-        return role;
+    public int getScore() {
+        return score;
+    }
+
+    public int getSuccess() {
+        return success;
+    }
+
+    public int getAttempt() {
+        return attempt;
+    }
+
+    public void incrementScore(int points) {
+        if (points < 0)
+            throw new IllegalArgumentException("Cannot increment score with negative points");
+        score += points;
+    }
+
+    public void incrementSuccess() {
+        ++success;
+    }
+
+    public void incrementAttempt() {
+        ++attempt;
     }
 
     @Override
@@ -95,8 +125,6 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return firstName.equals(user.firstName)
-                && lastName.equals(user.lastName)
-                && role == user.role;
+        return firstName.equals(user.firstName) && lastName.equals(user.lastName);
     }
 }
