@@ -108,12 +108,23 @@ public class User implements Serializable {
 
     public void incrementScore(int points) {
         if (points < 0)
-            throw new IllegalArgumentException("Cannot increment score with negative points");
+            throw new IllegalArgumentException(
+                    "Cannot increment score with negative points: use decrementScore instead");
         score += points;
+    }
+
+    public void decrementScore(int points) {
+        if (points < 0)
+            throw new IllegalArgumentException(
+                    "Cannot decrement score with negative points: use incrementScore instead");
+        if (score - points < 0)
+            throw new IllegalArgumentException("User cannot have a negative score");
+        score -= points;
     }
 
     public void incrementSuccess() {
         ++success;
+        ++attempt;
     }
 
     public void incrementAttempt() {

@@ -60,15 +60,31 @@ public class UserTest {
         user.incrementSuccess();
         user.incrementSuccess();
         assertEquals(2, user.getSuccess());
+        assertEquals(5, user.getAttempt());
 
         user.incrementScore(45);
         assertEquals(45, user.getScore());
+
+        user.decrementScore(5);
+        assertEquals(40, user.getScore());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testScoreIncrementFail() {
         User user = new User("John", "Doe");
         user.incrementScore(-45);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testScoreDecrementFail1() {
+        User user = new User("John", "Doe", 8, 0, 0);
+        user.decrementScore(45);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testScoreDecrementFail2() {
+        User user = new User("John", "Doe");
+        user.decrementScore(-45);
     }
 
     @Test
