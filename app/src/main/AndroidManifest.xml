@@ -3,15 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ch.epfl.qedit">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- The app needs those permissions to access the device's location -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-feature android:name="android.hardware.camera2" />
+    <uses-feature android:name="android.hardware.camera2.params." />
 
-    <uses-feature android:name="android.hardware.camera2"/>
-    <uses-feature android:name="android.hardware.camera2.params."/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -22,15 +26,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".view.edit.EditMapsActivity"
+            android:label="@string/title_activity_edit_maps"></activity>
         <activity android:name=".view.edit.EditSettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".view.edit.EditQuestionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,6 +61,7 @@
             android:parentActivityName=".view.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -48,6 +70,7 @@
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -58,6 +81,7 @@
             android:parentActivityName=".view.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW_ROLE" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -66,6 +90,7 @@
             android:parentActivityName=".view.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

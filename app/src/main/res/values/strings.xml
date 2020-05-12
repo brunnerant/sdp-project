@@ -120,5 +120,6 @@
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
     <string name="database_error">An error occurred connecting to the database</string>
+    <string name="title_activity_edit_maps">Map</string>
 
 </resources>
