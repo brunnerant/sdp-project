@@ -8,30 +8,29 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.location.LocServiceFactory;
 import ch.epfl.qedit.backend.location.LocationService;
 import ch.epfl.qedit.util.LocaleHelper;
 
 /**
- * This activity handles the navigation to the next question in treasure hunt quizzes. Because
- * we found it nicer, we don't show the location of the next question, but rather the
- * direction and distance, so that it gamifies the process.
+ * This activity handles the navigation to the next question in treasure hunt quizzes. Because we
+ * found it nicer, we don't show the location of the next question, but rather the direction and
+ * distance, so that it gamifies the process.
  */
 public class QuestionLocatorActivity extends AppCompatActivity implements LocationListener {
 
     public static final String QUESTION_LOCATION = "ch.epfl.qedit.view.quiz.QUESTION_LOCATION";
     private static final int REQUEST_CODE = 0;
-    private static final String[] REQUESTED_PERMISSIONS = new String[] {
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_NETWORK_STATE,
-    };
+    private static final String[] REQUESTED_PERMISSIONS =
+            new String[] {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+            };
 
     // This is the interval at which we would like to receive location updates
     private static final int LOCATION_INTERVAL = 1000;
@@ -60,8 +59,8 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
         setContentView(R.layout.activity_question_locator);
 
         // We retrieve the location from the activity arguments
-//        Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
-//        questionLoc = (Location) bundle.getSerializable(QUESTION_LOCATION);
+        //        Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
+        //        questionLoc = (Location) bundle.getSerializable(QUESTION_LOCATION);
         questionLoc = new Location("");
         questionLoc.setLongitude(0);
         questionLoc.setLatitude(0);
@@ -83,7 +82,8 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != REQUEST_CODE || permissions.length != REQUESTED_PERMISSIONS.length)
             return;
 
@@ -122,8 +122,11 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
 
     // This method updates the UI when a new location measurement was made
     private void updateUI(float distance, float targetBearing, float direction) {
-        distanceView.setText(String.format("%s %.0f", getString(R.string.question_locator_distance), distance));
-        bearingView.setText(String.format("%s %.0f", getString(R.string.question_locator_bearing), targetBearing));
+        distanceView.setText(
+                String.format("%s %.0f", getString(R.string.question_locator_distance), distance));
+        bearingView.setText(
+                String.format(
+                        "%s %.0f", getString(R.string.question_locator_bearing), targetBearing));
     }
 
     @Override
