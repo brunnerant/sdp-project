@@ -37,7 +37,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textSize="50sp"
-                android:layout_marginLeft="@dimen/regular_padding"
+                android:layout_marginStart="@dimen/regular_padding"
                 tools:text="788"/>
 
         </LinearLayout>
