@@ -104,6 +104,11 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
         bearingView.setText("");
     }
 
+    private static float mod(float a, float b) {
+        float m = a % b;
+        return m < 0 ? m + b : m;
+    }
+
     @Override
     // This method is called when the location service sends location information
     public void onLocationChanged(Location location) {
@@ -112,21 +117,26 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
         float targetBearing = location.bearingTo(questionLoc);
         float currentBearing = location.getBearing();
 
-        float direction = (targetBearing - currentBearing) % 360;
+        updateUI(distance, mod(targetBearing, 360), mod(targetBearing - currentBearing, 360));
+    }
 
-        // This is used to have a number between 0 and 360
-        if (direction < 0) direction += 360;
-
-        updateUI(distance, targetBearing, direction);
+    // This function is used to ensure that the modulo always return a positive number
+    // This method returns a user friendly distance indication from a distance measured in meters
+    private static String formatDistance(float distance) {
+        // Note: \u00A0 is a non-breaking space
+        if (distance < 1000) return String.format("%.0f\u00A0m", distance);
+        else return String.format("%.0f\u00A0km", distance / 1000);
     }
 
     // This method updates the UI when a new location measurement was made
     private void updateUI(float distance, float targetBearing, float direction) {
         distanceView.setText(
-                String.format("%s %.0f", getString(R.string.question_locator_distance), distance));
+                String.format(
+                        "%s %s",
+                        getString(R.string.question_locator_distance), formatDistance(distance)));
         bearingView.setText(
                 String.format(
-                        "%s %.0f", getString(R.string.question_locator_bearing), targetBearing));
+                        "%s %.0f°", getString(R.string.question_locator_bearing), targetBearing));
     }
 
     @Override
