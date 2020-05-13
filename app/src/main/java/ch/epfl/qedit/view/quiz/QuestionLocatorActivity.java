@@ -9,9 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import java.util.Objects;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.location.LocServiceFactory;
 import ch.epfl.qedit.backend.location.LocationService;
@@ -24,7 +29,11 @@ import ch.epfl.qedit.util.LocaleHelper;
  */
 public class QuestionLocatorActivity extends AppCompatActivity implements LocationListener {
 
+    // Those are the keys of the arguments passed with the bundle to this activity
     public static final String QUESTION_LOCATION = "ch.epfl.qedit.view.quiz.QUESTION_LOCATION";
+    public static final String QUESTION_RADIUS = "ch.epfl.qedit.view.quiz.QUESTION_RADIUS";
+
+    // Those are the permissions needed by this activity
     private static final int REQUEST_CODE = 0;
     private static final String[] REQUESTED_PERMISSIONS =
             new String[] {
@@ -36,15 +45,16 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
     // This is the interval at which we would like to receive location updates
     private static final int LOCATION_INTERVAL = 1000;
 
-    // This is the location of the question the user has to go to
+    // This is the location and radius of the question the user has to go to
     private Location questionLoc;
+    private float questionRadius;
 
     // This is the location service from which we retrieve the phone's location
     private LocationService locService;
 
     // Those are the text views that display the direction and distance to the user
-    private TextView distanceView;
-    private TextView bearingView;
+    private TextView text1;
+    private TextView text2;
 
     // This button has two usages: allowing the user to answer the question, and allowing him
     // to grant the location permission
@@ -64,15 +74,13 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
         setContentView(R.layout.activity_question_locator);
 
         // We retrieve the location from the activity arguments
-        //        Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
-        //        questionLoc = (Location) bundle.getSerializable(QUESTION_LOCATION);
-        questionLoc = new Location("");
-        questionLoc.setLongitude(0);
-        questionLoc.setLatitude(0);
+        Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
+        questionLoc = (Location) bundle.getSerializable(QUESTION_LOCATION);
+        questionRadius = bundle.getFloat(QUESTION_RADIUS);
 
         // We retrieve the UI elements and set up the default UI
-        distanceView = findViewById(R.id.question_distance);
-        bearingView = findViewById(R.id.question_bearing);
+        text1 = findViewById(R.id.question_locator_text1);
+        text2 = findViewById(R.id.question_locator_text2);
         button = findViewById(R.id.question_locator_button);
         setUnknownUI();
 
@@ -106,19 +114,31 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
             }
         }
 
+        // The user finally accepted, so we can hide the button and subscribe to the location
         locService.subscribe(this, LOCATION_INTERVAL);
+        button.setVisibility(View.GONE);
     }
 
     // Sets the text of the UI to inform the user that his position is unknown
     private void setUnknownUI() {
-        distanceView.setText(getString(R.string.question_locator_error));
-        bearingView.setText("");
+        text1.setText(getString(R.string.question_locator_error));
+        text2.setText("");
     }
 
     // Sets the button of the UI so that the user can allow the location
     private void setPermissionUI() {
         button.setOnClickListener(v -> askPermissions());
         button.setText(R.string.enable_location);
+        button.setVisibility(View.VISIBLE);
+    }
+
+    // This method shows the final UI that appears when the user found the question
+    private void setFinishUI() {
+        text1.setText(getString(R.string.question_locator_found));
+        text2.setText("");
+        button.setOnClickListener(
+                v -> Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show());
+        button.setText(getString(R.string.question_locator_answer));
         button.setVisibility(View.VISIBLE);
     }
 
@@ -148,11 +168,18 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
 
     // This method updates the UI when a new location measurement was made
     private void updateUI(float distance, float targetBearing, float direction) {
-        distanceView.setText(
+        // If the user found the question, we can stop the location service
+        if (distance < questionRadius) {
+            locService.unsubscribe(this);
+            setFinishUI();
+            return;
+        }
+
+        text1.setText(
                 String.format(
                         "%s %s",
                         getString(R.string.question_locator_distance), formatDistance(distance)));
-        bearingView.setText(
+        text2.setText(
                 String.format(
                         "%s %.0f°", getString(R.string.question_locator_bearing), targetBearing));
     }
