@@ -37,13 +37,7 @@ public class ScannerActivityTest {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
-    /* @After
-    public void cleanup() {
-        InstrumentationRegistry.getInstrumentation()
-                .getUiAutomation().revokeRuntimePermission(InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(), Manifest.permission.CAMERA);
 
-
-    }*/
 
     public static void assertPermissionRequestIsVisible(UiDevice device, String text) {
         UiObject allowButton = device.findObject(new UiSelector().text(text));
@@ -77,14 +71,7 @@ public class ScannerActivityTest {
                 .inRoot(withDecorView(not(is(testRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
 
-        // cleanup();
     }
 
-    @Test
-    public void c_alreadyAcceptedPermission() {
-        testRule.launchActivity(null);
-        onView(withText("Permission already granted!"))
-                .inRoot(withDecorView(not(is(testRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
-    }
+   
 }
