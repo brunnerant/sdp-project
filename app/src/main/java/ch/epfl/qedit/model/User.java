@@ -2,10 +2,10 @@ package ch.epfl.qedit.model;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /** Represents a user of the QEDit app. */
 public class User implements Serializable {
@@ -15,7 +15,7 @@ public class User implements Serializable {
      * directly the title of the quiz so that we don't have to query it from the database every time
      * we go back to the HomeActivity
      */
-    private HashMap<String, String> quizzes;
+    private Map<String, String> quizzes;
 
     private String firstName;
     private String lastName;
@@ -32,13 +32,23 @@ public class User implements Serializable {
     }
 
     public User(String firstName, String lastName, int score, int successes, int attempts) {
+        this(firstName, lastName, new LinkedHashMap<>(), score, successes, attempts);
+    }
+
+    public User(
+            String firstName,
+            String lastName,
+            Map<String, String> quizzes,
+            int score,
+            int successes,
+            int attempts) {
         if (score < 0) throw new IllegalArgumentException("User score has to be positive");
         if (successes < 0) throw new IllegalArgumentException("User success has to be positive");
         if (attempts < 0) throw new IllegalArgumentException("User attempt has to be positive");
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.quizzes = new LinkedHashMap<>();
+        this.quizzes = Objects.requireNonNull(quizzes);
         this.score = score;
         this.successes = successes;
         this.attempts = attempts;

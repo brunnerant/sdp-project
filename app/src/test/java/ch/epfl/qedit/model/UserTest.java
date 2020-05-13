@@ -27,7 +27,7 @@ public class UserTest {
     }
 
     @Test
-    public void testConstructor() {
+    public void testConstructor1() {
         User user = new User("John", "Doe", 456, 7, 1);
         assertEquals(456, user.getScore());
         assertEquals(7, user.getSuccesses());
@@ -47,6 +47,11 @@ public class UserTest {
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorFail3() {
         User user = new User("John", "Doe", 0, 0, -895);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testConstructorFail4() {
+        User user = new User("John", "Doe", null, 0, 0, 0);
     }
 
     @Test

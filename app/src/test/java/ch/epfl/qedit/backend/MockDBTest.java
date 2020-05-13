@@ -1,9 +1,11 @@
 package ch.epfl.qedit.backend;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 
 import ch.epfl.qedit.backend.database.MockDBService;
+import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +27,9 @@ public class MockDBTest {
         assertFutureThrows(() -> db.getQuizLanguages("unknown"));
         assertFutureThrows(() -> db.getQuizStringPool("unknown", "en"));
         assertFutureThrows(() -> db.getQuizStringPool("quiz0", "it"));
+        assertFutureThrows(() -> db.getUser("unknown"));
+        assertFutureThrows(() -> db.updateUserQuizList("unknown", null));
+        assertFutureThrows(() -> db.updateUserStatistics("unknown", 0, 0, 0));
     }
 
     @Test
@@ -33,5 +38,14 @@ public class MockDBTest {
         assertNotNull(db.getQuizLanguages("quiz0").get(3, TimeUnit.SECONDS));
         assertNotNull(db.getQuizStructure("quiz0").get(3, TimeUnit.SECONDS));
         assertNotNull(db.getQuizStringPool("quiz0", "en").get(3, TimeUnit.SECONDS));
+        assertNotNull(db.getUser("R4rXRVU3EMkgm5YEW52Q").get(3, TimeUnit.SECONDS));
+
+        assertNull(
+                db.createUser("T78XRGU3EMkgm5YED52Q", "JoJo", "Johnson").get(3, TimeUnit.SECONDS));
+        assertNull(
+                db.updateUserQuizList("R4rXRVU3EMkgm5YEW52Q", new HashMap<>())
+                        .get(3, TimeUnit.SECONDS));
+        assertNull(
+                db.updateUserStatistics("R4rXRVU3EMkgm5YEW52Q", 0, 0, 0).get(3, TimeUnit.SECONDS));
     }
 }
