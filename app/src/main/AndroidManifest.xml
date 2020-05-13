@@ -40,7 +40,12 @@
 
         <activity
             android:name=".view.edit.EditMapsActivity"
-            android:label="@string/title_activity_edit_maps"></activity>
+            android:label="@string/title_activity_edit_maps">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".view.edit.EditSettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
