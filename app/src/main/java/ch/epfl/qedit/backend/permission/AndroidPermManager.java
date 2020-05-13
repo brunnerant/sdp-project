@@ -1,16 +1,13 @@
 package ch.epfl.qedit.backend.permission;
 
 import android.content.pm.PackageManager;
-
 import androidx.core.app.ActivityCompat;
-
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This is the real implementation of the permission manager. Due to how android works,
- * we are obliged to rely on the permission activity class to send the permission results
- * to this manager.
+ * This is the real implementation of the permission manager. Due to how android works, we are
+ * obliged to rely on the permission activity class to send the permission results to this manager.
  */
 public class AndroidPermManager implements PermissionManager {
 
@@ -27,11 +24,18 @@ public class AndroidPermManager implements PermissionManager {
 
     @Override
     public boolean checkPermission(PermissionActivity activity, String permission) {
-        return ActivityCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(activity, permission)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
-    public void requestPermissions(PermissionActivity activity, String[] permissions, OnPermissionResult callback) {
+    public boolean shouldAskAgain(PermissionActivity activity, String permission) {
+        return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+    }
+
+    @Override
+    public void requestPermissions(
+            PermissionActivity activity, String[] permissions, OnPermissionResult callback) {
         callbacks.put(nextRequestCode++, callback);
         ActivityCompat.requestPermissions(activity, permissions, nextRequestCode);
     }

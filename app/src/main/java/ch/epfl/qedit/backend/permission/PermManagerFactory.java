@@ -1,8 +1,6 @@
 package ch.epfl.qedit.backend.permission;
 
-/**
- * This class is used to retrieve the singleton
- */
+/** This class is used to retrieve the singleton */
 public class PermManagerFactory {
     /** The singleton instance of the auth service */
     private static PermissionManager permManager = null;
@@ -10,8 +8,7 @@ public class PermManagerFactory {
     private PermManagerFactory() {}
 
     public static PermissionManager getInstance() {
-        if (permManager == null)
-            permManager = new AndroidPermManager();
+        if (permManager == null) permManager = new AndroidPermManager();
 
         return permManager;
     }
