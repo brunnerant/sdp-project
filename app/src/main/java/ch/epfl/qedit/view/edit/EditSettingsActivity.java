@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,10 +29,15 @@ public class EditSettingsActivity extends AppCompatActivity
     private StringPool stringPool;
     private EditText editTitle;
 
+    private boolean hasTreasureHunt;
+    private CheckBox treasureHuntCheckbox;
+
     // Only used for new quizzes
     private Spinner languageSelectionSpinner;
     private boolean userHasInteracted = false;
     private String languageCode;
+
+    private Quiz quiz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +47,12 @@ public class EditSettingsActivity extends AppCompatActivity
         Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
 
         stringPool = (StringPool) bundle.getSerializable(STRING_POOL);
-        Quiz quiz = (Quiz) bundle.getSerializable(QUIZ_ID);
+        quiz = (Quiz) bundle.getSerializable(QUIZ_ID);
 
         if (quiz != null) {
             setContentView(R.layout.activity_edit_modify_quiz_settings);
-
-            // Initialize the builder with the existing quiz
-            quizBuilder = new Quiz.Builder(quiz);
-
         } else {
             setContentView(R.layout.fragment_edit_quiz_settings);
-
-            // Initialize a new empty QuizBuilder
-            quizBuilder = new Quiz.Builder();
 
             // Create spinner (language list)
             languageSelectionSpinner = findViewById(R.id.edit_language_selection);
@@ -68,6 +67,9 @@ public class EditSettingsActivity extends AppCompatActivity
 
             // Set listener
             languageSelectionSpinner.setOnItemSelectedListener(this);
+
+            // Set treasure hunt
+            createTreasureHuntCheckbox();
         }
 
         // Set the EditText for the title
@@ -78,8 +80,23 @@ public class EditSettingsActivity extends AppCompatActivity
         editTitle.setText((title == null) ? quiz.getTitle() : title);
     }
 
+    private void createTreasureHuntCheckbox() {
+        treasureHuntCheckbox = findViewById(R.id.treasure_hunt_checkbox);
+        treasureHuntCheckbox.setOnClickListener(
+                v -> {
+                    hasTreasureHunt = ((CheckBox) v).isChecked();
+                });
+    }
+
     public void startEditing(View view) {
         // Update the title in the StringPool and the languageCode
+        if (quiz != null) {
+            // Initialize the builder with the existing quiz
+            quizBuilder = new Quiz.Builder(quiz);
+        } else {
+            quizBuilder = new Quiz.Builder(hasTreasureHunt);
+        }
+
         stringPool.update(TITLE_ID, editTitle.getText().toString());
         stringPool.setLanguageCode(languageCode);
 

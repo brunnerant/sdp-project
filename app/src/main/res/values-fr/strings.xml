@@ -74,6 +74,7 @@
     <string name="correct_answer_specified"><b>Un type de réponse correct a été spécifié <font color="#00FF00">✔</font></b></string>
 
     <!-- Edit Field -->
+    <string name="treasure_hunt">Chasse au trésor</string>
     <string name="edit_field_title">Solution</string>
     <string name="hint_preview">L\'aperçu sera</string>
     <string name="enter_solution">Entrer la solution de cette question.</string>
