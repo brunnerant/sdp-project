@@ -56,6 +56,8 @@
     <string name="empty_password_message">Empty password</string>
     <string name="wrong_token_message">Invalid token</string>
     <string name="empty_token_message">Empty token</string>
+    <string name="already_signed_up">I already have an account, log in</string>
+    <string name="not_signed_up">I don\'t have an account, sign up</string>
 
     <!-- Connection error -->
     <string name="connection_error_message">Connection error</string>

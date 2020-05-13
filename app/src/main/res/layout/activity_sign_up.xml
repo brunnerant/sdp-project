@@ -86,10 +86,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/spinner_language_selection"
+        app:layout_constraintBottom_toTopOf="@+id/log_in_instead"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_sign_up" />
+
+    <TextView
+        android:id="@+id/already_signed_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="handleSignUp"
+        android:text="@string/already_signed_up"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
 
     <Spinner
         android:id="@+id/spinner_language_selection"
@@ -97,9 +108,8 @@
         android:layout_height="wrap_content"
         android:entries="@array/languages_list"
         android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress_bar" />
+        app:layout_constraintTop_toBottomOf="@id/already_signed_up" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
