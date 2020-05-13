@@ -2,21 +2,20 @@ package ch.epfl.qedit.view.QR;
 
 import static android.Manifest.permission.CAMERA;
 
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import ch.epfl.qedit.view.util.ConfirmDialog;
 import com.google.zxing.Result;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /** * this class is largely inspired from priyanka pakhale work available on github ** */
-public class ScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+public class ScannerActivity extends AppCompatActivity
+        implements ZXingScannerView.ResultHandler, ConfirmDialog.ConfirmationListener {
 
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
@@ -85,9 +84,9 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
             boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
             if (cameraAccepted) {
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_LONG).show();
                 super.onBackPressed();
             }
         }
@@ -95,10 +94,10 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
 
     @Override
     public void handleResult(Result result) {
-        Log.d("QRCodeScanner", result.getText());
-        Log.d("QRCodeScanner", result.getBarcodeFormat().toString());
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        /*Log.d("QRCodeScanner", result.getText());
+        Log.d("QRCodeScanner", result.getBarcodeFormat().toString());*/
+        ConfirmDialog.create(result.getText(), this);
+        /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Scan Result");
         builder.setPositiveButton(
                 "OK",
@@ -110,6 +109,11 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
                 });
         builder.setMessage(result.getText());
         AlertDialog alert1 = builder.create();
-        alert1.show();
+        alert1.show();*/
+    }
+
+    @Override
+    public void onConfirm(ConfirmDialog dialog) {
+        return;
     }
 }

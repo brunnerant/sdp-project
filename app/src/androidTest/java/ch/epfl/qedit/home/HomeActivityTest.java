@@ -34,13 +34,19 @@ import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.LoginActivity;
+import ch.epfl.qedit.view.QR.ScannerActivity;
 import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.Collection;
@@ -60,8 +66,11 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         super(R.id.home_quiz_list);
     }
 
+    UiDevice device;
+
     @Before
     public void launchActivity() {
+        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         User user = new User("Marcel", "Doe");
         user.addQuiz("quiz0", "Qualification EPFL");
 
@@ -145,6 +154,23 @@ public class HomeActivityTest extends RecyclerViewHelpers {
     }
 
     @Test
+    public void testSelectQrScanner() {
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.START)))
+                .perform(DrawerActions.open());
+        onView(withId(R.id.burger_view))
+                .perform(NavigationViewActions.navigateTo(R.id.qr_code_burger));
+        intended(hasComponent(ScannerActivity.class.getName()));
+        UiObject denyButton = device.findObject(new UiSelector().text("DENY"));
+        try {
+
+            denyButton.click();
+        } catch (UiObjectNotFoundException e) {
+
+        }
+    }
+
+    @Test
     public void testSelectUnimplementedFeatures() {
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.START)))
@@ -153,8 +179,6 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         onView(withId(R.id.burger_view))
                 .perform(NavigationViewActions.navigateTo(R.id.online_quizzes));
         onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.my_account));
-        onView(withId(R.id.burger_view))
-                .perform(NavigationViewActions.navigateTo(R.id.qr_code_burger));
         onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.settings));
         onView(withId(R.id.drawer_layout))
                 .check(matches(isOpen(Gravity.START)))
