@@ -15,14 +15,17 @@ public class User implements Serializable {
      * directly the title of the quiz so that we don't have to query it from the database every time
      * we go back to the HomeActivity
      */
-    private final HashMap<String, String> quizzes;
+    private HashMap<String, String> quizzes;
 
-    private final String firstName;
-    private final String lastName;
+    private String firstName;
+    private String lastName;
 
     private int score;
     private int successes;
     private int attempts;
+
+    /** Useful constructor to get directly a user from firestore */
+    public User() {}
 
     public User(String firstName, String lastName) {
         this(firstName, lastName, 0, 0, 0);

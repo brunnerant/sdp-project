@@ -5,6 +5,7 @@ import androidx.test.espresso.idling.CountingIdlingResource;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
@@ -196,6 +197,27 @@ public class MockDBService implements DatabaseService {
                     return pool;
                 });
         return future;
+    }
+
+    @Override
+    public CompletableFuture<User> getUser(String userId) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> createUser(String userId, String firstName, String lastName) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> updateUserStatistics(
+            String userId, int score, int successes, int attempts) {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Void> updateUserQuizList(String userId, Map<String, String> quizzes) {
+        return null;
     }
 
     public IdlingResource getIdlingResource() {
