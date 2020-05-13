@@ -6,7 +6,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +46,10 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
     private TextView distanceView;
     private TextView bearingView;
 
+    // This button has two usages: allowing the user to answer the question, and allowing him
+    // to grant the location permission
+    private Button button;
+
     public QuestionLocatorActivity() {}
 
     @Override
@@ -65,16 +70,17 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
         questionLoc.setLongitude(0);
         questionLoc.setLatitude(0);
 
-        // We retrieve the two text views
+        // We retrieve the UI elements and set up the default UI
         distanceView = findViewById(R.id.question_distance);
         bearingView = findViewById(R.id.question_bearing);
+        button = findViewById(R.id.question_locator_button);
+        setUnknownUI();
 
         // We subscribe to the location service through the factory
         locService = LocServiceFactory.getInstance(getApplicationContext());
 
         // If we couldn't subscribe, we need to ask for permissions for the location
-        if (!locService.subscribe(this, LOCATION_INTERVAL))
-            ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, REQUEST_CODE);
+        if (!locService.subscribe(this, LOCATION_INTERVAL)) askPermissions();
     }
 
     private void askPermissions() {
@@ -90,7 +96,12 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
         for (int i = 0; i < REQUESTED_PERMISSIONS.length; i++) {
             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                 // If the permissions were not granted, we just show an error UI to the user
-                setErrorUI();
+                // If it is the first time the user denies, we show the button, otherwise we
+                // just give up and show nothing.
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[i]))
+                    setPermissionUI();
+                else button.setVisibility(View.GONE);
+
                 return;
             }
         }
@@ -98,12 +109,20 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
         locService.subscribe(this, LOCATION_INTERVAL);
     }
 
-    // Sets an error UI so that the user knows why he cannot see the next question
-    private void setErrorUI() {
+    // Sets the text of the UI to inform the user that his position is unknown
+    private void setUnknownUI() {
         distanceView.setText(getString(R.string.question_locator_error));
         bearingView.setText("");
     }
 
+    // Sets the button of the UI so that the user can allow the location
+    private void setPermissionUI() {
+        button.setOnClickListener(v -> askPermissions());
+        button.setText(R.string.enable_location);
+        button.setVisibility(View.VISIBLE);
+    }
+
+    // This method is used to prevent the modulo from returning negative numbers
     private static float mod(float a, float b) {
         float m = a % b;
         return m < 0 ? m + b : m;
@@ -112,7 +131,6 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
     @Override
     // This method is called when the location service sends location information
     public void onLocationChanged(Location location) {
-        Log.d("qedit", "location updated");
         float distance = location.distanceTo(questionLoc);
         float targetBearing = location.bearingTo(questionLoc);
         float currentBearing = location.getBearing();
@@ -146,7 +164,5 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
     public void onProviderEnabled(String provider) {}
 
     @Override
-    public void onProviderDisabled(String provider) {
-        Log.d("qedit", "provider disabled: " + provider);
-    }
+    public void onProviderDisabled(String provider) {}
 }

@@ -49,7 +49,8 @@
     <string name="title_activity_question_locator">Localisation de la question</string>
     <string name="question_locator_distance">Distance vers la prochaine question :</string>
     <string name="question_locator_bearing">Orientation vers la prochaine question (depuis le nord) :</string>
-    <string name="question_locator_error">Please enable access to your location in order to locate the next question</string>
+    <string name="question_locator_error">Impossible de localiser votre téléphone</string>
+    <string name="enable_location">Autoriser la localisation</string>
 
     <!-- Edit Settings -->
     <string name="edit_quiz_title">Entrer le titre du quiz</string>
