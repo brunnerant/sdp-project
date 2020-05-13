@@ -86,6 +86,6 @@ public class ScannerActivityTest {
         onView(withText("Permission already granted!"))
                 .inRoot(withDecorView(not(is(testRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-        testRule.finishActivity();
+        
     }
 }
