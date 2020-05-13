@@ -38,12 +38,14 @@ public class EditFieldFragment extends DialogFragment {
     private boolean isDecimal;
     private boolean isText;
     private boolean isPreFilled;
+
     private String solution;
 
     /** Layout component */
     private CheckBox decimalCheckbox;
 
     private CheckBox signCheckbox;
+
     private EditText solutionView;
     private TextView preview;
     private Spinner typesSpinner;
@@ -185,21 +187,7 @@ public class EditFieldFragment extends DialogFragment {
 
     // METHODS THAT HANDLE THE LAYOUT //
 
-    /**
-     * Init all the layout component with listener and default parameters
-     *
-     * @param view View from which we retrieve layout component
-     */
-    private void initLayoutComponent(View view) {
-
-        // find layout component in the layout
-        decimalCheckbox = view.findViewById(R.id.decimal_checkbox);
-        signCheckbox = view.findViewById(R.id.sign_checkbox);
-        solutionView = view.findViewById(R.id.field_solution);
-        preview = view.findViewById(R.id.field_hint_preview);
-        typesSpinner = view.findViewById(R.id.field_types_selection);
-
-        // create listeners for each check box
+    private void setCheckBoxesOnClickListener() {
         decimalCheckbox.setOnClickListener(
                 v -> {
                     isDecimal = ((CheckBox) v).isChecked();
@@ -210,6 +198,25 @@ public class EditFieldFragment extends DialogFragment {
                     isSigned = ((CheckBox) v).isChecked();
                     updateLayout();
                 });
+    }
+
+    /**
+     * Init all the layout component with listener and default parameters
+     *
+     * @param view View from which we retrieve layout component
+     */
+    private void initLayoutComponent(View view) {
+
+        // find layout component in the layout
+        decimalCheckbox = view.findViewById(R.id.decimal_checkbox);
+        signCheckbox = view.findViewById(R.id.sign_checkbox);
+
+        solutionView = view.findViewById(R.id.field_solution);
+        preview = view.findViewById(R.id.field_hint_preview);
+        typesSpinner = view.findViewById(R.id.field_types_selection);
+
+        // create listeners for each check box
+        setCheckBoxesOnClickListener();
 
         setTypesSpinnerListener();
         setSolutionViewListener();
