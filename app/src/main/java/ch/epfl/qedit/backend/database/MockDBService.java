@@ -5,6 +5,7 @@ import androidx.test.espresso.idling.CountingIdlingResource;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public class MockDBService implements DatabaseService {
+
     /** This class simulates a quiz that is stored in Firestore */
     private static class MockQuiz {
 
@@ -108,13 +110,13 @@ public class MockDBService implements DatabaseService {
 
         static MockQuiz createTestMockQuiz2() {
             HashMap<String, String> stringPool_en = new HashMap<>();
-            stringPool_en.put("main_title", "Title");
+            stringPool_en.put("main_title", "An other Quiz");
             stringPool_en.put("q1_title", "Banana");
             stringPool_en.put("q1_text", "How many bananas are there on Earth?");
             stringPool_en.put("hint1", "text field");
 
             HashMap<String, String> stringPool_fr = new HashMap<>();
-            stringPool_fr.put("main_title", "Titre");
+            stringPool_fr.put("main_title", "Un autre Quiz");
             stringPool_fr.put("q1_title", "Banane");
             stringPool_fr.put("q1_text", "Combien y a-t-il de bananes sur Terre ?");
             stringPool_fr.put("hint1", "champ texte");
@@ -131,6 +133,7 @@ public class MockDBService implements DatabaseService {
     }
 
     private HashMap<String, MockQuiz> quizzes;
+    private HashMap<String, User> users;
     private CountingIdlingResource idlingResource;
 
     public MockDBService() {
@@ -140,6 +143,25 @@ public class MockDBService implements DatabaseService {
         quizzes.put("quiz1", MockQuiz.createTestMockQuiz2());
         quizzes.put("quiz2", MockQuiz.createTestMockQuiz2());
         quizzes.put("quiz3", MockQuiz.createTestMockQuiz2());
+
+        users = new HashMap<>();
+        users.put("v5ns9OMqV4hH7jwD8S5w", createAnthony());
+        users.put("R4rXRVU3EMkgm5YEW52Q", createCosme());
+    }
+
+    private User createAnthony() {
+        User anthony = new User("Anthony", "Iozzia", 78, 7, 3);
+        anthony.addQuiz("quiz0", "I am a Mock Quiz!");
+        anthony.addQuiz("quiz1", "An other Quiz");
+
+        return anthony;
+    }
+
+    private User createCosme() {
+        User cosme = new User("Cosme", "Jordan");
+        cosme.addQuiz("quiz0", "I am a Mock Quiz!");
+
+        return cosme;
     }
 
     /** Simply make the current thread wait 2 second */
@@ -151,6 +173,11 @@ public class MockDBService implements DatabaseService {
         }
     }
 
+    /** This allows to complete the future with a request exception */
+    private static void error(CompletableFuture<?> future, String message) {
+        future.completeExceptionally(new Util.RequestException(message));
+    }
+
     private <T> void waitForQuiz(
             CompletableFuture<T> future, String quizId, Function<MockQuiz, T> f) {
         idlingResource.increment();
@@ -159,13 +186,29 @@ public class MockDBService implements DatabaseService {
                         () -> {
                             wait2second();
                             MockQuiz quiz = quizzes.get(quizId);
-                            if (quiz == null)
-                                future.completeExceptionally(
-                                        new Util.RequestException("Invalid quiz id"));
+                            if (quiz == null) error(future, "Invalid quiz id");
                             else future.complete(f.apply(quiz));
                             idlingResource.decrement();
                         })
                 .run();
+    }
+
+    private CompletableFuture<Void> updateUser(String userId, User user, boolean error) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        idlingResource.increment();
+        new Thread(
+                        () -> {
+                            wait2second();
+                            if (error) error(future, "Invalid user id");
+                            else {
+                                users.put(userId, user);
+                                future.complete(null);
+                            }
+                            idlingResource.decrement();
+                        })
+                .run();
+
+        return future;
     }
 
     @Override
@@ -190,12 +233,71 @@ public class MockDBService implements DatabaseService {
                 quizId,
                 mockQuiz -> {
                     StringPool pool = mockQuiz.getStringPool(language);
-                    if (pool == null)
-                        future.completeExceptionally(
-                                new Util.RequestException("Language does not exist"));
+                    if (pool == null) error(future, "Language does not exist");
                     return pool;
                 });
         return future;
+    }
+
+    @Override
+    public CompletableFuture<User> getUser(String userId) {
+        CompletableFuture<User> future = new CompletableFuture<>();
+        idlingResource.increment();
+        new Thread(
+                        () -> {
+                            wait2second();
+                            User user = users.get(userId);
+                            if (user == null) error(future, "Invalid user id");
+                            else future.complete(user);
+                            idlingResource.decrement();
+                        })
+                .run();
+
+        return future;
+    }
+
+    @Override
+    public CompletableFuture<Void> createUser(String userId, String firstName, String lastName) {
+        return updateUser(userId, new User(firstName, lastName), false);
+    }
+
+    @Override
+    public CompletableFuture<Void> updateUserStatistics(
+            String userId, int score, int successes, int attempts) {
+
+        User user = users.get(userId);
+        boolean error = user == null;
+        if (!error) {
+            user =
+                    new User(
+                            user.getFirstName(),
+                            user.getLastName(),
+                            user.getQuizzes(),
+                            score,
+                            successes,
+                            attempts);
+        }
+
+        return updateUser(userId, user, error);
+    }
+
+    @Override
+    public CompletableFuture<Void> updateUserQuizList(String userId, Map<String, String> quizzes) {
+
+        User user = users.get(userId);
+        boolean error = user == null;
+        if (!error) {
+            user =
+                    new User(
+                            user.getFirstName(),
+                            user.getLastName(),
+                            quizzes,
+                            user.getScore(),
+                            user.getSuccesses(),
+                            user.getAttempts());
+        }
+
+        return updateUser(userId, user, error);
     }
 
     public IdlingResource getIdlingResource() {
