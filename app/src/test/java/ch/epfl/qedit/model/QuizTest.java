@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 
+import android.location.Location;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import java.util.ArrayList;
@@ -52,5 +53,104 @@ public class QuizTest {
     public void getTitleTest() {
         Quiz quiz = new Quiz("About Math and Spider", initQuestionList());
         assertEquals(quiz.getTitle(), "About Math and Spider");
+    }
+
+    // BUILDER TESTS //
+
+    @Test
+    public void builderTest() {
+        List<Question> questions = initQuestionList();
+        Quiz q0 = new Quiz("title", questions);
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.append(questions.get(0)).append(questions.get(1)).append(questions.get(2));
+        assertEquals(q0.getQuestions(), builder.build().getQuestions());
+    }
+
+    @Test
+    public void builderAdd() {
+        List<Question> questions = initQuestionList();
+        Quiz q0 = new Quiz("title", questions);
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.append(questions.get(1)).insert(0, questions.get(0)).append(questions.get(2));
+        assertEquals(q0.getQuestions(), builder.build().getQuestions());
+    }
+
+    @Test
+    public void builderSwap() {
+        List<Question> questions = initQuestionList();
+        Quiz q0 = new Quiz("title", questions);
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.append(questions.get(2))
+                .append(questions.get(1))
+                .append(questions.get(0))
+                .swap(0, 2);
+        assertEquals(q0.getQuestions(), builder.build().getQuestions());
+    }
+
+    @Test
+    public void builderRemove() {
+        List<Question> questions = initQuestionList();
+        Quiz q0 = new Quiz("title", questions);
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.append(questions.get(0))
+                .append(questions.get(0))
+                .append(questions.get(1))
+                .append(questions.get(2))
+                .remove(1);
+        assertEquals(q0.getQuestions(), builder.build().getQuestions());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderFail1Test() {
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.build();
+        builder.build();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderAddFail1Test() {
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.build();
+        builder.append(null);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderAddFail2Test() {
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.build();
+        builder.insert(0, null);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderSwapFailTest() {
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.build();
+        builder.swap(0, 5);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderSizeFailTest() {
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.build();
+        builder.size();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void builderRemoveFailTest() {
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.build();
+        builder.remove(0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void builderTreasureHuntFail1() {
+        Quiz.Builder builder = new Quiz.Builder(true);
+        builder.append(new Question("", "", answerFormat));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void builderTreasureHuntFail2() {
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.append(new Question("", "", answerFormat, new Location(""), 1));
     }
 }

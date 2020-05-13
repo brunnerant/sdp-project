@@ -58,21 +58,21 @@ public class MockAuthService implements AuthenticationService {
     }
 
     private User createMarcel() {
-        User marcel = new User("Marcel", "Doe", User.Role.Participant);
+        User marcel = new User("Marcel", "Doe");
         marcel.addQuiz("quiz0", "Qualification EPFL");
 
         return marcel;
     }
 
     private User createCosme() {
-        User cosme = new User("Cosme", "Jordan", User.Role.Editor);
+        User cosme = new User("Cosme", "Jordan");
         cosme.addQuiz("quiz0", "Qualification EPFL");
 
         return cosme;
     }
 
     private User createAnthony() {
-        User anthony = new User("Anthony", "Iozzia", User.Role.Administrator);
+        User anthony = new User("Anthony", "Iozzia");
         anthony.addQuiz("quiz0", "Quiz 0");
         anthony.addQuiz("quiz1", "Quiz 1");
         anthony.addQuiz("quiz2", "Quiz 2");

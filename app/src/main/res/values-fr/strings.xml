@@ -39,18 +39,33 @@
     <!-- Home -->
     <string name="title_activity_home">Accueil</string>
     <string name="welcome">Bienvenue,</string>
-    <string name="role_administrator">Vous êtes un administrateur/une administratrice.</string>
-    <string name="role_editor">Vous êtes un éditeur/une éditrice.</string>
-    <string name="role_participant">Vous êtes un participant/une participante.</string>
 
+    <string name="display_stats">Afficher les statistiques</string>
+    <string name="hide_stats">Cacher les statistiques</string>
+    <string name="score">QEDit SCORE</string>
+    <string name="successes">NOMBRE DE QUIZ RÉUSSIS</string>
+    <string name="attempts">NOMBRE TOTAL D\'ESSAIS</string>
     <!-- Menu -->
     <string name="menu_overview">Aperçu</string>
     <string name="menu_timer">Minuteur</string>
     <string name="menu_previous">Précédent</string>
     <string name="menu_next">Suivant</string>
+    <string name="menu_done">Terminer</string>
+
+    <!-- Burger Menu -->
+    <string name="menu_home">ACCUEIL</string>
+    <string name="menu_qr">QR CODE</string>
+    <string name="menu_quiz_list">MES QUIZ</string>
+    <string name="menu_person">MON COMPTE</string>
+    <string name="menu_search">QUIZ EN LIGNE</string>
+    <string name="menu_settings">PARAMÈTRES</string>
 
     <!-- Quiz -->
     <string name="title_activity_edit_quiz">Édition</string>
+
+    <!-- Edit Settings -->
+    <string name="edit_quiz_title">Entrer le titre du quiz</string>
+    <string name="button_start_editing_message">Démarrer l\'édition</string>
 
     <!-- Edit -->
     <string name="delete">Supprimer</string>
@@ -65,12 +80,39 @@
     <string name="edit_title">Renommer</string>
     <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
     <string name="add_quiz">Ajouter</string>
+    <string name="empty_question_list_hint_text">Ajouter une question</string>
+
+    <!-- Edit Question -->
+    <string name="edit_question_title">Entrer le titre de la question ici.</string>
+    <string name="edit_question_text">Entrer le texte de la question ici.</string>
+    <string name="cannot_be_empty">Ne peut pas être vide.</string>
+
+    <!-- Edit Answer -->
+    <string name="choose_answer_format">Choisir un type de réponse tel que TEXTE ou NOMBRE.</string>
+    <string name="correct_answer_specified"><b>Un type de réponse correct a été spécifié <font color="#00FF00">✔</font></b></string>
+
+    <!-- Edit Field -->
+    <string name="treasure_hunt">Chasse au trésor</string>
+    <string name="edit_field_title">Solution</string>
+    <string name="hint_preview">L\'aperçu sera</string>
+    <string name="enter_solution">Entrer la solution de cette question.</string>
+    <string name="enter_pre_filled">Entrer le texte de ce champ pré-rempli.</string>
+    <string name="check_box_sign">Peut être négatif</string>
+    <string name="check_box_decimal">Peut être décimal</string>
+    <!-- Type selection -->
+    <string name="select_field_type">Type de cette solution</string>
+    <string-array name="field_types_list">
+        <item>Nombre</item>
+        <item>Texte</item>
+        <item>Pré-rempli</item>
+    </string-array>
 
     <!-- Miscellaneous -->
     <!-- In French, there is a space before the exclammation point.
          Since we cannot have leading and trailing spaces in string resources,
          we put \u0020 to force a space. -->
     <string name="exclamation_point">\u0020!</string>
-    <string name="test_answer_format_message">Ceci est juste un test !</string>
+    <string name="database_error">Une erreur s\'est produite lors de la connexion à la base de donnée</string>
+    <string name="card_icon">card icon</string>
 
 </resources>

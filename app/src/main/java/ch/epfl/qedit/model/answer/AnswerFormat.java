@@ -1,5 +1,6 @@
 package ch.epfl.qedit.model.answer;
 
+import ch.epfl.qedit.model.MultiLanguage;
 import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Objects;
  * class is merely to represents how the answer fields look like, and not to store what the user
  * entered. To store what the user entered, see AnswerModel.
  */
-public abstract class AnswerFormat implements Serializable {
+public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Serializable {
 
     /**
      * This is the title of the answer, to help the user know what he needs to fill. It can be null
@@ -18,6 +19,17 @@ public abstract class AnswerFormat implements Serializable {
      */
     private String text;
 
+    /** The correct answer */
+    private AnswerModel solution;
+
+    public void setCorrectAnswer(AnswerModel correctAnswer) {
+        this.solution = correctAnswer;
+    }
+
+    public boolean correct(AnswerModel participantAnswer) {
+        if (participantAnswer == null || solution == null) return false;
+        return solution.equals(participantAnswer);
+    }
     // Package-private constructor, to be used by subclasses
     AnswerFormat(String text) {
         this.text = text;
@@ -61,13 +73,7 @@ public abstract class AnswerFormat implements Serializable {
         String format = formatAndText[0];
         String text = (formatAndText.length == 2) ? formatAndText[1].trim() : null;
 
-        AnswerFormat answerFormat = MatrixFormat.parse(format, text);
-
-        if (answerFormat == null) {
-            answerFormat = TestAnswerFormat.parse(format, text);
-        }
-
-        return answerFormat;
+        return MatrixFormat.parse(format, text);
     }
 
     /**
