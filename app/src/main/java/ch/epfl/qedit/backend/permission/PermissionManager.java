@@ -17,16 +17,18 @@ public interface PermissionManager {
     /**
      * This method returns whether the given permission is granted or not. The permission is
      * represented as a string, which can be accessed from Manifest.permission.
+     * @param activity the activity checking the permission
      * @param permission the permission, as a string.
      * @return true iff the permission is granted to the app.
      */
-    boolean checkPermission(String permission);
+    boolean checkPermission(PermissionActivity activity, String permission);
 
     /**
      * Requests the given permissions asynchronously, and triggers the given callback once the
      * user responded to the request.
+     * @param activity the activity requesting the permissions
      * @param permissions the permissions that the app wants to request.
      * @param callback the callback that will be triggered once the user answered.
      */
-    void requestPermissions(String[] permissions, OnPermissionResult callback);
+    void requestPermissions(PermissionActivity activity, String[] permissions, OnPermissionResult callback);
 }

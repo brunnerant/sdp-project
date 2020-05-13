@@ -1,55 +1,52 @@
 package ch.epfl.qedit.backend.permission;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AndroidPermManager implements PermissionManager, ActivityCompat.OnRequestPermissionsResultCallback {
-
-    private final Context context;
+/**
+ * This is the real implementation of the permission manager. Due to how android works,
+ * we are obliged to rely on the permission activity class to send the permission results
+ * to this manager.
+ */
+public class AndroidPermManager implements PermissionManager {
 
     // This is the map of pending requests to the android permission system. nextRequestId
     // is used to generate unique ids for each request. I assumed that 2^31 values is well
     // enough for the requestId not to overflow.
-    private int nextRequestId;
     private final Map<Integer, OnPermissionResult> callbacks;
+    private int nextRequestCode;
 
-    public AndroidPermManager(Context context) {
-        this.context = context;
-        this.nextRequestId = 0;
+    public AndroidPermManager() {
+        this.nextRequestCode = 0;
         this.callbacks = new HashMap<>();
     }
 
     @Override
-    public boolean checkPermission(String permission) {
-        return ActivityCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED;
+    public boolean checkPermission(PermissionActivity activity, String permission) {
+        return ActivityCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
-    public void requestPermissions(String[] permissions, OnPermissionResult callback) {
-        callbacks.put(nextRequestId++, callback);
-        ActivityCompat.requestPermissions(this, permissions, nextRequestId);
+    public void requestPermissions(PermissionActivity activity, String[] permissions, OnPermissionResult callback) {
+        callbacks.put(nextRequestCode++, callback);
+        ActivityCompat.requestPermissions(activity, permissions, nextRequestCode);
     }
 
-    @Override
-    public void onRequestPermissionsResult(
-            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode != REQUEST_CODE || permissions.length != REQUESTED_PERMISSIONS.length)
-            return;
+    // This method will be called by the permission activity when a permission result arrives.
+    // This design makes it possible to mock the permission manager, because it is the central
+    // class through which all requests and responses go.
+    void onRequestPermissionResult(int requestCode, int[] grantResults) {
+        boolean[] granted = new boolean[grantResults.length];
 
-        for (int i = 0; i < REQUESTED_PERMISSIONS.length; i++) {
-            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                // If the permissions were not granted, we just show an error UI to the user
-                setErrorUI();
-                return;
-            }
-        }
+        for (int i = 0; i < granted.length; i++)
+            granted[i] = grantResults[i] == PackageManager.PERMISSION_GRANTED;
 
-        locService.subscribe(this, LOCATION_INTERVAL);
+        OnPermissionResult callback = callbacks.get(requestCode);
+        callbacks.remove(requestCode);
+        callback.handle(granted);
     }
 }
