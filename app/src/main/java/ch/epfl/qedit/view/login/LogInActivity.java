@@ -8,15 +8,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import ch.epfl.qedit.R;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import ch.epfl.qedit.R;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -24,27 +25,28 @@ public class LogInActivity extends AppCompatActivity {
     private Button loginButton;
     private ProgressBar progressBar;
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        mAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        initializeUI();
+        initializeViews();
 
-        loginButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        loginUserAccount();
-                    }
-                });
+        loginButton.setOnClickListener(v -> logIn());
     }
 
-    private void loginUserAccount() {
+    private void initializeViews() {
+        emailField = findViewById(R.id.field_email);
+        passwordField = findViewById(R.id.field_password);
+        loginButton = findViewById(R.id.button_log_in);
+        progressBar = findViewById(R.id.progress_bar);
+    }
+
+    private void logIn() {
         progressBar.setVisibility(View.VISIBLE);
 
         String email, password;
@@ -52,48 +54,37 @@ public class LogInActivity extends AppCompatActivity {
         password = passwordField.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Please enter email", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "email empty", Toast.LENGTH_LONG).show();
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Please enter password", Toast.LENGTH_LONG)
+            Toast.makeText(getApplicationContext(), "password empty", Toast.LENGTH_LONG)
                     .show();
             return;
         }
 
-        mAuth.signInWithEmailAndPassword(email, password)
+        firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
-                        new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(
-                                            getApplicationContext(),
-                                            "Login successful",
-                                            Toast.LENGTH_LONG)
-                                            .show();
-                                    progressBar.setVisibility(View.GONE);
+                        task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(
+                                        getApplicationContext(),
+                                        "log in success",
+                                        Toast.LENGTH_LONG)
+                                        .show();
+                                progressBar.setVisibility(View.GONE);
 
-                                    Intent intent =
-                                            new Intent(LogInActivity.this, TokenLogInActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(
-                                            getApplicationContext(),
-                                            "Login failed",
-                                            Toast.LENGTH_LONG)
-                                            .show();
-                                    progressBar.setVisibility(View.GONE);
-                                }
+                                Intent intent =
+                                        new Intent(LogInActivity.this, TokenLogInActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(
+                                        getApplicationContext(),
+                                        "log in fail",
+                                        Toast.LENGTH_LONG)
+                                        .show();
+                                progressBar.setVisibility(View.GONE);
                             }
                         });
-    }
-
-    private void initializeUI() {
-        emailField = findViewById(R.id.field_email);
-        passwordField = findViewById(R.id.field_password);
-
-        loginButton = findViewById(R.id.button_log_in);
-        progressBar = findViewById(R.id.progress_bar);
     }
 }
