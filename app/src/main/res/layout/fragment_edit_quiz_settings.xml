@@ -27,26 +27,11 @@
         android:layout_height="wrap_content"
         android:entries="@array/languages_list"
         android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toTopOf="@id/button_start_editing"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_quiz_title" />
-
-    <Button
-        android:id="@+id/button_start_editing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:background="@color/colorAccent"
-        android:textColor="@color/colorPrimary"
-        android:text="@string/button_start_editing_message"
-        android:textStyle="bold"
-        android:onClick="startEditing"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_language_selection" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

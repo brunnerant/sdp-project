@@ -50,7 +50,7 @@ public class EditSettingsActivity extends AppCompatActivity
             quizBuilder = new Quiz.Builder(quiz);
 
         } else {
-            setContentView(R.layout.activity_edit_new_quiz_settings);
+            setContentView(R.layout.fragment_edit_quiz_settings);
 
             // Initialize a new empty QuizBuilder
             quizBuilder = new Quiz.Builder();
