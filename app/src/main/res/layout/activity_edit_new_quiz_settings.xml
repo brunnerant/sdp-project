@@ -54,7 +54,7 @@
         android:padding="5dp"
         android:background="@color/colorAccent"
         android:textColor="@color/colorPrimary"
-        android:text="@string/button_start_editing_message"
+        android:text="@string/button_start_editing"
         android:textStyle="bold"
         android:onClick="startEditing"
         app:layout_constraintBottom_toBottomOf="parent"

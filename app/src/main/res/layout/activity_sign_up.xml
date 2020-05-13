@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/log_in_instead"
+        app:layout_constraintBottom_toTopOf="@+id/already_signed_up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_sign_up" />
@@ -108,6 +108,7 @@
         android:layout_height="wrap_content"
         android:entries="@array/languages_list"
         android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/already_signed_up" />

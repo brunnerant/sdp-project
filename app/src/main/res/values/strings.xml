@@ -44,6 +44,7 @@
     <string name="title_activity_log_in">Log in</string>
     <string name="title_activity_sign_up">Sign up</string>
     <string name="title_activity_token_log_in">Token log in</string>
+
     <string name="log_in_button_text">Log in</string>
     <string name="log_in_action_label">Log in</string>
     <string name="sign_up_button_text">Sign up</string>
@@ -52,21 +53,27 @@
     <string name="hint_password">Password</string>
     <string name="hint_password_confirmation">Confirm password</string>
     <string name="hint_token">Token</string>
-    <string name="wrong_email_message">Invalid email</string>
-    <string name="empty_email_message">Empty email</string>
-    <string name="wrong_password_message">Invalid password</string>
-    <string name="empty_password_message">Empty password</string>
-    <string name="wrong_token_message">Invalid token</string>
-    <string name="empty_token_message">Empty token</string>
-    <string name="already_signed_up">I already have an account, log in</string>
-    <string name="not_signed_up">I don\'t have an account, sign up</string>
+
+    <string name="input_cannot_be_empty">Cannot be empty</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="invalid_password_confirmation">Password not identical</string>
+    <string name="invalid_token">Invalid token</string>
+
+    <string name="already_signed_up"><font color="#0000FF">I already have an account -> Log in</font></string>
+    <string name="not_signed_up"><font color="#0000FF">I don\'t have an account -> Sign up</font></string>
+
+    <string name="log_in_success">Logged in successfully :)</string>
+    <string name="log_in_fail">Log in failed :(</string>
+    <string name="sign_up_success">Signed up successfully :) An email has been sent to you with a link to verify your email</string>
+    <string name="sign_up_fail">Sign up failed :(</string>
 
     <!-- Connection error -->
-    <string name="connection_error_message">Connection error</string>
+    <string name="connection_error">Connection error</string>
 
     <!-- Database -->
-    <string name="wrong_quiz_id_message">This quiz does not exist</string>
-    <string name="wrong_document_error_message">Invalid document</string>
+    <string name="wrong_quiz_id">This quiz does not exist</string>
+    <string name="wrong_document_error">Invalid document</string>
 
     <!-- Home -->
     <string name="title_activity_home">Home</string>
@@ -76,7 +83,7 @@
     <string name="hide_stats">Hide statistics</string>
     <string name="score">QEDit SCORE</string>
     <string name="successes">NUMBER OF QUIZZES SUCCEEDED</string>
-    <string name="attempts">TOTAL NUMBER OF ATTEMPT</string>
+    <string name="attempts">TOTAL NUMBER OF ATTEMPTS</string>
 
     <!-- Menu -->
     <string name="menu_overview">Overview</string>
@@ -98,7 +105,7 @@
 
     <!-- Edit Settings -->
     <string name="edit_quiz_title">Enter the quiz title</string>
-    <string name="button_start_editing_message">Start editing</string>
+    <string name="button_start_editing">Start editing</string>
 
     <!-- Edit -->
     <string name="delete">Delete</string>

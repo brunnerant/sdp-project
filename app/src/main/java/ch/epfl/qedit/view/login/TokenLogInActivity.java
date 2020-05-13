@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -12,17 +13,16 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Callback;
+import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.util.Response;
 import ch.epfl.qedit.view.home.HomeActivity;
-import java.util.Arrays;
-import java.util.Locale;
 
 public class TokenLogInActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
@@ -46,31 +46,15 @@ public class TokenLogInActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_token_log_in);
 
-        tokenText = findViewById(R.id.field_token);
-        logInButton = findViewById(R.id.button_log_in);
-        progressBar = findViewById(R.id.progress_bar);
-
         authService = AuthenticationFactory.getInstance();
         handler = new Handler();
+
+        initializeViews();
 
         context = getBaseContext();
         resources = getResources();
 
-        /* Language selection */
-        // Create spinner (language list)
-        Spinner languageSelectionSpinner = findViewById(R.id.spinner_language_selection);
-
-        // Find app's current language position in languages list
-        String currentLanguage = Locale.getDefault().getLanguage();
-        String[] languageList = resources.getStringArray(R.array.languages_codes);
-        int positionInLanguageList = Arrays.asList(languageList).indexOf(currentLanguage);
-
-        // Set current language in spinner at startup
-        languageSelectionSpinner.setSelection(positionInLanguageList, false);
-        // Set listener
-        languageSelectionSpinner.setOnItemSelectedListener(this);
-        // Set page title to display it in the right language
-        setTitle(R.string.title_activity_token_log_in);
+        initializeLanguage();
     }
 
     @Override
@@ -99,12 +83,31 @@ public class TokenLogInActivity extends AppCompatActivity
 
         setLanguage(languageCode);
         updateTexts();
-        printChangedLanguageToast(pos);
+        Utils.printChangedLanguageToast(pos, Toast.LENGTH_SHORT, getApplicationContext(), resources);
     }
 
     @Override
     public void onNothingSelected(AdapterView parent) {
         // Not used because there will always be something selected
+    }
+
+    private void initializeViews() {
+        tokenText = findViewById(R.id.field_token);
+        logInButton = findViewById(R.id.button_log_in);
+        progressBar = findViewById(R.id.progress_bar);
+    }
+
+    private void initializeLanguage() {
+        // Create spinner (language list)
+        Spinner languageSelectionSpinner = findViewById(R.id.spinner_language_selection);
+        // Find app's current language position in languages list
+        int positionInLanguageList = Utils.languagePositionInList(resources, Utils.getCurrentLanguageCode());
+        // Set current language in spinner at startup
+        languageSelectionSpinner.setSelection(positionInLanguageList, false);
+        // Set listener
+        languageSelectionSpinner.setOnItemSelectedListener(this);
+        // Set page title to display it in the right language
+        setTitle(R.string.title_activity_token_log_in);
     }
 
     /**
@@ -124,26 +127,12 @@ public class TokenLogInActivity extends AppCompatActivity
         setTitle(resources.getString(R.string.title_activity_token_log_in));
     }
 
-    /**
-     * Display a toast to inform the user that the language was successfully changed
-     *
-     * @param languagePos position of the language in the spinner
-     */
-    private void printChangedLanguageToast(int languagePos) {
-        Toast.makeText(
-                        getApplicationContext(),
-                        resources.getString(R.string.language_changed)
-                                + " "
-                                + resources.getStringArray(R.array.languages_list)[languagePos],
-                        Toast.LENGTH_SHORT)
-                .show();
-    }
-
     public void handleLogIn(View view) {
+        Utils.hideKeyboard(this);
         String token = tokenText.getText().toString();
         // Sanitize token
-        if (token.isEmpty()) {
-            printShortToast(R.string.empty_token_message);
+        if(TextUtils.isEmpty(token)) {
+            tokenText.setError(resources.getString(R.string.input_cannot_be_empty));
             return;
         }
         token = token.trim(); // Remove leading and trailing spaces in the token
@@ -151,7 +140,7 @@ public class TokenLogInActivity extends AppCompatActivity
         // This regular expression will accept only strings of length 20
         // and composed of letters and digits
         if (!token.matches("[a-zA-Z0-9]{20}")) {
-            printShortToast(R.string.wrong_token_message);
+            tokenText.setError(resources.getString(R.string.invalid_token));
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
@@ -162,23 +151,16 @@ public class TokenLogInActivity extends AppCompatActivity
                         () -> {
                             progressBar.setVisibility(View.GONE);
                             if (response.getError().noError(context)) {
-                                onLoginSuccessful(response.getData());
+                                onLogInSuccessful(response.getData());
                             }
                         }));
     }
 
-    private void onLoginSuccessful(User user) {
+    private void onLogInSuccessful(User user) {
         Intent intent = new Intent(TokenLogInActivity.this, HomeActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
         startActivity(intent);
-    }
-
-    private void printShortToast(int stringId) {
-        Toast toast =
-                Toast.makeText(
-                        getApplicationContext(), resources.getString(stringId), Toast.LENGTH_SHORT);
-        toast.show();
     }
 }

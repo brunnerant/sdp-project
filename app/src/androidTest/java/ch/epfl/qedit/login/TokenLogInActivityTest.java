@@ -83,7 +83,7 @@ public class TokenLogInActivityTest {
     @Test
     public void testConnectionErrorCannotLogIn() {
         //noinspection SpellCheckingInspection
-        testLoginFailed("fjd4ywnzcCcLHaVb7oKg", R.string.connection_error_message);
+        testLoginFailed("fjd4ywnzcCcLHaVb7oKg", R.string.connection_error);
     }
 
     @Test

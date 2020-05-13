@@ -12,8 +12,8 @@ import ch.epfl.qedit.util.Response;
  */
 public interface AuthenticationService {
 
-    Error CONNECTION_ERROR = new Error(R.string.connection_error_message);
-    Error WRONG_TOKEN = new Error(R.string.wrong_token_message);
+    Error CONNECTION_ERROR = new Error(R.string.connection_error);
+    Error WRONG_TOKEN = new Error(R.string.invalid_token);
 
     /**
      * Sends a request to the authentication service, and receives the response asynchronously
