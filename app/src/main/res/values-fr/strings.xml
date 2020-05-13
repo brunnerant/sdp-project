@@ -30,7 +30,7 @@
     <string name="display_stats">Afficher les statistiques</string>
     <string name="hide_stats">Cacher les statistiques</string>
     <string name="score">QEDit SCORE</string>
-    <string name="successes">NOMBRE DE QUIZZES RÉUSSIS</string>
+    <string name="successes">NOMBRE DE QUIZ RÉUSSIS</string>
     <string name="attempts">NOMBRE TOTAL D\'ESSAIS</string>
     <!-- Menu -->
     <string name="menu_overview">Aperçu</string>
