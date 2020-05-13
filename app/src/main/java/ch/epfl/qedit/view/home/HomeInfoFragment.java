@@ -49,7 +49,10 @@ public class HomeInfoFragment extends Fragment {
         TextView displayStats = view.findViewById(R.id.display_stats);
         displayStats.setOnClickListener(
                 v -> {
-                    int textId = stats.getVisibility() == GONE ? R.string.hide_stats : R.string.display_stats;
+                    int textId =
+                            stats.getVisibility() == GONE
+                                    ? R.string.hide_stats
+                                    : R.string.display_stats;
                     int visibility = stats.getVisibility() == GONE ? VISIBLE : GONE;
                     displayStats.setText(textId);
                     stats.setVisibility(visibility);
