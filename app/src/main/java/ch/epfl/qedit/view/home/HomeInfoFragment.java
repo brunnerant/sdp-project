@@ -50,8 +50,8 @@ public class HomeInfoFragment extends Fragment {
         displayStats.setOnClickListener(
                 v -> {
                     boolean isHidden = stats.getVisibility() == GONE;
-                    int textId = isHidden? R.string.hide_stats : R.string.display_stats;
-                    int visibility = isHidden? VISIBLE : GONE;
+                    int textId = isHidden ? R.string.hide_stats : R.string.display_stats;
+                    int visibility = isHidden ? VISIBLE : GONE;
                     displayStats.setText(textId);
                     stats.setVisibility(visibility);
                 });
