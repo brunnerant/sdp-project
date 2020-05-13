@@ -37,8 +37,6 @@ public class ScannerActivityTest {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     }
 
-
-
     public static void assertPermissionRequestIsVisible(UiDevice device, String text) {
         UiObject allowButton = device.findObject(new UiSelector().text(text));
         if (!allowButton.exists()) {
@@ -70,8 +68,5 @@ public class ScannerActivityTest {
         onView(withText("Permission Granted"))
                 .inRoot(withDecorView(not(is(testRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
-
     }
-
-   
 }
