@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -50,6 +51,14 @@ public class TokenLogInActivity extends AppCompatActivity
         handler = new Handler();
 
         initializeViews();
+
+        Display display = getWindowManager().getDefaultDisplay();
+        int width = display.getWidth();
+        System.out.println("widthhhhhhhhhhhhhh " + width);
+
+        if(width > 300) {
+            tokenText.setWidth(300);
+        }
 
         context = getBaseContext();
         resources = getResources();
