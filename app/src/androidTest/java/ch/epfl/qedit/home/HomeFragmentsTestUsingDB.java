@@ -14,13 +14,14 @@ import com.android21buttons.fragmenttestrule.FragmentTestRule;
 
 class HomeFragmentsTestUsingDB extends RecyclerViewHelpers {
     private IdlingResource idlingResource;
+    int score = 145, successes = 42, attempts = 78;
 
-    public HomeFragmentsTestUsingDB(int recyclerViewId) {
+    HomeFragmentsTestUsingDB(int recyclerViewId) {
         super(recyclerViewId);
     }
 
     public void setup(FragmentTestRule testRule, Fragment fragment) {
-        User user = new User("Jon", "Snow");
+        User user = new User("Jon", "Snow", score, successes, attempts);
         user.addQuiz("quiz0", "Qualification EPFL");
 
         Bundle bundle = new Bundle();
