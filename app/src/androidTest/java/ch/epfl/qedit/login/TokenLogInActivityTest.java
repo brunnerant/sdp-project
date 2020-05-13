@@ -58,10 +58,10 @@ public class TokenLogInActivityTest {
     }
 
     private void performLogin(String token) {
-        onView(ViewMatchers.withId(R.id.login_token))
+        onView(ViewMatchers.withId(R.id.field_token))
                 .perform((typeText(token)))
                 .perform(closeSoftKeyboard());
-        onView(withId(R.id.login_button)).perform(click());
+        onView(withId(R.id.button_log_in)).perform(click());
     }
 
     private void testLoginSuccessful(String token, User user) {

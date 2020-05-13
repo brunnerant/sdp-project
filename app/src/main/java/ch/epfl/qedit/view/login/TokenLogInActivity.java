@@ -158,21 +158,13 @@ public class TokenLogInActivity extends AppCompatActivity
 
         authService.sendRequest(
                 token,
-                new Callback<Response<User>>() {
-                    @Override
-                    public void onReceive(final Response<User> response) {
-                        handler.post(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        progressBar.setVisibility(View.GONE);
-                                        if (response.getError().noError(context)) {
-                                            onLoginSuccessful(response.getData());
-                                        }
-                                    }
-                                });
-                    }
-                });
+                response -> handler.post(
+                        () -> {
+                            progressBar.setVisibility(View.GONE);
+                            if (response.getError().noError(context)) {
+                                onLoginSuccessful(response.getData());
+                            }
+                        }));
     }
 
     private void onLoginSuccessful(User user) {
