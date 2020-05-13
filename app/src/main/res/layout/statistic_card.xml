@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="@dimen/regular_padding">
+        android:layout_margin="@dimen/medium_margin">
 
         <TextView
             android:id="@+id/card_title"
@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textStyle="bold"
-            android:layout_marginBottom="@dimen/regular_padding"
+            android:layout_marginBottom="@dimen/medium_margin"
             tools:text="TITLE OF THE CARD" />
 
         <LinearLayout

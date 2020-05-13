@@ -27,8 +27,8 @@
     <string name="title_activity_home">Accueil</string>
     <string name="welcome">Bienvenue,</string>
 
-    <string name="display">Afficher</string>
-    <string name="hide">Cacher</string>
+    <string name="display_stats">Afficher les statistiques</string>
+    <string name="hide_stats">Cacher les statistiques</string>
     <string name="score">QEDit SCORE</string>
     <string name="successes">NOMBRE DE QUIZZES RÉUSSIS</string>
     <string name="attempts">NOMBRE TOTAL D\'ESSAIS</string>

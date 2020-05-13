@@ -14,7 +14,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:padding="@dimen/regular_padding"
         android:textStyle="bold"
-        android:layout_margin="@dimen/regular_padding"
+        android:layout_margin="@dimen/medium_margin"
         android:layout_gravity="center"/>
 
     <TextView
@@ -22,8 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginStart="@dimen/regular_padding"
-        android:text="@string/hide"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:text="@string/hide_stats"
         android:textColor="@color/colorAccent"/>
 
     <View
@@ -46,7 +47,7 @@
                 android:id="@+id/score_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/regular_padding"
+                android:layout_margin="@dimen/medium_margin"
                 custom:data="754"
                 custom:icon="@mipmap/q_score"
                 custom:title="@string/score"/>
@@ -56,7 +57,7 @@
                 android:id="@+id/successes_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/regular_padding"
+                android:layout_margin="@dimen/medium_margin"
                 custom:data="754"
                 custom:icon="@mipmap/successes"
                 custom:title="@string/successes"/>
@@ -65,7 +66,7 @@
                 android:id="@+id/attempts_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/regular_padding"
+                android:layout_margin="@dimen/medium_margin"
                 custom:data="754"
                 custom:icon="@mipmap/attempts"
                 custom:title="@string/attempts"/>
