@@ -24,6 +24,7 @@ import static ch.epfl.qedit.view.LoginActivity.USER;
 public class EditMapsActivity extends FragmentActivity implements OnMapReadyCallback {
     public static final String LATITUDE = "ch.epfl.qedit.view.edit.LATITUDE";
     public static final String LONGITUDE = "ch.epfl.qedit.view.edit.LONGITUDE";
+    private final String yourLocation = getString(R.string.your_location);
 
     private GoogleMap mMap;
     private LatLng latLng;
@@ -42,7 +43,6 @@ public class EditMapsActivity extends FragmentActivity implements OnMapReadyCall
         double latitude = Objects.requireNonNull(intent.getExtras()).getDouble(LATITUDE);
         double longitude = Objects.requireNonNull(intent.getExtras()).getDouble(LONGITUDE);
         latLng = new LatLng(latitude, longitude);
-
     }
 
     /**
@@ -57,13 +57,12 @@ public class EditMapsActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng location = new LatLng(46.518819, 6.561919);
 
         // Add a marker in Sydney and move the camera
-        mMap.addMarker(new MarkerOptions().position(location).title("Marker in EPFL"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-        CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(location, 12);
-        mMap.animateCamera(yourLocation);
+        mMap.addMarker(new MarkerOptions().position(latLng).title(yourLocation));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        CameraUpdate latLngLocation = CameraUpdateFactory.newLatLngZoom(latLng, 12);
+        mMap.animateCamera(latLngLocation);
 
         mMap.setOnMapClickListener(point -> {
             mMap.clear();
