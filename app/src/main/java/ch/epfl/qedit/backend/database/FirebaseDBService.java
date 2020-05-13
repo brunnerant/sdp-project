@@ -93,13 +93,13 @@ public class FirebaseDBService implements DatabaseService {
     public CompletableFuture<Void> createUser(String userId, String firstName, String lastName) {
         Map<String, Object> data = new HashMap<>();
         data.put("first_name", firstName);
-        data.put("state", lastName);
+        data.put("last_name", lastName);
         data.put("score", 0);
         data.put("successes", 0);
         data.put("attempts", 0);
         data.put("quizzes", new HashMap<>());
 
-        // in firestore API it is specified that if there is no user with id userId, on will be
+        // in firestore API it is specified that if there is no user with id userId, one will be
         // created
         return updateUser(db, userId, data);
     }
