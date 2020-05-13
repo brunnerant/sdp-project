@@ -75,7 +75,7 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
 
         // We retrieve the location from the activity arguments
         Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
-        questionLoc = (Location) bundle.getSerializable(QUESTION_LOCATION);
+        questionLoc = (Location) bundle.getParcelable(QUESTION_LOCATION);
         questionRadius = bundle.getFloat(QUESTION_RADIUS);
 
         // We retrieve the UI elements and set up the default UI
