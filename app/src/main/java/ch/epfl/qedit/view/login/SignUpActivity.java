@@ -10,9 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.auth.AuthenticationFactory;
+import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.backend.database.FirebaseDBService;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -27,14 +27,14 @@ public class SignUpActivity extends AppCompatActivity {
     private String firstName;
     private String lastName;
 
-    private FirebaseAuth firebaseAuth;
+    private AuthenticationService auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        auth = AuthenticationFactory.getInstance();
 
         initializeViews();
 
@@ -69,53 +69,38 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        firebaseAuth
-                .createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(
-                        task -> {
-                            if (task.isSuccessful()) {
-                                onSignUpSuccessful();
-                            } else {
-                                Toast.makeText(
-                                                getApplicationContext(),
-                                                "sign up fail",
-                                                Toast.LENGTH_LONG)
-                                        .show();
-                                progressBar.setVisibility(View.GONE);
-                            }
+        auth.signUp(email, password)
+                .whenComplete(
+                        (userId, error) -> {
+                            if (error != null) onSignUpFail();
+                            else onSignUpSuccessful(userId);
                         });
     }
 
-    private void onSignUpSuccessful() {
+    private void onSignUpFail() {
+        Toast.makeText(getApplicationContext(), "sign up fail", Toast.LENGTH_LONG).show();
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private void onSignUpSuccessful(String userId) {
         Toast.makeText(getApplicationContext(), "sign up success", Toast.LENGTH_LONG).show();
         progressBar.setVisibility(View.GONE);
 
         Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            // User is signed in
-            String uid = firebaseUser.getUid();
-
-            FirebaseDBService firebaseDBService = new FirebaseDBService();
-            firebaseDBService
-                    .createUser(uid, firstName, lastName)
-                    .whenComplete(
-                            (result, throwable) -> {
-                                if (throwable != null) {
-                                    Toast.makeText(
-                                                    getBaseContext(),
-                                                    R.string.database_error,
-                                                    Toast.LENGTH_SHORT)
-                                            .show();
-                                } else {
-                                    startActivity(intent);
-                                }
-                            });
-
-        } else {
-            // No user is signed in
-            // onLogInFailed();
-        }
+        FirebaseDBService db = new FirebaseDBService();
+        db.createUser(userId, firstName, lastName)
+                .whenComplete(
+                        (result, throwable) -> {
+                            if (throwable != null) {
+                                Toast.makeText(
+                                                getBaseContext(),
+                                                R.string.database_error,
+                                                Toast.LENGTH_SHORT)
+                                        .show();
+                            } else {
+                                startActivity(intent);
+                            }
+                        });
     }
 }
