@@ -6,14 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
@@ -54,7 +51,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         logInButton.setOnClickListener(v -> logIn());
         textViewSignUpInstead.setOnClickListener(v -> signUpInstead());
 
-        initializeLanguage();
+        Util.initializeLanguage(this, this);
     }
 
     @Override
@@ -97,21 +94,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         logInButton = findViewById(R.id.button_log_in);
         progressBar = findViewById(R.id.progress_bar);
         textViewSignUpInstead = findViewById(R.id.sign_up_instead);
-        updateSignUpInsteadText();
-    }
-
-    private void initializeLanguage() {
-        // Create spinner (language list)
-        Spinner languageSelectionSpinner = findViewById(R.id.spinner_language_selection);
-        // Find app's current language position in languages list
-        int positionInLanguageList =
-                Util.languagePositionInList(resources, Util.getCurrentLanguageCode());
-        // Set current language in spinner at startup
-        languageSelectionSpinner.setSelection(positionInLanguageList, false);
-        // Set listener
-        languageSelectionSpinner.setOnItemSelectedListener(this);
-        // Set page title to display it in the right language
-        setTitle(R.string.title_activity_log_in);
+        Util.updateRedirectionText(resources, textViewSignUpInstead, R.string.sign_up_instead);
     }
 
     /**
@@ -129,22 +112,9 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         emailField.setHint(resources.getString(R.string.hint_email));
         passwordField.setHint(resources.getString(R.string.hint_password));
         logInButton.setText(resources.getString(R.string.log_in_button_text));
-        updateSignUpInsteadText();
+        Util.updateRedirectionText(resources, textViewSignUpInstead, R.string.sign_up_instead);
 
         setTitle(resources.getString(R.string.title_activity_log_in));
-    }
-
-    private void updateSignUpInsteadText() {
-        int colorNotSignedUpAlreadySignedUp =
-                resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
-        Spanned coloredText =
-                Html.fromHtml(
-                        "<font color='"
-                                + colorNotSignedUpAlreadySignedUp
-                                + "'>"
-                                + resources.getString(R.string.sign_up_instead)
-                                + "</font>");
-        textViewSignUpInstead.setText(coloredText);
     }
 
     private void logIn() {

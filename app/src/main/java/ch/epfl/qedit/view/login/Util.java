@@ -9,7 +9,10 @@ import android.content.res.Resources;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import ch.epfl.qedit.R;
 import java.util.Arrays;
@@ -60,6 +63,32 @@ public final class Util {
         return Arrays.asList(languageList).indexOf(languageCode);
     }
 
+    /** Initialize the language spinner and the language of the activity */
+    public static void initializeLanguage(
+            Activity activity, AdapterView.OnItemSelectedListener onItemSelectedListener) {
+        // Create spinner (language list)
+        Spinner languageSelectionSpinner = activity.findViewById(R.id.spinner_language_selection);
+        // Find app's current language position in languages list
+        int positionInLanguageList =
+                Util.languagePositionInList(activity.getResources(), Util.getCurrentLanguageCode());
+        // Set current language in spinner at startup
+        languageSelectionSpinner.setSelection(positionInLanguageList, false);
+        // Set listener
+        languageSelectionSpinner.setOnItemSelectedListener(onItemSelectedListener);
+        // Set page title to display it in the right language
+        activity.setTitle(R.string.title_activity_sign_up);
+    }
+
+    /**
+     * Update text with colors (we cannot directly put the color in the string.xml because we are
+     * changing language in these activities
+     */
+    public static void updateRedirectionText(Resources resources, TextView view, int stringId) {
+        int color = resources.getColor(R.color.colorRedirection);
+        view.setText(resources.getString(stringId));
+        view.setTextColor(color);
+    }
+
     /**
      * Display a toast to inform the user that the language was successfully changed
      *
@@ -78,7 +107,7 @@ public final class Util {
         Toast.makeText(context, stringToDisplay, Toast.LENGTH_SHORT).show();
     }
 
-    static void showToast(int stringId, Context context, Resources resources) {
+    public static void showToast(int stringId, Context context, Resources resources) {
         showToast(resources.getString(stringId), context);
     }
 
