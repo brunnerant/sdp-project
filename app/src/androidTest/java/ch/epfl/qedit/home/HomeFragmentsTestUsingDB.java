@@ -1,5 +1,7 @@
 package ch.epfl.qedit.home;
 
+import static ch.epfl.qedit.view.login.Util.USER;
+
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.test.espresso.IdlingRegistry;
@@ -9,8 +11,6 @@ import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
-
-import static ch.epfl.qedit.view.login.Util.USER;
 
 class HomeFragmentsTestUsingDB extends RecyclerViewHelpers {
     private IdlingResource idlingResource;

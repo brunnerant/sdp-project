@@ -151,7 +151,7 @@ public class MockDBService implements DatabaseService {
         users.put(MockAuthService.COSME_JORDAN_ID, createCosme());
     }
 
-    private User createAnthony() {
+    public static User createAnthony() {
         User anthony = new User("Anthony", "Iozzia", 78, 7, 3);
         anthony.addQuiz("quiz0", "I am a Mock Quiz!");
         anthony.addQuiz("quiz1", "An other Quiz");
@@ -159,7 +159,7 @@ public class MockDBService implements DatabaseService {
         return anthony;
     }
 
-    private User createCosme() {
+    public static User createCosme() {
         User cosme = new User("Cosme", "Jordan");
         cosme.addQuiz("quiz0", "I am a Mock Quiz!");
 
