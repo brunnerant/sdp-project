@@ -1,5 +1,39 @@
 package ch.epfl.qedit.home;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+
+import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.espresso.contrib.NavigationViewActions;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import androidx.test.runner.lifecycle.Stage;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.Collection;
+
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.util.RecyclerViewHelpers;
+import ch.epfl.qedit.view.QR.ScannerActivity;
+import ch.epfl.qedit.view.edit.EditSettingsActivity;
+import ch.epfl.qedit.view.home.HomeActivity;
+
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
@@ -20,42 +54,11 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.isDisplayed;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
+import static ch.epfl.qedit.view.login.Util.USER;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import androidx.test.espresso.contrib.DrawerActions;
-import androidx.test.espresso.contrib.NavigationViewActions;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
-import androidx.test.runner.lifecycle.Stage;
-import androidx.test.uiautomator.UiDevice;
-import androidx.test.uiautomator.UiObject;
-import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiSelector;
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.RecyclerViewHelpers;
-import ch.epfl.qedit.view.QR.ScannerActivity;
-import ch.epfl.qedit.view.edit.EditSettingsActivity;
-import ch.epfl.qedit.view.home.HomeActivity;
-import ch.epfl.qedit.view.login.LogInActivity;
-
-import java.util.Collection;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class HomeActivityTest extends RecyclerViewHelpers {
@@ -78,7 +81,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
 
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(LogInActivity.USER, user);
+        bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
         testRule.launchActivity(intent);
         // always close the statistics panel by default to be sure it does not take to much place on
