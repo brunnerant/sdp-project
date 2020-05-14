@@ -32,8 +32,8 @@
     <string name="invalid_password_confirmation">Mot de passe non identique</string>
     <string name="invalid_name">Nom invalide</string>
 
-    <string name="already_signed_up">J\'ai déjà un compte -> Connexion</string>
-    <string name="not_signed_up">Je n\'ai pas de compte -> Inscription</string>
+    <string name="log_in_instead">J\'ai déjà un compte -> Connexion</string>
+    <string name="sign_up_instead">Je n\'ai pas de compte -> Inscription</string>
 
     <string name="log_in_success">Connexion réussie.</string>
     <string name="log_in_fail">Connexion échouée. Merci de vérifier si votre email et mot de pass sont corrects.</string>

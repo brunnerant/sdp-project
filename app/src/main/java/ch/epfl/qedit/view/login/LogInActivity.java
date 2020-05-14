@@ -33,7 +33,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     private EditText emailField, passwordField;
     private Button logInButton;
     private ProgressBar progressBar;
-    private TextView textViewSignUp;
+    private TextView textViewSignUpInstead;
 
     private AuthenticationService auth;
 
@@ -55,7 +55,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         initializeViews();
 
         logInButton.setOnClickListener(v -> logIn());
-        textViewSignUp.setOnClickListener(v -> signUpInstead());
+        textViewSignUpInstead.setOnClickListener(v -> signUpInstead());
 
         initializeLanguage();
     }
@@ -86,7 +86,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
         setLanguage(languageCode);
         updateTexts();
-        Utils.showToastChangedLanguage(pos, Toast.LENGTH_SHORT, getApplicationContext(), resources);
+        Utils.showToastChangedLanguage(pos, Toast.LENGTH_SHORT, context, resources);
     }
 
     @Override
@@ -99,18 +99,8 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         passwordField = findViewById(R.id.field_password);
         logInButton = findViewById(R.id.button_log_in);
         progressBar = findViewById(R.id.progress_bar);
-        textViewSignUp = findViewById(R.id.not_signed_up);
-
-        int colorNotSignedUpAlreadySignedUp =
-                resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
-        Spanned coloredText =
-                Html.fromHtml(
-                        "<font color='"
-                                + colorNotSignedUpAlreadySignedUp
-                                + "'>"
-                                + resources.getString(R.string.not_signed_up)
-                                + "</font>");
-        textViewSignUp.setText(coloredText);
+        textViewSignUpInstead = findViewById(R.id.sign_up_instead);
+        updateSignUpInsteadText();
     }
 
     private void initializeLanguage() {
@@ -142,7 +132,12 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         emailField.setHint(resources.getString(R.string.hint_email));
         passwordField.setHint(resources.getString(R.string.hint_password));
         logInButton.setText(resources.getString(R.string.log_in_button_text));
+        updateSignUpInsteadText();
 
+        setTitle(resources.getString(R.string.title_activity_log_in));
+    }
+
+    private void updateSignUpInsteadText() {
         int colorNotSignedUpAlreadySignedUp =
                 resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
         Spanned coloredText =
@@ -150,11 +145,9 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                         "<font color='"
                                 + colorNotSignedUpAlreadySignedUp
                                 + "'>"
-                                + resources.getString(R.string.not_signed_up)
+                                + resources.getString(R.string.sign_up_instead)
                                 + "</font>");
-        textViewSignUp.setText(coloredText);
-
-        setTitle(resources.getString(R.string.title_activity_log_in));
+        textViewSignUpInstead.setText(coloredText);
     }
 
     private void logIn() {
@@ -203,13 +196,13 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void onLogInFailed() {
-        Utils.showToast(
-                R.string.log_in_fail, Toast.LENGTH_SHORT, getApplicationContext(), resources);
         progressBar.setVisibility(View.GONE);
+        Utils.showToast(
+                R.string.log_in_fail, Toast.LENGTH_SHORT, context, resources);
     }
 
     private void signUpInstead() {
-        Intent intent = new Intent(LogInActivity.this, SignUpActivity.class);
+        Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 }

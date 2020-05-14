@@ -121,7 +121,6 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="handleSignUp"
                 android:text="@string/sign_up_button_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -133,17 +132,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/already_signed_up"
+                app:layout_constraintBottom_toTopOf="@+id/log_in_instead"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button_sign_up" />
 
             <TextView
-                android:id="@+id/already_signed_up"
+                android:id="@+id/log_in_instead"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="handleSignUp"
-                android:text="@string/already_signed_up"
+                android:text="@string/log_in_instead"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -158,7 +156,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/already_signed_up" />
+                app:layout_constraintTop_toBottomOf="@id/log_in_instead" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

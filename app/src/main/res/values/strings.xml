@@ -62,12 +62,12 @@
     <string name="invalid_password_confirmation">Password not identical</string>
     <string name="invalid_name">Invalid name</string>
 
-    <string name="already_signed_up">I already have an account -> Log in</string>
-    <string name="not_signed_up">I don\'t have an account -> Sign up</string>
+    <string name="log_in_instead">I already have an account -> Log in</string>
+    <string name="sign_up_instead">I don\'t have an account -> Sign up</string>
 
     <string name="log_in_success">Log in successful.</string>
     <string name="log_in_fail">Log in failed. Please check that your email/password is correct.</string>
-    <string name="sign_up_success">Sign up successful. An email has been sent to you with a link to verify your email.</string>
+    <string name="sign_up_success">Sign up successful.</string>
     <string name="sign_up_fail">Sign up failed.</string>
 
     <!-- Connection error -->
