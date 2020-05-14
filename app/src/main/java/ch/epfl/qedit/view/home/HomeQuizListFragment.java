@@ -111,7 +111,7 @@ public class HomeQuizListFragment extends Fragment
 
     // This is used to create the warning and add dialog
     private void createDialogs() {
-        deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete), this);
+        deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete_quiz), this);
         addDialog = EditTextDialog.create(getString(R.string.add_quiz_message), this);
         addDialog.setTextFilter(
                 text -> {
@@ -260,6 +260,9 @@ public class HomeQuizListFragment extends Fragment
                 progressBar.setVisibility(GONE);
                 // TODO send back to data base etc.
             }
+            // When the user decides to stop the edition without saving the changes the
+            // EditQuizActivity will return with RESULT_CANCELED. But we do not need to do anything
+            // in thing in this case.
         }
     }
 

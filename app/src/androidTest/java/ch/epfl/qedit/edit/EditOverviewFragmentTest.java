@@ -9,12 +9,14 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
 import static ch.epfl.qedit.util.Util.createTestQuiz;
 import static ch.epfl.qedit.util.Util.createTestStringPool;
+import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.NEW_QUESTION_REQUEST_CODE;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
@@ -103,9 +105,21 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
 
     @Test
     public void testCanDeleteItem() {
-        item(0).perform(click());
+        String firstQuestionTitle = stringPool.get(testQuiz.getQuestions().get(0).getTitle());
+        onView(withText(firstQuestionTitle)).perform(click());
         itemView(0, R.id.delete_button).perform(click());
-        onView(withText(testQuiz.getQuestions().get(0).getTitle())).check(doesNotExist());
+
+        onView(withText(testRule.getActivity().getString(R.string.warning_delete_question)))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()));
+
+        onDialog(android.R.id.button2).perform(click());
+        onView(withText(firstQuestionTitle)).check(matches(isDisplayed()));
+
+        itemView(0, R.id.delete_button).perform(click());
+        onDialog(android.R.id.button1).perform(click());
+        onView(withText(firstQuestionTitle)).check(doesNotExist());
+
         assertOverlayAt(-1, 4);
     }
 
@@ -196,6 +210,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         for (int i = 0; i < testQuiz.getQuestions().size(); ++i) {
             item(0).perform(click());
             itemView(0, R.id.delete_button).perform(click());
+            onDialog(android.R.id.button1).perform(click());
         }
 
         onView(withId(R.id.empty_list_hint)).check(matches(isDisplayed()));

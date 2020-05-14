@@ -66,7 +66,7 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
         itemView(0, R.id.delete_button).perform(click());
 
         // Check that the confirmation dialog is displayed
-        onView(withText(testRule.getActivity().getString(R.string.warning_delete)))
+        onView(withText(testRule.getActivity().getString(R.string.warning_delete_quiz)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
 
