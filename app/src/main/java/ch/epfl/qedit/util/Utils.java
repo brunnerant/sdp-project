@@ -64,10 +64,7 @@ public class Utils {
     }
 
     public static String regexEmail() { // TODO verif
-        // Source: https://howtodoinjava.com/regex/java-regex-validate-email-address/
-        final String regexEmail =
-                "^[\\\\w!#$%&’*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$";
-
-        return regexEmail;
+        // Source: regex n°2 on https://howtodoinjava.com/regex/java-regex-validate-email-address/
+        return "^[A-Za-z0-9+_.-]+@(.+)$";
     }
 }

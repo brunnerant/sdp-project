@@ -6,7 +6,5 @@
         android:id="@+id/add"
         android:icon="@drawable/ic_add_editor_mode"
         android:title="@string/add_quiz"
-        app:showAsAction="always"
-
-        />
+        app:showAsAction="always" />
 </menu>

@@ -19,6 +19,9 @@
     <string name="log_in_action_label">Connexion</string>
     <string name="sign_up_button_text">Inscription</string>
     <string name="sign_up_action_label">Inscription</string>
+
+    <string name="hint_first_name">Prénom</string>
+    <string name="hint_last_name">Nom</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Mot de passe</string>
     <string name="hint_password_confirmation">Confirmation du mot de passe</string>

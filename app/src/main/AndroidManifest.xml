@@ -66,16 +66,6 @@
         </activity>
 
         <activity
-            android:name=".view.login.TokenLogInActivity"
-            android:label="@string/title_activity_token_log_in">
-            <intent-filter>
-                <action android:name="android.intent.action.TOKENLOGIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".view.home.HomeActivity"
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"

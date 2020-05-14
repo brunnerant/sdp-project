@@ -48,7 +48,7 @@ import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.QR.ScannerActivity;
 import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
-import ch.epfl.qedit.view.login.TokenLogInActivity;
+
 import java.util.Collection;
 import org.junit.After;
 import org.junit.Before;

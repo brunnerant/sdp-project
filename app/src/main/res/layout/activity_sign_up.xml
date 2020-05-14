@@ -18,10 +18,41 @@
         android:contentDescription="@string/qedit_logo_description"
         app:layout_constraintBottom_toTopOf="@+id/spinner_language_selection"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.312"
+        app:layout_constraintVertical_bias="0.212"
         app:srcCompat="@mipmap/qedit_light" />
+
+    <EditText
+        android:id="@+id/field_first_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:backgroundTint="@color/colorLogInFields"
+        android:hint="@string/hint_first_name"
+        android:imeOptions="actionDone"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_qedit_logo" />
+
+    <EditText
+        android:id="@+id/field_last_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:backgroundTint="@color/colorLogInFields"
+        android:hint="@string/hint_last_name"
+        android:imeOptions="actionDone"
+        android:inputType="textPersonName"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/field_first_name" />
 
     <EditText
         android:id="@+id/field_email"
@@ -36,7 +67,7 @@
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_qedit_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/field_last_name" />
 
     <EditText
         android:id="@+id/field_password"
@@ -54,7 +85,7 @@
         app:layout_constraintTop_toBottomOf="@+id/field_email" />
 
     <EditText
-        android:id="@+id/field_password_verification"
+        android:id="@+id/field_password_confirmation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
@@ -78,7 +109,7 @@
         android:text="@string/sign_up_button_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/field_password_verification" />
+        app:layout_constraintTop_toBottomOf="@+id/field_password_confirmation" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

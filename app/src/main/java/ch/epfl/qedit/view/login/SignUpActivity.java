@@ -16,17 +16,15 @@ import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.FirebaseDBService;
-import ch.epfl.qedit.util.Utils;
-import ch.epfl.qedit.view.home.HomeActivity;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    private EditText emailField, passwordField;
+    private EditText firstNameField, lastNameField, emailField, passwordField, passwordConfirmationField;
     private Button signUpButton;
     private ProgressBar progressBar;
 
-    private String firstName = "jsdf";
-    private String lastName = "dhdf";
+    private String firstName;
+    private String lastName;
 
     private FirebaseAuth firebaseAuth;
 
@@ -39,15 +37,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         initializeViews();
 
-        firstName = "moi";
-        lastName = "toi";
-
         signUpButton.setOnClickListener(v -> signUp());
     }
 
     private void initializeViews() {
+        firstNameField = findViewById(R.id.field_first_name);
+        lastNameField = findViewById(R.id.field_last_name);
         emailField = findViewById(R.id.field_email);
         passwordField = findViewById(R.id.field_password);
+        passwordConfirmationField = findViewById(R.id.field_password_confirmation);
         signUpButton = findViewById(R.id.button_sign_up);
         progressBar = findViewById(R.id.progress_bar);
     }
@@ -55,6 +53,8 @@ public class SignUpActivity extends AppCompatActivity {
     private void signUp() {
         progressBar.setVisibility(View.VISIBLE);
 
+        firstName = firstNameField.getText().toString();
+        lastName = lastNameField.getText().toString();
         String email, password;
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
@@ -103,7 +103,6 @@ public class SignUpActivity extends AppCompatActivity {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             // User is signed in
-            String email = firebaseUser.getEmail();
             String uid = firebaseUser.getUid();
 
             FirebaseDBService firebaseDBService = new FirebaseDBService();
