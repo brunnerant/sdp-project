@@ -4,14 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
@@ -61,7 +58,7 @@ public class SignUpActivity extends AppCompatActivity
         signUpButton.setOnClickListener(v -> signUp());
         textViewLogInInstead.setOnClickListener(v -> logInInstead());
 
-        initializeLanguage();
+        Util.initializeLanguage(this, this);
     }
 
     @Override
@@ -107,21 +104,7 @@ public class SignUpActivity extends AppCompatActivity
         signUpButton = findViewById(R.id.button_sign_up);
         progressBar = findViewById(R.id.progress_bar);
         textViewLogInInstead = findViewById(R.id.log_in_instead);
-        updateLogInInsteadText();
-    }
-
-    private void initializeLanguage() {
-        // Create spinner (language list)
-        Spinner languageSelectionSpinner = findViewById(R.id.spinner_language_selection);
-        // Find app's current language position in languages list
-        int positionInLanguageList =
-                Util.languagePositionInList(resources, Util.getCurrentLanguageCode());
-        // Set current language in spinner at startup
-        languageSelectionSpinner.setSelection(positionInLanguageList, false);
-        // Set listener
-        languageSelectionSpinner.setOnItemSelectedListener(this);
-        // Set page title to display it in the right language
-        setTitle(R.string.title_activity_sign_up);
+        Util.updateRedirectionText(resources, textViewLogInInstead, R.string.log_in_instead);
     }
 
     /**
@@ -142,21 +125,9 @@ public class SignUpActivity extends AppCompatActivity
         passwordField.setHint(resources.getString(R.string.hint_password));
         passwordConfirmationField.setHint(resources.getString(R.string.hint_password_confirmation));
         signUpButton.setText(resources.getString(R.string.sign_up_button_text));
-        updateLogInInsteadText();
+        Util.updateRedirectionText(resources, textViewLogInInstead, R.string.log_in_instead);
 
         setTitle(resources.getString(R.string.title_activity_sign_up));
-    }
-
-    private void updateLogInInsteadText() {
-        int colorAlreadySignedUp = resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
-        Spanned coloredText =
-                Html.fromHtml(
-                        "<font color='"
-                                + colorAlreadySignedUp
-                                + "'>"
-                                + resources.getString(R.string.log_in_instead)
-                                + "</font>");
-        textViewLogInInstead.setText(coloredText);
     }
 
     private boolean checkInputValidity() {
