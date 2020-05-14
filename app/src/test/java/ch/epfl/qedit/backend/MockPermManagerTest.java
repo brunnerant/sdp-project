@@ -1,11 +1,5 @@
 package ch.epfl.qedit.backend;
 
-import org.junit.Test;
-
-import ch.epfl.qedit.backend.permission.MockPermManager;
-import ch.epfl.qedit.backend.permission.PermManagerFactory;
-import ch.epfl.qedit.backend.permission.PermissionManager;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -14,6 +8,11 @@ import static org.mockito.AdditionalMatchers.aryEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+
+import ch.epfl.qedit.backend.permission.MockPermManager;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.backend.permission.PermissionManager;
+import org.junit.Test;
 
 public class MockPermManagerTest {
     // Note that in all tests, we pass null when the activity is needed. This is because the
