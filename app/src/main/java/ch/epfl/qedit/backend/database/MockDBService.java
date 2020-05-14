@@ -3,6 +3,7 @@ package ch.epfl.qedit.backend.database;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import ch.epfl.qedit.backend.Util;
+import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
@@ -146,8 +147,8 @@ public class MockDBService implements DatabaseService {
         quizzes.put("quiz3", MockQuiz.createTestMockQuiz2());
 
         users = new HashMap<>();
-        users.put("v5ns9OMqV4hH7jwD8S5w", createAnthony());
-        users.put("R4rXRVU3EMkgm5YEW52Q", createCosme());
+        users.put(MockAuthService.ANTHONY_IOZZIA_ID, createAnthony());
+        users.put(MockAuthService.COSME_JORDAN_ID, createCosme());
     }
 
     private User createAnthony() {
