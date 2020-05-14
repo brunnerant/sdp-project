@@ -109,10 +109,6 @@ public class EditQuizSettingsDialog extends DialogFragment
         // Setup basic elements of the dialog
         View view = getArgumentsAndSetView();
 
-        // Setup the EditText for the title
-        editTitle = view.findViewById(R.id.edit_quiz_title);
-        editTitle.setInputType(InputType.TYPE_CLASS_TEXT);
-
         if (quiz != null && stringPool != null) {
             setupModifyingExistingQuiz(view);
         } else {
@@ -166,7 +162,8 @@ public class EditQuizSettingsDialog extends DialogFragment
     }
 
     /**
-     * Gets all the arguments that are passes to the dialog and inflates the view
+     * Gets all the arguments that are passes to the dialog, inflates the view and sets up the
+     * EditTExt for the title
      *
      * @return The inflated view
      */
@@ -176,7 +173,13 @@ public class EditQuizSettingsDialog extends DialogFragment
         quiz = (Quiz) getArguments().getSerializable(QUIZ_ID);
 
         LayoutInflater inflater = Objects.requireNonNull(requireActivity()).getLayoutInflater();
-        return inflater.inflate(R.layout.fragment_edit_quiz_settings, null);
+        View view = inflater.inflate(R.layout.fragment_edit_quiz_settings, null);
+
+        // Setup the EditText for the title
+        editTitle = view.findViewById(R.id.edit_quiz_title);
+        editTitle.setInputType(InputType.TYPE_CLASS_TEXT);
+
+        return view;
     }
 
     /**
