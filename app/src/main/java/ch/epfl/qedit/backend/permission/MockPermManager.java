@@ -2,10 +2,11 @@ package ch.epfl.qedit.backend.permission;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.idling.CountingIdlingResource;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This class is used to mock the android permission manager. It can be used to test what happens
@@ -26,8 +27,12 @@ public class MockPermManager implements PermissionManager {
     // state UnkownPositive.
     private final Map<String, State> permStates;
 
+    // This is for espresso tests to wait
+    CountingIdlingResource idlingResource;
+
     public MockPermManager() {
         this.permStates = new HashMap<>();
+        this.idlingResource = new CountingIdlingResource("MockPermService");
     }
 
     /**
@@ -113,14 +118,17 @@ public class MockPermManager implements PermissionManager {
 
         // We don't pass the result immediately, because it could cause issues. It is not a good
         // idea to grant permissions before the request was terminated, so we wait a little bit.
-        new Timer()
-                .schedule(
-                        new TimerTask() {
-                            @Override
-                            public void run() {
-                                callback.onPermissionResult(permissions, result);
-                            }
+        idlingResource.increment();
+        new Handler()
+                .postDelayed(
+                        () -> {
+                            callback.onPermissionResult(permissions, result);
+                            idlingResource.decrement();
                         },
                         100);
+    }
+
+    public IdlingResource getIdlingResource() {
+        return idlingResource;
     }
 }
