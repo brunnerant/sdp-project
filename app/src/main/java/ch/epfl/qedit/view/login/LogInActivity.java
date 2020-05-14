@@ -86,7 +86,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
         setLanguage(languageCode);
         updateTexts();
-        Utils.showToastChangedLanguage(pos, Toast.LENGTH_SHORT, context, resources);
+        Utils.showToastChangedLanguage(pos, context, resources);
     }
 
     @Override
@@ -184,7 +184,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                         (user, throwable) -> {
                             if (throwable != null) {
                                 Utils.showToast(
-                                        R.string.database_error, Toast.LENGTH_SHORT, context, resources);
+                                        R.string.database_error, context, resources);
                             } else {
                                 bundle.putSerializable(USER, user);
                                 intent.putExtras(bundle);
@@ -198,7 +198,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     private void onLogInFailed() {
         progressBar.setVisibility(View.GONE);
         Utils.showToast(
-                R.string.log_in_fail, Toast.LENGTH_SHORT, context, resources);
+                R.string.log_in_fail, context, resources);
     }
 
     private void signUpInstead() {

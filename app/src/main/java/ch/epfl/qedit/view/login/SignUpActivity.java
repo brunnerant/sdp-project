@@ -94,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
         setLanguage(languageCode);
         updateTexts();
-        Utils.showToastChangedLanguage(pos, Toast.LENGTH_SHORT, context, resources);
+        Utils.showToastChangedLanguage(pos, context, resources);
     }
 
     @Override
@@ -184,7 +184,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                             passwordConfirmationField,
                             matchPsw,
                             resources,
-                            R.string.invalid_confirmation_psw);
+                            R.string.invalid_password_confirmation);
             if (confirmation == null) return false;
         }
 
@@ -213,13 +213,13 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     private void onSignUpFail() {
         progressBar.setVisibility(View.GONE);
         Utils.showToast(
-                R.string.sign_up_fail, Toast.LENGTH_SHORT, context, resources);
+                R.string.sign_up_fail, context, resources);
     }
 
     private void onSignUpSuccessful(String userId) {
         progressBar.setVisibility(View.GONE);
 
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, LogInActivity.class);
 
         FirebaseDBService db = new FirebaseDBService();
         db.createUser(userId, firstName, lastName)
@@ -227,7 +227,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         (result, throwable) -> {
                             if (throwable != null) {
                                 Utils.showToast(
-                                        R.string.database_error, Toast.LENGTH_SHORT, context, resources);
+                                        R.string.database_error, context, resources);
                             } else {
                                 startActivity(intent);
                             }
@@ -236,7 +236,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         Utils.putStringInPrefs(this, "user_id", userId);
 
         Utils.showToast(
-                R.string.sign_up_success, Toast.LENGTH_SHORT, context, resources);
+                R.string.sign_up_success, context, resources);
     }
 
     private void logInInstead() {

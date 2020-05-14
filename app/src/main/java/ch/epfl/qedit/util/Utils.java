@@ -60,22 +60,22 @@ public class Utils {
      * @param languagePos position of the language in the spinner
      */
     public static void showToastChangedLanguage(
-            int languagePos, int toastType, Context context, Resources resources) {
+            int languagePos, Context context, Resources resources) {
         String stringToDisplay =
                 resources.getString(R.string.language_changed)
                         + " "
                         + resources.getStringArray(R.array.languages_list)[languagePos];
 
-        showToast(stringToDisplay, toastType, context);
+        showToast(stringToDisplay, context);
     }
 
-    public static void showToast(String stringToDisplay, int toastType, Context context) {
-        Toast.makeText(context, stringToDisplay, toastType).show();
+    public static void showToast(String stringToDisplay, Context context) {
+        Toast.makeText(context, stringToDisplay, Toast.LENGTH_SHORT).show();
     }
 
     public static void showToast(
-            int stringId, int toastType, Context context, Resources resources) {
-        showToast(resources.getString(stringId), toastType, context);
+            int stringId, Context context, Resources resources) {
+        showToast(resources.getString(stringId), context);
     }
 
     /**
