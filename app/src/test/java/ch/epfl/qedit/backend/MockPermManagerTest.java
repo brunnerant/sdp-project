@@ -3,8 +3,10 @@ package ch.epfl.qedit.backend;
 import org.junit.Test;
 
 import ch.epfl.qedit.backend.permission.MockPermManager;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import ch.epfl.qedit.backend.permission.PermissionManager;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.AdditionalMatchers.aryEq;
@@ -64,5 +66,12 @@ public class MockPermManagerTest {
         assertTrue(manager.shouldAskAgain(null, "accepted"));
         assertTrue(manager.shouldAskAgain(null, "refused"));
         assertFalse(manager.shouldAskAgain(null, "denied"));
+    }
+
+    @Test
+    public void testThatFactoryCanSetInstance() {
+        MockPermManager manager = new MockPermManager();
+        PermManagerFactory.setInstance(manager);
+        assertEquals(manager, PermManagerFactory.getInstance());
     }
 }
