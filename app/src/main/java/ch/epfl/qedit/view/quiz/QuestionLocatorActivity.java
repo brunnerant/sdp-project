@@ -2,7 +2,6 @@ package ch.epfl.qedit.view.quiz;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -10,24 +9,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import java.util.Objects;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.location.LocServiceFactory;
 import ch.epfl.qedit.backend.location.LocationService;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.backend.permission.PermissionActivity;
+import ch.epfl.qedit.backend.permission.PermissionManager;
 import ch.epfl.qedit.util.LocaleHelper;
+import java.util.Objects;
 
 /**
  * This activity handles the navigation to the next question in treasure hunt quizzes. Because we
  * found it nicer, we don't show the location of the next question, but rather the direction and
  * distance, so that it gamifies the process.
  */
-public class QuestionLocatorActivity extends AppCompatActivity implements LocationListener {
+public class QuestionLocatorActivity extends PermissionActivity
+        implements LocationListener, PermissionManager.OnPermissionResult {
 
     // Those are the keys of the arguments passed with the bundle to this activity
     public static final String QUESTION_LOCATION = "ch.epfl.qedit.view.quiz.QUESTION_LOCATION";
@@ -39,7 +36,6 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
             new String[] {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_NETWORK_STATE,
             };
 
     // This is the interval at which we would like to receive location updates
@@ -49,8 +45,10 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
     private Location questionLoc;
     private float questionRadius;
 
-    // This is the location service from which we retrieve the phone's location
+    // This is the location service from which we retrieve the phone's location, and the
+    // location manager from which we request permissions
     private LocationService locService;
+    private PermissionManager permManager;
 
     // Those are the text views that display the direction and distance to the user
     private TextView text1;
@@ -84,30 +82,26 @@ public class QuestionLocatorActivity extends AppCompatActivity implements Locati
         button = findViewById(R.id.question_locator_button);
         setUnknownUI();
 
-        // We subscribe to the location service through the factory
+        // We retrieve the two singleton backend services
         locService = LocServiceFactory.getInstance(getApplicationContext());
+        permManager = PermManagerFactory.getInstance();
 
         // If we couldn't subscribe, we need to ask for permissions for the location
         if (!locService.subscribe(this, LOCATION_INTERVAL)) askPermissions();
     }
 
     private void askPermissions() {
-        ActivityCompat.requestPermissions(this, REQUESTED_PERMISSIONS, REQUEST_CODE);
+        permManager.requestPermissions(this, this, REQUESTED_PERMISSIONS);
     }
 
     @Override
-    public void onRequestPermissionsResult(
-            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode != REQUEST_CODE || permissions.length != REQUESTED_PERMISSIONS.length)
-            return;
-
-        for (int i = 0; i < REQUESTED_PERMISSIONS.length; i++) {
-            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+    public void onPermissionResult(String[] permissions, boolean[] granted) {
+        for (int i = 0; i < granted.length; i++) {
+            if (!granted[i]) {
                 // If the permissions were not granted, we just show an error UI to the user
                 // If it is the first time the user denies, we show the button, otherwise we
                 // just give up and show nothing.
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[i]))
-                    setPermissionUI();
+                if (permManager.shouldAskAgain(this, permissions[i])) setPermissionUI();
                 else button.setVisibility(View.GONE);
 
                 return;

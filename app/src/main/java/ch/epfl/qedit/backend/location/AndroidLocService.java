@@ -5,7 +5,6 @@ import android.content.Context;
 import android.location.Criteria;
 import android.location.LocationListener;
 import android.location.LocationManager;
-
 import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import ch.epfl.qedit.backend.permission.PermissionManager;
 
@@ -32,9 +31,9 @@ public class AndroidLocService implements LocationService {
         // We need the permission manager to check the location permissions
         PermissionManager permManager = PermManagerFactory.getInstance();
 
-        if (!permManager.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ||
-                !permManager.checkPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION))
-            return false;
+        if (!permManager.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                || !permManager.checkPermission(
+                        context, Manifest.permission.ACCESS_COARSE_LOCATION)) return false;
 
         // Otherwise, we subscribe to the location service
         manager.requestLocationUpdates(interval, 0, criteria, listener, null);

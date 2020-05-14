@@ -14,7 +14,7 @@ public interface PermissionManager {
      * denied the permissions that were requested.
      */
     interface OnPermissionResult {
-        void handle(boolean[] granted);
+        void onPermissionResult(String[] permissions, boolean[] granted);
     }
 
     /**

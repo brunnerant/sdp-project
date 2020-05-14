@@ -53,7 +53,9 @@ public class MockPermManagerTest {
 
         manager.requestPermissions(null, callback, "granted", "accepted", "refused", "denied");
         verify(callback, timeout(1000).times(1))
-                .handle(aryEq(new boolean[] {true, true, false, false}));
+                .onPermissionResult(
+                        aryEq(new String[] {"granted", "accepted", "refused", "denied"}),
+                        aryEq(new boolean[] {true, true, false, false}));
     }
 
     @Test

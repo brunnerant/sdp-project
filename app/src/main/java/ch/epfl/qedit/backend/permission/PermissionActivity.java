@@ -17,6 +17,6 @@ public class PermissionActivity extends AppCompatActivity {
         // real permission manager this method will be called, so we can safely cast the
         // permission manager to the correct type, and forward it the response.
         AndroidPermManager manager = (AndroidPermManager) PermManagerFactory.getInstance();
-        manager.onRequestPermissionResult(requestCode, grantResults);
+        manager.onRequestPermissionResult(requestCode, permissions, grantResults);
     }
 }

@@ -4,11 +4,10 @@ import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
-import java.util.HashSet;
-import java.util.Set;
-
 import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import ch.epfl.qedit.backend.permission.PermissionManager;
+import java.util.HashSet;
+import java.util.Set;
 
 /** This class is used to write tests for the parts of the app that need the location service. */
 public class MockLocService implements LocationService {
@@ -34,8 +33,9 @@ public class MockLocService implements LocationService {
         // We need the permission manager to check the location permissions
         PermissionManager permManager = PermManagerFactory.getInstance();
 
-        if (permManager.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) &&
-                permManager.checkPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (permManager.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                && permManager.checkPermission(
+                        context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
             listeners.add(listener);
             return true;
         } else {

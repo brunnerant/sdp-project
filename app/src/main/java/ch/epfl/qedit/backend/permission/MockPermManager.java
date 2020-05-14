@@ -2,7 +2,6 @@ package ch.epfl.qedit.backend.permission;
 
 import android.app.Activity;
 import android.content.Context;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -119,7 +118,7 @@ public class MockPermManager implements PermissionManager {
                         new TimerTask() {
                             @Override
                             public void run() {
-                                callback.handle(result);
+                                callback.onPermissionResult(permissions, result);
                             }
                         },
                         100);
