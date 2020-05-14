@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.edit;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.view.edit.EditSettingsActivity.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
@@ -9,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
@@ -126,9 +127,13 @@ public class EditQuizActivity extends AppCompatActivity
 
     /** This function handles toggling the overview fragment */
     private void handleToggleOverview() {
-        findViewById(R.id.quiz_overview_container)
-                .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
-        findViewById(R.id.separator).setVisibility(overviewActive ? View.GONE : View.VISIBLE);
+        if (overviewActive) {
+            findViewById(R.id.quiz_overview_container).setVisibility(GONE);
+            findViewById(R.id.separator).setVisibility(GONE);
+        } else {
+            findViewById(R.id.quiz_overview_container).setVisibility(VISIBLE);
+            findViewById(R.id.separator).setVisibility(VISIBLE);
+        }
         overviewActive = !overviewActive;
     }
 
