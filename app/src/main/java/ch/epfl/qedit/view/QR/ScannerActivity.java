@@ -1,16 +1,27 @@
 package ch.epfl.qedit.view.QR;
 
 import static android.Manifest.permission.CAMERA;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.DatabaseService;
+import ch.epfl.qedit.backend.database.Util;
+import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import com.google.zxing.Result;
+import java.util.concurrent.CompletableFuture;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /** * this class is largely inspired from priyanka pakhale work available on github ** */
@@ -19,10 +30,15 @@ public class ScannerActivity extends AppCompatActivity
 
     private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
+    private DatabaseService db;
+    private String quizId;
+    private ConfirmDialog resultDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db = DatabaseFactory.getInstance();
 
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
@@ -94,26 +110,36 @@ public class ScannerActivity extends AppCompatActivity
 
     @Override
     public void handleResult(Result result) {
-        /*Log.d("QRCodeScanner", result.getText());
-        Log.d("QRCodeScanner", result.getBarcodeFormat().toString());*/
-        ConfirmDialog.create(result.getText(), this);
-        /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan Result");
-        builder.setPositiveButton(
-                "OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        scannerView.resumeCameraPreview(ScannerActivity.this);
-                    }
-                });
-        builder.setMessage(result.getText());
-        AlertDialog alert1 = builder.create();
-        alert1.show();*/
+        quizId = result.getText();
+        Log.d(result.getText(), "hey");
+
+        ConfirmDialog.create("Do you want to load the quiz " + result.getText(), this)
+                .show(getSupportFragmentManager(), null);
     }
 
     @Override
     public void onConfirm(ConfirmDialog dialog) {
-        return;
+        CompletableFuture<StringPool> stringPool =
+                db.getQuizLanguages(quizId)
+                        .thenCompose(
+                                languages ->
+                                        db.getQuizStringPool(
+                                                quizId, Util.getBestLanguage(languages, this)));
+        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizId);
+        CompletableFuture.allOf(stringPool, quizStructure)
+                .whenComplete(
+                        (aVoid, throwable) -> {
+                            if (throwable != null)
+                                Toast.makeText(this, R.string.database_error, Toast.LENGTH_SHORT)
+                                        .show();
+                            else launchQuizActivity(quizStructure.join(), stringPool.join());
+                        });
+    }
+
+    private void launchQuizActivity(Quiz quiz, StringPool pool) {
+        Intent intent = new Intent(ScannerActivity.this, QuizActivity.class);
+        quiz.instantiateLanguage(pool);
+        intent.putExtra(QUIZ_ID, quiz);
+        startActivity(intent);
     }
 }

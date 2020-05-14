@@ -4,7 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static ch.epfl.qedit.view.QR.QRGeneratorFragment.QUIZ_ID;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 
 import android.os.Bundle;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;

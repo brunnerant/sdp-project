@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view.QR;
 
 import static android.content.Context.WINDOW_SERVICE;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -19,7 +20,6 @@ import ch.epfl.qedit.R;
 import com.google.zxing.WriterException;
 
 public class QRGeneratorFragment extends Fragment {
-    public static final String QUIZ_ID = "ch.epfl.qedit.view.quiz_id";
     String quizId;
     ImageView qrCode;
     Bitmap bitmap;

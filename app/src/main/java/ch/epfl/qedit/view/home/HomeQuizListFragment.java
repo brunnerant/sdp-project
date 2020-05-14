@@ -22,10 +22,10 @@ import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
+import ch.epfl.qedit.backend.database.Util;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.EditTextDialog;
@@ -194,7 +194,9 @@ public class HomeQuizListFragment extends Fragment
                 db.getQuizLanguages(quizID)
                         .thenCompose(
                                 languages ->
-                                        db.getQuizStringPool(quizID, getBestLanguage(languages)));
+                                        db.getQuizStringPool(
+                                                quizID,
+                                                Util.getBestLanguage(languages, requireContext())));
 
         CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
 
@@ -210,16 +212,6 @@ public class HomeQuizListFragment extends Fragment
                             else
                                 launchEditSettingsActivity(quizStructure.join(), stringPool.join());
                         });
-    }
-
-    private String getBestLanguage(List<String> languages) {
-        String appLanguage = LocaleHelper.getLanguage(requireContext());
-
-        // If the quiz was translated in the application language, pick that version,
-        // otherwise we pick the first one. Note that we could have some more complex logic
-        // here, for example trying english first, and then falling back.
-        if (languages.contains(appLanguage)) return appLanguage;
-        else return languages.get(0);
     }
 
     // Launches the quiz activity with the given quiz. This is used when a quiz is selected.

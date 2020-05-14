@@ -149,7 +149,6 @@ public class QuizActivityTest {
     public void testDoneNoCLicked() {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
-        // onView(withText("No")).inRoot(isDialog()).perform(click());
         onView(withId(android.R.id.button2)).perform(click());
         finishActivity();
     }
@@ -159,7 +158,6 @@ public class QuizActivityTest {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        // onView(withText("Yes")).inRoot(isDialog()).perform(click());
         onView(withText("number of good answers = 0"))
                 .inRoot(
                         withDecorView(

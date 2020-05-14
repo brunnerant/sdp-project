@@ -1,11 +1,13 @@
 package ch.epfl.qedit.backend.database;
 
+import android.content.Context;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
+import ch.epfl.qedit.util.LocaleHelper;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -205,5 +207,15 @@ public final class Util {
                 .addOnFailureListener(e -> error(future, e.getMessage()));
 
         return future;
+    }
+
+    public static String getBestLanguage(List<String> languages, Context context) {
+        String appLanguage = LocaleHelper.getLanguage(context);
+
+        // If the quiz was translated in the application language, pick that version,
+        // otherwise we pick the first one. Note that we could have some more complex logic
+        // here, for example trying english first, and then falling back.
+        if (languages.contains(appLanguage)) return appLanguage;
+        else return languages.get(0);
     }
 }
