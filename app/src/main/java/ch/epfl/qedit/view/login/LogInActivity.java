@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.backend.database.FirebaseDBService;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Utils;
@@ -151,34 +153,34 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void logIn() {
-
+        // Check validity of each email and password before passing it to the Auth Service
         Predicate<String> emailFormat = str -> str.matches(Utils.REGEX_EMAIL);
         Predicate<String> passwordFormat = str -> str.length() >= 6;
         String email = checkString(emailField, emailFormat, resources, R.string.invalid_email);
         String password =
                 checkString(passwordField, passwordFormat, resources, R.string.invalid_password);
 
+        // If the email or password is invalid, abort login
         if (email == null || password == null) return;
-
+        // sanitize the email by removing starting and trailing space
         email = email.trim();
 
         progressBar.setVisibility(View.VISIBLE);
-
+        // Ask the authentication service for login
         auth.logIn(email, password)
                 .whenComplete(
                         (userId, error) -> {
+                            progressBar.setVisibility(View.GONE);
                             if (error != null) onLogInFailed();
                             else onLogInSuccessful(userId);
                         });
     }
 
     private void onLogInSuccessful(String userId) {
-        progressBar.setVisibility(View.GONE);
-
         Intent intent = new Intent(this, HomeActivity.class);
         Bundle bundle = new Bundle();
 
-        FirebaseDBService db = new FirebaseDBService();
+        DatabaseService db = DatabaseFactory.getInstance();
         db.getUser(userId)
                 .whenComplete(
                         (user, throwable) -> {
