@@ -31,8 +31,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        testInstrumentationRunnerArguments clearPackageData: 'true'
     }
     buildTypes {
         debug {
@@ -44,7 +42,6 @@ android {
         }
     }
     testOptions {
-        //execution 'ANDROIDX_TEST_ORCHESTRATOR'
         unitTests.returnDefaultValues = true
         unitTests.includeAndroidResources = true
     }
@@ -137,7 +134,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     androidTestImplementation 'com.21buttons:fragment-test-rule:2.0.1'
     androidTestImplementation 'org.mockito:mockito-android:3.3.3'
-    androidTestUtil 'androidx.test:orchestrator:1.2.0'
     debugImplementation 'com.21buttons:fragment-test-rule-extras:2.0.1'
     implementation 'androidx.mediarouter:mediarouter:1.1.0'
 }

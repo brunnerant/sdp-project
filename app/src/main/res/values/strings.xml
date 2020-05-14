@@ -128,7 +128,6 @@
     <string name="database_error">An error occurred connecting to the database</string>
     <string name="card_icon">card icon</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>
