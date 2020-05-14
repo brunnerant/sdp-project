@@ -35,7 +35,7 @@ public class AndroidPermManager implements PermissionManager {
 
     @Override
     public void requestPermissions(
-            PermissionActivity activity, String[] permissions, OnPermissionResult callback) {
+            PermissionActivity activity, OnPermissionResult callback, String... permissions) {
         callbacks.put(nextRequestCode++, callback);
         ActivityCompat.requestPermissions(activity, permissions, nextRequestCode);
     }

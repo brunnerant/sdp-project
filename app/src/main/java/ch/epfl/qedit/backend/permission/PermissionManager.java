@@ -38,11 +38,10 @@ public interface PermissionManager {
     /**
      * Requests the given permissions asynchronously, and triggers the given callback once the user
      * responded to the request.
-     *
-     * @param activity the activity requesting the permissions
-     * @param permissions the permissions that the app wants to request.
+     *  @param activity the activity requesting the permissions
      * @param callback the callback that will be triggered once the user answered.
+     * @param permissions the permissions that the app wants to request.
      */
     void requestPermissions(
-            PermissionActivity activity, String[] permissions, OnPermissionResult callback);
+            PermissionActivity activity, OnPermissionResult callback, String... permissions);
 }

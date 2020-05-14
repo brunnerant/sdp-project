@@ -67,6 +67,8 @@ public class MockPermManager implements PermissionManager {
         for (String permission : permissions) permStates.put(permission, State.Denied);
     }
 
+    // Returns the state of the given permission. If it is not in the map of permissions states,
+    // we assume that it has state UnknownPositive.
     private State getState(String permission) {
         return permStates.getOrDefault(permission, State.UnknownPositive);
     }
@@ -78,12 +80,16 @@ public class MockPermManager implements PermissionManager {
 
     @Override
     public boolean shouldAskAgain(PermissionActivity activity, String permission) {
-        return getState(permission) != State.Denied;
+        State state = getState(permission);
+
+        // We should only keep asking if the permission was not granted, and if the user
+        // didn't deny it forever (don't ask again button).
+        return state != State.Denied && state != State.Granted;
     }
 
     @Override
     public void requestPermissions(
-            PermissionActivity activity, String[] permissions, OnPermissionResult callback) {
+            PermissionActivity activity, OnPermissionResult callback, String... permissions) {
         boolean[] result = new boolean[permissions.length];
 
         for (int i = 0; i < result.length; i++) {
@@ -113,6 +119,6 @@ public class MockPermManager implements PermissionManager {
                                 callback.handle(result);
                             }
                         },
-                        1000);
+                        100);
     }
 }
