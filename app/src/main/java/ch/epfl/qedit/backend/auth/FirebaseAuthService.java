@@ -37,7 +37,7 @@ public class FirebaseAuthService implements AuthenticationService {
                                     DocumentSnapshot document = task.getResult();
                                     if (document != null && document.exists())
                                         response = Response.ok(getUserFromDocument(document));
-                                    else response = Response.error(WRONG_TOKEN);
+                                    else response = Response.error(CONNECTION_ERROR);
                                 } else {
                                     response = Response.error(CONNECTION_ERROR);
                                 }

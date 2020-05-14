@@ -20,7 +20,6 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.util.LocaleHelper;
-
 import java.util.Locale;
 import org.junit.After;
 import org.junit.Before;

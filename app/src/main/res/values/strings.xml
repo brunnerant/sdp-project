@@ -40,13 +40,13 @@
     </string-array>
     <string name="language_changed">Language changed to</string>
 
-    <!-- Log in, sign up, token log in -->
+    <!-- Log in, log out, sign up -->
     <string name="title_activity_log_in">Log in</string>
     <string name="title_activity_sign_up">Sign up</string>
-    <string name="title_activity_token_log_in">Token log in</string>
 
     <string name="log_in_button_text">Log in</string>
     <string name="log_in_action_label">Log in</string>
+    <string name="log_out">Log out</string>
     <string name="sign_up_button_text">Sign up</string>
     <string name="sign_up_action_label">Sign up</string>
 
@@ -55,13 +55,11 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_password_confirmation">Confirm password</string>
-    <string name="hint_token">Token</string>
 
     <string name="input_cannot_be_empty">Cannot be empty</string>
     <string name="invalid_email">Invalid email</string>
     <string name="invalid_password">Password must be at least 6 characters</string>
     <string name="invalid_password_confirmation">Password not identical</string>
-    <string name="invalid_token">Invalid token</string>
 
     <string name="already_signed_up">I already have an account -> Log in</string>
     <string name="not_signed_up">I don\'t have an account -> Sign up</string>
@@ -154,7 +152,6 @@
     <string name="exclamation_point">!</string>
     <string name="database_error">An error occurred connecting to the database</string>
     <string name="card_icon">card icon</string>
-
 
 
 </resources>

@@ -1,7 +1,10 @@
 package ch.epfl.qedit.util;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -63,8 +66,27 @@ public class Utils {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static String regexEmail() { // TODO verif
+    public static String regexEmail() {
         // Source: regex n°2 on https://howtodoinjava.com/regex/java-regex-validate-email-address/
         return "^[A-Za-z0-9+_.-]+@(.+)$";
+    }
+
+    public static void putStringInPrefs(Activity activity, String key, String value) {
+        SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static String getStringInPrefs(Activity activity, String key) {
+        SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
+        return prefs.getString(key, "");
+    }
+
+    public static void removeStringInPrefs(Activity activity, String key) {
+        SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(key);
+        editor.commit();
     }
 }

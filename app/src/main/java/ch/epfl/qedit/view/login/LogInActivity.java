@@ -2,7 +2,6 @@ package ch.epfl.qedit.view.login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SyncStats;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
@@ -16,20 +15,14 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.concurrent.CompletableFuture;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.FirebaseDBService;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.view.home.HomeActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LogInActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -106,11 +99,15 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         progressBar = findViewById(R.id.progress_bar);
         textViewSignUp = findViewById(R.id.not_signed_up);
 
-        int colorNotSignedUpAlreadySignedUp = resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
-        Spanned coloredText = Html.fromHtml(
-                "<font color='" + colorNotSignedUpAlreadySignedUp + "'>"
-                        + resources.getString(R.string.not_signed_up)
-                        + "</font>");
+        int colorNotSignedUpAlreadySignedUp =
+                resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
+        Spanned coloredText =
+                Html.fromHtml(
+                        "<font color='"
+                                + colorNotSignedUpAlreadySignedUp
+                                + "'>"
+                                + resources.getString(R.string.not_signed_up)
+                                + "</font>");
         textViewSignUp.setText(coloredText);
     }
 
@@ -118,7 +115,8 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         // Create spinner (language list)
         Spinner languageSelectionSpinner = findViewById(R.id.spinner_language_selection);
         // Find app's current language position in languages list
-        int positionInLanguageList = Utils.languagePositionInList(resources, Utils.getCurrentLanguageCode());
+        int positionInLanguageList =
+                Utils.languagePositionInList(resources, Utils.getCurrentLanguageCode());
         // Set current language in spinner at startup
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
         // Set listener
@@ -143,11 +141,15 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         passwordField.setHint(resources.getString(R.string.hint_password));
         logInButton.setText(resources.getString(R.string.log_in_button_text));
 
-        int colorNotSignedUpAlreadySignedUp = resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
-        Spanned coloredText = Html.fromHtml(
-                "<font color='" + colorNotSignedUpAlreadySignedUp + "'>"
-                        + resources.getString(R.string.not_signed_up)
-                        + "</font>");
+        int colorNotSignedUpAlreadySignedUp =
+                resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
+        Spanned coloredText =
+                Html.fromHtml(
+                        "<font color='"
+                                + colorNotSignedUpAlreadySignedUp
+                                + "'>"
+                                + resources.getString(R.string.not_signed_up)
+                                + "</font>");
         textViewSignUp.setText(coloredText);
 
         setTitle(resources.getString(R.string.title_activity_log_in));
@@ -174,7 +176,6 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         // Sanitize email
         email = email.trim(); // Remove leading and trailing spaces
 
-        // This regular expression will accept only strings with an '@' in them TODO
         Boolean emailMatches = email.matches(Utils.regexEmail());
         if (!emailIsEmpty && !emailMatches) {
             emailField.setError(resources.getString(R.string.invalid_email));
@@ -187,13 +188,14 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
             fail = true;
         }
 
-        if(fail) {
+        if (fail) {
             return;
         }
 
         progressBar.setVisibility(View.VISIBLE);
 
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+        firebaseAuth
+                .signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                         task -> {
                             if (task.isSuccessful()) {
@@ -205,35 +207,41 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void onLogInSuccessful() {
-        Utils.showToast(R.string.log_in_success, Toast.LENGTH_SHORT, getApplicationContext(), resources);//TODO après
+        Utils.showToast(
+                R.string.log_in_success,
+                Toast.LENGTH_SHORT,
+                getApplicationContext(),
+                resources); // TODO après
         progressBar.setVisibility(View.GONE);
 
-        Intent intent =
-                new Intent(LogInActivity.this, HomeActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         Bundle bundle = new Bundle();
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             // User is signed in
-            String email = firebaseUser.getEmail();
             String uid = firebaseUser.getUid();
 
             FirebaseDBService firebaseDBService = new FirebaseDBService();
-            firebaseDBService.getUser(uid).whenComplete(
-                    (result, throwable) -> {
-                     if (throwable != null || result.getFirstName() == null) {
-                         Toast.makeText(
-                                 context,
-                                 R.string.database_error,
-                                 Toast.LENGTH_SHORT)
-                                 .show();
-                     } else {
-                         bundle.putSerializable(USER, result);
-                         intent.putExtras(bundle);
-                         startActivity(intent);
-                     }
-                    }
-            );
+            firebaseDBService
+                    .getUser(uid)
+                    .whenComplete(
+                            (result, throwable) -> {
+                                if (throwable != null || result.getFirstName() == null) {
+                                    Toast.makeText(
+                                                    context,
+                                                    R.string.database_error,
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+                                } else {
+                                    bundle.putSerializable(USER, result);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                }
+                            });
+
+            // Put the current user id in cache
+            Utils.putStringInPrefs(this, "user_id", uid);
 
         } else {
             // No user is signed in
@@ -242,7 +250,8 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void onLogInFailed() {
-        Utils.showToast(R.string.log_in_fail, Toast.LENGTH_SHORT, getApplicationContext(), resources);
+        Utils.showToast(
+                R.string.log_in_fail, Toast.LENGTH_SHORT, getApplicationContext(), resources);
         progressBar.setVisibility(View.GONE);
     }
 

@@ -8,18 +8,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.database.FirebaseDBService;
+import ch.epfl.qedit.util.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.database.FirebaseDBService;
-
 public class SignUpActivity extends AppCompatActivity {
 
-    private EditText firstNameField, lastNameField, emailField, passwordField, passwordConfirmationField;
+    private EditText firstNameField,
+            lastNameField,
+            emailField,
+            passwordField,
+            passwordConfirmationField;
     private Button signUpButton;
     private ProgressBar progressBar;
 
@@ -60,26 +62,25 @@ public class SignUpActivity extends AppCompatActivity {
         password = passwordField.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "email empty", Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(getApplicationContext(), "email empty", Toast.LENGTH_LONG).show();
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "password empty", Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(getApplicationContext(), "password empty", Toast.LENGTH_LONG).show();
             return;
         }
 
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
+        firebaseAuth
+                .createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
                         task -> {
                             if (task.isSuccessful()) {
                                 onSignUpSuccessful();
                             } else {
                                 Toast.makeText(
-                                        getApplicationContext(),
-                                        "sign up fail",
-                                        Toast.LENGTH_LONG)
+                                                getApplicationContext(),
+                                                "sign up fail",
+                                                Toast.LENGTH_LONG)
                                         .show();
                                 progressBar.setVisibility(View.GONE);
                             }
@@ -87,18 +88,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void onSignUpSuccessful() {
-        Toast.makeText(
-                getApplicationContext(),
-                "sign up success",
-                Toast.LENGTH_LONG)
-                .show();
+        Toast.makeText(getApplicationContext(), "sign up success", Toast.LENGTH_LONG).show();
         progressBar.setVisibility(View.GONE);
 
-
-        Intent intent =
-                new Intent(
-                        SignUpActivity.this, LogInActivity.class);
-
+        Intent intent = new Intent(this, LogInActivity.class);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
@@ -106,24 +99,27 @@ public class SignUpActivity extends AppCompatActivity {
             String uid = firebaseUser.getUid();
 
             FirebaseDBService firebaseDBService = new FirebaseDBService();
-            firebaseDBService.createUser(uid, firstName, lastName).whenComplete(
-                    (result, throwable) -> {
-                        if (throwable != null) {
-                            Toast.makeText(
-                                    getBaseContext(),
-                                    R.string.database_error,
-                                    Toast.LENGTH_SHORT)
-                                    .show();
-                        } else {
-                            startActivity(intent);
-                        }
-                    }
-            );
+            firebaseDBService
+                    .createUser(uid, firstName, lastName)
+                    .whenComplete(
+                            (result, throwable) -> {
+                                if (throwable != null) {
+                                    Toast.makeText(
+                                                    getBaseContext(),
+                                                    R.string.database_error,
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+                                } else {
+                                    startActivity(intent);
+                                }
+                            });
+
+            // Put the current user id in cache
+            Utils.putStringInPrefs(this, "user_id", uid);
 
         } else {
             // No user is signed in
-            //onLogInFailed();
+            // onLogInFailed();
         }
-
     }
 }

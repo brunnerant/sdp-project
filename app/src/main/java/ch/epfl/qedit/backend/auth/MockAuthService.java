@@ -43,7 +43,7 @@ public class MockAuthService implements AuthenticationService {
 
                                 Response<User> response;
                                 if (!userResponses.containsKey(token))
-                                    response = Response.error(WRONG_TOKEN);
+                                    response = Response.error(CONNECTION_ERROR);
                                 else response = userResponses.get(token);
 
                                 idlingResource.decrement();

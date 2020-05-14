@@ -10,13 +10,13 @@
     <!-- Language selection -->
     <string name="language_changed">Langue changée en</string>
 
-    <!-- Log in, sign up, token log in -->
+    <!-- Log in, log out, sign up -->
     <string name="title_activity_log_in">Connexion</string>
     <string name="title_activity_sign_up">Inscription</string>
-    <string name="title_activity_token_log_in">Connexion avec token</string>
 
     <string name="log_in_button_text">Connexion</string>
     <string name="log_in_action_label">Connexion</string>
+    <string name="log_out">Déconnexion</string>
     <string name="sign_up_button_text">Inscription</string>
     <string name="sign_up_action_label">Inscription</string>
 
@@ -25,13 +25,11 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Mot de passe</string>
     <string name="hint_password_confirmation">Confirmation du mot de passe</string>
-    <string name="hint_token">Token</string>
 
     <string name="input_cannot_be_empty">Ne peut pas être vide</string>
     <string name="invalid_email">Email invalide</string>
     <string name="invalid_password">Le mot de passe doit faire 6 caractères minimum</string>
     <string name="invalid_password_confirmation">Mot de passe non identique</string>
-    <string name="invalid_token">Token invalide</string>
 
     <string name="already_signed_up">J\'ai déjà un compte -> Connexion</string>
     <string name="not_signed_up">Je n\'ai pas de compte -> Inscription</string>

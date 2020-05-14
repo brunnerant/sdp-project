@@ -4,7 +4,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
-import static ch.epfl.qedit.view.login.TokenLogInActivity.USER;
+import static ch.epfl.qedit.view.login.LogInActivity.USER;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,10 +26,13 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.view.edit.EditSettingsActivity;
+import ch.epfl.qedit.view.login.LogInActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.EditTextDialog;
 import ch.epfl.qedit.view.util.ListEditView;
+import com.google.firebase.auth.FirebaseAuth;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,12 +142,29 @@ public class HomeQuizListFragment extends Fragment
             case R.id.add:
                 addDialog.show(getParentFragmentManager(), "add_dialog");
                 break;
+            case R.id.log_out:
+                logOut();
+                break;
             case android.R.id.home:
                 requireActivity().onBackPressed();
                 break;
         }
 
         return true;
+    }
+
+    private void logOut() {
+        // Retrieve cached user id
+        String uid = Utils.getStringInPrefs(getActivity(), "user_id");
+
+        // Remove cached user id
+        Utils.removeStringInPrefs(getActivity(), "user_id");
+
+        // Log out
+        FirebaseAuth.getInstance().signOut();
+
+        // Go to log in activity
+        startActivity(new Intent(getActivity(), LogInActivity.class));
     }
 
     // Handles when a user clicked on the button to remove a quiz
