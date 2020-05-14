@@ -8,10 +8,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Intent;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.edit.EditMapsActivity;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
