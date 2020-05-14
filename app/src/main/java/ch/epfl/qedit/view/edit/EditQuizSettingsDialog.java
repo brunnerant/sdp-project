@@ -45,13 +45,13 @@ public class EditQuizSettingsDialog extends DialogFragment
     private Quiz.Builder quizBuilder;
     private boolean editExistingQuiz;
     private StringPool stringPool;
+    private Quiz quiz;
 
     private EditText editTitle;
     private EditTextDialog.TextFilter textFilter = EditTextDialog.NO_FILTER;
     private SubmissionListener listener;
 
     private boolean hasTreasureHunt;
-    private CheckBox treasureHuntCheckbox;
 
     // Only used for new quizzes
     private Spinner languageSelectionSpinner;
@@ -85,14 +85,7 @@ public class EditQuizSettingsDialog extends DialogFragment
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        listener = (SubmissionListener) getArguments().getSerializable(LISTENER_KEY);
-        stringPool = (StringPool) getArguments().getSerializable(STRING_POOL);
-        Quiz quiz = (Quiz) getArguments().getSerializable(QUIZ_ID);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-
-        LayoutInflater inflater = Objects.requireNonNull(requireActivity()).getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_edit_quiz_settings, null);
+        View view = getArgumentsAndSetView();
 
         // Set the EditText for the title
         editTitle = view.findViewById(R.id.edit_quiz_title);
@@ -112,6 +105,8 @@ public class EditQuizSettingsDialog extends DialogFragment
                         "<font color='#FF0000'>"
                                 + getString(R.string.edit_dialog_title_settings)
                                 + "</font>");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
         builder.setView(view)
                 .setTitle(title)
@@ -136,7 +131,7 @@ public class EditQuizSettingsDialog extends DialogFragment
     /* This method runs if the user selects another language */
     public void onItemSelected(AdapterView parent, View view, int pos, long id) {
         // Do not run if user has not chosen a language
-        if (!userHasInteracted) {
+        if (!userHasInteracted) { // TODO userInteracted
             return;
         }
 
@@ -147,6 +142,15 @@ public class EditQuizSettingsDialog extends DialogFragment
     @Override
     public void onNothingSelected(AdapterView parent) {
         // Not used because there will always be something selected
+    }
+
+    private View getArgumentsAndSetView() {
+        listener = (SubmissionListener) getArguments().getSerializable(LISTENER_KEY);
+        stringPool = (StringPool) getArguments().getSerializable(STRING_POOL);
+        quiz = (Quiz) getArguments().getSerializable(QUIZ_ID);
+
+        LayoutInflater inflater = Objects.requireNonNull(requireActivity()).getLayoutInflater();
+        return inflater.inflate(R.layout.fragment_edit_quiz_settings, null);
     }
 
     private void setupModifyingExistingQuiz(Quiz quiz, View view) {
@@ -181,7 +185,7 @@ public class EditQuizSettingsDialog extends DialogFragment
     }
 
     private void createTreasureHuntCheckbox(View view) {
-        treasureHuntCheckbox = view.findViewById(R.id.treasure_hunt_checkbox);
+        CheckBox treasureHuntCheckbox = view.findViewById(R.id.treasure_hunt_checkbox);
         treasureHuntCheckbox.setOnClickListener(v -> hasTreasureHunt = ((CheckBox) v).isChecked());
     }
 

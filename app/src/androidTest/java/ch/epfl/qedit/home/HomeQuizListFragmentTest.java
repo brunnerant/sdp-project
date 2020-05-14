@@ -2,6 +2,7 @@ package ch.epfl.qedit.home;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
@@ -11,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static org.hamcrest.core.IsNot.not;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
@@ -75,11 +77,24 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
     public void testClickOnEditLaunchesDialogModify() {
         item(0).perform(click());
         itemView(0, R.id.edit_button).perform(click());
+
         onView(withText(testRule.getActivity().getString(R.string.edit_dialog_title_settings)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
         onDialog(R.id.edit_quiz_title).check(matches(isDisplayed()));
         onDialog(R.id.treasure_hunt_checkbox).check(matches(not(isDisplayed())));
         onDialog(R.id.edit_language_selection).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testEnterTitle() {
+        item(0).perform(click());
+        itemView(0, R.id.edit_button).perform(click());
+
+        onDialog(R.id.edit_quiz_title).check(matches(withText("")));
+
+        onDialog(R.id.edit_quiz_title).perform((typeText("Title")));
+        Espresso.closeSoftKeyboard();
+        onDialog(R.id.edit_quiz_title).check(matches(withText("Title")));
     }
 }

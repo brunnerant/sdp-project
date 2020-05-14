@@ -1,8 +1,10 @@
 package ch.epfl.qedit.home;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -12,9 +14,12 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static ch.epfl.qedit.util.Util.clickOn;
@@ -23,6 +28,7 @@ import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
@@ -32,6 +38,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -101,7 +108,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
     }
 
     @Test
-    public void testAddItem() {
+    public void testAddLaunchesDialogForNewQuiz() {
         clickOn(R.id.add, false);
 
         onView(withText(testRule.getActivity().getString(R.string.edit_dialog_title_settings)))
@@ -110,6 +117,13 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         onDialog(R.id.edit_quiz_title).check(matches(isDisplayed()));
         onDialog(R.id.treasure_hunt_checkbox).check(matches((isDisplayed())));
         onDialog(R.id.edit_language_selection).check(matches((isDisplayed())));
+
+        clickOn(android.R.id.button1, false);
+    }
+
+    @Test
+    public void testAddItem() {
+        clickOn(R.id.add, false);
 
         // Test that an empty name is not allowed
         assertEditTextError(R.string.empty_quiz_name_error);
@@ -131,6 +145,40 @@ public class HomeActivityTest extends RecyclerViewHelpers {
                         hasComponent(EditQuizActivity.class.getName()),
                         hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class)),
                         hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class))));
+    }
+
+    // @Test TODO
+    public void testLanguageSpinner() {
+        clickOn(R.id.add, false);
+
+        // The error message of an empty title hides element of the view
+        onDialog(R.id.edit_quiz_title).perform(typeText("temp"));
+        Espresso.closeSoftKeyboard();
+
+        onDialog(R.id.edit_language_selection).perform(click());
+        onData(anything()).atPosition(1).perform(click());
+        onDialog(R.id.edit_language_selection).check(matches(withSpinnerText("Français")));
+        onData(anything()).atPosition(0).perform(click());
+        onDialog(R.id.edit_language_selection).check(matches(withSpinnerText("English")));
+
+        clickOn(android.R.id.button1, false);
+    }
+
+    @Test
+    public void treasureHuntCheckbox() {
+        clickOn(R.id.add, false);
+
+        // The error message of an empty title hides element of the view
+        onDialog(R.id.edit_quiz_title).perform(typeText("temp"));
+        Espresso.closeSoftKeyboard();
+
+        onDialog(R.id.treasure_hunt_checkbox).check(matches(isNotChecked()));
+        onDialog(R.id.treasure_hunt_checkbox).perform(click());
+        onDialog(R.id.treasure_hunt_checkbox).check(matches(isChecked()));
+        onDialog(R.id.treasure_hunt_checkbox).perform(click());
+        onDialog(R.id.treasure_hunt_checkbox).check(matches(isNotChecked()));
+
+        clickOn(android.R.id.button1, false);
     }
 
     @Test
