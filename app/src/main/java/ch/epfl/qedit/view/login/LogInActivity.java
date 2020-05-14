@@ -1,12 +1,13 @@
 package ch.epfl.qedit.view.login;
 
+import static ch.epfl.qedit.util.Utils.checkString;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -17,12 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.auth.AuthenticationFactory;
+import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.backend.database.FirebaseDBService;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.view.home.HomeActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import java.util.function.Predicate;
 
 public class LogInActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -33,7 +35,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     private ProgressBar progressBar;
     private TextView textViewSignUp;
 
-    private FirebaseAuth firebaseAuth;
+    private AuthenticationService auth;
 
     private boolean userHasInteracted = false;
 
@@ -45,7 +47,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        auth = AuthenticationFactory.getInstance();
 
         context = getBaseContext();
         resources = getResources();
@@ -156,97 +158,48 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void logIn() {
-        String email, password;
-        email = emailField.getText().toString();
-        password = passwordField.getText().toString();
 
-        Boolean fail = false;
+        Predicate<String> emailFormat = str -> str.matches(Utils.REGEX_EMAIL);
+        Predicate<String> passwordFormat = str -> str.length() >= 6;
+        String email = checkString(emailField, emailFormat, resources, R.string.invalid_email);
+        String password =
+                checkString(passwordField, passwordFormat, resources, R.string.invalid_password);
 
-        Boolean emailIsEmpty = TextUtils.isEmpty(email);
-        if (emailIsEmpty) {
-            emailField.setError(resources.getString(R.string.input_cannot_be_empty));
-            fail = true;
-        }
-        Boolean passwordIsEmpty = TextUtils.isEmpty(password);
-        if (passwordIsEmpty) {
-            passwordField.setError(resources.getString(R.string.input_cannot_be_empty));
-            fail = true;
-        }
+        if (email == null || password == null) return;
 
-        // Sanitize email
-        email = email.trim(); // Remove leading and trailing spaces
-
-        Boolean emailMatches = email.matches(Utils.regexEmail());
-        if (!emailIsEmpty && !emailMatches) {
-            emailField.setError(resources.getString(R.string.invalid_email));
-            fail = true;
-        }
-
-        Boolean passwordIsLongEnough = password.length() >= 6;
-        if (!passwordIsEmpty && !passwordIsLongEnough) {
-            passwordField.setError(resources.getString(R.string.invalid_password));
-            fail = true;
-        }
-
-        if (fail) {
-            return;
-        }
+        email = email.trim();
 
         progressBar.setVisibility(View.VISIBLE);
 
-        firebaseAuth
-                .signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(
-                        task -> {
-                            if (task.isSuccessful()) {
-                                onLogInSuccessful();
-                            } else {
-                                onLogInFailed();
-                            }
+        auth.logIn(email, password)
+                .whenComplete(
+                        (userId, error) -> {
+                            if (error != null) onLogInFailed();
+                            else onLogInSuccessful(userId);
                         });
     }
 
-    private void onLogInSuccessful() {
-        Utils.showToast(
-                R.string.log_in_success,
-                Toast.LENGTH_SHORT,
-                getApplicationContext(),
-                resources); // TODO après
+    private void onLogInSuccessful(String userId) {
         progressBar.setVisibility(View.GONE);
 
         Intent intent = new Intent(this, HomeActivity.class);
         Bundle bundle = new Bundle();
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            // User is signed in
-            String uid = firebaseUser.getUid();
-
-            FirebaseDBService firebaseDBService = new FirebaseDBService();
-            firebaseDBService
-                    .getUser(uid)
-                    .whenComplete(
-                            (result, throwable) -> {
-                                if (throwable != null || result.getFirstName() == null) {
-                                    Toast.makeText(
-                                                    context,
-                                                    R.string.database_error,
-                                                    Toast.LENGTH_SHORT)
-                                            .show();
-                                } else {
-                                    bundle.putSerializable(USER, result);
-                                    intent.putExtras(bundle);
-                                    startActivity(intent);
-                                }
-                            });
-
-            // Put the current user id in cache
-            Utils.putStringInPrefs(this, "user_id", uid);
-
-        } else {
-            // No user is signed in
-            onLogInFailed();
-        }
+        FirebaseDBService db = new FirebaseDBService();
+        db.getUser(userId)
+                .whenComplete(
+                        (user, throwable) -> {
+                            if (throwable != null) {
+                                Toast.makeText(context, R.string.database_error, Toast.LENGTH_SHORT)
+                                        .show();
+                            } else {
+                                bundle.putSerializable(USER, user);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                        });
+        // Put the current user id in cache
+        Utils.putStringInPrefs(this, "user_id", userId);
     }
 
     private void onLogInFailed() {

@@ -3,7 +3,6 @@ package ch.epfl.qedit.backend;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-import ch.epfl.qedit.backend.database.Util;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;

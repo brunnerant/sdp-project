@@ -1,83 +1,77 @@
 package ch.epfl.qedit.backend.auth;
 
+import static ch.epfl.qedit.backend.Util.error;
+
+import android.util.Pair;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Callback;
-import ch.epfl.qedit.util.Response;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class MockAuthService implements AuthenticationService {
 
     private final CountingIdlingResource idlingResource;
+    private int idCounter;
+
+    // map of <email, password> to userId
+    private Map<Pair<String, String>, String> users;
 
     public MockAuthService() {
+        idCounter = 0;
+        users = new HashMap<>();
         idlingResource = new CountingIdlingResource("MockAuthService");
-    }
-
-    private final HashMap<String, Response<User>> userResponses =
-            new HashMap<String, Response<User>>() {
-                {
-                    //noinspection SpellCheckingInspection
-                    put("fjd4ywnzcCcLHaVb7oKg", Response.<User>error(CONNECTION_ERROR));
-                    //noinspection SpellCheckingInspection
-                    put("fjd4ywnzXCXLHaVb7oKg", Response.ok(createMarcel()));
-                    //noinspection SpellCheckingInspection
-                    put("R4rXRVU3EMkgm5YEW52Q", Response.ok(createCosme()));
-                    put("v5ns9OMqV4hH7jwD8S5w", Response.ok(createAnthony()));
-                }
-            };
-
-    @Override
-    public void sendRequest(final String token, final Callback<Response<User>> responseCallback) {
-        idlingResource.increment();
-        new Thread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
-                                Response<User> response;
-                                if (!userResponses.containsKey(token))
-                                    response = Response.error(CONNECTION_ERROR);
-                                else response = userResponses.get(token);
-
-                                idlingResource.decrement();
-                                responseCallback.onReceive(response);
-                            }
-                        })
-                .start();
     }
 
     public IdlingResource getIdlingResource() {
         return idlingResource;
     }
 
-    private User createMarcel() {
-        User marcel = new User("Marcel", "Doe");
-        marcel.addQuiz("quiz0", "Qualification EPFL");
-
-        return marcel;
+    /** Simply make the current thread wait 2 second */
+    private static void wait2second() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    private User createCosme() {
-        User cosme = new User("Cosme", "Jordan");
-        cosme.addQuiz("quiz0", "Qualification EPFL");
+    @Override
+    public CompletableFuture<String> signUp(String email, String password) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        idlingResource.increment();
+        new Thread(
+                        () -> {
+                            wait2second();
+                            Pair<String, String> info = new Pair<>(email, password);
+                            if (users.containsKey(info)) error(future, "Sign up fail");
+                            else {
+                                String newId = Integer.toString(++idCounter);
+                                users.put(info, newId);
+                                future.complete(newId);
+                            }
+                            idlingResource.decrement();
+                        })
+                .run();
 
-        return cosme;
+        return future;
     }
 
-    private User createAnthony() {
-        User anthony = new User("Anthony", "Iozzia");
-        anthony.addQuiz("quiz0", "Quiz 0");
-        anthony.addQuiz("quiz1", "Quiz 1");
-        anthony.addQuiz("quiz2", "Quiz 2");
-        anthony.addQuiz("quiz3", "Quiz 3");
+    @Override
+    public CompletableFuture<String> logIn(String email, String password) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        idlingResource.increment();
+        new Thread(
+                        () -> {
+                            wait2second();
+                            Pair<String, String> info = new Pair<>(email, password);
+                            String id = users.get(info);
+                            if (id == null) error(future, "Authentication fail");
+                            else future.complete(id);
+                            idlingResource.decrement();
+                        })
+                .run();
 
-        return anthony;
+        return future;
     }
 }
