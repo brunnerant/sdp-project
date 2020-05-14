@@ -179,7 +179,7 @@ public class QuizActivityTest {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-            onView(withText("number of good answers = 0"))
+        onView(withText("number of good answers = 0"))
                 .inRoot(
                         withDecorView(
                                 Matchers.not(
