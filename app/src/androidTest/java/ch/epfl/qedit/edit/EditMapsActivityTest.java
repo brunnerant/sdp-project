@@ -8,8 +8,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.view.edit.EditMapsActivity;
@@ -38,8 +36,8 @@ public class EditMapsActivityTest {
 
     @Test
     public void testMap() {
-        new Handler(Looper.getMainLooper())
-                .post(
+        testRule.getActivity()
+                .runOnUiThread(
                         () -> {
                             SupportMapFragment mapFragment =
                                     (SupportMapFragment)
@@ -47,7 +45,6 @@ public class EditMapsActivityTest {
                                                     .getSupportFragmentManager()
                                                     .findFragmentById(R.id.map);
                             mapFragment.getMapAsync(testRule.getActivity());
-                            onView(withId(R.id.map)).perform(click());
                         });
     }
 
