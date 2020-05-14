@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 
+import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.backend.database.MockDBService;
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
@@ -38,14 +39,15 @@ public class MockDBTest {
         assertNotNull(db.getQuizLanguages("quiz0").get(3, TimeUnit.SECONDS));
         assertNotNull(db.getQuizStructure("quiz0").get(3, TimeUnit.SECONDS));
         assertNotNull(db.getQuizStringPool("quiz0", "en").get(3, TimeUnit.SECONDS));
-        assertNotNull(db.getUser("R4rXRVU3EMkgm5YEW52Q").get(3, TimeUnit.SECONDS));
+        assertNotNull(db.getUser(MockAuthService.ANTHONY_IOZZIA_ID).get(3, TimeUnit.SECONDS));
 
         assertNull(
                 db.createUser("T78XRGU3EMkgm5YED52Q", "JoJo", "Johnson").get(3, TimeUnit.SECONDS));
         assertNull(
-                db.updateUserQuizList("R4rXRVU3EMkgm5YEW52Q", new HashMap<>())
+                db.updateUserQuizList(MockAuthService.ANTHONY_IOZZIA_ID, new HashMap<>())
                         .get(3, TimeUnit.SECONDS));
         assertNull(
-                db.updateUserStatistics("R4rXRVU3EMkgm5YEW52Q", 0, 0, 0).get(3, TimeUnit.SECONDS));
+                db.updateUserStatistics(MockAuthService.ANTHONY_IOZZIA_ID, 0, 0, 0)
+                        .get(3, TimeUnit.SECONDS));
     }
 }

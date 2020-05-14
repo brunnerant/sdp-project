@@ -23,6 +23,7 @@ import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
+import ch.epfl.qedit.view.login.SignUpActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,13 +31,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class LogInActivityTest {
+public class SignUpActivityTest {
 
     private IdlingResource idlingResource;
 
     @Rule
-    public final IntentsTestRule<LogInActivity> testRule =
-            new IntentsTestRule<>(LogInActivity.class, false, false);
+    public final IntentsTestRule<SignUpActivity> testRule =
+            new IntentsTestRule<>(SignUpActivity.class, false, false);
 
     @Before
     public void init() {
@@ -55,6 +56,51 @@ public class LogInActivityTest {
         testRule.finishActivity();
     }
 
+    public void performSignUp(
+            String firstName,
+            String lastName,
+            String email,
+            String password,
+            String passwordConfirmation) {
+        onView(ViewMatchers.withId(R.id.field_first_name))
+                .perform((typeText(firstName)))
+                .perform(pressImeActionButton());
+        onView(ViewMatchers.withId(R.id.field_last_name))
+                .perform((typeText(lastName)))
+                .perform(pressImeActionButton());
+        onView(ViewMatchers.withId(R.id.field_email))
+                .perform((typeText(email)))
+                .perform(pressImeActionButton());
+        onView(ViewMatchers.withId(R.id.field_password))
+                .perform((typeText(password)))
+                .perform(pressImeActionButton());
+        onView(ViewMatchers.withId(R.id.field_password_confirmation))
+                .perform((typeText(passwordConfirmation)))
+                .perform(pressImeActionButton());
+        clickOn(R.id.button_sign_up, true);
+    }
+
+    public void testSignUpSuccessful(
+            String firstName,
+            String lastName,
+            String email,
+            String password,
+            String passwordConfirmation,
+            User user) {
+        performSignUp(firstName, lastName, email, password, passwordConfirmation);
+        intended(allOf(hasComponent(LogInActivity.class.getName())));
+    }
+
+    /*
+        private void testLoginFailed(String token, int toastStringId) {
+            performLogin(token);
+            TokenLogInActivity activity = testRule.getActivity();
+            onView(withText(toastStringId))
+                    .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
+                    .check(matches(isDisplayed()));
+        }
+    */
+
     public void performLogIn(String email, String password) {
         onView(ViewMatchers.withId(R.id.field_email))
                 .perform((typeText(email)))
@@ -70,17 +116,11 @@ public class LogInActivityTest {
         intended(allOf(hasComponent(HomeActivity.class.getName()), hasExtra(USER, user)));
     }
 
-    /*
-        private void testLogInFailed(String token, int toastStringId) {
-            performLogin(token);
-            TokenLogInActivity activity = testRule.getActivity();
-            onView(withText(toastStringId))
-                    .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
-                    .check(matches(isDisplayed()));
-        }
-    */
     @Test
-    public void testCanLogIn() {
-        testLogInSuccessful("anthony@mock.test", "123456", MockDBService.createAnthony());
+    public void testCanSignUp() {
+        User user = new User("Anthony1", "Iozzia");
+        testSignUpSuccessful(
+                "Anthony1", "Iozzia", "anthony1@mock.test", "1234567", "1234567", user);
+        testLogInSuccessful("anthony1@mock.test", "1234567", user);
     }
 }
