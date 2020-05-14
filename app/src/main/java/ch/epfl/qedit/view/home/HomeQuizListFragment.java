@@ -42,7 +42,7 @@ public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
     public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
     public static final String STRING_POOL = "ch.epfl.qedit.view.STRING_POOL";
-    public static final int EDIT_QUIZ_REQUEST_CODE = 2;
+    private static final int EDIT_QUIZ_REQUEST_CODE = 2;
 
     private DatabaseService db;
 
@@ -50,14 +50,11 @@ public class HomeQuizListFragment extends Fragment
     private ListEditView.Adapter<Map.Entry<String, String>> listAdapter;
 
     private ConfirmDialog deleteDialog;
-    private EditQuizSettingsDialog addSettingsDialog;
-    private EditQuizSettingsDialog modifySettingsDialog;
     private EditTextDialog.TextFilter textFilter = EditTextDialog.NO_FILTER;
 
     private int deleteIndex;
     private int modifyIndex = -1;
 
-    private User user;
     private List<Map.Entry<String, String>> quizzes;
 
     @Override
@@ -71,20 +68,10 @@ public class HomeQuizListFragment extends Fragment
 
         deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete), this);
 
-        textFilter =
-                text -> {
-                    if (text.trim().length() == 0) return getString(R.string.empty_quiz_name_error);
-
-                    for (Map.Entry<String, String> entry : quizzes) {
-                        if (entry.getValue().equals(text))
-                            return getString(R.string.dup_quiz_name_error);
-                    }
-
-                    return null;
-                };
+        createTextFilter();
 
         // Get user from the bundle created by the parent activity
-        user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
+        User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter and bind it to the list edit view
@@ -99,6 +86,20 @@ public class HomeQuizListFragment extends Fragment
         db = DatabaseFactory.getInstance();
 
         return view;
+    }
+
+    private void createTextFilter() {
+        textFilter =
+                text -> {
+                    if (text.trim().length() == 0) return getString(R.string.empty_quiz_name_error);
+
+                    for (Map.Entry<String, String> entry : quizzes) {
+                        if (entry.getValue().equals(text))
+                            return getString(R.string.dup_quiz_name_error);
+                    }
+
+                    return null;
+                };
     }
 
     // This function is used to create the list of quizzes for the given user
@@ -136,7 +137,7 @@ public class HomeQuizListFragment extends Fragment
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add:
-                addSettingsDialog = EditQuizSettingsDialog.newInstance(this);
+                EditQuizSettingsDialog addSettingsDialog = EditQuizSettingsDialog.newInstance(this);
                 addSettingsDialog.setTextFilter(textFilter);
                 addSettingsDialog.show(getParentFragmentManager(), "add_dialog");
                 break;
@@ -212,15 +213,18 @@ public class HomeQuizListFragment extends Fragment
                                 // Hide progress bar
                                 progressBar.setVisibility(GONE);
 
-                                modifySettingsDialog =
-                                        EditQuizSettingsDialog.newInstance(
-                                                this, stringPool.join(), quizStructure.join());
-                                modifySettingsDialog.setTextFilter(textFilter);
-                                modifySettingsDialog.show(
-                                        getParentFragmentManager(), "modify_dialog");
-                                modifyIndex = position;
+                                launchModifyQuizDialog(
+                                        stringPool.join(), quizStructure.join(), position);
                             }
                         });
+    }
+
+    private void launchModifyQuizDialog(StringPool stringPool, Quiz quizStructure, int position) {
+        EditQuizSettingsDialog modifySettingsDialog =
+                EditQuizSettingsDialog.newInstance(this, stringPool, quizStructure);
+        modifySettingsDialog.setTextFilter(textFilter);
+        modifySettingsDialog.show(getParentFragmentManager(), "modify_dialog");
+        modifyIndex = position;
     }
 
     private String getBestLanguage(List<String> languages) {

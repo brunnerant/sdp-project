@@ -9,6 +9,7 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -23,7 +24,8 @@ import static org.hamcrest.core.AllOf.allOf;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
@@ -34,10 +36,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class EditSettingsActivityTest {
+public class EditQuizSettingsDialogTest {
+    private IdlingResource idlingResource;
+
     @Rule
-    public final IntentsTestRule<EditSettingsActivity> testRule =
-            new IntentsTestRule<>(EditSettingsActivity.class, false, false);
+    public final ActivityTestRule<EditSettingsActivity> testRule =
+            new ActivityTestRule<>(EditSettingsActivity.class, false, false);
 
     @Before
     public void setUp() {
@@ -74,7 +78,7 @@ public class EditSettingsActivityTest {
         onView(withId(R.id.edit_language_selection)).check(matches(withSpinnerText("English")));
     }
 
-    // @Test
+    //@Test TODO
     public void testButtonsIntent() {
         onView(withId(R.id.edit_quiz_title)).perform((typeText("tle")));
         Espresso.closeSoftKeyboard();
@@ -88,7 +92,7 @@ public class EditSettingsActivityTest {
 
     @Test
     public void treasureHuntCheckbox() {
-        onView(withId(R.id.treasure_hunt_checkbox));
+        onView(withId(R.id.treasure_hunt_checkbox)).check(matches(isNotChecked()));
         onView(withId(R.id.treasure_hunt_checkbox)).perform(click());
         onView(withId(R.id.treasure_hunt_checkbox)).check(matches(isChecked()));
         onView(withId(R.id.treasure_hunt_checkbox)).perform(click());

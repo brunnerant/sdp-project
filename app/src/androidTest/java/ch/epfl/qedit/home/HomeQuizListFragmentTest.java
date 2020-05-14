@@ -4,25 +4,16 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
-import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
+import static ch.epfl.qedit.util.Util.onDialog;
+import static org.hamcrest.core.IsNot.not;
 
 import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
@@ -81,13 +72,14 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
     }
 
     @Test
-    public void testClickOnEditLaunchesEditSettingsActivity() {
+    public void testClickOnEditLaunchesDialogModify() {
         item(0).perform(click());
         itemView(0, R.id.edit_button).perform(click());
-        intended(
-                allOf(
-                        hasComponent(EditSettingsActivity.class.getName()),
-                        hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class)),
-                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
+        onView(withText(testRule.getActivity().getString(R.string.edit_dialog_title_settings)))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()));
+        onDialog(R.id.edit_quiz_title).check(matches(isDisplayed()));
+        onDialog(R.id.treasure_hunt_checkbox).check(matches(not(isDisplayed())));
+        onDialog(R.id.edit_language_selection).check(matches(not(isDisplayed())));
     }
 }

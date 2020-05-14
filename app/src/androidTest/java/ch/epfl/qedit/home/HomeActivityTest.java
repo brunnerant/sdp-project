@@ -19,6 +19,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.isDisplayed;
+import static ch.epfl.qedit.util.Util.onDialog;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -37,11 +39,12 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.LoginActivity;
-import ch.epfl.qedit.view.edit.EditSettingsActivity;
+import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.Collection;
 import org.junit.After;
@@ -92,37 +95,42 @@ public class HomeActivityTest extends RecyclerViewHelpers {
     }
 
     public void assertEditTextError(int id) {
-        onView(withId(android.R.id.button1)).check(matches(not(isEnabled())));
-        onView(withId(R.id.quiz_name_text))
+        onDialog(android.R.id.button1).check(matches(not(isEnabled())));
+        onDialog(R.id.edit_quiz_title)
                 .check(matches(hasErrorText(testRule.getActivity().getString(id))));
     }
 
     @Test
     public void testAddItem() {
         clickOn(R.id.add, false);
-        onView(withText(testRule.getActivity().getString(R.string.add_quiz_message)))
+
+        onView(withText(testRule.getActivity().getString(R.string.edit_dialog_title_settings)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
+        onDialog(R.id.edit_quiz_title).check(matches(isDisplayed()));
+        onDialog(R.id.treasure_hunt_checkbox).check(matches((isDisplayed())));
+        onDialog(R.id.edit_language_selection).check(matches((isDisplayed())));
 
         // Test that an empty name is not allowed
         assertEditTextError(R.string.empty_quiz_name_error);
         closeSoftKeyboard();
 
         // Test that a duplicate name is not allowed either
-        onView(withId(R.id.quiz_name_text)).perform(typeText("Qualification EPFL"));
+        onDialog(R.id.edit_quiz_title).perform(typeText("Qualification EPFL"));
         closeSoftKeyboard();
         assertEditTextError(R.string.dup_quiz_name_error);
 
         // Test that a regular name is allowed
-        onView(withId(R.id.quiz_name_text)).perform(clearText());
-        onView(withId(R.id.quiz_name_text)).perform(typeText("New quiz"));
+        onDialog(R.id.edit_quiz_title).perform(clearText());
+        onDialog(R.id.edit_quiz_title).perform(typeText("New quiz"));
         closeSoftKeyboard();
 
         clickOn(android.R.id.button1, false);
         intended(
                 allOf(
-                        hasComponent(EditSettingsActivity.class.getName()),
-                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
+                        hasComponent(EditQuizActivity.class.getName()),
+                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class)),
+                        hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class))));
     }
 
     @Test
