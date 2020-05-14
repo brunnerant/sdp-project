@@ -41,68 +41,70 @@
         <activity
             android:name=".view.edit.EditMapsActivity"
             android:label="@string/title_activity_edit_maps">
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".view.edit.EditSettingsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.EDIT" />
+            -->
+     </activity>
+     <activity android:name=".view.edit.EditSettingsActivity">
+         <intent-filter>
+             <action android:name="android.intent.action.EDIT" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".view.edit.EditQuestionActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.EDIT" />
+             <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
+     </activity>
+     <activity android:name=".view.edit.EditQuestionActivity">
+         <intent-filter>
+             <action android:name="android.intent.action.EDIT" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.edit.EditQuizActivity"
-            android:label="@string/title_activity_edit_quiz"
-            android:parentActivityName=".view.home.HomeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.EDIT" />
+             <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
+     </activity>
+     <activity
+         android:name=".view.edit.EditQuizActivity"
+         android:label="@string/title_activity_edit_quiz"
+         android:parentActivityName=".view.home.HomeActivity">
+         <intent-filter>
+             <action android:name="android.intent.action.EDIT" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.LoginActivity"
-            android:label="@string/title_activity_login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+             <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
+     </activity>
+     <activity
+         android:name=".view.LoginActivity"
+         android:label="@string/title_activity_login">
+         <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.home.HomeActivity"
-            android:label="@string/title_activity_home"
-            android:launchMode="singleTop"
-            android:parentActivityName=".view.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW_ROLE" />
+             <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
+     </activity>
+     <activity
+         android:name=".view.home.HomeActivity"
+         android:label="@string/title_activity_home"
+         android:launchMode="singleTop"
+         android:parentActivityName=".view.LoginActivity">
+         <intent-filter>
+             <action android:name="android.intent.action.VIEW_ROLE" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.quiz.QuizActivity"
-            android:parentActivityName=".view.home.HomeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.QUICK_VIEW" />
+             <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
+     </activity>
+     <activity
+         android:name=".view.quiz.QuizActivity"
+         android:parentActivityName=".view.home.HomeActivity">
+         <intent-filter>
+             <action android:name="android.intent.action.QUICK_VIEW" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <!--
- Addresses:
-            Warning: activity#com.google.firebase.auth.internal.FederatedSignInActivity@android:launchMode was tagged at AndroidManifest.xml:24 to replace other declarations but no other declaration present
-        -->
+             <category android:name="android.intent.category.LAUNCHER" />
+         </intent-filter>
+     </activity>
+     <!--
+Addresses:
+         Warning: activity#com.google.firebase.auth.internal.FederatedSignInActivity@android:launchMode was tagged at AndroidManifest.xml:24 to replace other declarations but no other declaration present
+     -->
         <activity
             android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
             android:launchMode="standard"
