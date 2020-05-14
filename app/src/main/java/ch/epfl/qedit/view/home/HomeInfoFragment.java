@@ -2,7 +2,7 @@ package ch.epfl.qedit.view.home;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static ch.epfl.qedit.view.login.LogInActivity.USER;
+import static ch.epfl.qedit.view.login.Util.USER;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
