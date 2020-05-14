@@ -7,4 +7,5 @@
     <color name="colorButton">#E0D0D0</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="colorSubTitle">#000000</color>
+    <color name="colorNotSignedUpAlreadySignedUp">#0000FF</color>
 </resources>

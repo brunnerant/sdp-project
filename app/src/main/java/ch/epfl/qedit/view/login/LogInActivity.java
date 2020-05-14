@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +29,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     private EditText emailField, passwordField;
     private Button logInButton;
     private ProgressBar progressBar;
+    private TextView textViewSignUp;
 
     private FirebaseAuth firebaseAuth;
 
@@ -41,12 +45,13 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        context = getBaseContext();
+        resources = getResources();
+
         initializeViews();
 
         logInButton.setOnClickListener(v -> logIn());
-
-        context = getBaseContext();
-        resources = getResources();
+        textViewSignUp.setOnClickListener(v -> signUpInstead());
 
         initializeLanguage();
     }
@@ -77,7 +82,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
         setLanguage(languageCode);
         updateTexts();
-        Utils.printChangedLanguageToast(pos, Toast.LENGTH_SHORT, getApplicationContext(), resources);
+        Utils.showToastChangedLanguage(pos, Toast.LENGTH_SHORT, getApplicationContext(), resources);
     }
 
     @Override
@@ -90,6 +95,14 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         passwordField = findViewById(R.id.field_password);
         logInButton = findViewById(R.id.button_log_in);
         progressBar = findViewById(R.id.progress_bar);
+        textViewSignUp = findViewById(R.id.not_signed_up);
+
+        int colorNotSignedUpAlreadySignedUp = resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
+        Spanned coloredText = Html.fromHtml(
+                "<font color='" + colorNotSignedUpAlreadySignedUp + "'>"
+                        + resources.getString(R.string.not_signed_up)
+                        + "</font>");
+        textViewSignUp.setText(coloredText);
     }
 
     private void initializeLanguage() {
@@ -120,25 +133,56 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         emailField.setHint(resources.getString(R.string.hint_email));
         passwordField.setHint(resources.getString(R.string.hint_password));
         logInButton.setText(resources.getString(R.string.log_in_button_text));
+
+        int colorNotSignedUpAlreadySignedUp = resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
+        Spanned coloredText = Html.fromHtml(
+                "<font color='" + colorNotSignedUpAlreadySignedUp + "'>"
+                        + resources.getString(R.string.not_signed_up)
+                        + "</font>");
+        textViewSignUp.setText(coloredText);
+
         setTitle(resources.getString(R.string.title_activity_log_in));
     }
 
     private void logIn() {
-        progressBar.setVisibility(View.VISIBLE);
-
         String email, password;
         email = emailField.getText().toString();
         password = passwordField.getText().toString();
 
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "email empty", Toast.LENGTH_LONG).show();
+        Boolean fail = false;
+
+        Boolean emailIsEmpty = TextUtils.isEmpty(email);
+        if (emailIsEmpty) {
+            emailField.setError(resources.getString(R.string.input_cannot_be_empty));
+            fail = true;
+        }
+        Boolean passwordIsEmpty = TextUtils.isEmpty(password);
+        if (passwordIsEmpty) {
+            passwordField.setError(resources.getString(R.string.input_cannot_be_empty));
+            fail = true;
+        }
+
+        // Sanitize email
+        email = email.trim(); // Remove leading and trailing spaces
+
+        // This regular expression will accept only strings with an '@' in them
+        Boolean emailMatches = email.matches(".+@.+");
+        if (!emailIsEmpty && !emailMatches) {
+            emailField.setError(resources.getString(R.string.invalid_email));
+            fail = true;
+        }
+
+        Boolean passwordIsLongEnough = password.length() >= 6;
+        if (!passwordIsEmpty && !passwordIsLongEnough) {
+            passwordField.setError(resources.getString(R.string.invalid_password));
+            fail = true;
+        }
+
+        if(fail) {
             return;
         }
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "password empty", Toast.LENGTH_LONG)
-                    .show();
-            return;
-        }
+
+        progressBar.setVisibility(View.VISIBLE);
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(
@@ -164,5 +208,10 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     private void onLogInFailed() {
         Utils.showToast(R.string.log_in_fail, Toast.LENGTH_SHORT, getApplicationContext(), resources);
         progressBar.setVisibility(View.GONE);
+    }
+
+    private void signUpInstead() {
+        Intent intent = new Intent(LogInActivity.this, SignUpActivity.class);
+        startActivity(intent);
     }
 }

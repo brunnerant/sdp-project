@@ -28,7 +28,7 @@ public class Utils {
      *
      * @param languagePos position of the language in the spinner
      */
-    public static void printChangedLanguageToast(int languagePos, int toastType, Context context, Resources resources) {
+    public static void showToastChangedLanguage(int languagePos, int toastType, Context context, Resources resources) {
         String stringToDisplay = resources.getString(R.string.language_changed)
                 + " "
                 + resources.getStringArray(R.array.languages_list)[languagePos];

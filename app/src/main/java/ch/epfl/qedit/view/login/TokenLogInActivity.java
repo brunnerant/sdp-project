@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -21,8 +20,8 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.view.home.HomeActivity;
 
 public class TokenLogInActivity extends AppCompatActivity
@@ -51,14 +50,6 @@ public class TokenLogInActivity extends AppCompatActivity
         handler = new Handler();
 
         initializeViews();
-
-        Display display = getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-        System.out.println("widthhhhhhhhhhhhhh " + width);
-
-        if(width > 300) {
-            tokenText.setWidth(300);
-        }
 
         context = getBaseContext();
         resources = getResources();
@@ -92,7 +83,7 @@ public class TokenLogInActivity extends AppCompatActivity
 
         setLanguage(languageCode);
         updateTexts();
-        Utils.printChangedLanguageToast(pos, Toast.LENGTH_SHORT, getApplicationContext(), resources);
+        Utils.showToastChangedLanguage(pos, Toast.LENGTH_SHORT, getApplicationContext(), resources);
     }
 
     @Override
@@ -136,7 +127,7 @@ public class TokenLogInActivity extends AppCompatActivity
         setTitle(resources.getString(R.string.title_activity_token_log_in));
     }
 
-    public void handleLogIn(View view) {
+    public void logIn(View view) {
         Utils.hideKeyboard(this);
         String token = tokenText.getText().toString();
         // Sanitize token

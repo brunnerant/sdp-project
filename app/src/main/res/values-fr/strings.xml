@@ -19,24 +19,24 @@
     <string name="log_in_action_label">Connexion</string>
     <string name="sign_up_button_text">Inscription</string>
     <string name="sign_up_action_label">Inscription</string>
-    <string name="hint_email">Mail</string>
+    <string name="hint_email">Email</string>
     <string name="hint_password">Mot de passe</string>
     <string name="hint_password_confirmation">Confirmation du mot de passe</string>
     <string name="hint_token">Token</string>
 
     <string name="input_cannot_be_empty">Ne peut pas être vide</string>
     <string name="invalid_email">Email invalide</string>
-    <string name="invalid_password">Mot de passe invalide</string>
+    <string name="invalid_password">Le mot de passe doit faire 6 caractères minimum</string>
     <string name="invalid_password_confirmation">Mot de passe non identique</string>
     <string name="invalid_token">Token invalide</string>
 
-    <string name="already_signed_up"><font color="#0000FF">J\ai déjà un compte -> Connexion</font></string>
-    <string name="not_signed_up"><font color="#0000FF">Je n\'ai pas de compte -> Inscription</font></string>
+    <string name="already_signed_up">J\'ai déjà un compte -> Connexion</string>
+    <string name="not_signed_up">Je n\'ai pas de compte -> Inscription</string>
 
-    <string name="log_in_success">Connexion réussie :)</string>
-    <string name="log_in_fail">La connexion a échoué :(</string>
-    <string name="sign_up_success">Inscription réussie :) Un email vous a été envoyé pour vérifier votre email</string>
-    <string name="sign_up_fail">L\'inscription a échoué :(</string>
+    <string name="log_in_success">Connexion réussie.</string>
+    <string name="log_in_fail">Connexion échouée. Merci de vérifier si votre email et mot de pass sont corrects.</string>
+    <string name="sign_up_success">Inscription réussie. Un email vous a été envoyé pour vérifier votre email.</string>
+    <string name="sign_up_fail">Inscription échouée.</string>
 
     <!-- Connection error -->
     <string name="connection_error">Erreur de connexion</string>

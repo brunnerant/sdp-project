@@ -56,17 +56,17 @@
 
     <string name="input_cannot_be_empty">Cannot be empty</string>
     <string name="invalid_email">Invalid email</string>
-    <string name="invalid_password">Invalid password</string>
+    <string name="invalid_password">Password must be at least 6 characters</string>
     <string name="invalid_password_confirmation">Password not identical</string>
     <string name="invalid_token">Invalid token</string>
 
-    <string name="already_signed_up"><font color="#0000FF">I already have an account -> Log in</font></string>
-    <string name="not_signed_up"><font color="#0000FF">I don\'t have an account -> Sign up</font></string>
+    <string name="already_signed_up">I already have an account -> Log in</string>
+    <string name="not_signed_up">I don\'t have an account -> Sign up</string>
 
-    <string name="log_in_success">Logged in successfully :)</string>
-    <string name="log_in_fail">Log in failed :(</string>
-    <string name="sign_up_success">Signed up successfully :) An email has been sent to you with a link to verify your email</string>
-    <string name="sign_up_fail">Sign up failed :(</string>
+    <string name="log_in_success">Log in successful.</string>
+    <string name="log_in_fail">Log in failed. Please check that your email/password is correct.</string>
+    <string name="sign_up_success">Sign up successful. An email has been sent to you with a link to verify your email.</string>
+    <string name="sign_up_fail">Sign up failed.</string>
 
     <!-- Connection error -->
     <string name="connection_error">Connection error</string>
