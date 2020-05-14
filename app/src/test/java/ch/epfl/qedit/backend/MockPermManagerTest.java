@@ -1,11 +1,5 @@
 package ch.epfl.qedit.backend;
 
-import org.junit.Test;
-
-import ch.epfl.qedit.backend.permission.MockPermManager;
-import ch.epfl.qedit.backend.permission.PermManagerFactory;
-import ch.epfl.qedit.backend.permission.PermissionManager;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -13,6 +7,11 @@ import static org.mockito.AdditionalMatchers.aryEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+
+import ch.epfl.qedit.backend.permission.MockPermManager;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.backend.permission.PermissionManager;
+import org.junit.Test;
 
 public class MockPermManagerTest {
     // Note that in all tests, we pass null when the activity is needed. This is because the
@@ -47,19 +46,20 @@ public class MockPermManagerTest {
     @Test
     public void testPermissionRequests() {
         MockPermManager manager = new MockPermManager();
-        PermissionManager.OnPermissionResult callback = mock(PermissionManager.OnPermissionResult.class);
+        PermissionManager.OnPermissionResult callback =
+                mock(PermissionManager.OnPermissionResult.class);
         setDummyPermissions(manager);
 
         manager.requestPermissions(null, callback, "granted", "accepted", "refused", "denied");
-        verify(callback, timeout(1000).times(1)).handle(aryEq(new boolean[] {
-                true, true, false, false
-        }));
+        verify(callback, timeout(1000).times(1))
+                .handle(aryEq(new boolean[] {true, true, false, false}));
     }
 
     @Test
     public void testShouldAskAgain() {
         MockPermManager manager = new MockPermManager();
-        PermissionManager.OnPermissionResult callback = mock(PermissionManager.OnPermissionResult.class);
+        PermissionManager.OnPermissionResult callback =
+                mock(PermissionManager.OnPermissionResult.class);
         setDummyPermissions(manager);
 
         assertFalse(manager.shouldAskAgain(null, "granted"));
