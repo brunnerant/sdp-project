@@ -69,22 +69,22 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
         getMenuInflater().inflate(R.menu.edit_menu, menu);
         return true;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        // TODO in future PR: implement menu options
-        switch (id) {
-            case R.id.next:
-            case R.id.previous:
-                break;
-            case R.id.overview:
-                break;
-            case R.id.done:
-                break;
-        }
-
-        return true;
-    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//
+//        // TODO in future PR: implement menu options
+//        switch (id) {
+//            case R.id.next:
+//            case R.id.previous:
+//                break;
+//            case R.id.overview:
+//                break;
+//            case R.id.done:
+//                break;
+//        }
+//
+//        return true;
+//    }
 }
