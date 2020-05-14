@@ -19,7 +19,7 @@ public class MockAuthService implements AuthenticationService {
             new HashMap<String, Response<User>>() {
                 {
                     //noinspection SpellCheckingInspection
-                    put("fjd4ywnzcCcLHaVb7oKg", Response.<User>error(CONNECTION_ERROR));
+                    put("fjd4ywnzcCcLHaVb7oKg", Response.error(CONNECTION_ERROR));
                     //noinspection SpellCheckingInspection
                     put("fjd4ywnzXCXLHaVb7oKg", Response.ok(createMarcel()));
                     //noinspection SpellCheckingInspection
@@ -32,23 +32,20 @@ public class MockAuthService implements AuthenticationService {
     public void sendRequest(final String token, final Callback<Response<User>> responseCallback) {
         idlingResource.increment();
         new Thread(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
-                                Response<User> response;
-                                if (!userResponses.containsKey(token))
-                                    response = Response.error(WRONG_TOKEN);
-                                else response = userResponses.get(token);
-
-                                idlingResource.decrement();
-                                responseCallback.onReceive(response);
+                        () -> {
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
+
+                            Response<User> response;
+                            if (!userResponses.containsKey(token))
+                                response = Response.error(WRONG_TOKEN);
+                            else response = userResponses.get(token);
+
+                            idlingResource.decrement();
+                            responseCallback.onReceive(response);
                         })
                 .start();
     }
@@ -59,24 +56,24 @@ public class MockAuthService implements AuthenticationService {
 
     private User createMarcel() {
         User marcel = new User("Marcel", "Doe");
-        marcel.addQuiz("quiz0", "Qualification EPFL");
+        marcel.addQuiz("quiz0", "I am a Mock Quiz!");
 
         return marcel;
     }
 
     private User createCosme() {
         User cosme = new User("Cosme", "Jordan");
-        cosme.addQuiz("quiz0", "Qualification EPFL");
+        cosme.addQuiz("quiz0", "I am a Mock Quiz!");
 
         return cosme;
     }
 
     private User createAnthony() {
         User anthony = new User("Anthony", "Iozzia");
-        anthony.addQuiz("quiz0", "Quiz 0");
-        anthony.addQuiz("quiz1", "Quiz 1");
-        anthony.addQuiz("quiz2", "Quiz 2");
-        anthony.addQuiz("quiz3", "Quiz 3");
+        anthony.addQuiz("quiz0", "I am a Mock Quiz!");
+        anthony.addQuiz("quiz1", "An other Quiz");
+        anthony.addQuiz("quiz2", "An other Quiz");
+        anthony.addQuiz("quiz3", "An other Quiz");
 
         return anthony;
     }
