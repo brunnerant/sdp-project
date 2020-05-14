@@ -1,7 +1,5 @@
 package ch.epfl.qedit.view.login;
 
-import static ch.epfl.qedit.view.login.Util.checkString;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -166,16 +164,17 @@ public class SignUpActivity extends AppCompatActivity
         Predicate<String> emailFormat = str -> str.matches(Util.REGEX_EMAIL);
         Predicate<String> passwordFormat = str -> str.length() >= 6;
         Predicate<String> nameFormat = str -> str.matches(Util.REGEX_NAME);
-        email = checkString(emailField, emailFormat, resources, R.string.invalid_email);
-        password = checkString(passwordField, passwordFormat, resources, R.string.invalid_password);
-        firstName = checkString(firstNameField, nameFormat, resources, R.string.invalid_name);
-        lastName = checkString(lastNameField, nameFormat, resources, R.string.invalid_name);
+        email = Util.getString(emailField, emailFormat, resources, R.string.invalid_email);
+        password =
+                Util.getString(passwordField, passwordFormat, resources, R.string.invalid_password);
+        firstName = Util.getString(firstNameField, nameFormat, resources, R.string.invalid_name);
+        lastName = Util.getString(lastNameField, nameFormat, resources, R.string.invalid_name);
 
         // Check if password confirmation match actual password
         if (password != null) {
             Predicate<String> matchPsw = str -> password.equals(str);
             String confirmation =
-                    checkString(
+                    Util.getString(
                             passwordConfirmationField,
                             matchPsw,
                             resources,

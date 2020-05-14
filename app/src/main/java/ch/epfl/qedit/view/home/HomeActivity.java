@@ -1,6 +1,6 @@
 package ch.epfl.qedit.view.home;
 
-import static ch.epfl.qedit.view.login.LogInActivity.USER;
+import static ch.epfl.qedit.view.login.Util.USER;
 
 import android.content.Context;
 import android.content.Intent;

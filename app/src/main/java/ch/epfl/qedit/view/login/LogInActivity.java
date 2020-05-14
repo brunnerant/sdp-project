@@ -1,6 +1,6 @@
 package ch.epfl.qedit.view.login;
 
-import static ch.epfl.qedit.view.login.Util.checkString;
+import static ch.epfl.qedit.view.login.Util.USER;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,8 +26,6 @@ import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.function.Predicate;
 
 public class LogInActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
-    public static final String USER = "ch.epfl.qedit.view.USER";
 
     private EditText emailField, passwordField;
     private Button logInButton;
@@ -153,9 +151,9 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         // Check validity of each email and password before passing it to the Auth Service
         Predicate<String> emailFormat = str -> str.matches(Util.REGEX_EMAIL);
         Predicate<String> passwordFormat = str -> str.length() >= 6;
-        String email = checkString(emailField, emailFormat, resources, R.string.invalid_email);
+        String email = Util.getString(emailField, emailFormat, resources, R.string.invalid_email);
         String password =
-                checkString(passwordField, passwordFormat, resources, R.string.invalid_password);
+                Util.getString(passwordField, passwordFormat, resources, R.string.invalid_password);
 
         // If the email or password is invalid, abort login
         if (email == null || password == null) return;
