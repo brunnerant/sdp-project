@@ -1,12 +1,13 @@
 package ch.epfl.qedit.view.login;
 
+import static ch.epfl.qedit.util.Utils.checkString;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import ch.epfl.qedit.backend.database.FirebaseDBService;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.view.home.HomeActivity;
+import java.util.function.Predicate;
 
 public class LogInActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -155,25 +157,17 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         setTitle(resources.getString(R.string.title_activity_log_in));
     }
 
-    private String checkString(EditText view, boolean condition, int errorString) {
-        String text = view.getText().toString();
-        if (TextUtils.isEmpty(text)) {
-            view.setError(resources.getString(R.string.input_cannot_be_empty));
-            text = null;
-        } else if (!condition) {
-            view.setError(resources.getString(errorString));
-            text = null;
-        }
-        return text;
-    }
-
     private void logIn() {
-        String email = emailField.getText().toString().trim();
-        email = checkString(emailField, email.matches(Utils.regexEmail()), R.string.invalid_email);
-        String password = passwordField.getText().toString();
-        password = checkString(passwordField, password.length() >= 6, R.string.invalid_password);
+
+        Predicate<String> emailFormat = str -> str.matches(Utils.REGEX_EMAIL);
+        Predicate<String> passwordFormat = str -> str.length() >= 6;
+        String email = checkString(emailField, emailFormat, resources, R.string.invalid_email);
+        String password =
+                checkString(passwordField, passwordFormat, resources, R.string.invalid_password);
 
         if (email == null || password == null) return;
+
+        email = email.trim();
 
         progressBar.setVisibility(View.VISIBLE);
 

@@ -62,6 +62,7 @@
     <string name="invalid_password">Password must be at least 6 characters</string>
     <string name="invalid_password_confirmation">Password not identical</string>
     <string name="invalid_token">Invalid token</string>
+    <string name="invalid_name">Invalid name</string>
 
     <string name="already_signed_up">I already have an account -> Log in</string>
     <string name="not_signed_up">I don\'t have an account -> Sign up</string>

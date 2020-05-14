@@ -1,8 +1,9 @@
 package ch.epfl.qedit.view.login;
 
+import static ch.epfl.qedit.util.Utils.checkString;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,8 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.backend.database.FirebaseDBService;
+import ch.epfl.qedit.util.Utils;
+import java.util.function.Predicate;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -24,6 +27,8 @@ public class SignUpActivity extends AppCompatActivity {
     private Button signUpButton;
     private ProgressBar progressBar;
 
+    private String email;
+    private String password;
     private String firstName;
     private String lastName;
 
@@ -51,23 +56,35 @@ public class SignUpActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
     }
 
+    private void confirmPassword() {
+        String confirmation = passwordConfirmationField.getText().toString();
+    }
+
+    private boolean checkInputValidity() {
+        // Check validity of all input
+        Predicate<String> emailFormat = str -> str.matches(Utils.REGEX_EMAIL);
+        Predicate<String> passwordFormat = str -> str.length() >= 6;
+        Predicate<String> nameFormat = str -> str.matches(Utils.REGEX_NAME);
+        email = checkString(emailField, emailFormat, getResources(), R.string.invalid_email);
+        password =
+                checkString(
+                        passwordField, passwordFormat, getResources(), R.string.invalid_password);
+        firstName = checkString(firstNameField, nameFormat, getResources(), R.string.invalid_name);
+        lastName = checkString(lastNameField, nameFormat, getResources(), R.string.invalid_name);
+
+        return email != null && password != null && firstName != null && lastName != null;
+    }
+
     private void signUp() {
+
+        if (!checkInputValidity()) return;
+
+        // Remove leading and trailing space of email, first and last name
+        email = email.trim();
+        firstName = firstName.trim();
+        lastName = lastName.trim();
+
         progressBar.setVisibility(View.VISIBLE);
-
-        firstName = firstNameField.getText().toString();
-        lastName = lastNameField.getText().toString();
-        String email, password;
-        email = emailField.getText().toString();
-        password = passwordField.getText().toString();
-
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "email empty", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "password empty", Toast.LENGTH_LONG).show();
-            return;
-        }
 
         auth.signUp(email, password)
                 .whenComplete(
