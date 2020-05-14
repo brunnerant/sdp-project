@@ -1,8 +1,8 @@
 package ch.epfl.qedit.view.home;
 
-import static ch.epfl.qedit.view.login.TokenLogInActivity.USER;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static ch.epfl.qedit.view.login.TokenLogInActivity.USER;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

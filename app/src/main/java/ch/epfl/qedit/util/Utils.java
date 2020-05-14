@@ -6,11 +6,9 @@ import android.content.res.Resources;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-
+import ch.epfl.qedit.R;
 import java.util.Arrays;
 import java.util.Locale;
-
-import ch.epfl.qedit.R;
 
 public class Utils {
 
@@ -28,10 +26,12 @@ public class Utils {
      *
      * @param languagePos position of the language in the spinner
      */
-    public static void showToastChangedLanguage(int languagePos, int toastType, Context context, Resources resources) {
-        String stringToDisplay = resources.getString(R.string.language_changed)
-                + " "
-                + resources.getStringArray(R.array.languages_list)[languagePos];
+    public static void showToastChangedLanguage(
+            int languagePos, int toastType, Context context, Resources resources) {
+        String stringToDisplay =
+                resources.getString(R.string.language_changed)
+                        + " "
+                        + resources.getStringArray(R.array.languages_list)[languagePos];
 
         showToast(stringToDisplay, toastType, context);
     }
@@ -40,22 +40,34 @@ public class Utils {
         Toast.makeText(context, stringToDisplay, toastType).show();
     }
 
-    public static void showToast(int stringId, int toastType, Context context, Resources resources) {
+    public static void showToast(
+            int stringId, int toastType, Context context, Resources resources) {
         showToast(resources.getString(stringId), toastType, context);
     }
 
     /**
      * Source: https://stackoverflow.com/a/17789187/13249857
+     *
      * @param activity
      */
     public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager imm =
+                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         // Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
-        // If no view currently has focus, create a new one, just so we can grab a window token from it
+        // If no view currently has focus, create a new one, just so we can grab a window token from
+        // it
         if (view == null) {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static String regexEmail() { // TODO verif
+        // Source: https://howtodoinjava.com/regex/java-regex-validate-email-address/
+        final String regexEmail =
+                "^[\\\\w!#$%&’*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$";
+
+        return regexEmail;
     }
 }

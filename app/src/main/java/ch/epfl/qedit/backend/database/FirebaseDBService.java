@@ -92,8 +92,8 @@ public class FirebaseDBService implements DatabaseService {
     @Override
     public CompletableFuture<Void> createUser(String userId, String firstName, String lastName) {
         Map<String, Object> data = new HashMap<>();
-        data.put("first_name", firstName);
-        data.put("last_name", lastName);
+        data.put("firstName", firstName);
+        data.put("lastName", lastName);
         data.put("score", 0);
         data.put("successes", 0);
         data.put("attempts", 0);

@@ -12,14 +12,21 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.database.FirebaseDBService;
+import ch.epfl.qedit.util.Utils;
+import ch.epfl.qedit.view.home.HomeActivity;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText emailField, passwordField;
     private Button signUpButton;
     private ProgressBar progressBar;
+
+    private String firstName = "jsdf";
+    private String lastName = "dhdf";
 
     private FirebaseAuth firebaseAuth;
 
@@ -31,6 +38,9 @@ public class SignUpActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         initializeViews();
+
+        firstName = "moi";
+        lastName = "toi";
 
         signUpButton.setOnClickListener(v -> signUp());
     }
@@ -64,17 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnCompleteListener(
                         task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(
-                                        getApplicationContext(),
-                                        "sign up success",
-                                        Toast.LENGTH_LONG)
-                                        .show();
-                                progressBar.setVisibility(View.GONE);
-
-                                Intent intent =
-                                        new Intent(
-                                                SignUpActivity.this, LogInActivity.class);
-                                startActivity(intent);
+                                onSignUpSuccessful();
                             } else {
                                 Toast.makeText(
                                         getApplicationContext(),
@@ -84,5 +84,47 @@ public class SignUpActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
                             }
                         });
+    }
+
+    private void onSignUpSuccessful() {
+        Toast.makeText(
+                getApplicationContext(),
+                "sign up success",
+                Toast.LENGTH_LONG)
+                .show();
+        progressBar.setVisibility(View.GONE);
+
+
+        Intent intent =
+                new Intent(
+                        SignUpActivity.this, LogInActivity.class);
+
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            // User is signed in
+            String email = firebaseUser.getEmail();
+            String uid = firebaseUser.getUid();
+
+            FirebaseDBService firebaseDBService = new FirebaseDBService();
+            firebaseDBService.createUser(uid, firstName, lastName).whenComplete(
+                    (result, throwable) -> {
+                        if (throwable != null) {
+                            Toast.makeText(
+                                    getBaseContext(),
+                                    R.string.database_error,
+                                    Toast.LENGTH_SHORT)
+                                    .show();
+                        } else {
+                            startActivity(intent);
+                        }
+                    }
+            );
+
+        } else {
+            // No user is signed in
+            //onLogInFailed();
+        }
+
     }
 }

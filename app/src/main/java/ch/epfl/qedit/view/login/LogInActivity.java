@@ -2,6 +2,7 @@ package ch.epfl.qedit.view.login;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SyncStats;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
@@ -19,12 +20,20 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.concurrent.CompletableFuture;
 
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.database.FirebaseDBService;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.view.home.HomeActivity;
 
 public class LogInActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    public static final String USER = "ch.epfl.qedit.view.USER";
 
     private EditText emailField, passwordField;
     private Button logInButton;
@@ -165,8 +174,8 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         // Sanitize email
         email = email.trim(); // Remove leading and trailing spaces
 
-        // This regular expression will accept only strings with an '@' in them
-        Boolean emailMatches = email.matches(".+@.+");
+        // This regular expression will accept only strings with an '@' in them TODO
+        Boolean emailMatches = email.matches(Utils.regexEmail());
         if (!emailIsEmpty && !emailMatches) {
             emailField.setError(resources.getString(R.string.invalid_email));
             fail = true;
@@ -196,13 +205,40 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     private void onLogInSuccessful() {
-        Utils.showToast(R.string.log_in_success, Toast.LENGTH_SHORT, getApplicationContext(), resources);
+        Utils.showToast(R.string.log_in_success, Toast.LENGTH_SHORT, getApplicationContext(), resources);//TODO après
         progressBar.setVisibility(View.GONE);
 
         Intent intent =
-                new Intent(LogInActivity.this, TokenLogInActivity.class);
-        // TODO bundle user
-        startActivity(intent);
+                new Intent(LogInActivity.this, HomeActivity.class);
+        Bundle bundle = new Bundle();
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            // User is signed in
+            String email = firebaseUser.getEmail();
+            String uid = firebaseUser.getUid();
+
+            FirebaseDBService firebaseDBService = new FirebaseDBService();
+            firebaseDBService.getUser(uid).whenComplete(
+                    (result, throwable) -> {
+                     if (throwable != null || result.getFirstName() == null) {
+                         Toast.makeText(
+                                 context,
+                                 R.string.database_error,
+                                 Toast.LENGTH_SHORT)
+                                 .show();
+                     } else {
+                         bundle.putSerializable(USER, result);
+                         intent.putExtras(bundle);
+                         startActivity(intent);
+                     }
+                    }
+            );
+
+        } else {
+            // No user is signed in
+            onLogInFailed();
+        }
     }
 
     private void onLogInFailed() {
