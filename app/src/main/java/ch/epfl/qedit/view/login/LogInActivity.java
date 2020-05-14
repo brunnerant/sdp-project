@@ -185,8 +185,8 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                 .whenComplete(
                         (user, throwable) -> {
                             if (throwable != null) {
-                                Toast.makeText(context, R.string.database_error, Toast.LENGTH_SHORT)
-                                        .show();
+                                Utils.showToast(
+                                        R.string.database_error, Toast.LENGTH_SHORT, context, resources);
                             } else {
                                 bundle.putSerializable(USER, user);
                                 intent.putExtras(bundle);
