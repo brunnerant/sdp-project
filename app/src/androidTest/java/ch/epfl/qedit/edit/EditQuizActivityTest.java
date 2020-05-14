@@ -9,7 +9,8 @@ import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultDat
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.util.Util.createMockQuiz;
+import static ch.epfl.qedit.util.Util.createTestQuiz;
+import static ch.epfl.qedit.util.Util.createTestStringPool;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
@@ -31,6 +32,7 @@ import org.junit.Test;
 
 public class EditQuizActivityTest {
     private Quiz quiz;
+    private StringPool stringPool;
 
     @Rule
     public final IntentsTestRule<EditQuizActivity> testRule =
@@ -38,9 +40,9 @@ public class EditQuizActivityTest {
 
     @Before
     public void setUp() {
-        quiz = createMockQuiz("Test");
+        quiz = createTestQuiz();
         Quiz.Builder quizBuilder = new Quiz.Builder(quiz);
-        StringPool stringPool = new StringPool();
+        stringPool = createTestStringPool("Title");
 
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -74,7 +76,7 @@ public class EditQuizActivityTest {
         onView(withId(R.id.next)).perform(click());
 
         onView(withId(R.id.question_title))
-                .check(matches(withText(quiz.getQuestions().get(1).getTitle())));
+                .check(matches(withText(stringPool.get(quiz.getQuestions().get(1).getTitle()))));
 
         onView(withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
         onView(withId(R.id.question_details_container)).check(matches(isDisplayed()));
