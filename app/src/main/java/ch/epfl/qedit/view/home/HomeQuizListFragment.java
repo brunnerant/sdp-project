@@ -40,6 +40,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
+
     public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
     public static final String STRING_POOL = "ch.epfl.qedit.view.STRING_POOL";
     private static final int EDIT_QUIZ_REQUEST_CODE = 2;
@@ -63,14 +64,17 @@ public class HomeQuizListFragment extends Fragment
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home_quiz_list, container, false);
 
-        // Build the top bar and the dialogs
+        // Set the top bar
         setHasOptionsMenu(true);
 
+        // Initialize the dialog shown on deletion
         deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete), this);
 
+        // Create the filter that is applied on the titles enter by the user when changing the title
+        // of the quiz
         createTextFilter();
 
-        // Get user from the bundle created by the parent activity
+        // Get user from the bundle created by the parent activity and get his/her quizzes
         User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
@@ -88,9 +92,11 @@ public class HomeQuizListFragment extends Fragment
         return view;
     }
 
+    /** Initialize the TextFilter used to check the titles entered by the user */
     private void createTextFilter() {
         textFilter =
                 text -> {
+                    // Empty
                     if (text.trim().length() == 0) return getString(R.string.empty_quiz_name_error);
 
                     for (Map.Entry<String, String> entry : quizzes) {
@@ -137,6 +143,7 @@ public class HomeQuizListFragment extends Fragment
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add:
+                // Prepare and show the dialog with settings for a new quiz
                 EditQuizSettingsDialog addSettingsDialog = EditQuizSettingsDialog.newInstance(this);
                 addSettingsDialog.setTextFilter(textFilter);
                 addSettingsDialog.show(getParentFragmentManager(), "add_dialog");
@@ -219,6 +226,10 @@ public class HomeQuizListFragment extends Fragment
                         });
     }
 
+    /**
+     * Initializes a dialog that gives the user the possibility to change the title of the already
+     * existing quiz
+     */
     private void launchModifyQuizDialog(StringPool stringPool, Quiz quizStructure, int position) {
         EditQuizSettingsDialog modifySettingsDialog =
                 EditQuizSettingsDialog.newInstance(this, stringPool, quizStructure);
@@ -268,14 +279,18 @@ public class HomeQuizListFragment extends Fragment
         listAdapter.removeItem(deleteIndex);
     }
 
-    // This method will be called when the user confirms the addition by clicking "yes"
+    // This method will be called when the user submits the settings made in the SettingsDialog by
+    // clicking on "Start editing"
     @Override
     public void onSubmit(StringPool stringPool, Quiz.Builder quizBuilder) {
         String title = stringPool.get(TITLE_ID);
 
         if (modifyIndex < 0) {
+            // Edit a new Quiz, add an new entry in the list of quizzes
             listAdapter.addItem(new AbstractMap.SimpleEntry<>("key", title));
         } else {
+            // Edit an already existing Quiz, so we have to update the existing entry in the list of
+            // quizzes
             Map.Entry<String, String> oldEntry = quizzes.get(modifyIndex);
             AbstractMap.SimpleImmutableEntry<String, String> newEntry =
                     new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), title);
@@ -284,7 +299,7 @@ public class HomeQuizListFragment extends Fragment
             modifyIndex = -1;
         }
 
-        // Launch the EditQuizActivity
+        // Launch the EditQuizActivity with the extras
         Intent intent = new Intent(requireActivity(), EditQuizActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZ_BUILDER, quizBuilder);
