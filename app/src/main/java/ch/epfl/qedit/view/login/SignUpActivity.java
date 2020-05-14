@@ -56,10 +56,6 @@ public class SignUpActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
     }
 
-    private void confirmPassword() {
-        String confirmation = passwordConfirmationField.getText().toString();
-    }
-
     private boolean checkInputValidity() {
         // Check validity of all input
         Predicate<String> emailFormat = str -> str.matches(Utils.REGEX_EMAIL);
@@ -71,6 +67,18 @@ public class SignUpActivity extends AppCompatActivity {
                         passwordField, passwordFormat, getResources(), R.string.invalid_password);
         firstName = checkString(firstNameField, nameFormat, getResources(), R.string.invalid_name);
         lastName = checkString(lastNameField, nameFormat, getResources(), R.string.invalid_name);
+
+        // Check if password confirmation match actual password
+        if (password != null) {
+            Predicate<String> matchPsw = str -> password.equals(str);
+            String confirmation =
+                    checkString(
+                            passwordConfirmationField,
+                            matchPsw,
+                            getResources(),
+                            R.string.invalid_confirmation_psw);
+            if (confirmation == null) return false;
+        }
 
         return email != null && password != null && firstName != null && lastName != null;
     }
