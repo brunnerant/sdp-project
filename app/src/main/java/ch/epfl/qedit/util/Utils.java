@@ -20,7 +20,7 @@ public class Utils {
 
     // Source: regex n°2 on https://howtodoinjava.com/regex/java-regex-validate-email-address/
     public static final String REGEX_EMAIL = "^(\\s)*[A-Za-z0-9+_.-]+@(.+)(\\s)*$";
-    public static final String REGEX_NAME = "^(\\s)*[A-Za-z0-9+-\\s]+(\\s)*$";
+    public static final String REGEX_NAME = "^(\\s)*[A-Za-z0-9\\s\\-]+(\\s)*$";
 
     /**
      * Check if the string written in the text view is not empty and respect a certain predicate. If

@@ -119,7 +119,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
                         });
-            // Put the current user id in cache
-            Utils.putStringInPrefs(this, "user_id", userId);
+        // Put the current user id in cache
+        Utils.putStringInPrefs(this, "user_id", userId);
     }
 }
