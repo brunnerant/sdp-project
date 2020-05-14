@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.backend.database.FirebaseDBService;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.util.Utils;
@@ -221,7 +223,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
         Intent intent = new Intent(this, HomeActivity.class);
 
-        FirebaseDBService db = new FirebaseDBService();
+        DatabaseService db = DatabaseFactory.getInstance();
         db.createUser(userId, firstName, lastName)
                 .whenComplete(
                         (result, throwable) -> {
