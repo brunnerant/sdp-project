@@ -164,10 +164,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         textViewLogInInstead.setText(coloredText);
     }
 
-    private void confirmPassword() {
-        String confirmation = passwordConfirmationField.getText().toString();
-    }
-
     private boolean checkInputValidity() {
         // Check validity of all input
         Predicate<String> emailFormat = str -> str.matches(Utils.REGEX_EMAIL);
@@ -179,6 +175,18 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                         passwordField, passwordFormat, resources, R.string.invalid_password);
         firstName = checkString(firstNameField, nameFormat, resources, R.string.invalid_name);
         lastName = checkString(lastNameField, nameFormat, resources, R.string.invalid_name);
+
+        // Check if password confirmation match actual password
+        if (password != null) {
+            Predicate<String> matchPsw = str -> password.equals(str);
+            String confirmation =
+                    checkString(
+                            passwordConfirmationField,
+                            matchPsw,
+                            getResources(),
+                            R.string.invalid_confirmation_psw);
+            if (confirmation == null) return false;
+        }
 
         return email != null && password != null && firstName != null && lastName != null;
     }
@@ -227,8 +235,8 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                                 startActivity(intent);
                             }
                         });
-            // Put the current user id in cache
-            Utils.putStringInPrefs(this, "user_id", userId);
+        // Put the current user id in cache
+        Utils.putStringInPrefs(this, "user_id", userId);
     }
 
     private void logInInstead() {
