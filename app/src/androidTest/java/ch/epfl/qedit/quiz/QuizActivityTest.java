@@ -41,6 +41,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class QuizActivityTest {
+    private Quiz quiz;
+    private StringPool stringPool;
     private QuizViewModel model;
     private final Integer zero = 0;
     private final String answer1 = "1234";
@@ -52,22 +54,8 @@ public class QuizActivityTest {
     public void launchActivity() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        StringPool stringPool = new StringPool();
-        stringPool.update(TITLE_ID, "Title");
 
-        Quiz.Builder builder = new Quiz.Builder();
-        builder.append(
-                        new Question(
-                                stringPool.add("Bananas"),
-                                stringPool.add("How many?"),
-                                "matrix1x1"))
-                .append(
-                        new Question(
-                                stringPool.add("Vector"),
-                                stringPool.add("Fill this Vector!"),
-                                "matrix7x1"));
-
-        Quiz quiz = builder.build();
+        initializeQuizAndStringPool();
 
         bundle.putSerializable(QUIZ_ID, quiz);
         bundle.putSerializable(STRING_POOL, stringPool);
@@ -91,6 +79,25 @@ public class QuizActivityTest {
 
     public void finishActivity() {
         testRule.finishActivity();
+    }
+
+    private void initializeQuizAndStringPool() {
+        stringPool = new StringPool();
+        stringPool.update(TITLE_ID, "Title");
+
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.append(
+                        new Question(
+                                stringPool.add("Bananas"),
+                                stringPool.add("How many?"),
+                                "matrix1x1"))
+                .append(
+                        new Question(
+                                stringPool.add("Vector"),
+                                stringPool.add("Fill this Vector!"),
+                                "matrix7x1"));
+
+        quiz = builder.build();
     }
 
     @Test
@@ -163,7 +170,6 @@ public class QuizActivityTest {
     public void testDoneNoCLicked() {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
-        // onView(withText("No")).inRoot(isDialog()).perform(click());
         onView(withId(android.R.id.button2)).perform(click());
         finishActivity();
     }
@@ -173,8 +179,7 @@ public class QuizActivityTest {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        // onView(withText("Yes")).inRoot(isDialog()).perform(click());
-        onView(withText("number of good answers = 0"))
+            onView(withText("number of good answers = 0"))
                 .inRoot(
                         withDecorView(
                                 Matchers.not(
