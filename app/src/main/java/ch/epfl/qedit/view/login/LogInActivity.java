@@ -155,12 +155,12 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         setTitle(resources.getString(R.string.title_activity_log_in));
     }
 
-    private String checkString(EditText view, boolean errorCondition, int errorString) {
+    private String checkString(EditText view, boolean condition, int errorString) {
         String text = view.getText().toString();
         if (TextUtils.isEmpty(text)) {
             view.setError(resources.getString(R.string.input_cannot_be_empty));
             text = null;
-        } else if (errorCondition) {
+        } else if (!condition) {
             view.setError(resources.getString(errorString));
             text = null;
         }

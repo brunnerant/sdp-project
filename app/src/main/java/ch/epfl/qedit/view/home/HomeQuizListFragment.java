@@ -4,7 +4,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
-import static ch.epfl.qedit.view.login.TokenLogInActivity.USER;
+import static ch.epfl.qedit.view.login.LogInActivity.USER;
 
 import android.content.Intent;
 import android.os.Bundle;
