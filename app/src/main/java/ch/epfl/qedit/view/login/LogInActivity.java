@@ -1,6 +1,6 @@
 package ch.epfl.qedit.view.login;
 
-import static ch.epfl.qedit.util.Utils.checkString;
+import static ch.epfl.qedit.view.login.Util.checkString;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,16 +15,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
-import ch.epfl.qedit.backend.database.FirebaseDBService;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.function.Predicate;
 
@@ -88,7 +86,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
         setLanguage(languageCode);
         updateTexts();
-        Utils.showToastChangedLanguage(pos, context, resources);
+        Util.showToastChangedLanguage(pos, context, resources);
     }
 
     @Override
@@ -110,7 +108,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         Spinner languageSelectionSpinner = findViewById(R.id.spinner_language_selection);
         // Find app's current language position in languages list
         int positionInLanguageList =
-                Utils.languagePositionInList(resources, Utils.getCurrentLanguageCode());
+                Util.languagePositionInList(resources, Util.getCurrentLanguageCode());
         // Set current language in spinner at startup
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
         // Set listener
@@ -154,7 +152,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private void logIn() {
         // Check validity of each email and password before passing it to the Auth Service
-        Predicate<String> emailFormat = str -> str.matches(Utils.REGEX_EMAIL);
+        Predicate<String> emailFormat = str -> str.matches(Util.REGEX_EMAIL);
         Predicate<String> passwordFormat = str -> str.length() >= 6;
         String email = checkString(emailField, emailFormat, resources, R.string.invalid_email);
         String password =
@@ -185,7 +183,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                 .whenComplete(
                         (user, throwable) -> {
                             if (throwable != null) {
-                                Utils.showToast(
+                                Util.showToast(
                                         R.string.database_error, context, resources);
                             } else {
                                 bundle.putSerializable(USER, user);
@@ -194,12 +192,12 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                             }
                         });
         // Put the current user id in cache
-        Utils.putStringInPrefs(this, "user_id", userId);
+        Util.putStringInPrefs(this, "user_id", userId);
     }
 
     private void onLogInFailed() {
         progressBar.setVisibility(View.GONE);
-        Utils.showToast(
+        Util.showToast(
                 R.string.log_in_fail, context, resources);
     }
 

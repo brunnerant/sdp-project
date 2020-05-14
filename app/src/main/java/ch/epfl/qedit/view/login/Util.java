@@ -1,4 +1,4 @@
-package ch.epfl.qedit.util;
+package ch.epfl.qedit.view.login;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -16,11 +16,13 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.function.Predicate;
 
-public class Utils {
+public final class Util {
 
     // Source: regex n°2 on https://howtodoinjava.com/regex/java-regex-validate-email-address/
     public static final String REGEX_EMAIL = "^(\\s)*[A-Za-z0-9+_.-]+@(.+)(\\s)*$";
     public static final String REGEX_NAME = "^(\\s)*[A-Za-z0-9\\s\\-]+(\\s)*$";
+
+    private Util() {}
 
     /**
      * Check if the string written in the text view is not empty and respect a certain predicate. If

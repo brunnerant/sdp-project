@@ -15,7 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.util.Utils;
+import ch.epfl.qedit.view.login.Util;
 import ch.epfl.qedit.view.QR.ScannerActivity;
 import com.google.android.material.navigation.NavigationView;
 import java.util.Objects;
@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private boolean isUserLoggedIn() {
-        String uid = Utils.getStringInPrefs(this, "user_id");
+        String uid = Util.getStringInPrefs(this, "user_id");
         System.out.println("uid.equals(\"\") = " + uid.equals(""));
         return !uid.equals("");
     }

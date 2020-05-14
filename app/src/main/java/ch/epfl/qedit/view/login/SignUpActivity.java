@@ -1,6 +1,6 @@
 package ch.epfl.qedit.view.login;
 
-import static ch.epfl.qedit.util.Utils.checkString;
+import static ch.epfl.qedit.view.login.Util.checkString;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,17 +15,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
-import ch.epfl.qedit.backend.database.FirebaseDBService;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.util.Utils;
-import ch.epfl.qedit.view.home.HomeActivity;
 
 import java.util.function.Predicate;
 
@@ -96,7 +93,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
         setLanguage(languageCode);
         updateTexts();
-        Utils.showToastChangedLanguage(pos, context, resources);
+        Util.showToastChangedLanguage(pos, context, resources);
     }
 
     @Override
@@ -121,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         Spinner languageSelectionSpinner = findViewById(R.id.spinner_language_selection);
         // Find app's current language position in languages list
         int positionInLanguageList =
-                Utils.languagePositionInList(resources, Utils.getCurrentLanguageCode());
+                Util.languagePositionInList(resources, Util.getCurrentLanguageCode());
         // Set current language in spinner at startup
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
         // Set listener
@@ -168,9 +165,9 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     private boolean checkInputValidity() {
         // Check validity of all input
-        Predicate<String> emailFormat = str -> str.matches(Utils.REGEX_EMAIL);
+        Predicate<String> emailFormat = str -> str.matches(Util.REGEX_EMAIL);
         Predicate<String> passwordFormat = str -> str.length() >= 6;
-        Predicate<String> nameFormat = str -> str.matches(Utils.REGEX_NAME);
+        Predicate<String> nameFormat = str -> str.matches(Util.REGEX_NAME);
         email = checkString(emailField, emailFormat, resources, R.string.invalid_email);
         password =
                 checkString(
@@ -214,7 +211,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     private void onSignUpFail() {
         progressBar.setVisibility(View.GONE);
-        Utils.showToast(
+        Util.showToast(
                 R.string.sign_up_fail, context, resources);
     }
 
@@ -228,16 +225,16 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                 .whenComplete(
                         (result, throwable) -> {
                             if (throwable != null) {
-                                Utils.showToast(
+                                Util.showToast(
                                         R.string.database_error, context, resources);
                             } else {
                                 startActivity(intent);
                             }
                         });
         // Put the current user id in cache
-        Utils.putStringInPrefs(this, "user_id", userId);
+        Util.putStringInPrefs(this, "user_id", userId);
 
-        Utils.showToast(
+        Util.showToast(
                 R.string.sign_up_success, context, resources);
     }
 

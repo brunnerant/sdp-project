@@ -26,7 +26,7 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.util.Utils;
+import ch.epfl.qedit.view.login.Util;
 import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
@@ -155,10 +155,10 @@ public class HomeQuizListFragment extends Fragment
 
     private void logOut() {
         // Retrieve cached user id
-        String uid = Utils.getStringInPrefs(getActivity(), "user_id");
+        String uid = Util.getStringInPrefs(getActivity(), "user_id");
 
         // Remove cached user id
-        Utils.removeStringInPrefs(getActivity(), "user_id");
+        Util.removeStringInPrefs(getActivity(), "user_id");
 
         // Log out
         FirebaseAuth.getInstance().signOut();
