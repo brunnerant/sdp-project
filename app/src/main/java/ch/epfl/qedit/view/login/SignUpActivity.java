@@ -186,7 +186,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                             passwordConfirmationField,
                             matchPsw,
                             resources,
-                            R.string.invalid_confirmation_psw);
+                            R.string.invalid_password_confirmation);
             if (confirmation == null) return false;
         }
 
