@@ -7,8 +7,10 @@ import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -188,5 +190,20 @@ public final class Util {
         }
 
         future.complete(new StringPool(result));
+    }
+
+    /** Update data specified in data Map in Firestore User (user ID) */
+    public static CompletableFuture<Void> updateUser(
+            FirebaseFirestore db, String userId, Map<String, Object> data) {
+
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
+        db.collection("users")
+                .document(userId)
+                .set(data, SetOptions.merge())
+                .addOnSuccessListener(doc -> future.complete(null))
+                .addOnFailureListener(e -> error(future, e.getMessage()));
+
+        return future;
     }
 }

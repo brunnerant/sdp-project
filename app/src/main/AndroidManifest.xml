@@ -3,17 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ch.epfl.qedit">
 
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- The app needs those permissions to access the device's location -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera2" />
+    <uses-feature android:name="android.hardware.camera2.params." />
 
-    <!-- The app needs those permissions to access the device's location -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
-    <uses-feature android:name="android.hardware.camera2"/>
-    <uses-feature android:name="android.hardware.camera2.params."/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -23,16 +21,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".view.QR.ScannerActivity"></activity>
         <activity android:name=".view.edit.EditSettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".view.edit.EditQuestionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,6 +42,7 @@
             android:parentActivityName=".view.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -69,6 +70,7 @@
             android:label="@string/title_activity_token_log_in">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -80,6 +82,7 @@
             android:parentActivityName=".view.login.TokenLogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW_ROLE" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -88,6 +91,7 @@
             android:parentActivityName=".view.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
