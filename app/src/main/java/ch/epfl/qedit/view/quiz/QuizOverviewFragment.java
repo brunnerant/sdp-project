@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
-import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.List;
 
@@ -18,7 +18,6 @@ import java.util.List;
 public class QuizOverviewFragment extends Fragment {
 
     private ListView listView;
-    private QuizViewModel quizViewModel;
 
     @Override
     public View onCreateView(
@@ -28,28 +27,28 @@ public class QuizOverviewFragment extends Fragment {
         listView = view.findViewById(R.id.question_list);
 
         // Listen to the quiz live data
-        quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
-        setupListView();
+        final QuizViewModel model =
+                new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
+        setupListView(model.getQuiz());
 
         listView.setOnItemClickListener(
                 (parent, view1, position, id) -> {
                     // We change the question that is focused when the corresponding list item
                     // is selected
-                    quizViewModel.getFocusedQuestion().postValue(position);
+                    model.getFocusedQuestion().postValue(position);
                 });
 
         return view;
     }
 
     /** Handles the initialization of the ListView showing the list of questions */
-    private void setupListView() {
-        List<Question> questions = quizViewModel.getQuiz().getQuestions();
-        StringPool stringPool = quizViewModel.getStringPool();
+    private void setupListView(Quiz quiz) {
+        List<Question> questions = quiz.getQuestions();
         String[] overviewItems = new String[questions.size()];
 
         // For each question of the quiz, we create an item in the list view
         for (int i = 0; i < questions.size(); ++i) {
-            String title = stringPool.get(questions.get(i).getTitle());
+            String title = questions.get(i).getTitle();
             overviewItems[i] = (i + 1) + ") " + title;
         }
 

@@ -12,7 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
-import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static ch.epfl.qedit.view.quiz.QuestionFragment.FRAGMENT_TAG;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.Is.is;
@@ -55,16 +54,15 @@ public class QuizActivityTest {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
 
-        initializeQuizAndStringPool();
+        initializeStringPoolAndQuiz();
 
         bundle.putSerializable(QUIZ_ID, quiz);
-        bundle.putSerializable(STRING_POOL, stringPool);
         intent.putExtras(bundle);
 
         testRule.launchActivity(intent);
 
         model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
-        model.initialize(quiz, stringPool);
+        model.setQuiz(quiz.instantiateLanguage(stringPool));
 
         final MatrixModel matrixModel = new MatrixModel(1, 1);
         matrixModel.updateAnswer(0, 0, answer1);
@@ -81,7 +79,7 @@ public class QuizActivityTest {
         testRule.finishActivity();
     }
 
-    private void initializeQuizAndStringPool() {
+    private void initializeStringPoolAndQuiz() {
         stringPool = new StringPool();
         stringPool.update(TITLE_ID, "Title");
 
@@ -97,7 +95,7 @@ public class QuizActivityTest {
                                 stringPool.add("Fill this Vector!"),
                                 "matrix7x1"));
 
-        quiz = builder.build();
+        quiz = builder.build().instantiateLanguage(stringPool);
     }
 
     @Test

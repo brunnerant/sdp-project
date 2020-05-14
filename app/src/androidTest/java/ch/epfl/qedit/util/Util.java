@@ -52,6 +52,10 @@ public final class Util {
         return new StringPool(stringPool);
     }
 
+    public static Quiz createInstantiatedTestQuiz(String title) {
+        return createTestQuiz().instantiateLanguage(createTestStringPool(title));
+    }
+
     public static void isDisplayed(int id, boolean scrollTo) {
         if (scrollTo)
             onView(withId(id)).perform(scrollTo()).check(matches(ViewMatchers.isDisplayed()));

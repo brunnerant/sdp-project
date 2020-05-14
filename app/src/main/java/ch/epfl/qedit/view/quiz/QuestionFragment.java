@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
@@ -55,14 +54,12 @@ public class QuestionFragment extends Fragment {
             return;
         }
 
-        StringPool stringPool = quizViewModel.getStringPool();
         Question question = quiz.getQuestions().get(index);
 
         // We have to change the question title and text
-        String questionTitleStr =
-                "Question " + (index + 1) + " - " + stringPool.get(question.getTitle());
+        String questionTitleStr = "Question " + (index + 1) + " - " + question.getTitle();
         questionTitle.setText(questionTitleStr);
-        questionDisplay.setText(stringPool.get(question.getText()));
+        questionDisplay.setText(question.getText());
 
         // Set everything up for the concrete AnswerFragment and launch it
         prepareAnswerFormatFragment(question, index);
