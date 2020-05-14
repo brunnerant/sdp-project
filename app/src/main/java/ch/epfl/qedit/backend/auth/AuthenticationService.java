@@ -1,10 +1,8 @@
 package ch.epfl.qedit.backend.auth;
 
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Callback;
 import ch.epfl.qedit.util.Error;
-import ch.epfl.qedit.util.Response;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Represents an authentication service, that is a service to which login requests can be sent. It
@@ -22,5 +20,9 @@ public interface AuthenticationService {
      * @param token the token to send to the authentication service
      * @param responseCallback the callback to handle the response once it arrives
      */
-    void sendRequest(String token, Callback<Response<User>> responseCallback);
+    // void sendRequest(String token, Callback<Response<User>> responseCallback);
+
+    CompletableFuture<String> signUp(String email, String password);
+
+    CompletableFuture<String> logIn(String email, String password);
 }

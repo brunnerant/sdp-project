@@ -26,7 +26,6 @@ import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.home.HomeActivity;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

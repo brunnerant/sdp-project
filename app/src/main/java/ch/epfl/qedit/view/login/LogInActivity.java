@@ -2,7 +2,6 @@ package ch.epfl.qedit.view.login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SyncStats;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
@@ -16,19 +15,13 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.concurrent.CompletableFuture;
-
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.auth.AuthenticationFactory;
+import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.backend.database.FirebaseDBService;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.util.Utils;
 import ch.epfl.qedit.view.home.HomeActivity;
 
 public class LogInActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -40,7 +33,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     private ProgressBar progressBar;
     private TextView textViewSignUp;
 
-    private FirebaseAuth firebaseAuth;
+    private AuthenticationService auth;
 
     private boolean userHasInteracted = false;
 
@@ -52,7 +45,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        auth = AuthenticationFactory.getInstance();
 
         context = getBaseContext();
         resources = getResources();
@@ -106,11 +99,15 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         progressBar = findViewById(R.id.progress_bar);
         textViewSignUp = findViewById(R.id.not_signed_up);
 
-        int colorNotSignedUpAlreadySignedUp = resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
-        Spanned coloredText = Html.fromHtml(
-                "<font color='" + colorNotSignedUpAlreadySignedUp + "'>"
-                        + resources.getString(R.string.not_signed_up)
-                        + "</font>");
+        int colorNotSignedUpAlreadySignedUp =
+                resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
+        Spanned coloredText =
+                Html.fromHtml(
+                        "<font color='"
+                                + colorNotSignedUpAlreadySignedUp
+                                + "'>"
+                                + resources.getString(R.string.not_signed_up)
+                                + "</font>");
         textViewSignUp.setText(coloredText);
     }
 
@@ -118,7 +115,8 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         // Create spinner (language list)
         Spinner languageSelectionSpinner = findViewById(R.id.spinner_language_selection);
         // Find app's current language position in languages list
-        int positionInLanguageList = Utils.languagePositionInList(resources, Utils.getCurrentLanguageCode());
+        int positionInLanguageList =
+                Utils.languagePositionInList(resources, Utils.getCurrentLanguageCode());
         // Set current language in spinner at startup
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
         // Set listener
@@ -143,106 +141,74 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         passwordField.setHint(resources.getString(R.string.hint_password));
         logInButton.setText(resources.getString(R.string.log_in_button_text));
 
-        int colorNotSignedUpAlreadySignedUp = resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
-        Spanned coloredText = Html.fromHtml(
-                "<font color='" + colorNotSignedUpAlreadySignedUp + "'>"
-                        + resources.getString(R.string.not_signed_up)
-                        + "</font>");
+        int colorNotSignedUpAlreadySignedUp =
+                resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
+        Spanned coloredText =
+                Html.fromHtml(
+                        "<font color='"
+                                + colorNotSignedUpAlreadySignedUp
+                                + "'>"
+                                + resources.getString(R.string.not_signed_up)
+                                + "</font>");
         textViewSignUp.setText(coloredText);
 
         setTitle(resources.getString(R.string.title_activity_log_in));
     }
 
+    private String checkString(EditText view, boolean errorCondition, int errorString) {
+        String text = view.getText().toString();
+        if (TextUtils.isEmpty(text)) {
+            view.setError(resources.getString(R.string.input_cannot_be_empty));
+            text = null;
+        } else if (errorCondition) {
+            view.setError(resources.getString(errorString));
+            text = null;
+        }
+        return text;
+    }
+
     private void logIn() {
-        String email, password;
-        email = emailField.getText().toString();
-        password = passwordField.getText().toString();
+        String email = emailField.getText().toString().trim();
+        email = checkString(emailField, email.matches(Utils.regexEmail()), R.string.invalid_email);
+        String password = passwordField.getText().toString();
+        password = checkString(passwordField, password.length() >= 6, R.string.invalid_password);
 
-        Boolean fail = false;
-
-        Boolean emailIsEmpty = TextUtils.isEmpty(email);
-        if (emailIsEmpty) {
-            emailField.setError(resources.getString(R.string.input_cannot_be_empty));
-            fail = true;
-        }
-        Boolean passwordIsEmpty = TextUtils.isEmpty(password);
-        if (passwordIsEmpty) {
-            passwordField.setError(resources.getString(R.string.input_cannot_be_empty));
-            fail = true;
-        }
-
-        // Sanitize email
-        email = email.trim(); // Remove leading and trailing spaces
-
-        // This regular expression will accept only strings with an '@' in them TODO
-        Boolean emailMatches = email.matches(Utils.regexEmail());
-        if (!emailIsEmpty && !emailMatches) {
-            emailField.setError(resources.getString(R.string.invalid_email));
-            fail = true;
-        }
-
-        Boolean passwordIsLongEnough = password.length() >= 6;
-        if (!passwordIsEmpty && !passwordIsLongEnough) {
-            passwordField.setError(resources.getString(R.string.invalid_password));
-            fail = true;
-        }
-
-        if(fail) {
-            return;
-        }
+        if (email == null || password == null) return;
 
         progressBar.setVisibility(View.VISIBLE);
 
-        firebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(
-                        task -> {
-                            if (task.isSuccessful()) {
-                                onLogInSuccessful();
+        auth.logIn(email, password)
+                .whenComplete(
+                        (userId, error) -> {
+                            if (error != null) onLogInFailed();
+                            else onLogInSuccessful(userId);
+                        });
+    }
+
+    private void onLogInSuccessful(String userId) {
+        progressBar.setVisibility(View.GONE);
+
+        Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+        Bundle bundle = new Bundle();
+
+        FirebaseDBService db = new FirebaseDBService();
+        db.getUser(userId)
+                .whenComplete(
+                        (user, throwable) -> {
+                            if (throwable != null) {
+                                Toast.makeText(context, R.string.database_error, Toast.LENGTH_SHORT)
+                                        .show();
                             } else {
-                                onLogInFailed();
+                                bundle.putSerializable(USER, user);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
                             }
                         });
     }
 
-    private void onLogInSuccessful() {
-        Utils.showToast(R.string.log_in_success, Toast.LENGTH_SHORT, getApplicationContext(), resources);//TODO après
-        progressBar.setVisibility(View.GONE);
-
-        Intent intent =
-                new Intent(LogInActivity.this, HomeActivity.class);
-        Bundle bundle = new Bundle();
-
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            // User is signed in
-            String email = firebaseUser.getEmail();
-            String uid = firebaseUser.getUid();
-
-            FirebaseDBService firebaseDBService = new FirebaseDBService();
-            firebaseDBService.getUser(uid).whenComplete(
-                    (result, throwable) -> {
-                     if (throwable != null || result.getFirstName() == null) {
-                         Toast.makeText(
-                                 context,
-                                 R.string.database_error,
-                                 Toast.LENGTH_SHORT)
-                                 .show();
-                     } else {
-                         bundle.putSerializable(USER, result);
-                         intent.putExtras(bundle);
-                         startActivity(intent);
-                     }
-                    }
-            );
-
-        } else {
-            // No user is signed in
-            onLogInFailed();
-        }
-    }
-
     private void onLogInFailed() {
-        Utils.showToast(R.string.log_in_fail, Toast.LENGTH_SHORT, getApplicationContext(), resources);
+        Utils.showToast(
+                R.string.log_in_fail, Toast.LENGTH_SHORT, getApplicationContext(), resources);
         progressBar.setVisibility(View.GONE);
     }
 
