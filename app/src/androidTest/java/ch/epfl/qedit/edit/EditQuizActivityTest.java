@@ -29,19 +29,24 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class EditQuizActivityTest {
+public class EditQuizActivityTest extends RecyclerViewHelpers {
     private Quiz quiz;
     private StringPool stringPool;
 
     @Rule
     public final IntentsTestRule<EditQuizActivity> testRule =
             new IntentsTestRule<>(EditQuizActivity.class, false, false);
+
+    public EditQuizActivityTest() {
+        super(R.id.question_list);
+    }
 
     @Before
     public void setUp() {
@@ -90,19 +95,15 @@ public class EditQuizActivityTest {
     @Test
     public void testReturnEditedResult() {
         onView(withId(R.id.done)).perform(click());
-
         onView(withText(testRule.getActivity().getString(R.string.warning_done_edition)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
 
         onDialog(android.R.id.button2).perform(click());
-
         assertFalse(testRule.getActivity().isFinishing());
 
         onView(withId(R.id.done)).perform(click());
-
         onDialog(android.R.id.button1).perform(click());
-
         assertThat(testRule.getActivityResult(), hasResultCode(RESULT_OK));
         assertThat(
                 testRule.getActivityResult(),
@@ -110,28 +111,40 @@ public class EditQuizActivityTest {
         assertThat(
                 testRule.getActivityResult(),
                 hasResultData(IntentMatchers.hasExtraWithKey(STRING_POOL)));
-
         assertTrue(testRule.getActivity().isFinishing());
     }
 
     @Test
     public void testCancelEdition() {
         onView(withId(R.id.exit)).perform(click());
-
         onView(withText(testRule.getActivity().getString(R.string.warning_exit_edition)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
 
         onDialog(android.R.id.button2).perform(click());
-
         assertFalse(testRule.getActivity().isFinishing());
 
         onView(withId(R.id.exit)).perform(click());
-
         onDialog(android.R.id.button1).perform(click());
-
         assertThat(testRule.getActivityResult(), hasResultCode(RESULT_CANCELED));
-
         assertTrue(testRule.getActivity().isFinishing());
+    }
+
+    @Test
+    public void testSaveEmptyQuiz() {
+        for (int i = 0; i < quiz.getQuestions().size(); ++i) {
+            item(0).perform(click());
+            itemView(0, R.id.delete_button).perform(click());
+            onDialog(android.R.id.button1).perform(click());
+        }
+
+        onView(withId(R.id.done)).perform(click());
+        onView(withText(testRule.getActivity().getString(R.string.warning_save_empty_quiz)))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()));
+
+        onDialog(android.R.id.button2).perform(click());
+        onView(withText(testRule.getActivity().getString(R.string.empty_question_list_hint_text)))
+                .check(matches(isDisplayed()));
     }
 }

@@ -68,7 +68,8 @@
     <string name="warning_delete_quiz">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
     <string name="warning_delete_question">Êtes-vous sûr de vouloir supprimer cette question ?</string>
     <string name="warning_exit_edition">Êtes-vous sûr de vouloir annuler l\'édition du quiz ? Les changements que vous avez effectué vont être ignorés.</string>
-    <string name="warning_done_edition">Êtes-vous sûr de vouloir arrêter l\'édition du quiz et de sauvgarder les changements ?</string>
+    <string name="warning_done_edition">Êtes-vous sûr de vouloir arrêter l\'édition du quiz et de sauvegarder les changements ?</string>
+    <string name="warning_save_empty_quiz">Vous ne pouvez pas sauvegarder un quiz vide. Ajoutez au moins une question.</string>
     <string name="add_quiz">Ajouter</string>
     <string name="empty_question_list_hint_text">Ajouter une question</string>
 

@@ -20,6 +20,7 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.util.ConfirmDialog;
+import ch.epfl.qedit.view.util.InfoDialog;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 import java.util.Objects;
 
@@ -35,6 +36,7 @@ public class EditQuizActivity extends AppCompatActivity
 
     private ConfirmDialog exitDialog;
     private ConfirmDialog doneDialog;
+    private InfoDialog cantSaveEmptyQuizDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class EditQuizActivity extends AppCompatActivity
     private void setupDialogs() {
         exitDialog = ConfirmDialog.create(getString(R.string.warning_exit_edition), this);
         doneDialog = ConfirmDialog.create(getString(R.string.warning_done_edition), this);
+        cantSaveEmptyQuizDialog = InfoDialog.create(getString(R.string.warning_save_empty_quiz));
     }
 
     @Override
@@ -106,7 +109,12 @@ public class EditQuizActivity extends AppCompatActivity
                 exitDialog.show(getSupportFragmentManager(), "exit_confirmation");
                 break;
             case R.id.done:
-                doneDialog.show(getSupportFragmentManager(), "done_confirmation");
+                if (quizBuilder.size() == 0) {
+                    cantSaveEmptyQuizDialog.show(
+                            getSupportFragmentManager(), "save_empty_quiz_information");
+                } else {
+                    doneDialog.show(getSupportFragmentManager(), "done_confirmation");
+                }
                 break;
         }
 
