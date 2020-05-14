@@ -8,6 +8,8 @@ public final class DatabaseFactory {
     /** The singleton instance of the auth service */
     private static DatabaseService dbService = null;
 
+    private DatabaseFactory() {}
+
     public static DatabaseService getInstance() {
         if (dbService == null) {
             dbService = new MockDBService();

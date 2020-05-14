@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.view.QR.ScannerActivity;
 import com.google.android.material.navigation.NavigationView;
 import java.util.Objects;
 
@@ -84,9 +85,8 @@ public class HomeActivity extends AppCompatActivity
                         .show();
                 break;
             case R.id.qr_code_burger:
-                /*Intent intent = new Intent(HomeActivity.this, ScannerActivity.class);
-                startActivity(intent);*/
-                Toast.makeText(this, "Can't scan QR codes for now", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeActivity.this, ScannerActivity.class);
+                startActivity(intent);
                 break;
             case R.id.my_account:
                 Toast.makeText(this, "You don't have an account page for now", Toast.LENGTH_SHORT)
