@@ -2,8 +2,6 @@ package ch.epfl.qedit.view.edit;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import com.google.android.gms.maps.CameraUpdate;
@@ -69,22 +67,22 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
         getMenuInflater().inflate(R.menu.edit_menu, menu);
         return true;
     }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        int id = item.getItemId();
-//
-//        // TODO in future PR: implement menu options
-//        switch (id) {
-//            case R.id.next:
-//            case R.id.previous:
-//                break;
-//            case R.id.overview:
-//                break;
-//            case R.id.done:
-//                break;
-//        }
-//
-//        return true;
-//    }
+    //
+    //    @Override
+    //    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    //        int id = item.getItemId();
+    //
+    //        // TODO in future PR: implement menu options
+    //        switch (id) {
+    //            case R.id.next:
+    //            case R.id.previous:
+    //                break;
+    //            case R.id.overview:
+    //                break;
+    //            case R.id.done:
+    //                break;
+    //        }
+    //
+    //        return true;
+    //    }
 }
