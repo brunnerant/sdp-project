@@ -13,6 +13,7 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
+import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -28,9 +29,9 @@ import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 import android.app.Activity;
@@ -74,7 +75,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
     @Before
     public void launchActivity() {
         User user = new User("Marcel", "Doe");
-        user.addQuiz("quiz0", "Qualification EPFL");
+        user.addQuiz("quiz0", "I am a Mock Quiz!");
 
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -117,8 +118,6 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         onDialog(R.id.edit_quiz_title).check(matches(isDisplayed()));
         onDialog(R.id.treasure_hunt_checkbox).check(matches((isDisplayed())));
         onDialog(R.id.edit_language_selection).check(matches((isDisplayed())));
-
-        clickOn(android.R.id.button1, false);
     }
 
     @Test
@@ -130,7 +129,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         closeSoftKeyboard();
 
         // Test that a duplicate name is not allowed either
-        onDialog(R.id.edit_quiz_title).perform(typeText("Qualification EPFL"));
+        onDialog(R.id.edit_quiz_title).perform(typeText("I am a Mock Quiz!"));
         closeSoftKeyboard();
         assertEditTextError(R.string.dup_quiz_name_error);
 
@@ -147,7 +146,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
                         hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class))));
     }
 
-    // @Test TODO
+    @Test // TODO check that stringPool contains right language onResult
     public void testLanguageSpinner() {
         clickOn(R.id.add, false);
 
@@ -156,12 +155,16 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         Espresso.closeSoftKeyboard();
 
         onDialog(R.id.edit_language_selection).perform(click());
-        onData(anything()).atPosition(1).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Français")))
+                .inRoot(isPlatformPopup())
+                .perform(click());
         onDialog(R.id.edit_language_selection).check(matches(withSpinnerText("Français")));
-        onData(anything()).atPosition(0).perform(click());
-        onDialog(R.id.edit_language_selection).check(matches(withSpinnerText("English")));
 
-        clickOn(android.R.id.button1, false);
+        onDialog(R.id.edit_language_selection).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("English")))
+                .inRoot(isPlatformPopup())
+                .perform(click());
+        onDialog(R.id.edit_language_selection).check(matches(withSpinnerText("English")));
     }
 
     @Test
@@ -177,8 +180,6 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         onDialog(R.id.treasure_hunt_checkbox).check(matches(isChecked()));
         onDialog(R.id.treasure_hunt_checkbox).perform(click());
         onDialog(R.id.treasure_hunt_checkbox).check(matches(isNotChecked()));
-
-        clickOn(android.R.id.button1, false);
     }
 
     @Test

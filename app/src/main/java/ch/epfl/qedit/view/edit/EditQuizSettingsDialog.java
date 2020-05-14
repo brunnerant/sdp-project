@@ -51,11 +51,9 @@ public class EditQuizSettingsDialog extends DialogFragment
     private EditTextDialog.TextFilter textFilter = EditTextDialog.NO_FILTER;
     private SubmissionListener listener;
 
-    private boolean hasTreasureHunt;
+    private boolean hasTreasureHuntCheckBox;
 
     // Only used for new quizzes
-    private Spinner languageSelectionSpinner;
-    private boolean userHasInteracted = false;
     private String languageCode;
 
     public static EditQuizSettingsDialog newInstance(SubmissionListener listener) {
@@ -130,11 +128,6 @@ public class EditQuizSettingsDialog extends DialogFragment
     @Override
     /* This method runs if the user selects another language */
     public void onItemSelected(AdapterView parent, View view, int pos, long id) {
-        // Do not run if user has not chosen a language
-        if (!userHasInteracted) { // TODO userInteracted
-            return;
-        }
-
         // Get language code from the position of the clicked language in the spinner
         languageCode = getResources().getStringArray(R.array.languages_codes)[pos];
     }
@@ -154,7 +147,7 @@ public class EditQuizSettingsDialog extends DialogFragment
     }
 
     private void setupModifyingExistingQuiz(Quiz quiz, View view) {
-        editExistingQuiz = false;
+        editExistingQuiz = true;
 
         // Initialize the builder with the existing quiz
         quizBuilder = new Quiz.Builder(quiz);
@@ -162,15 +155,16 @@ public class EditQuizSettingsDialog extends DialogFragment
         String title = stringPool.get(TITLE_ID);
         // TODO Support old questions that store the strings directly as well
         editTitle.setText((title == null) ? quiz.getTitle() : title);
+        editTitle.setSelection(editTitle.getText().length());
 
-        hasTreasureHunt = false;
+        hasTreasureHuntCheckBox = false;
         view.findViewById(R.id.edit_language_selection).setVisibility(GONE);
         view.findViewById(R.id.treasure_hunt_checkbox).setVisibility(GONE);
     }
 
     private void setupLanguageSpinner(View view) {
         // Create spinner (language list)
-        languageSelectionSpinner = view.findViewById(R.id.edit_language_selection);
+        Spinner languageSelectionSpinner = view.findViewById(R.id.edit_language_selection);
 
         // Find app's current language position in languages list
         String currentLanguage = Locale.getDefault().getLanguage();
@@ -186,7 +180,8 @@ public class EditQuizSettingsDialog extends DialogFragment
 
     private void createTreasureHuntCheckbox(View view) {
         CheckBox treasureHuntCheckbox = view.findViewById(R.id.treasure_hunt_checkbox);
-        treasureHuntCheckbox.setOnClickListener(v -> hasTreasureHunt = ((CheckBox) v).isChecked());
+        treasureHuntCheckbox.setOnClickListener(
+                v -> hasTreasureHuntCheckBox = ((CheckBox) v).isChecked());
     }
 
     private void setupEditTitleTextWatcher(AlertDialog dialog) {
@@ -213,7 +208,9 @@ public class EditQuizSettingsDialog extends DialogFragment
                     public void afterTextChanged(Editable s) {}
                 });
 
-        dialog.setOnShowListener(dialog1 -> editTitle.setText(""));
+        if (!editExistingQuiz) {
+            dialog.setOnShowListener(dialog1 -> editTitle.setText(""));
+        }
     }
 
     private void prepareEditing() {
@@ -223,7 +220,7 @@ public class EditQuizSettingsDialog extends DialogFragment
 
         if (!editExistingQuiz) {
             // Initialize a new empty QuizBuilder
-            quizBuilder = new Quiz.Builder(hasTreasureHunt);
+            quizBuilder = new Quiz.Builder(hasTreasureHuntCheckBox);
         }
 
         listener.onSubmit(stringPool, quizBuilder);
