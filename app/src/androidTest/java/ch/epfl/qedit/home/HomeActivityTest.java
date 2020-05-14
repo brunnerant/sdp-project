@@ -48,6 +48,8 @@ import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.QR.ScannerActivity;
 import ch.epfl.qedit.view.edit.EditSettingsActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
+import ch.epfl.qedit.view.login.LogInActivity;
+
 import java.util.Collection;
 import org.junit.After;
 import org.junit.Before;
@@ -76,7 +78,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
 
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(TokenLogInActivity.USER, user);
+        bundle.putSerializable(LogInActivity.USER, user);
         intent.putExtras(bundle);
         testRule.launchActivity(intent);
         // always close the statistics panel by default to be sure it does not take to much place on

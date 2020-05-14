@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
@@ -183,8 +182,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                 .whenComplete(
                         (user, throwable) -> {
                             if (throwable != null) {
-                                Util.showToast(
-                                        R.string.database_error, context, resources);
+                                Util.showToast(R.string.database_error, context, resources);
                             } else {
                                 bundle.putSerializable(USER, user);
                                 intent.putExtras(bundle);
@@ -197,8 +195,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private void onLogInFailed() {
         progressBar.setVisibility(View.GONE);
-        Util.showToast(
-                R.string.log_in_fail, context, resources);
+        Util.showToast(R.string.log_in_fail, context, resources);
     }
 
     private void signUpInstead() {
