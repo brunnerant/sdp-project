@@ -12,9 +12,9 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.util.DragAndDropAction.dragAndDrop;
-import static ch.epfl.qedit.util.Util.createMockQuiz;
+import static ch.epfl.qedit.util.Util.createTestQuiz;
+import static ch.epfl.qedit.util.Util.createTestStringPool;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.NEW_QUESTION_REQUEST_CODE;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
@@ -44,7 +44,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class EditOverviewFragmentTest extends RecyclerViewHelpers {
-    private static final Quiz mockQuiz = createMockQuiz("TestTitle");
+    private static final Quiz testQuiz = createTestQuiz();
+    private static final StringPool stringPool = createTestStringPool("TestTitle");
 
     @Rule
     public final FragmentTestRule<?, EditOverviewFragment> testRule =
@@ -57,10 +58,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     @Before
     public void setUp() {
         Intents.init();
-        Quiz.Builder quizBuilder = new Quiz.Builder(mockQuiz);
-
-        StringPool stringPool = new StringPool();
-        stringPool.update(TITLE_ID, mockQuiz.getTitle());
+        Quiz.Builder quizBuilder = new Quiz.Builder(testQuiz);
 
         EditionViewModel model =
                 new ViewModelProvider(testRule.getActivity()).get(EditionViewModel.class);
@@ -107,7 +105,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     public void testCanDeleteItem() {
         item(0).perform(click());
         itemView(0, R.id.delete_button).perform(click());
-        onView(withText(mockQuiz.getQuestions().get(0).getTitle())).check(doesNotExist());
+        onView(withText(testQuiz.getQuestions().get(0).getTitle())).check(doesNotExist());
         assertOverlayAt(-1, 4);
     }
 
@@ -149,10 +147,10 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     }
 
     private String[] getTitles() {
-        String[] titles = new String[mockQuiz.getQuestions().size()];
+        String[] titles = new String[testQuiz.getQuestions().size()];
 
         for (int i = 0; i < titles.length; ++i) {
-            titles[i] = mockQuiz.getQuestions().get(i).getTitle();
+            titles[i] = stringPool.get(testQuiz.getQuestions().get(i).getTitle());
         }
 
         return titles;
@@ -195,7 +193,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     public void testEmptyHint() {
         onView(withId(R.id.empty_list_hint)).check(matches(not(isDisplayed())));
 
-        for (int i = 0; i < mockQuiz.getQuestions().size(); ++i) {
+        for (int i = 0; i < testQuiz.getQuestions().size(); ++i) {
             item(0).perform(click());
             itemView(0, R.id.delete_button).perform(click());
         }

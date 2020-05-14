@@ -56,15 +56,8 @@ public class EditPreviewFragment extends Fragment {
         Question question = quizBuilder.getQuestions().get(index);
         StringPool stringPool = model.getStringPool();
 
-        // Update the title of the question
-        String key =
-                question.getTitle(); // TODO Support old questions that store the strings directly
-        String text = stringPool.get(key);
-        questionTitle.setText((text == null) ? key : text);
-
-        // Update the text of the question
-        key = question.getText();
-        text = stringPool.get(key);
-        questionDisplay.setText((text == null) ? key : text);
+        // Update EditText
+        questionTitle.setText(stringPool.get(question.getTitle()));
+        questionDisplay.setText(stringPool.get(question.getText()));
     }
 }

@@ -97,11 +97,7 @@ public class EditOverviewFragment extends Fragment {
 
         // Add the titles of all question already in the builder to a list
         for (Question question : model.getQuizBuilder().getQuestions()) {
-            String key = question.getTitle();
-            String text = model.getStringPool().get(key);
-
-            // TODO Support old questions that store the strings directly as well
-            titles.add((text == null) ? key : text);
+            titles.add(model.getStringPool().get(question.getTitle()));
         }
 
         handleEmptyHint();
