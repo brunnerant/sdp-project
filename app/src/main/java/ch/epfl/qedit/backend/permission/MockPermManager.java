@@ -2,7 +2,6 @@ package ch.epfl.qedit.backend.permission;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import java.util.HashMap;
@@ -119,13 +118,17 @@ public class MockPermManager implements PermissionManager {
         // We don't pass the result immediately, because it could cause issues. It is not a good
         // idea to grant permissions before the request was terminated, so we wait a little bit.
         idlingResource.increment();
-        new Handler()
-                .postDelayed(
+        new Thread(
                         () -> {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             callback.onPermissionResult(permissions, result);
                             idlingResource.decrement();
-                        },
-                        100);
+                        })
+                .run();
     }
 
     public IdlingResource getIdlingResource() {

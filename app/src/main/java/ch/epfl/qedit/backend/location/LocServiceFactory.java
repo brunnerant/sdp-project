@@ -34,4 +34,10 @@ public final class LocServiceFactory {
     public static void setInstance(Function<Context, LocationService> builder) {
         LocServiceFactory.builder = builder;
     }
+
+    /** This is used to reset the factory since some tests fail otherwise */
+    public static void reset() {
+        locService = null;
+        builder = null;
+    }
 }
