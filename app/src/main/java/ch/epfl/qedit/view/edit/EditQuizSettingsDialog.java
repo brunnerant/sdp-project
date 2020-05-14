@@ -162,8 +162,8 @@ public class EditQuizSettingsDialog extends DialogFragment
     }
 
     /**
-     * Gets all the arguments that are passes to the dialog, inflates the view and sets up the
-     * EditTExt for the title
+     * This method gets all the arguments that are passed to the dialog, inflates the view and sets
+     * up the EditText for the title
      *
      * @return The inflated view
      */
