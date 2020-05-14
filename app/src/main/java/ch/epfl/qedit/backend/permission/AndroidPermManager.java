@@ -1,5 +1,7 @@
 package ch.epfl.qedit.backend.permission;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import java.util.HashMap;
@@ -23,13 +25,13 @@ public class AndroidPermManager implements PermissionManager {
     }
 
     @Override
-    public boolean checkPermission(PermissionActivity activity, String permission) {
-        return ActivityCompat.checkSelfPermission(activity, permission)
+    public boolean checkPermission(Context context, String permission) {
+        return ActivityCompat.checkSelfPermission(context, permission)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
-    public boolean shouldAskAgain(PermissionActivity activity, String permission) {
+    public boolean shouldAskAgain(Activity activity, String permission) {
         return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }
 

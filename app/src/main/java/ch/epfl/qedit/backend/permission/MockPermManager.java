@@ -1,5 +1,8 @@
 package ch.epfl.qedit.backend.permission;
 
+import android.app.Activity;
+import android.content.Context;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -74,12 +77,12 @@ public class MockPermManager implements PermissionManager {
     }
 
     @Override
-    public boolean checkPermission(PermissionActivity activity, String permission) {
+    public boolean checkPermission(Context context, String permission) {
         return getState(permission) == State.Granted;
     }
 
     @Override
-    public boolean shouldAskAgain(PermissionActivity activity, String permission) {
+    public boolean shouldAskAgain(Activity activity, String permission) {
         State state = getState(permission);
 
         // We should only keep asking if the permission was not granted, and if the user

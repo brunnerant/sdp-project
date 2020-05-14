@@ -11,7 +11,6 @@ public final class LocServiceFactory {
     private static LocationService locService = null;
 
     public static LocationService getInstance(Context context) {
-        //        if (locService == null) locService = new MockLocService(context);
         if (locService == null) locService = new AndroidLocService(context);
 
         return locService;

@@ -2,11 +2,12 @@ package ch.epfl.qedit.backend.location;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import androidx.core.app.ActivityCompat;
+
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.backend.permission.PermissionManager;
 
 public class AndroidLocService implements LocationService {
 
@@ -28,12 +29,12 @@ public class AndroidLocService implements LocationService {
         criteria.setCostAllowed(false);
         criteria.setSpeedRequired(false);
 
-        // If the application doesn't have the permission, we cannot subscribe
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(
-                                context, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) return false;
+        // We need the permission manager to check the location permissions
+        PermissionManager permManager = PermManagerFactory.getInstance();
+
+        if (!permManager.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ||
+                !permManager.checkPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION))
+            return false;
 
         // Otherwise, we subscribe to the location service
         manager.requestLocationUpdates(interval, 0, criteria, listener, null);
