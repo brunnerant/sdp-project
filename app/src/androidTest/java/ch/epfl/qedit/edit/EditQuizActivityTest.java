@@ -10,7 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.createMockQuiz;
-import static ch.epfl.qedit.view.edit.EditSettingsActivity.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.MatcherAssert.assertThat;

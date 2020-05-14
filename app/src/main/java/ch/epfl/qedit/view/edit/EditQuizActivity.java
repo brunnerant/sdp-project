@@ -1,6 +1,6 @@
 package ch.epfl.qedit.view.edit;
 
-import static ch.epfl.qedit.view.edit.EditSettingsActivity.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 

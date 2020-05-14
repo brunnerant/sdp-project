@@ -5,6 +5,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.LoginActivity.USER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 
 import android.content.Intent;
@@ -29,7 +30,6 @@ import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
 import ch.epfl.qedit.view.util.ConfirmDialog;
-import ch.epfl.qedit.view.util.EditTextDialog;
 import ch.epfl.qedit.view.util.ListEditView;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class HomeQuizListFragment extends Fragment
     private ListEditView.Adapter<Map.Entry<String, String>> listAdapter;
 
     private ConfirmDialog deleteDialog;
-    private EditTextDialog.TextFilter textFilter = EditTextDialog.NO_FILTER;
+    private EditQuizSettingsDialog.TextFilter textFilter = NO_FILTER;
 
     private int deleteIndex;
     private int modifyIndex = -1;

@@ -26,7 +26,6 @@ import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.view.util.EditTextDialog;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Locale;
@@ -34,10 +33,22 @@ import java.util.Objects;
 
 public class EditQuizSettingsDialog extends DialogFragment
         implements AdapterView.OnItemSelectedListener {
+
     /** This interface is used to be notified when the user entered the text. */
     public interface SubmissionListener extends Serializable {
         void onSubmit(StringPool stringPool, Quiz.Builder quizBuilder);
     }
+
+    /**
+     * This interface is used to filter the allowed text inputs. To allow a string in the dialog, it
+     * should return null. To indicate an error, it simply returns the string containing the error
+     * message, which will be displayed next to the edit text.
+     */
+    public interface TextFilter {
+        String isAllowed(String text);
+    }
+
+    public static final TextFilter NO_FILTER = text -> null;
 
     public static final String QUIZ_BUILDER = "ch.epfl.qedit.model.QUIZ_BUILDER";
     private static final String LISTENER_KEY = "listener";
@@ -48,7 +59,7 @@ public class EditQuizSettingsDialog extends DialogFragment
     private Quiz quiz;
 
     private EditText editTitle;
-    private EditTextDialog.TextFilter textFilter = EditTextDialog.NO_FILTER;
+    private TextFilter textFilter = NO_FILTER;
     private SubmissionListener listener;
 
     private boolean hasTreasureHuntCheckBox;
@@ -121,7 +132,7 @@ public class EditQuizSettingsDialog extends DialogFragment
         return dialog;
     }
 
-    public void setTextFilter(EditTextDialog.TextFilter textFilter) {
+    public void setTextFilter(TextFilter textFilter) {
         this.textFilter = Objects.requireNonNull(textFilter);
     }
 
