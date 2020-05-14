@@ -78,7 +78,7 @@ public final class Util {
         Toast.makeText(context, stringToDisplay, Toast.LENGTH_SHORT).show();
     }
 
-    static void showToast(int stringId, Context context, Resources resources) {
+    public static void showToast(int stringId, Context context, Resources resources) {
         showToast(resources.getString(stringId), context);
     }
 

@@ -8,7 +8,24 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface AuthenticationService {
 
+    /**
+     * Sign Up a new user in the Authentication service. It associate a new ID to each unique pairs
+     * of email-password.
+     *
+     * @param email of the new user
+     * @param password of the new user
+     * @return future that hold an error if sign up fail or the new ID of the user if sign up
+     *     succeed
+     */
     CompletableFuture<String> signUp(String email, String password);
 
+    /**
+     * Check if the pair email-password is in the Authentication service and return the ID of the
+     * user if it does.
+     *
+     * @param email of the user
+     * @param password of the user
+     * @return future that hold an error if log in fail or the new ID of the user if log in succeed
+     */
     CompletableFuture<String> logIn(String email, String password);
 }
