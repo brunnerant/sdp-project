@@ -8,6 +8,8 @@ public final class AuthenticationFactory {
     /** The singleton instance of the auth service */
     private static AuthenticationService authService = null;
 
+    private AuthenticationFactory() {}
+
     public static AuthenticationService getInstance() {
         if (authService == null) {
             authService = new MockAuthService();

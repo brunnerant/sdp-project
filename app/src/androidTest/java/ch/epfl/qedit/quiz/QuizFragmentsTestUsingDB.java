@@ -1,6 +1,6 @@
 package ch.epfl.qedit.quiz;
 
-import static ch.epfl.qedit.util.Util.createMockQuiz;
+import static ch.epfl.qedit.util.Util.createInstantiatedTestQuiz;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,7 +28,7 @@ public class QuizFragmentsTestUsingDB {
                 new ViewModelProvider((ViewModelStoreOwner) testRule.getActivity())
                         .get(QuizViewModel.class);
 
-        model.setQuiz(createMockQuiz("Test Title"));
+        model.setQuiz(createInstantiatedTestQuiz("Test Title"));
 
         testRule.launchFragment(fragment);
 
