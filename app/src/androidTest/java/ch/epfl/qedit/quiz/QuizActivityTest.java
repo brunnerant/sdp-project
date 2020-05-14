@@ -10,7 +10,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static ch.epfl.qedit.view.quiz.QuestionFragment.FRAGMENT_TAG;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.Is.is;
@@ -24,12 +26,12 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.Arrays;
 import java.util.HashMap;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -50,19 +52,31 @@ public class QuizActivityTest {
     public void launchActivity() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        Quiz quiz =
-                new Quiz(
-                        "Title",
-                        Arrays.asList(
-                                new Question("Banane", "How many?", "matrix1x1"),
-                                new Question("Vector", "Fill this Vector!", "matrix7x1")));
+        StringPool stringPool = new StringPool();
+        stringPool.update(TITLE_ID, "Title");
+
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.append(
+                        new Question(
+                                stringPool.add("Bananas"),
+                                stringPool.add("How many?"),
+                                "matrix1x1"))
+                .append(
+                        new Question(
+                                stringPool.add("Vector"),
+                                stringPool.add("Fill this Vector!"),
+                                "matrix7x1"));
+
+        Quiz quiz = builder.build();
+
         bundle.putSerializable(QUIZ_ID, quiz);
+        bundle.putSerializable(STRING_POOL, stringPool);
         intent.putExtras(bundle);
 
         testRule.launchActivity(intent);
 
         model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
-        model.setQuiz(quiz);
+        model.initialize(quiz, stringPool);
 
         final MatrixModel matrixModel = new MatrixModel(1, 1);
         matrixModel.updateAnswer(0, 0, answer1);

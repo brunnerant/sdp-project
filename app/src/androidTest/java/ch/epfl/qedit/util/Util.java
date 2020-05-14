@@ -8,6 +8,7 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
@@ -15,30 +16,40 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import java.util.Arrays;
+import ch.epfl.qedit.model.StringPool;
+import java.util.HashMap;
 
 public final class Util {
 
     private Util() {};
 
-    public static Quiz createMockQuiz(String title) {
-        return new Quiz(
-                title,
-                Arrays.asList(
-                        new Question(
-                                "The matches problem",
-                                "How many matches can fit in a shoe of size 43?",
-                                "matrix3x3"),
-                        new Question(
-                                "Pigeons",
-                                "How many pigeons are there on Earth? (Hint: do not count yourself)",
-                                "matrix1x1"),
-                        new Question("KitchenBu", "Oyster", "matrix1x1"),
-                        new Question(
-                                "Everything",
-                                "What is the answer to life the universe and everything?",
-                                "matrix3x3"),
-                        new Question("Banane", "Combien y a-t-il de bananes ?", "matrix1x1")));
+    public static Quiz createTestQuiz() {
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.append(new Question("q1_title", "q1_text", "matrix3x3"))
+                .append(new Question("q2_title", "q2_text", "matrix1x1"))
+                .append(new Question("q3_title", "q3_text", "matrix1x1"))
+                .append(new Question("q4_title", "q4_text", "matrix3x3"))
+                .append(new Question("q5_title", "q5_text", "matrix1x1"));
+
+        return builder.build();
+    }
+
+    public static StringPool createTestStringPool(String title) {
+        HashMap<String, String> stringPool = new HashMap<>();
+        stringPool.put(TITLE_ID, title);
+        stringPool.put("q1_title", "The matches problem");
+        stringPool.put("q1_text", "How many matches can fit in a shoe of size 43?");
+        stringPool.put("q2_title", "Pigeons");
+        stringPool.put(
+                "q2_text", "How many pigeons are there on Earth? (Hint: do not count yourself)");
+        stringPool.put("q3_title", "KitchenBu");
+        stringPool.put("q3_text", "Oyster");
+        stringPool.put("q4_title", "Everything");
+        stringPool.put("q4_text", "What is the answer to life the universe and everything?");
+        stringPool.put("q5_title", "Bananas");
+        stringPool.put("q5_text", "How many bananas are there?");
+
+        return new StringPool(stringPool);
     }
 
     public static void isDisplayed(int id, boolean scrollTo) {

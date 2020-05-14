@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view.quiz;
 
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.util.ConfirmDialog;
@@ -30,6 +32,7 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
 
     private ConfirmDialog validateDialog;
     private Quiz quiz;
+    private StringPool stringPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +42,12 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
         // Get the Intent that started this activity and extract the quiz
         Intent intent = getIntent();
         quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
+        stringPool =
+                (StringPool)
+                        Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
 
         model = new ViewModelProvider(this).get(QuizViewModel.class);
-        model.setQuiz(quiz);
+        model.initialize(quiz, stringPool);
 
         overviewActive = false;
         handleToggleOverview();

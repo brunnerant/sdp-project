@@ -74,10 +74,7 @@ public class EditSettingsActivity extends AppCompatActivity
 
         // Set the EditText for the title
         editTitle = findViewById(R.id.edit_quiz_title);
-
-        String title = stringPool.get(TITLE_ID);
-        // TODO Support old questions that store the strings directly as well
-        editTitle.setText((title == null) ? quiz.getTitle() : title);
+        editTitle.setText(stringPool.get(TITLE_ID));
     }
 
     private void createTreasureHuntCheckbox() {
