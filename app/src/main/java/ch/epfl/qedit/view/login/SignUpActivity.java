@@ -110,7 +110,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         passwordConfirmationField = findViewById(R.id.field_password_confirmation);
         signUpButton = findViewById(R.id.button_sign_up);
         progressBar = findViewById(R.id.progress_bar);
-        textViewLogInInstead = findViewById(R.id.sign_up_instead);
+        textViewLogInInstead = findViewById(R.id.log_in_instead);
         updateLogInInsteadText();
     }
 
@@ -211,12 +211,12 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     private void onSignUpFail() {
-        Toast.makeText(getApplicationContext(), "sign up fail", Toast.LENGTH_LONG).show();
         progressBar.setVisibility(View.GONE);
+        Utils.showToast(
+                R.string.sign_up_fail, Toast.LENGTH_SHORT, context, resources);
     }
 
     private void onSignUpSuccessful(String userId) {
-        Toast.makeText(getApplicationContext(), "sign up success", Toast.LENGTH_LONG).show();
         progressBar.setVisibility(View.GONE);
 
         Intent intent = new Intent(this, HomeActivity.class);
@@ -226,17 +226,17 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                 .whenComplete(
                         (result, throwable) -> {
                             if (throwable != null) {
-                                Toast.makeText(
-                                                getBaseContext(),
-                                                R.string.database_error,
-                                                Toast.LENGTH_SHORT)
-                                        .show();
+                                Utils.showToast(
+                                        R.string.database_error, Toast.LENGTH_SHORT, context, resources);
                             } else {
                                 startActivity(intent);
                             }
                         });
         // Put the current user id in cache
         Utils.putStringInPrefs(this, "user_id", userId);
+
+        Utils.showToast(
+                R.string.sign_up_success, Toast.LENGTH_SHORT, context, resources);
     }
 
     private void logInInstead() {
