@@ -1,6 +1,6 @@
 package ch.epfl.qedit.view.login;
 
-import static ch.epfl.qedit.view.login.Util.checkString;
+import static ch.epfl.qedit.view.login.Util.USER;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
@@ -27,8 +26,6 @@ import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.function.Predicate;
 
 public class LogInActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
-    public static final String USER = "ch.epfl.qedit.view.USER";
 
     private EditText emailField, passwordField;
     private Button logInButton;
@@ -154,9 +151,9 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         // Check validity of each email and password before passing it to the Auth Service
         Predicate<String> emailFormat = str -> str.matches(Util.REGEX_EMAIL);
         Predicate<String> passwordFormat = str -> str.length() >= 6;
-        String email = checkString(emailField, emailFormat, resources, R.string.invalid_email);
+        String email = Util.getString(emailField, emailFormat, resources, R.string.invalid_email);
         String password =
-                checkString(passwordField, passwordFormat, resources, R.string.invalid_password);
+                Util.getString(passwordField, passwordFormat, resources, R.string.invalid_password);
 
         // If the email or password is invalid, abort login
         if (email == null || password == null) return;
@@ -183,8 +180,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                 .whenComplete(
                         (user, throwable) -> {
                             if (throwable != null) {
-                                Util.showToast(
-                                        R.string.database_error, context, resources);
+                                Util.showToast(R.string.database_error, context, resources);
                             } else {
                                 bundle.putSerializable(USER, user);
                                 intent.putExtras(bundle);
@@ -197,8 +193,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private void onLogInFailed() {
         progressBar.setVisibility(View.GONE);
-        Util.showToast(
-                R.string.log_in_fail, context, resources);
+        Util.showToast(R.string.log_in_fail, context, resources);
     }
 
     private void signUpInstead() {

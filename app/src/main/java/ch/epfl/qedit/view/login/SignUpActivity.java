@@ -1,7 +1,5 @@
 package ch.epfl.qedit.view.login;
 
-import static ch.epfl.qedit.view.login.Util.checkString;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
@@ -23,10 +20,10 @@ import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.util.LocaleHelper;
-
 import java.util.function.Predicate;
 
-public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class SignUpActivity extends AppCompatActivity
+        implements AdapterView.OnItemSelectedListener {
 
     private EditText firstNameField,
             lastNameField,
@@ -151,8 +148,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     }
 
     private void updateLogInInsteadText() {
-        int colorAlreadySignedUp =
-                resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
+        int colorAlreadySignedUp = resources.getColor(R.color.colorNotSignedUpAlreadySignedUp);
         Spanned coloredText =
                 Html.fromHtml(
                         "<font color='"
@@ -168,18 +164,17 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         Predicate<String> emailFormat = str -> str.matches(Util.REGEX_EMAIL);
         Predicate<String> passwordFormat = str -> str.length() >= 6;
         Predicate<String> nameFormat = str -> str.matches(Util.REGEX_NAME);
-        email = checkString(emailField, emailFormat, resources, R.string.invalid_email);
+        email = Util.getString(emailField, emailFormat, resources, R.string.invalid_email);
         password =
-                checkString(
-                        passwordField, passwordFormat, resources, R.string.invalid_password);
-        firstName = checkString(firstNameField, nameFormat, resources, R.string.invalid_name);
-        lastName = checkString(lastNameField, nameFormat, resources, R.string.invalid_name);
+                Util.getString(passwordField, passwordFormat, resources, R.string.invalid_password);
+        firstName = Util.getString(firstNameField, nameFormat, resources, R.string.invalid_name);
+        lastName = Util.getString(lastNameField, nameFormat, resources, R.string.invalid_name);
 
         // Check if password confirmation match actual password
         if (password != null) {
             Predicate<String> matchPsw = str -> password.equals(str);
             String confirmation =
-                    checkString(
+                    Util.getString(
                             passwordConfirmationField,
                             matchPsw,
                             resources,
@@ -211,8 +206,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
     private void onSignUpFail() {
         progressBar.setVisibility(View.GONE);
-        Util.showToast(
-                R.string.sign_up_fail, context, resources);
+        Util.showToast(R.string.sign_up_fail, context, resources);
     }
 
     private void onSignUpSuccessful(String userId) {
@@ -225,8 +219,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                 .whenComplete(
                         (result, throwable) -> {
                             if (throwable != null) {
-                                Util.showToast(
-                                        R.string.database_error, context, resources);
+                                Util.showToast(R.string.database_error, context, resources);
                             } else {
                                 startActivity(intent);
                             }
@@ -234,8 +227,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         // Put the current user id in cache
         Util.putStringInPrefs(this, "user_id", userId);
 
-        Util.showToast(
-                R.string.sign_up_success, context, resources);
+        Util.showToast(R.string.sign_up_success, context, resources);
     }
 
     private void logInInstead() {

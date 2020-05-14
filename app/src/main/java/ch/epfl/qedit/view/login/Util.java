@@ -16,17 +16,21 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.function.Predicate;
 
+/** A Utility class useful for login and sign up */
 public final class Util {
 
     // Source: regex n°2 on https://howtodoinjava.com/regex/java-regex-validate-email-address/
-    public static final String REGEX_EMAIL = "^(\\s)*[A-Za-z0-9+_.-]+@(.+)(\\s)*$";
-    public static final String REGEX_NAME = "^(\\s)*[A-Za-z0-9\\s\\-]+(\\s)*$";
+    static final String REGEX_EMAIL = "^(\\s)*[A-Za-z0-9+_.-]+@(.+)(\\s)*$";
+    static final String REGEX_NAME = "^(\\s)*[A-Za-z0-9\\s\\-]+(\\s)*$";
+
+    // Key of user passed in bundle to home activity
+    public static final String USER = "ch.epfl.qedit.view.login.USER";
 
     private Util() {}
 
     /**
      * Check if the string written in the text view is not empty and respect a certain predicate. If
-     * text is not valid, set an error to the TextView
+     * text is not valid, set an error to the TextView and return null.
      *
      * @param view text view to check
      * @param predicate predicate that must be valid about the string we check
@@ -34,7 +38,7 @@ public final class Util {
      * @param errorString the id of the custom error message if the predicate is false
      * @return the text of the text view or null if the text is not valid
      */
-    public static String checkString(
+    static String getString(
             EditText view, Predicate<String> predicate, Resources resources, int errorString) {
         String text = view.getText().toString();
         if (TextUtils.isEmpty(text)) {
@@ -47,11 +51,11 @@ public final class Util {
         return text;
     }
 
-    public static String getCurrentLanguageCode() {
+    static String getCurrentLanguageCode() {
         return Locale.getDefault().getLanguage();
     }
 
-    public static int languagePositionInList(Resources resources, String languageCode) {
+    static int languagePositionInList(Resources resources, String languageCode) {
         String[] languageList = resources.getStringArray(R.array.languages_codes);
         return Arrays.asList(languageList).indexOf(languageCode);
     }
@@ -61,8 +65,7 @@ public final class Util {
      *
      * @param languagePos position of the language in the spinner
      */
-    public static void showToastChangedLanguage(
-            int languagePos, Context context, Resources resources) {
+    static void showToastChangedLanguage(int languagePos, Context context, Resources resources) {
         String stringToDisplay =
                 resources.getString(R.string.language_changed)
                         + " "
@@ -71,12 +74,11 @@ public final class Util {
         showToast(stringToDisplay, context);
     }
 
-    public static void showToast(String stringToDisplay, Context context) {
+    private static void showToast(String stringToDisplay, Context context) {
         Toast.makeText(context, stringToDisplay, Toast.LENGTH_SHORT).show();
     }
 
-    public static void showToast(
-            int stringId, Context context, Resources resources) {
+    static void showToast(int stringId, Context context, Resources resources) {
         showToast(resources.getString(stringId), context);
     }
 
@@ -98,7 +100,7 @@ public final class Util {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public static void putStringInPrefs(Activity activity, String key, String value) {
+    static void putStringInPrefs(Activity activity, String key, String value) {
         SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);

@@ -1,18 +1,19 @@
 package ch.epfl.qedit;
 
+import static ch.epfl.qedit.view.login.Util.USER;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import ch.epfl.qedit.backend.database.FirebaseDBService;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class StartActivity extends Activity {
-
-    public static final String USER = "ch.epfl.qedit.view.USER";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +36,27 @@ public class StartActivity extends Activity {
                                                     Toast.LENGTH_SHORT)
                                             .show();
                                 } else {
-                                    Intent intent = new Intent(this, HomeActivity.class);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable(USER, result);
-                                    intent.putExtras(bundle);
-                                    startActivity(intent);
-                                    finish();
+                                    launchHomeActivity(result);
                                 }
                             });
         } else {
             // No user is signed in
-            Intent intent = new Intent(this, LogInActivity.class);
-            startActivity(intent);
-            finish();
+            launchLoginActivity();
         }
+    }
+
+    private void launchLoginActivity() {
+        Intent intent = new Intent(this, LogInActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void launchHomeActivity(User user) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER, user);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 }
