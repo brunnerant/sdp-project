@@ -1,19 +1,21 @@
 package ch.epfl.qedit.login;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.qedit.util.Util.clickOn;
+import static ch.epfl.qedit.util.Util.onScrollView;
 import static ch.epfl.qedit.view.login.Util.USER;
 import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
@@ -23,6 +25,7 @@ import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
+import ch.epfl.qedit.view.login.SignUpActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -55,32 +58,78 @@ public class LogInActivityTest {
         testRule.finishActivity();
     }
 
-    public void performLogIn(String email, String password) {
-        onView(ViewMatchers.withId(R.id.field_email))
-                .perform((typeText(email)))
-                .perform(pressImeActionButton());
-        onView(ViewMatchers.withId(R.id.field_password))
+    private void performLogIn(String email, String password) {
+        onScrollView(R.id.field_email).perform((typeText(email))).perform(pressImeActionButton());
+        onScrollView(R.id.field_password)
                 .perform((typeText(password)))
                 .perform(pressImeActionButton());
         clickOn(R.id.button_log_in, true);
     }
 
-    public void testLogInSuccessful(String email, String password, User user) {
+    private void testLogInSuccessful(String email, String password, User user) {
         performLogIn(email, password);
         intended(allOf(hasComponent(HomeActivity.class.getName()), hasExtra(USER, user)));
     }
 
-    /*
-        private void testLogInFailed(String token, int toastStringId) {
-            performLogin(token);
-            TokenLogInActivity activity = testRule.getActivity();
-            onView(withText(toastStringId))
-                    .inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))))
-                    .check(matches(isDisplayed()));
-        }
-    */
+    private void testLogInFailed(String email, String password) {
+        performLogIn(email, password);
+    }
+
     @Test
     public void testCanLogIn() {
         testLogInSuccessful("anthony@mock.test", "123456", MockDBService.createAnthony());
+    }
+
+    @Test
+    public void testCanLogInAndLogOut() {
+        testLogInSuccessful("anthony@mock.test", "123456", MockDBService.createAnthony());
+
+        clickOn(R.id.log_out, false);
+        intended(allOf(hasComponent(LogInActivity.class.getName())));
+    }
+
+    @Test
+    public void testSignUpInstead() {
+        clickOn(R.id.sign_up_instead, true);
+        intended(allOf(hasComponent(SignUpActivity.class.getName())));
+    }
+
+    @Test
+    public void testEmptyEmailCannotLogIn() {
+        onView(withId(R.id.field_email)).perform((typeText(""))).perform(closeSoftKeyboard());
+        onView(withId(R.id.field_password))
+                .perform((typeText("123456")))
+                .perform(closeSoftKeyboard());
+
+        clickOn(R.id.button_log_in, true);
+    }
+
+    @Test
+    public void testWrongEmailCannotLogIn() {
+        onView(withId(R.id.field_email)).perform((typeText("a"))).perform(closeSoftKeyboard());
+
+        clickOn(R.id.button_log_in, true);
+    }
+
+    @Test
+    public void testEmptyPasswordCannotLogIn() {
+        onView(withId(R.id.field_email))
+                .perform((typeText("anthony@mock.test")))
+                .perform(closeSoftKeyboard());
+        onView(withId(R.id.field_password)).perform((typeText(""))).perform(closeSoftKeyboard());
+
+        clickOn(R.id.button_log_in, true);
+    }
+
+    @Test
+    public void testShortPasswordCannotLogIn() {
+        onView(withId(R.id.field_password)).perform((typeText("a"))).perform(closeSoftKeyboard());
+
+        clickOn(R.id.button_log_in, true);
+    }
+
+    @Test
+    public void testNoUserExistingCannotLogIn() {
+        testLogInFailed("test@test.com", "password");
     }
 }

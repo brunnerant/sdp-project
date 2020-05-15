@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,7 +20,6 @@ import java.util.function.Predicate;
 /** A Utility class useful for login and sign up */
 public final class Util {
 
-    // Source: regex n°2 on https://howtodoinjava.com/regex/java-regex-validate-email-address/
     static final String REGEX_EMAIL = "^(\\s)*[A-Za-z0-9+_.-]+@(.+)(\\s)*$";
     static final String REGEX_NAME = "^(\\s)*[A-Za-z0-9\\s\\-]+(\\s)*$";
 
@@ -109,25 +106,6 @@ public final class Util {
 
     public static void showToast(int stringId, Context context, Resources resources) {
         showToast(resources.getString(stringId), context);
-    }
-
-    /**
-     * Source: https://stackoverflow.com/a/17789187/13249857
-     *
-     * @param activity
-     */
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm =
-                (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        // Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        // If no view currently has focus, create a new one, just so we can grab a window token from
-        // it
-        if (view == null) {
-            view = new View(activity);
-        }
-        assert imm != null;
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     static void putStringInPrefs(Activity activity, String key, String value) {
