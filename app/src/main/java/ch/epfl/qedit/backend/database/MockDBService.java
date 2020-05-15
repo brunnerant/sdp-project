@@ -4,6 +4,8 @@ import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
+import ch.epfl.qedit.backend.Util;
+import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
@@ -58,6 +60,7 @@ public class MockDBService implements DatabaseService {
                                         true, false, "hint5", MatrixFormat.Field.NO_LIMIT))
                         .build();
 
+        @SuppressWarnings("SpellCheckingInspection")
         static MockQuiz createTestMockQuiz1() {
             HashMap<String, String> stringPool_en = new HashMap<>();
             stringPool_en.put(TITLE_ID, "I am a Mock Quiz!");
@@ -116,6 +119,7 @@ public class MockDBService implements DatabaseService {
             return new MockQuiz(questions, stringPools);
         }
 
+        @SuppressWarnings("SpellCheckingInspection")
         static MockQuiz createTestMockQuiz2() {
             HashMap<String, String> stringPool_en = new HashMap<>();
             stringPool_en.put(TITLE_ID, "An other Quiz");
@@ -159,11 +163,11 @@ public class MockDBService implements DatabaseService {
         quizzes.put("quiz3", MockQuiz.createTestMockQuiz2());
 
         users = new HashMap<>();
-        users.put("v5ns9OMqV4hH7jwD8S5w", createAnthony());
-        users.put("R4rXRVU3EMkgm5YEW52Q", createCosme());
+        users.put(MockAuthService.ANTHONY_IOZZIA_ID, createAnthony());
+        users.put(MockAuthService.COSME_JORDAN_ID, createCosme());
     }
 
-    private User createAnthony() {
+    public static User createAnthony() {
         User anthony = new User("Anthony", "Iozzia", 78, 7, 3);
         anthony.addQuiz("quiz0", "I am a Mock Quiz!");
         anthony.addQuiz("quiz1", "An other Quiz");
@@ -171,7 +175,7 @@ public class MockDBService implements DatabaseService {
         return anthony;
     }
 
-    private User createCosme() {
+    public static User createCosme() {
         User cosme = new User("Cosme", "Jordan");
         cosme.addQuiz("quiz0", "I am a Mock Quiz!");
 

@@ -14,6 +14,7 @@ import com.google.zxing.Result;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /** * this class is largely inspired from priyanka pakhale work available on github ** */
+@SuppressWarnings("SpellCheckingInspection")
 public class ScannerActivity extends AppCompatActivity
         implements ZXingScannerView.ResultHandler, ConfirmDialog.ConfirmationListener {
 
