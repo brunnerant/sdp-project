@@ -66,6 +66,11 @@ public class LogInActivityTest {
         clickOn(R.id.button_log_in, true);
     }
 
+    private void fillField(int field, String stringToBeTyped) {
+        onView(withId(field)).perform((typeText(stringToBeTyped))).perform(closeSoftKeyboard());
+        clickOn(R.id.button_log_in, true);
+    }
+
     @SuppressWarnings("SameParameterValue")
     private void testLogInSuccessful(String email, String password, User user) {
         performLogIn(email, password);
@@ -100,36 +105,22 @@ public class LogInActivityTest {
 
     @Test
     public void testEmptyEmailCannotLogIn() {
-        onView(withId(R.id.field_email)).perform((typeText(""))).perform(closeSoftKeyboard());
-        onView(withId(R.id.field_password))
-                .perform((typeText("123456")))
-                .perform(closeSoftKeyboard());
-
-        clickOn(R.id.button_log_in, true);
+        performLogIn("", "123456");
     }
 
     @Test
     public void testWrongEmailCannotLogIn() {
-        onView(withId(R.id.field_email)).perform((typeText("a"))).perform(closeSoftKeyboard());
-
-        clickOn(R.id.button_log_in, true);
+        fillField(R.id.field_email, "a");
     }
 
     @Test
     public void testEmptyPasswordCannotLogIn() {
-        onView(withId(R.id.field_email))
-                .perform((typeText("anthony@mock.test")))
-                .perform(closeSoftKeyboard());
-        onView(withId(R.id.field_password)).perform((typeText(""))).perform(closeSoftKeyboard());
-
-        clickOn(R.id.button_log_in, true);
+        performLogIn("anthony@mock.test", "");
     }
 
     @Test
     public void testShortPasswordCannotLogIn() {
-        onView(withId(R.id.field_password)).perform((typeText("a"))).perform(closeSoftKeyboard());
-
-        clickOn(R.id.button_log_in, true);
+        fillField(R.id.field_password, "a");
     }
 
     @Test
