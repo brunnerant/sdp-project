@@ -77,8 +77,8 @@ public class EditPreviewFragment extends Fragment {
     }
 
     /**
-     * This method gets the concrete AnswerFormat and AnswerModel, prepares a bundle, then it dispatches the correct Fragment class and finally
-     * starts it.
+     * This method gets the concrete AnswerFormat and AnswerModel, prepares a bundle, then it
+     * dispatches the correct Fragment class and finally starts it.
      *
      * @param question The question that is going to be shown
      */

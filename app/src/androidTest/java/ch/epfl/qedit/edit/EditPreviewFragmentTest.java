@@ -2,10 +2,12 @@ package ch.epfl.qedit.edit;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.createTestQuiz;
 import static ch.epfl.qedit.util.Util.createTestStringPool;
+import static org.hamcrest.core.IsNot.not;
 
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
@@ -51,6 +53,7 @@ public class EditPreviewFragmentTest {
     public void testFragmentIsEmptyByDefault() {
         onView(withId(R.id.question_title)).check(matches(withText("")));
         onView(withId(R.id.question_display)).check(matches(withText("")));
+        onView(withId(R.id.answer_fragment_container)).check(matches(not(isDisplayed())));
     }
 
     @Test
@@ -62,5 +65,6 @@ public class EditPreviewFragmentTest {
                 .check(matches(withText(stringPool.get(question.getTitle()))));
         onView(withId(R.id.question_display))
                 .check(matches(withText(stringPool.get(question.getText()))));
+        onView(withId(R.id.answer_fragment_container)).check(matches(isDisplayed()));
     }
 }
