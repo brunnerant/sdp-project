@@ -1,13 +1,11 @@
 package ch.epfl.qedit.login;
 
-import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.onScrollView;
 import static ch.epfl.qedit.view.login.Util.USER;
