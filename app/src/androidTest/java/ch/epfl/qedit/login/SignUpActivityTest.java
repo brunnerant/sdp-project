@@ -9,20 +9,17 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.qedit.util.Util.clickOn;
+import static ch.epfl.qedit.util.Util.initActivityWithMockAuthAndDBService;
 import static ch.epfl.qedit.view.login.Util.USER;
 import static org.hamcrest.Matchers.allOf;
 
-import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.auth.AuthenticationFactory;
-import ch.epfl.qedit.backend.auth.MockAuthService;
-import ch.epfl.qedit.backend.database.DatabaseFactory;
-import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
 import ch.epfl.qedit.view.login.SignUpActivity;
@@ -38,24 +35,17 @@ public class SignUpActivityTest {
     private IdlingResource idlingResource;
 
     @Rule
-    public final IntentsTestRule<SignUpActivity> testRule =
-            new IntentsTestRule<>(SignUpActivity.class, false, false);
+    public final ActivityTestRule<SignUpActivity> testRule =
+            new ActivityTestRule<>(SignUpActivity.class, false, false);
 
     @Before
     public void init() {
-        MockAuthService authService = new MockAuthService();
-        MockDBService dbService = new MockDBService();
-        idlingResource = authService.getIdlingResource();
-        IdlingRegistry.getInstance().register(idlingResource);
-        AuthenticationFactory.setInstance(authService);
-        DatabaseFactory.setInstance(dbService);
-        testRule.launchActivity(null);
+        idlingResource = initActivityWithMockAuthAndDBService(testRule);
     }
 
     @After
     public void cleanup() {
-        IdlingRegistry.getInstance().unregister(idlingResource);
-        testRule.finishActivity();
+        Util.cleanup(testRule, idlingResource);
     }
 
     private void fillFields(
@@ -152,7 +142,7 @@ public class SignUpActivityTest {
     public void testLogInInstead() {
         clickOn(R.id.log_in_instead, true);
         //noinspection unchecked
-        intended(allOf(hasComponent(LogInActivity.class.getName())));
+        intended(hasComponent(LogInActivity.class.getName()));
     }
 
     @Test

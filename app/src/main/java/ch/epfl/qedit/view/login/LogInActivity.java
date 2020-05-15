@@ -94,6 +94,8 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         logInButton = findViewById(R.id.button_log_in);
         progressBar = findViewById(R.id.progress_bar);
         textViewSignUpInstead = findViewById(R.id.sign_up_instead);
+        // The redirection text is the colored text that is clickable and proposed to the user to
+        // sign up instead
         Util.updateRedirectionText(resources, textViewSignUpInstead, R.string.sign_up_instead);
     }
 
@@ -136,7 +138,6 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         auth.logIn(email, password)
                 .whenComplete(
                         (userId, error) -> {
-                            progressBar.setVisibility(View.GONE);
                             if (error != null) onLogInFailed();
                             else onLogInSuccessful(userId);
                         });
@@ -146,10 +147,13 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         Intent intent = new Intent(this, HomeActivity.class);
         Bundle bundle = new Bundle();
 
+        // We extract the complete user information from the database thanks to the user id given by
+        // the authentication service
         DatabaseService db = DatabaseFactory.getInstance();
         db.getUser(userId)
                 .whenComplete(
                         (user, throwable) -> {
+                            progressBar.setVisibility(View.GONE);
                             if (throwable != null) {
                                 Util.showToast(R.string.database_error, context, resources);
                             } else {

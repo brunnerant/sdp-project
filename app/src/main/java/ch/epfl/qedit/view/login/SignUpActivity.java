@@ -131,7 +131,7 @@ public class SignUpActivity extends AppCompatActivity
     }
 
     /**
-     * Check the validities of the values entered in the fields.
+     * Check the validity of the values entered in the fields.
      *
      * @return whether or not all the inputs are valid
      */
@@ -187,14 +187,13 @@ public class SignUpActivity extends AppCompatActivity
     }
 
     private void onSignUpSuccessful(String userId) {
-        progressBar.setVisibility(View.GONE);
-
         Intent intent = new Intent(this, LogInActivity.class);
 
         DatabaseService db = DatabaseFactory.getInstance();
         db.createUser(userId, firstName, lastName)
                 .whenComplete(
                         (result, throwable) -> {
+                            progressBar.setVisibility(View.GONE);
                             if (throwable != null) {
                                 Util.showToast(R.string.database_error, context, resources);
                             } else {

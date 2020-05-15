@@ -11,9 +11,17 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.auth.AuthenticationFactory;
+import ch.epfl.qedit.backend.auth.MockAuthService;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
@@ -50,6 +58,25 @@ public final class Util {
         stringPool.put("q5_text", "How many bananas are there?");
 
         return new StringPool(stringPool);
+    }
+
+    /** Init a test rule activity with access to authentication and database services */
+    public static IdlingResource initActivityWithMockAuthAndDBService(ActivityTestRule testRule) {
+        MockAuthService authService = new MockAuthService();
+        MockDBService dbService = new MockDBService();
+        IdlingResource idlingResource = authService.getIdlingResource();
+        IdlingRegistry.getInstance().register(idlingResource);
+        AuthenticationFactory.setInstance(authService);
+        DatabaseFactory.setInstance(dbService);
+        testRule.launchActivity(null);
+        Intents.init();
+        return idlingResource;
+    }
+
+    public static void cleanup(ActivityTestRule testRule, IdlingResource idlingResource) {
+        Intents.release();
+        IdlingRegistry.getInstance().unregister(idlingResource);
+        testRule.finishActivity();
     }
 
     public static Quiz createInstantiatedTestQuiz(String title) {
