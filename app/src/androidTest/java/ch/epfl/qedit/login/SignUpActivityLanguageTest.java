@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
@@ -11,10 +12,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.clickOn;
 import static org.hamcrest.Matchers.anything;
 
-import android.content.Intent;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.login.SignUpActivity;
@@ -28,13 +28,12 @@ import org.junit.runner.RunWith;
 public class SignUpActivityLanguageTest {
 
     @Rule
-    public final IntentsTestRule<SignUpActivity> testRule =
-            new IntentsTestRule<>(SignUpActivity.class, false, false);
+    public final ActivityTestRule<SignUpActivity> testRule =
+            new ActivityTestRule<>(SignUpActivity.class, false, false);
 
     @Before
     public void launchActivity() {
-        Intent intent = new Intent();
-        testRule.launchActivity(intent);
+        testRule.launchActivity(null);
         Espresso.closeSoftKeyboard();
     }
 
@@ -63,8 +62,12 @@ public class SignUpActivityLanguageTest {
         onView(withId(R.id.button_sign_up)).perform(closeSoftKeyboard());
         clickOn(R.id.spinner_language_selection, true);
         onData(anything()).atPosition(pos).perform(click());
-        onView(withId(R.id.spinner_language_selection)).check(matches(withSpinnerText(language)));
-        onView(withId(R.id.button_sign_up)).check(matches(withText(loginString)));
+        onView(withId(R.id.spinner_language_selection))
+                .perform(scrollTo())
+                .check(matches(withSpinnerText(language)));
+        onView(withId(R.id.button_sign_up))
+                .perform(scrollTo())
+                .check(matches(withText(loginString)));
     }
 
     @Test
