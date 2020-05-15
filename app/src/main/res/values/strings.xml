@@ -105,8 +105,9 @@
     <string name="title_activity_edit_quiz">Edit</string>
 
     <!-- Edit Settings -->
-    <string name="edit_quiz_title">Enter the quiz title</string>
-    <string name="button_start_editing">Start editing</string>
+    <string name="edit_dialog_title_settings">Settings</string>
+    <string name="edit_quiz_title">Title</string>
+    <string name="button_start_editing_message">Start editing</string>
 
     <!-- Edit -->
     <string name="delete">Delete</string>

@@ -22,7 +22,7 @@ class HomeFragmentsTestUsingDB extends RecyclerViewHelpers {
 
     public void setup(FragmentTestRule testRule, Fragment fragment) {
         User user = new User("Jon", "Snow", score, successes, attempts);
-        user.addQuiz("quiz0", "Qualification EPFL");
+        user.addQuiz("quiz0", "I am a Mock Quiz!");
 
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);

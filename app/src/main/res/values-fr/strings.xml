@@ -74,8 +74,9 @@
     <string name="title_activity_edit_quiz">Édition</string>
 
     <!-- Edit Settings -->
-    <string name="edit_quiz_title">Entrer le titre du quiz</string>
-    <string name="button_start_editing">Démarrer l\'édition</string>
+    <string name="edit_dialog_title_settings">Réglages</string>
+    <string name="edit_quiz_title">Titre</string>
+    <string name="button_start_editing_message">Démarrer l\'édition</string>
 
     <!-- Edit -->
     <string name="delete">Supprimer</string>

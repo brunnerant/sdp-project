@@ -1,8 +1,10 @@
 package ch.epfl.qedit.home;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -11,19 +13,26 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
+import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.isDisplayed;
+import static ch.epfl.qedit.util.Util.onDialog;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static ch.epfl.qedit.view.login.Util.USER;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 import android.app.Activity;
@@ -31,6 +40,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -43,11 +53,12 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.QR.ScannerActivity;
-import ch.epfl.qedit.view.edit.EditSettingsActivity;
+import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.Collection;
 import org.junit.After;
@@ -73,7 +84,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
     public void launchActivity() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         User user = new User("Marcel", "Doe");
-        user.addQuiz("quiz0", "Qualification EPFL");
+        user.addQuiz("quiz0", "I am a Mock Quiz!");
 
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -101,37 +112,83 @@ public class HomeActivityTest extends RecyclerViewHelpers {
     }
 
     public void assertEditTextError(int id) {
-        onView(withId(android.R.id.button1)).check(matches(not(isEnabled())));
-        onView(withId(R.id.quiz_name_text))
+        onDialog(android.R.id.button1).check(matches(not(isEnabled())));
+        onDialog(R.id.edit_quiz_title)
                 .check(matches(hasErrorText(testRule.getActivity().getString(id))));
+    }
+
+    @Test
+    public void testAddLaunchesDialogForNewQuiz() {
+        clickOn(R.id.add, false);
+
+        onView(withText(testRule.getActivity().getString(R.string.edit_dialog_title_settings)))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()));
+        onDialog(R.id.edit_quiz_title).check(matches(isDisplayed()));
+        onDialog(R.id.treasure_hunt_checkbox).check(matches((isDisplayed())));
+        onDialog(R.id.edit_language_selection).check(matches((isDisplayed())));
     }
 
     @Test
     public void testAddItem() {
         clickOn(R.id.add, false);
-        onView(withText(testRule.getActivity().getString(R.string.add_quiz_message)))
-                .inRoot(isDialog())
-                .check(matches(isDisplayed()));
 
         // Test that an empty name is not allowed
         assertEditTextError(R.string.empty_quiz_name_error);
         closeSoftKeyboard();
 
         // Test that a duplicate name is not allowed either
-        onView(withId(R.id.quiz_name_text)).perform(typeText("Qualification EPFL"));
+        onDialog(R.id.edit_quiz_title).perform(typeText("I am a Mock Quiz!"));
         closeSoftKeyboard();
         assertEditTextError(R.string.dup_quiz_name_error);
 
         // Test that a regular name is allowed
-        onView(withId(R.id.quiz_name_text)).perform(clearText());
-        onView(withId(R.id.quiz_name_text)).perform(typeText("New quiz"));
+        onDialog(R.id.edit_quiz_title).perform(clearText());
+        onDialog(R.id.edit_quiz_title).perform(typeText("New quiz"));
         closeSoftKeyboard();
 
         clickOn(android.R.id.button1, false);
         intended(
                 allOf(
-                        hasComponent(EditSettingsActivity.class.getName()),
-                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class))));
+                        hasComponent(EditQuizActivity.class.getName()),
+                        hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class)),
+                        hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class))));
+    }
+
+    @Test // TODO check that stringPool contains right language onResult
+    public void testLanguageSpinner() {
+        clickOn(R.id.add, false);
+
+        // The error message of an empty title hides element of the view
+        onDialog(R.id.edit_quiz_title).perform(typeText("temp"));
+        Espresso.closeSoftKeyboard();
+
+        onDialog(R.id.edit_language_selection).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Français")))
+                .inRoot(isPlatformPopup())
+                .perform(click());
+        onDialog(R.id.edit_language_selection).check(matches(withSpinnerText("Français")));
+
+        onDialog(R.id.edit_language_selection).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("English")))
+                .inRoot(isPlatformPopup())
+                .perform(click());
+        onDialog(R.id.edit_language_selection).check(matches(withSpinnerText("English")));
+    }
+
+    @Test
+    public void treasureHuntCheckbox() {
+        clickOn(R.id.add, false);
+
+        // The error message of an empty title hides element of the view
+        onDialog(R.id.edit_quiz_title).perform(typeText("temp"));
+        Espresso.closeSoftKeyboard();
+
+        onDialog(R.id.treasure_hunt_checkbox).check(matches(isNotChecked()));
+        onDialog(R.id.treasure_hunt_checkbox).perform(click());
+        onDialog(R.id.treasure_hunt_checkbox).check(matches(isChecked()));
+        onDialog(R.id.treasure_hunt_checkbox).perform(click());
+        onDialog(R.id.treasure_hunt_checkbox).check(matches(isNotChecked()));
     }
 
     @Test

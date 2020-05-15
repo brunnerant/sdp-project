@@ -1,5 +1,7 @@
 package ch.epfl.qedit.backend.database;
 
+import static ch.epfl.qedit.model.StringPool.TITLE_ID;
+
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
 import ch.epfl.qedit.backend.Util;
@@ -60,7 +62,7 @@ public class MockDBService implements DatabaseService {
 
         static MockQuiz createTestMockQuiz1() {
             HashMap<String, String> stringPool_en = new HashMap<>();
-            stringPool_en.put("main_title", "I am a Mock Quiz!");
+            stringPool_en.put(TITLE_ID, "I am a Mock Quiz!");
             stringPool_en.put("q1_title", "Banana");
             stringPool_en.put("q1_text", "How many bananas are there on Earth?");
             stringPool_en.put("q2_title", "Apple");
@@ -78,7 +80,7 @@ public class MockDBService implements DatabaseService {
             stringPool_en.put("hint5", "unsigned float field");
 
             HashMap<String, String> stringPool_fr = new HashMap<>();
-            stringPool_en.put("main_title", "Je suis un Mock Quiz !");
+            stringPool_fr.put(TITLE_ID, "Je suis un Mock Quiz !");
             stringPool_fr.put("q1_title", "Banane");
             stringPool_fr.put("q1_text", "Combien y a-t-il de bananes sur Terre ?");
             stringPool_fr.put("q2_title", "Pomme");
@@ -96,8 +98,14 @@ public class MockDBService implements DatabaseService {
             stringPool_fr.put("hint5", "champ décimal non-signé");
 
             HashMap<String, StringPool> stringPools = new HashMap<>();
-            stringPools.put("en", new StringPool(stringPool_en));
-            stringPools.put("fr", new StringPool(stringPool_fr));
+
+            StringPool stringPool = new StringPool(stringPool_en);
+            stringPool.setLanguageCode("en");
+            stringPools.put("en", stringPool);
+
+            stringPool = new StringPool(stringPool_fr);
+            stringPool.setLanguageCode("fr");
+            stringPools.put("fr", stringPool);
 
             List<Question> questions =
                     Arrays.asList(
@@ -112,20 +120,26 @@ public class MockDBService implements DatabaseService {
 
         static MockQuiz createTestMockQuiz2() {
             HashMap<String, String> stringPool_en = new HashMap<>();
-            stringPool_en.put("main_title", "An other Quiz");
+            stringPool_en.put(TITLE_ID, "An other Quiz");
             stringPool_en.put("q1_title", "Banana");
             stringPool_en.put("q1_text", "How many bananas are there on Earth?");
             stringPool_en.put("hint1", "text field");
 
             HashMap<String, String> stringPool_fr = new HashMap<>();
-            stringPool_fr.put("main_title", "Un autre Quiz");
+            stringPool_fr.put(TITLE_ID, "Un autre Quiz");
             stringPool_fr.put("q1_title", "Banane");
             stringPool_fr.put("q1_text", "Combien y a-t-il de bananes sur Terre ?");
             stringPool_fr.put("hint1", "champ texte");
 
             HashMap<String, StringPool> stringPools = new HashMap<>();
-            stringPools.put("en", new StringPool(stringPool_en));
-            stringPools.put("fr", new StringPool(stringPool_fr));
+
+            StringPool stringPool = new StringPool(stringPool_en);
+            stringPool.setLanguageCode("en");
+            stringPools.put("en", stringPool);
+
+            stringPool = new StringPool(stringPool_fr);
+            stringPool.setLanguageCode("fr");
+            stringPools.put("fr", stringPool);
 
             List<Question> questions =
                     Arrays.asList(new Question("q1_title", "q1_text", simpleFormat));
@@ -223,7 +237,7 @@ public class MockDBService implements DatabaseService {
     @Override
     public CompletableFuture<Quiz> getQuizStructure(String quizId) {
         CompletableFuture<Quiz> future = new CompletableFuture<>();
-        waitForQuiz(future, quizId, mockQuiz -> new Quiz("main_title", mockQuiz.getQuestions()));
+        waitForQuiz(future, quizId, mockQuiz -> new Quiz(TITLE_ID, mockQuiz.getQuestions()));
         return future;
     }
 
