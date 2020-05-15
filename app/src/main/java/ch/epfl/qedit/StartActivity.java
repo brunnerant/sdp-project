@@ -1,6 +1,7 @@
 package ch.epfl.qedit;
 
 import static ch.epfl.qedit.view.login.Util.USER;
+import static ch.epfl.qedit.view.login.Util.getStringInPrefs;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,8 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
- * This ghost activity is launch first in the QEDit app. It redirects the flow on the Home activity
- * if a user has previously logged in, or in the LogIn activity otherwise.
+ * This ghost activity is launched first in the QEDit app. It redirects the flow on the HomeActivity
+ * if a user has previously logged in, or in the LogInActivity otherwise.
  */
 public class StartActivity extends Activity {
 
@@ -23,6 +24,20 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Offline automatic log in
+        /*
+        String uid = getUserIdInCache();
+        if(userExistsInCache(uid)) {
+            // User is signed in
+            User user = ... // get user from cache
+            launchHomeActivity(user);
+        } else {
+            // No user is signed in
+            launchLoginActivity();
+        }
+        */
+
+        // Online automatic log in
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             // User is signed in
@@ -46,6 +61,14 @@ public class StartActivity extends Activity {
             // No user is signed in
             launchLoginActivity();
         }
+    }
+
+    private Boolean userExistsInCache(String uid) {
+        return !uid.equals("");
+    }
+
+    private String getUserIdInCache() {
+        return getStringInPrefs(this, "user_id");
     }
 
     private void launchLoginActivity() {
