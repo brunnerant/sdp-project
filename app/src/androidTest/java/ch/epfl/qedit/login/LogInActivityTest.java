@@ -67,7 +67,7 @@ public class LogInActivityTest {
     }
 
     private void fillField(int field, String stringToBeTyped) {
-        onView(withId(field)).perform((typeText(stringToBeTyped))).perform(closeSoftKeyboard());
+        onScrollView(field).perform((typeText(stringToBeTyped))).perform(closeSoftKeyboard());
         clickOn(R.id.button_log_in, true);
     }
 
