@@ -2,7 +2,7 @@ package ch.epfl.qedit.view.edit;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static ch.epfl.qedit.view.edit.EditSettingsActivity.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
@@ -30,6 +30,7 @@ import java.util.Objects;
  */
 public class EditQuizActivity extends AppCompatActivity
         implements ConfirmDialog.ConfirmationListener {
+
     private EditionViewModel model;
     private Quiz.Builder quizBuilder;
     private Boolean overviewActive;

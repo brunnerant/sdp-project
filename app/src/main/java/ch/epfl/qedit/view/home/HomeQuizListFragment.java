@@ -5,10 +5,11 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.LoginActivity.USER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,9 +27,9 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.view.edit.EditSettingsActivity;
+import ch.epfl.qedit.view.edit.EditQuizActivity;
+import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
 import ch.epfl.qedit.view.util.ConfirmDialog;
-import ch.epfl.qedit.view.util.EditTextDialog;
 import ch.epfl.qedit.view.util.ListEditView;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -38,22 +39,23 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class HomeQuizListFragment extends Fragment
-        implements ConfirmDialog.ConfirmationListener, EditTextDialog.SubmissionListener {
+        implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
+
     public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
     public static final String STRING_POOL = "ch.epfl.qedit.view.STRING_POOL";
-    public static final int EDIT_QUIZ_REQUEST_CODE = 2;
+    private static final int EDIT_QUIZ_REQUEST_CODE = 2;
 
     private DatabaseService db;
-    private Handler handler;
 
     private ProgressBar progressBar;
     private ListEditView.Adapter<Map.Entry<String, String>> listAdapter;
 
     private ConfirmDialog deleteDialog;
-    private EditTextDialog addDialog;
-    private int deleteIndex;
+    private EditQuizSettingsDialog.TextFilter textFilter = NO_FILTER;
 
-    private User user;
+    private int deleteIndex;
+    private int modifyIndex = -1;
+
     private List<Map.Entry<String, String>> quizzes;
 
     @Override
@@ -62,12 +64,18 @@ public class HomeQuizListFragment extends Fragment
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home_quiz_list, container, false);
 
-        // Build the top bar and the dialogs
+        // Set the top bar
         setHasOptionsMenu(true);
-        createDialogs();
 
-        // Get user from the bundle created by the parent activity
-        user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
+        // Initialize the dialog shown on deletion
+        deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete_quiz), this);
+
+        // Create the filter that is applied on the titles enter by the user when changing the title
+        // of the quiz
+        createTextFilter();
+
+        // Get user from the bundle created by the parent activity and get his/her quizzes
+        User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter and bind it to the list edit view
@@ -80,9 +88,24 @@ public class HomeQuizListFragment extends Fragment
 
         // Instantiate Handler and the DatabaseService
         db = DatabaseFactory.getInstance();
-        handler = new Handler();
 
         return view;
+    }
+
+    /** Initialize the TextFilter used to check the titles entered by the user */
+    private void createTextFilter() {
+        textFilter =
+                text -> {
+                    // Empty
+                    if (text.trim().length() == 0) return getString(R.string.empty_quiz_name_error);
+
+                    for (Map.Entry<String, String> entry : quizzes) {
+                        if (entry.getValue().equals(text))
+                            return getString(R.string.dup_quiz_name_error);
+                    }
+
+                    return null;
+                };
     }
 
     // This function is used to create the list of quizzes for the given user
@@ -109,23 +132,6 @@ public class HomeQuizListFragment extends Fragment
                 });
     }
 
-    // This is used to create the warning and add dialog
-    private void createDialogs() {
-        deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete_quiz), this);
-        addDialog = EditTextDialog.create(getString(R.string.add_quiz_message), this);
-        addDialog.setTextFilter(
-                text -> {
-                    if (text.trim().length() == 0) return getString(R.string.empty_quiz_name_error);
-
-                    for (Map.Entry<String, String> entry : quizzes) {
-                        if (entry.getValue().equals(text))
-                            return getString(R.string.dup_quiz_name_error);
-                    }
-
-                    return null;
-                });
-    }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.home_menu, menu);
@@ -137,7 +143,10 @@ public class HomeQuizListFragment extends Fragment
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add:
-                addDialog.show(getParentFragmentManager(), "add_dialog");
+                // Prepare and show the dialog with settings for a new quiz
+                EditQuizSettingsDialog addSettingsDialog = EditQuizSettingsDialog.newInstance(this);
+                addSettingsDialog.setTextFilter(textFilter);
+                addSettingsDialog.show(getParentFragmentManager(), "add_dialog");
                 break;
             case android.R.id.home:
                 requireActivity().onBackPressed();
@@ -207,9 +216,26 @@ public class HomeQuizListFragment extends Fragment
                                                 R.string.database_error,
                                                 Toast.LENGTH_SHORT)
                                         .show();
-                            else
-                                launchEditSettingsActivity(quizStructure.join(), stringPool.join());
+                            else {
+                                // Hide progress bar
+                                progressBar.setVisibility(GONE);
+
+                                launchModifyQuizDialog(
+                                        stringPool.join(), quizStructure.join(), position);
+                            }
                         });
+    }
+
+    /**
+     * Initializes a dialog that gives the user the possibility to change the title of the already
+     * existing quiz
+     */
+    private void launchModifyQuizDialog(StringPool stringPool, Quiz quizStructure, int position) {
+        EditQuizSettingsDialog modifySettingsDialog =
+                EditQuizSettingsDialog.newInstance(this, stringPool, quizStructure);
+        modifySettingsDialog.setTextFilter(textFilter);
+        modifySettingsDialog.show(getParentFragmentManager(), "modify_dialog");
+        modifyIndex = position;
     }
 
     private String getBestLanguage(List<String> languages) {
@@ -231,21 +257,6 @@ public class HomeQuizListFragment extends Fragment
     //        startActivity(intent);
     //    }
 
-    // Launches the EditSettingsActivity with the given quiz. This is used when a quiz is either
-    // added or modified.
-    private void launchEditSettingsActivity(Quiz quiz, StringPool stringPool) {
-        Intent intent = new Intent(requireActivity(), EditSettingsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(STRING_POOL, stringPool);
-
-        if (quiz != null) {
-            bundle.putSerializable(QUIZ_ID, quiz);
-        }
-
-        intent.putExtras(bundle);
-        startActivityForResult(intent, EDIT_QUIZ_REQUEST_CODE);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -255,9 +266,6 @@ public class HomeQuizListFragment extends Fragment
                 Quiz quiz = (Quiz) data.getExtras().getSerializable(QUIZ_ID);
                 StringPool extendedStringPool =
                         (StringPool) data.getExtras().getSerializable(STRING_POOL);
-
-                // Hide progress bar
-                progressBar.setVisibility(GONE);
                 // TODO send back to data base etc.
             }
             // When the user decides to stop the edition without saving the changes the
@@ -274,12 +282,32 @@ public class HomeQuizListFragment extends Fragment
         listAdapter.removeItem(deleteIndex);
     }
 
-    // This method will be called when the user confirms the addition by clicking "yes"
+    // This method will be called when the user submits the settings made in the SettingsDialog by
+    // clicking on "Start editing"
     @Override
-    public void onSubmit(String text) {
-        listAdapter.addItem(new AbstractMap.SimpleEntry<>("key", text));
-        StringPool stringPool = new StringPool();
-        stringPool.update(TITLE_ID, text);
-        launchEditSettingsActivity(null, stringPool);
+    public void onSubmit(StringPool stringPool, Quiz.Builder quizBuilder) {
+        String title = stringPool.get(TITLE_ID);
+
+        if (modifyIndex < 0) {
+            // Edit a new Quiz, add an new entry in the list of quizzes
+            listAdapter.addItem(new AbstractMap.SimpleEntry<>("key", title));
+        } else {
+            // Edit an already existing Quiz, so we have to update the existing entry in the list of
+            // quizzes
+            Map.Entry<String, String> oldEntry = quizzes.get(modifyIndex);
+            AbstractMap.SimpleImmutableEntry<String, String> newEntry =
+                    new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), title);
+            quizzes.set(modifyIndex, newEntry);
+            listAdapter.updateItem(modifyIndex);
+            modifyIndex = -1;
+        }
+
+        // Launch the EditQuizActivity with the extras
+        Intent intent = new Intent(requireActivity(), EditQuizActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(QUIZ_BUILDER, quizBuilder);
+        bundle.putSerializable(STRING_POOL, stringPool);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, EDIT_QUIZ_REQUEST_CODE);
     }
 }

@@ -14,7 +14,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.createTestQuiz;
 import static ch.epfl.qedit.util.Util.createTestStringPool;
 import static ch.epfl.qedit.util.Util.onDialog;
-import static ch.epfl.qedit.view.edit.EditSettingsActivity.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static junit.framework.TestCase.assertTrue;
