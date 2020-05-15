@@ -70,6 +70,7 @@ public final class Util {
         DatabaseFactory.setInstance(dbService);
         testRule.launchActivity(null);
         Intents.init();
+        Espresso.closeSoftKeyboard();
         return idlingResource;
     }
 
