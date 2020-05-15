@@ -53,6 +53,8 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         textViewSignUpInstead.setOnClickListener(v -> signUpInstead());
 
         Util.initializeLanguage(this, this);
+
+        setTitle(resources.getString(R.string.title_activity_log_in));
     }
 
     @Override

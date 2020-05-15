@@ -59,6 +59,8 @@ public class SignUpActivity extends AppCompatActivity
         textViewLogInInstead.setOnClickListener(v -> logInInstead());
 
         Util.initializeLanguage(this, this);
+
+        setTitle(resources.getString(R.string.title_activity_sign_up));
     }
 
     @Override

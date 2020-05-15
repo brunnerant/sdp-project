@@ -93,8 +93,6 @@ public final class Util {
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
         // Set listener
         languageSelectionSpinner.setOnItemSelectedListener(onItemSelectedListener);
-        // Set page title to display it in the right language
-        activity.setTitle(R.string.title_activity_sign_up);
     }
 
     /**

@@ -64,9 +64,10 @@
         <activity
             android:name=".view.home.HomeActivity"
             android:label="@string/title_activity_home"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:parentActivityName=".StartActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW_ROLE" />
+                <action android:name="android.intent.action.HOME" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
