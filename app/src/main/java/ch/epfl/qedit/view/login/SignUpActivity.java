@@ -108,7 +108,7 @@ public class SignUpActivity extends AppCompatActivity
     }
 
     /**
-     * Set the new language
+     * Change app's language.
      *
      * @param languageCode the universal language code (e.g. "en" for English, "fr" for French)
      */
@@ -117,7 +117,7 @@ public class SignUpActivity extends AppCompatActivity
         resources = context.getResources();
     }
 
-    /** Update activity's texts */
+    /** Update activity's texts (useful when the language is changed). */
     private void updateTexts() {
         firstNameField.setHint(resources.getString(R.string.hint_first_name));
         lastNameField.setHint(resources.getString(R.string.hint_last_name));
@@ -130,6 +130,11 @@ public class SignUpActivity extends AppCompatActivity
         setTitle(resources.getString(R.string.title_activity_sign_up));
     }
 
+    /**
+     * Check the validities of the values entered in the fields.
+     *
+     * @return whether or not all the inputs are valid
+     */
     private boolean checkInputValidity() {
         // Check validity of all input
         Predicate<String> emailFormat = str -> str.matches(Util.REGEX_EMAIL);
@@ -156,6 +161,7 @@ public class SignUpActivity extends AppCompatActivity
         return email != null && password != null && firstName != null && lastName != null;
     }
 
+    /** Sign up the user. */
     private void signUp() {
 
         if (!checkInputValidity()) return;

@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public final class Util {
 
-    private Util() {};
+    private Util() {}
 
     public static Quiz createTestQuiz() {
         Quiz.Builder builder = new Quiz.Builder();

@@ -60,6 +60,7 @@ public class MockDBService implements DatabaseService {
                                         true, false, "hint5", MatrixFormat.Field.NO_LIMIT))
                         .build();
 
+        @SuppressWarnings("SpellCheckingInspection")
         static MockQuiz createTestMockQuiz1() {
             HashMap<String, String> stringPool_en = new HashMap<>();
             stringPool_en.put(TITLE_ID, "I am a Mock Quiz!");
@@ -118,6 +119,7 @@ public class MockDBService implements DatabaseService {
             return new MockQuiz(questions, stringPools);
         }
 
+        @SuppressWarnings("SpellCheckingInspection")
         static MockQuiz createTestMockQuiz2() {
             HashMap<String, String> stringPool_en = new HashMap<>();
             stringPool_en.put(TITLE_ID, "An other Quiz");

@@ -98,7 +98,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     /**
-     * Set the new language
+     * Change app's language.
      *
      * @param languageCode the universal language code (e.g. "en" for English, "fr" for French)
      */
@@ -107,7 +107,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         resources = context.getResources();
     }
 
-    /** Update activity's texts */
+    /** Update activity's texts (useful when the language is changed). */
     private void updateTexts() {
         emailField.setHint(resources.getString(R.string.hint_email));
         passwordField.setHint(resources.getString(R.string.hint_password));
@@ -117,6 +117,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         setTitle(resources.getString(R.string.title_activity_log_in));
     }
 
+    /** Log in the user. */
     private void logIn() {
         // Check validity of each email and password before passing it to the Auth Service
         Predicate<String> emailFormat = str -> str.matches(Util.REGEX_EMAIL);

@@ -66,11 +66,13 @@ public class LogInActivityTest {
         clickOn(R.id.button_log_in, true);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void testLogInSuccessful(String email, String password, User user) {
         performLogIn(email, password);
         intended(allOf(hasComponent(HomeActivity.class.getName()), hasExtra(USER, user)));
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void testLogInFailed(String email, String password) {
         performLogIn(email, password);
     }
@@ -85,12 +87,14 @@ public class LogInActivityTest {
         testLogInSuccessful("anthony@mock.test", "123456", MockDBService.createAnthony());
 
         clickOn(R.id.log_out, false);
+        //noinspection unchecked
         intended(allOf(hasComponent(LogInActivity.class.getName())));
     }
 
     @Test
     public void testSignUpInstead() {
         clickOn(R.id.sign_up_instead, true);
+        //noinspection unchecked
         intended(allOf(hasComponent(SignUpActivity.class.getName())));
     }
 

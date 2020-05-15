@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 public final class Util {
 
     // This class is only a namespace for helper functions, so it should not be instantiable
-    private Util() {};
+    private Util() {}
 
     /**
      * This type of exception indicates that a request couldn't be answered, either because of a

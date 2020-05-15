@@ -41,6 +41,7 @@ public class MockDBTest {
         assertNotNull(db.getQuizStringPool("quiz0", "en").get(3, TimeUnit.SECONDS));
         assertNotNull(db.getUser(MockAuthService.ANTHONY_IOZZIA_ID).get(3, TimeUnit.SECONDS));
 
+        //noinspection SpellCheckingInspection
         assertNull(
                 db.createUser("T78XRGU3EMkgm5YED52Q", "JoJo", "Johnson").get(3, TimeUnit.SECONDS));
         assertNull(

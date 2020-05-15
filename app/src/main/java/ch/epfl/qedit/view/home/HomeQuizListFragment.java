@@ -4,6 +4,8 @@ import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.login.Util.USER;
 
 import android.content.Intent;
@@ -25,7 +27,8 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.view.edit.EditSettingsActivity;
+import ch.epfl.qedit.view.edit.EditQuizActivity;
+import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
 import ch.epfl.qedit.view.login.LogInActivity;
 import ch.epfl.qedit.view.login.Util;
 import ch.epfl.qedit.view.util.ConfirmDialog;

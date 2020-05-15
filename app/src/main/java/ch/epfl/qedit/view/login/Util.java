@@ -51,16 +51,33 @@ public final class Util {
         return text;
     }
 
-    static String getCurrentLanguageCode() {
+    /**
+     * Get the language code of the actual language of the app.
+     *
+     * @return the language code
+     */
+    private static String getCurrentLanguageCode() {
         return Locale.getDefault().getLanguage();
     }
 
-    static int languagePositionInList(Resources resources, String languageCode) {
+    /**
+     * Compute the position of the given language in the languages list.
+     *
+     * @param resources resources to get the strings from
+     * @param languageCode language code of the language from which we want to retrieve the position
+     * @return the language position
+     */
+    private static int languagePositionInList(Resources resources, String languageCode) {
         String[] languageList = resources.getStringArray(R.array.languages_codes);
         return Arrays.asList(languageList).indexOf(languageCode);
     }
 
-    /** Initialize the language spinner and the language of the activity */
+    /**
+     * Initialize the language selection spinner and the language of the activity.
+     *
+     * @param activity the activity in which the language selection spinner is
+     * @param onItemSelectedListener listener called when an item of the spinner is selected
+     */
     public static void initializeLanguage(
             Activity activity, AdapterView.OnItemSelectedListener onItemSelectedListener) {
         // Create spinner (language list)
@@ -77,8 +94,12 @@ public final class Util {
     }
 
     /**
-     * Update text with colors (we cannot directly put the color in the string.xml because we are
-     * changing language in these activities
+     * Update the redirection text with colors (we cannot directly put the color in the strings.xml
+     * because we are changing language the language dynamically in these activities
+     *
+     * @param resources resources to get the strings from
+     * @param view TextView to update
+     * @param stringId id of the string tu put in the TextView
      */
     public static void updateRedirectionText(Resources resources, TextView view, int stringId) {
         int color = resources.getColor(R.color.colorRedirection);
@@ -87,9 +108,11 @@ public final class Util {
     }
 
     /**
-     * Display a toast to inform the user that the language was successfully changed
+     * Display a toast to inform the user that the language was successfully changed.
      *
      * @param languagePos position of the language in the spinner
+     * @param context context containing the current app's language
+     * @param resources resources to get the strings from
      */
     static void showToastChangedLanguage(int languagePos, Context context, Resources resources) {
         String stringToDisplay =
@@ -100,14 +123,35 @@ public final class Util {
         showToast(stringToDisplay, context);
     }
 
+    /**
+     * Given a string, display a short toast.
+     *
+     * @param stringToDisplay string to display in the toast
+     * @param context context containing the current app's language
+     */
     private static void showToast(String stringToDisplay, Context context) {
         Toast.makeText(context, stringToDisplay, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Given a string id, display a short toast.
+     *
+     * @param stringId id of the string to display in the toast
+     * @param context context containing the current app's language
+     * @param resources resources to get the string from
+     */
     public static void showToast(int stringId, Context context, Resources resources) {
         showToast(resources.getString(stringId), context);
     }
 
+    /**
+     * Put a string in the preferences.
+     *
+     * @param activity current activity
+     * @param key key to put
+     * @param value value to put with the key
+     */
+    @SuppressWarnings("SameParameterValue")
     static void putStringInPrefs(Activity activity, String key, String value) {
         SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -115,11 +159,24 @@ public final class Util {
         editor.apply();
     }
 
+    /**
+     * Get a string from a key in the preferences.
+     *
+     * @param activity current activity
+     * @param key key associated with the value to retrieve
+     * @return the string associated with the key in the preferences
+     */
     public static String getStringInPrefs(Activity activity, String key) {
         SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
         return prefs.getString(key, "");
     }
 
+    /**
+     * Remove a string in the preferences.
+     *
+     * @param activity current activity
+     * @param key key to remove
+     */
     public static void removeStringInPrefs(Activity activity, String key) {
         SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();

@@ -48,7 +48,7 @@ public class LogInActivityLanguageTest {
         String lang = LocaleHelper.getLanguage(testRule.getActivity());
 
         // Language position
-        int pos = -1;
+        int pos;
         if (languageCode.equals("en")) {
             pos = 0;
         } else if (languageCode.equals("fr")) {

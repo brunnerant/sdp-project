@@ -91,17 +91,19 @@ public class SignUpActivityTest {
         clickOn(R.id.button_sign_up, true);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void testSignUpSuccessful(
             String firstName,
             String lastName,
             String email,
             String password,
-            String passwordConfirmation,
-            User user) {
+            String passwordConfirmation) {
         performSignUp(firstName, lastName, email, password, passwordConfirmation);
+        //noinspection unchecked
         intended(allOf(hasComponent(LogInActivity.class.getName())));
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void testSignUpFailed(
             String firstName,
             String lastName,
@@ -121,6 +123,7 @@ public class SignUpActivityTest {
         clickOn(R.id.button_log_in, true);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void testLogInSuccessful(String email, String password, User user) {
         performLogIn(email, password);
         intended(allOf(hasComponent(HomeActivity.class.getName()), hasExtra(USER, user)));
@@ -141,13 +144,14 @@ public class SignUpActivityTest {
     public void testCanSignUp() {
         User user = new User("Balboa", "Bark");
         testSignUpSuccessful(
-                "Balboa", "Bark", "balboa.bark@river.tree", "honeyToast", "honeyToast", user);
+                "Balboa", "Bark", "balboa.bark@river.tree", "honeyToast", "honeyToast");
         testLogInSuccessful("balboa.bark@river.tree", "honeyToast", user);
     }
 
     @Test
     public void testLogInInstead() {
         clickOn(R.id.log_in_instead, true);
+        //noinspection unchecked
         intended(allOf(hasComponent(LogInActivity.class.getName())));
     }
 
