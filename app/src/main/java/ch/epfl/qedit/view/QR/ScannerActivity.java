@@ -88,6 +88,11 @@ public class ScannerActivity extends AppCompatActivity
         }
     }
 
+    // for tests purpose
+    public ZXingScannerView getScannerView() {
+        return scannerView;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

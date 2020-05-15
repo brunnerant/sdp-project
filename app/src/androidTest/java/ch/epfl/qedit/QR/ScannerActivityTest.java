@@ -26,6 +26,8 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class ScannerActivityTest {
+    private static final int TEST_RESULT_HANDLER = 1;
+
     @Rule
     public final IntentsTestRule<ScannerActivity> testRule =
             new IntentsTestRule<>(ScannerActivity.class, false, false);
