@@ -23,11 +23,12 @@ public final class Util {
     static final String REGEX_EMAIL = "^(\\s)*[A-Za-z0-9+_.-]+@(.+)(\\s)*$";
     static final String REGEX_NAME = "^(\\s)*[A-Za-z0-9\\s\\-]+(\\s)*$";
 
-    static final String USER_DATA = "ch.epfl.qedit.view.login.USER_DATA";
-    public static final String USER_ID = "ch.epfl.qedit.view.login.USER_ID";
-
     // Key of user passed in bundle to home activity
     public static final String USER = "ch.epfl.qedit.view.login.USER";
+
+    // This is the name of the shared preference file, and the key for the user id
+    public static final String USER_DATA = "user_data";
+    public static final String USER_ID = "user_id";
 
     private Util() {}
 
@@ -98,7 +99,7 @@ public final class Util {
 
     /**
      * Update the redirection text with colors (we cannot directly put the color in the strings.xml
-     * because we are changing language the language dynamically in these activities
+     * because we are changing the language dynamically in these activities).
      *
      * @param resources resources to get the strings from
      * @param view TextView to update

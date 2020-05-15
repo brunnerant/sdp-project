@@ -201,7 +201,7 @@ public class SignUpActivity extends AppCompatActivity
                             }
                         });
         // Put the current user id in cache
-        Util.putStringInPrefs(this, "user_id", userId);
+        Util.putStringInPrefs(this, Util.USER_ID, userId);
 
         Util.showToast(R.string.sign_up_success, context, resources);
     }
