@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
@@ -65,12 +64,12 @@ public class EditPreviewFragment extends Fragment {
         }
 
         // Get resources from the ViewModel
-        Question question = quizBuilder.getQuestions().get(index);
-        StringPool stringPool = model.getStringPool();
+        Question question =
+                quizBuilder.getQuestions().get(index).instantiateLanguage(model.getStringPool());
 
         // Update EditTexts
-        questionTitle.setText(stringPool.get(question.getTitle()));
-        questionDisplay.setText(stringPool.get(question.getText()));
+        questionTitle.setText(question.getTitle());
+        questionDisplay.setText(question.getText());
 
         // Set everything up for the concrete AnswerFragment and launch it
         prepareAnswerFormatFragment(question);
