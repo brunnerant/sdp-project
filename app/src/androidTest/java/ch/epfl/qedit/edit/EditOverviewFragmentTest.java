@@ -35,7 +35,6 @@ import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.MatrixFormat;
-import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.edit.EditOverviewFragment;
 import ch.epfl.qedit.view.edit.EditQuestionActivity;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
@@ -45,7 +44,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class EditOverviewFragmentTest extends RecyclerViewHelpers {
+public class EditOverviewFragmentTest extends EditTest {
     private static final Quiz testQuiz = createTestQuiz();
     private static final StringPool stringPool = createTestStringPool("TestTitle");
 
@@ -75,10 +74,6 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     public void commit() {
         testRule.finishActivity();
         Intents.release();
-    }
-
-    public EditOverviewFragmentTest() {
-        super(R.id.question_list);
     }
 
     private void checkText(int position, String text) {
@@ -207,11 +202,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     public void testEmptyHint() {
         onView(withId(R.id.empty_list_hint)).check(matches(not(isDisplayed())));
 
-        for (int i = 0; i < testQuiz.getQuestions().size(); ++i) {
-            item(0).perform(click());
-            itemView(0, R.id.delete_button).perform(click());
-            onDialog(android.R.id.button1).perform(click());
-        }
+        emptyQuizList(testQuiz);
 
         onView(withId(R.id.empty_list_hint)).check(matches(isDisplayed()));
     }

@@ -29,24 +29,19 @@ import androidx.test.espresso.intent.rule.IntentsTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
-import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class EditQuizActivityTest extends RecyclerViewHelpers {
+public class EditQuizActivityTest extends EditTest {
     private Quiz quiz;
     private StringPool stringPool;
 
     @Rule
     public final IntentsTestRule<EditQuizActivity> testRule =
             new IntentsTestRule<>(EditQuizActivity.class, false, false);
-
-    public EditQuizActivityTest() {
-        super(R.id.question_list);
-    }
 
     @Before
     public void setUp() {
@@ -132,11 +127,7 @@ public class EditQuizActivityTest extends RecyclerViewHelpers {
 
     @Test
     public void testSaveEmptyQuiz() {
-        for (int i = 0; i < quiz.getQuestions().size(); ++i) {
-            item(0).perform(click());
-            itemView(0, R.id.delete_button).perform(click());
-            onDialog(android.R.id.button1).perform(click());
-        }
+        emptyQuizList(quiz);
 
         onView(withId(R.id.done)).perform(click());
         onView(withText(testRule.getActivity().getString(R.string.warning_save_empty_quiz)))
