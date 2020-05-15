@@ -77,19 +77,18 @@ public class EditPreviewFragment extends Fragment {
     }
 
     /**
-     * This method gets the concrete AnswerFormat, checks if the QuizViewModel contains already a
-     * matching AnswerModel and otherwise creates a new one and adds it to the QuizViewModel.
-     * Further a bundle is prepared, then it dispatches the correct Fragment class and finally
+     * This method gets the concrete AnswerFormat and AnswerModel, prepares a bundle, then it dispatches the correct Fragment class and finally
      * starts it.
      *
      * @param question The question that is going to be shown
      */
     private void prepareAnswerFormatFragment(Question question) {
+        // Make the AnswerFragment visible again if it wasn't already
         if (fragmentContainerView.getVisibility() == GONE) {
             fragmentContainerView.setVisibility(VISIBLE);
         }
 
-        // Get the AnswerFormat of the question
+        // Get the AnswerFormat and the AnswerModel of the question
         AnswerFormat answerFormat = question.getFormat();
         AnswerModel answerModel = answerFormat.getEmptyAnswerModel();
 
@@ -102,7 +101,7 @@ public class EditPreviewFragment extends Fragment {
         Fragment fragment = answerFormat.getAnswerFragment();
         fragment.setArguments(bundle);
 
-        // And dynamically instantiate the answer form
+        // And dynamically instantiate the fragment
         requireActivity()
                 .getSupportFragmentManager()
                 .beginTransaction()
