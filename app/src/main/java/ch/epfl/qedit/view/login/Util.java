@@ -1,7 +1,5 @@
 package ch.epfl.qedit.view.login;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,10 +10,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import ch.epfl.qedit.R;
+
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.function.Predicate;
+
+import ch.epfl.qedit.R;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /** A Utility class useful for login and sign up */
 public final class Util {
@@ -25,6 +27,10 @@ public final class Util {
 
     // Key of user passed in bundle to home activity
     public static final String USER = "ch.epfl.qedit.view.login.USER";
+
+    // This is the name of the shared preference file, and the key for the user id
+    public static final String USER_DATA = "user_data";
+    public static final String USER_ID = "user_id";
 
     private Util() {}
 
@@ -95,7 +101,7 @@ public final class Util {
 
     /**
      * Update the redirection text with colors (we cannot directly put the color in the strings.xml
-     * because we are changing language the language dynamically in these activities
+     * because we are changing the language dynamically in these activities).
      *
      * @param resources resources to get the strings from
      * @param view TextView to update
@@ -153,7 +159,7 @@ public final class Util {
      */
     @SuppressWarnings("SameParameterValue")
     static void putStringInPrefs(Activity activity, String key, String value) {
-        SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences prefs = activity.getSharedPreferences(USER_DATA, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
         editor.apply();
@@ -167,7 +173,7 @@ public final class Util {
      * @return the string associated with the key in the preferences
      */
     public static String getStringInPrefs(Activity activity, String key) {
-        SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences prefs = activity.getSharedPreferences(USER_DATA, MODE_PRIVATE);
         return prefs.getString(key, "");
     }
 
@@ -178,7 +184,7 @@ public final class Util {
      * @param key key to remove
      */
     public static void removeStringInPrefs(Activity activity, String key) {
-        SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences prefs = activity.getSharedPreferences(USER_DATA, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(key);
         editor.apply();

@@ -10,14 +10,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.function.Predicate;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.util.LocaleHelper;
-import java.util.function.Predicate;
 
 public class SignUpActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
@@ -201,7 +204,7 @@ public class SignUpActivity extends AppCompatActivity
                             }
                         });
         // Put the current user id in cache
-        Util.putStringInPrefs(this, "user_id", userId);
+        Util.putStringInPrefs(this, Util.USER_ID, userId);
 
         Util.showToast(R.string.sign_up_success, context, resources);
     }
