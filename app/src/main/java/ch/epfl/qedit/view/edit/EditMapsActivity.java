@@ -43,8 +43,6 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
      * method will only be triggered once the user has installed Google Play services and returned
      * to the app.
      */
-    boolean test = false;
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
