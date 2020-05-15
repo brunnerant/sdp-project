@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- French -->
+
 <resources>
 
     <!-- App and logo -->
@@ -8,20 +10,35 @@
     <!-- Language selection -->
     <string name="language_changed">Langue changée en</string>
 
-    <!-- Log in -->
-    <string name="title_activity_login">Connexion</string>
-    <string name="login_button_text">Connexion</string>
-    <string name="login_action_label">Connexion</string>
-    <string name="token_hint">Token de connexion</string>
-    <string name="wrong_token_message">Token invalide</string>
-    <string name="empty_token_message">Token vide</string>
+    <!-- Log in, log out, sign up -->
+    <string name="title_activity_log_in">Connexion</string>
+    <string name="title_activity_sign_up">Inscription</string>
 
-    <!-- Connection error -->
-    <string name="connection_error_message">Erreur de connexion</string>
+    <string name="log_in_button_text">Connexion</string>
+    <string name="log_in_action_label">Connexion</string>
+    <string name="log_out">Déconnexion</string>
+    <string name="sign_up_button_text">Inscription</string>
+    <string name="sign_up_action_label">Inscription</string>
 
-    <!-- Database -->
-    <string name="wrong_quiz_id_message">Quiz inexistant</string>
-    <string name="wrong_document_error_message">Document invalide</string>
+    <string name="hint_first_name">Prénom</string>
+    <string name="hint_last_name">Nom</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="hint_password_confirmation">Confirmation du mot de passe</string>
+
+    <string name="input_cannot_be_empty">Ne peut pas être vide</string>
+    <string name="invalid_email">Email invalide</string>
+    <string name="invalid_password">Le mot de passe doit faire 6 caractères minimum</string>
+    <string name="invalid_name">Nom invalide</string>
+    <string name="invalid_password_confirmation">Les mots de passe ne sont pas identique</string>
+
+    <string name="log_in_instead">J\'ai déjà un compte -> Connexion</string>
+    <string name="sign_up_instead">Je n\'ai pas de compte -> Inscription</string>
+
+    <string name="log_in_fail">Connexion échouée. Merci de vérifier si votre email et mot de passe sont corrects.</string>
+    <string name="sign_up_success">Inscription réussie</string>
+    <string name="sign_up_fail">Inscription échouée</string>
+    <string name="log_out_success">Déconnexion réussie</string>
 
     <!-- Home -->
     <string name="title_activity_home">Accueil</string>
@@ -56,16 +73,12 @@
     <string name="button_start_editing_message">Démarrer l\'édition</string>
 
     <!-- Edit -->
-    <string name="delete">Supprimer</string>
-    <string name="edit">Éditer</string>
     <string name="dup_quiz_name_error">Un quiz du même nom existe déjà</string>
     <string name="empty_quiz_name_error">Veuillez entrer le nom du quiz</string>
     <string name="cancel">Annuler</string>
     <string name="done">Ok</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
-    <string name="add_quiz_message">Entrez le nom de votre quiz</string>
-    <string name="edit_title">Renommer</string>
     <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
     <string name="add_quiz">Ajouter</string>
     <string name="empty_question_list_hint_text">Ajouter une question</string>

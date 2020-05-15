@@ -28,6 +28,7 @@ import static ch.epfl.qedit.util.Util.isDisplayed;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
+import static ch.epfl.qedit.view.login.Util.USER;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -56,7 +57,6 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
-import ch.epfl.qedit.view.LoginActivity;
 import ch.epfl.qedit.view.QR.ScannerActivity;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
@@ -88,7 +88,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
 
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(LoginActivity.USER, user);
+        bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
         testRule.launchActivity(intent);
         // always close the statistics panel by default to be sure it does not take to much place on
