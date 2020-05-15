@@ -38,6 +38,7 @@
     <string name="log_in_fail">Connexion échouée. Merci de vérifier si votre email et mot de passe sont corrects.</string>
     <string name="sign_up_success">Inscription réussie</string>
     <string name="sign_up_fail">Inscription échouée</string>
+    <string name="log_out_success">Déconnexion réussie</string>
 
     <!-- Home -->
     <string name="title_activity_home">Accueil</string>

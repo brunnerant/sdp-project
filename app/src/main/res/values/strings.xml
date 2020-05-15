@@ -66,8 +66,9 @@
     <string name="sign_up_instead">I don\'t have an account -> Sign up</string>
 
     <string name="log_in_fail">Log in failed. Please check that your email and password are correct.</string>
-    <string name="sign_up_success">Sign up successful</string>
+    <string name="sign_up_success">Signed up successfully</string>
     <string name="sign_up_fail">Sign up failed</string>
+    <string name="log_out_success">Logged out successfully</string>
 
     <!-- Home -->
     <string name="title_activity_home">Home</string>
