@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.login;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,14 +12,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import ch.epfl.qedit.R;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.function.Predicate;
-
-import ch.epfl.qedit.R;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /** A Utility class useful for login and sign up */
 public final class Util {

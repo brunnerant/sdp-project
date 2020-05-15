@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.login;
 
+import static ch.epfl.qedit.view.login.Util.USER;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -10,11 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.function.Predicate;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
@@ -22,8 +20,7 @@ import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.home.HomeActivity;
-
-import static ch.epfl.qedit.view.login.Util.USER;
+import java.util.function.Predicate;
 
 public class LogInActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
