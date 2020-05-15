@@ -176,7 +176,11 @@ public class HomeQuizListFragment extends Fragment
         startActivity(new Intent(getActivity(), LogInActivity.class));
 
         // Show toast
-        Toast.makeText(getContext(), getResources().getString(R.string.log_out_success), Toast.LENGTH_SHORT).show();
+        Toast.makeText(
+                        getContext(),
+                        getResources().getString(R.string.log_out_success),
+                        Toast.LENGTH_SHORT)
+                .show();
     }
 
     // Handles when a user clicked on the button to remove a quiz
