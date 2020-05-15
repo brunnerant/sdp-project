@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view.login;
 
 import static ch.epfl.qedit.view.login.Util.USER;
+import static ch.epfl.qedit.view.login.Util.USER_ID;
 
 import android.content.Context;
 import android.content.Intent;
@@ -163,7 +164,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                             }
                         });
         // Put the current user id in cache
-        Util.putStringInPrefs(this, "user_id", userId);
+        Util.putStringInPrefs(this, USER_ID, userId);
     }
 
     private void onLogInFailed() {

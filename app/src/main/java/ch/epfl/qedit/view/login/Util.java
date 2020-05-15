@@ -23,6 +23,9 @@ public final class Util {
     static final String REGEX_EMAIL = "^(\\s)*[A-Za-z0-9+_.-]+@(.+)(\\s)*$";
     static final String REGEX_NAME = "^(\\s)*[A-Za-z0-9\\s\\-]+(\\s)*$";
 
+    static final String USER_DATA = "ch.epfl.qedit.view.login.USER_DATA";
+    public static final String USER_ID = "ch.epfl.qedit.view.login.USER_ID";
+
     // Key of user passed in bundle to home activity
     public static final String USER = "ch.epfl.qedit.view.login.USER";
 
@@ -153,7 +156,7 @@ public final class Util {
      */
     @SuppressWarnings("SameParameterValue")
     static void putStringInPrefs(Activity activity, String key, String value) {
-        SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences prefs = activity.getSharedPreferences(USER_DATA, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
         editor.apply();
@@ -167,7 +170,7 @@ public final class Util {
      * @return the string associated with the key in the preferences
      */
     public static String getStringInPrefs(Activity activity, String key) {
-        SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences prefs = activity.getSharedPreferences(USER_DATA, MODE_PRIVATE);
         return prefs.getString(key, "");
     }
 
@@ -178,7 +181,7 @@ public final class Util {
      * @param key key to remove
      */
     public static void removeStringInPrefs(Activity activity, String key) {
-        SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences prefs = activity.getSharedPreferences(USER_DATA, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(key);
         editor.apply();

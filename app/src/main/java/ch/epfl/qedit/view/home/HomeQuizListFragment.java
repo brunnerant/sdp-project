@@ -7,6 +7,7 @@ import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.login.Util.USER;
+import static ch.epfl.qedit.view.login.Util.USER_ID;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -164,10 +165,10 @@ public class HomeQuizListFragment extends Fragment
 
     private void logOut() {
         // Retrieve cached user id
-        String uid = Util.getStringInPrefs(getActivity(), "user_id");
+        String uid = Util.getStringInPrefs(requireActivity(), USER_ID);
 
         // Remove cached user id
-        Util.removeStringInPrefs(getActivity(), "user_id");
+        Util.removeStringInPrefs(getActivity(), USER_ID);
 
         // Log out
         FirebaseAuth.getInstance().signOut();
