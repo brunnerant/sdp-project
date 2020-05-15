@@ -65,10 +65,9 @@
     <string name="log_in_instead">I already have an account -> Log in</string>
     <string name="sign_up_instead">I don\'t have an account -> Sign up</string>
 
-    <string name="log_in_success">Log in successful.</string>
-    <string name="log_in_fail">Log in failed. Please check that your email/password is correct.</string>
-    <string name="sign_up_success">Sign up successful.</string>
-    <string name="sign_up_fail">Sign up failed.</string>
+    <string name="log_in_fail">Log in failed. Please check that your email and password are correct.</string>
+    <string name="sign_up_success">Sign up successful</string>
+    <string name="sign_up_fail">Sign up failed</string>
 
     <!-- Connection error -->
     <string name="connection_error">Connection error</string>

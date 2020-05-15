@@ -126,6 +126,7 @@ public final class Util {
         if (view == null) {
             view = new View(activity);
         }
+        assert imm != null;
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
@@ -133,7 +134,7 @@ public final class Util {
         SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getStringInPrefs(Activity activity, String key) {
@@ -145,6 +146,6 @@ public final class Util {
         SharedPreferences prefs = activity.getSharedPreferences("UserData", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(key);
-        editor.commit();
+        editor.apply();
     }
 }

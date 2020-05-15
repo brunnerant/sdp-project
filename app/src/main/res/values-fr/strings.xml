@@ -35,10 +35,9 @@
     <string name="log_in_instead">J\'ai déjà un compte -> Connexion</string>
     <string name="sign_up_instead">Je n\'ai pas de compte -> Inscription</string>
 
-    <string name="log_in_success">Connexion réussie.</string>
-    <string name="log_in_fail">Connexion échouée. Merci de vérifier si votre email et mot de pass sont corrects.</string>
-    <string name="sign_up_success">Inscription réussie.</string>
-    <string name="sign_up_fail">Inscription échouée.</string>
+    <string name="log_in_fail">Connexion échouée. Merci de vérifier si votre email et mot de passe sont corrects.</string>
+    <string name="sign_up_success">Inscription réussie</string>
+    <string name="sign_up_fail">Inscription échouée</string>
 
     <!-- Connection error -->
     <string name="connection_error">Erreur de connexion</string>
