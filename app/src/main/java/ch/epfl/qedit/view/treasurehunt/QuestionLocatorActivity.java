@@ -38,7 +38,7 @@ public class QuestionLocatorActivity extends PermissionActivity
                 Manifest.permission.ACCESS_COARSE_LOCATION,
             };
 
-    // This is the interval at which we would like to receive location updates
+    // This is the interval at which we would like to receive location updates, in milliseconds
     private static final int LOCATION_INTERVAL = 1000;
 
     // This is the location and radius of the question the user has to go to

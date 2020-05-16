@@ -10,7 +10,7 @@ import ch.epfl.qedit.backend.permission.PermissionManager;
 
 public class AndroidLocService implements LocationService {
 
-    // This the minimum distance at which location updates are received
+    // This the minimum distance at which location updates are received, in meters
     private final int MIN_DISTANCE = 5;
 
     private final Context context;
