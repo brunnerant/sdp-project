@@ -4,11 +4,11 @@ import android.content.Context;
 import java.util.function.Function;
 
 /**
- * This factory class allows the frontend classes to retrieve the singleton authentication service
- * without caring about its implementation.
+ * This factory class can be used to retrieve the singleton location service. Tests can also set
+ * the location service, so that they can provide a mock implementation of it.
  */
 public final class LocServiceFactory {
-    /** The singleton instance of the auth service */
+    /** The singleton instance of the location service */
     private static LocationService locService = null;
 
     /** The callback used to instantiate a new instance, once the context was aquired */

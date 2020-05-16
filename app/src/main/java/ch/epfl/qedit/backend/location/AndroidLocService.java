@@ -10,6 +10,9 @@ import ch.epfl.qedit.backend.permission.PermissionManager;
 
 public class AndroidLocService implements LocationService {
 
+    // This the minimum distance at which location updates are received
+    private final int MIN_DISTANCE = 5;
+
     private final Context context;
     private final LocationManager manager;
 
@@ -36,7 +39,7 @@ public class AndroidLocService implements LocationService {
                         context, Manifest.permission.ACCESS_COARSE_LOCATION)) return false;
 
         // Otherwise, we subscribe to the location service
-        manager.requestLocationUpdates(interval, 0, criteria, listener, null);
+        manager.requestLocationUpdates(interval, MIN_DISTANCE, criteria, listener, null);
         return true;
     }
 
