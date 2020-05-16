@@ -68,13 +68,15 @@
     <string name="title_activity_edit_quiz">Édition</string>
 
     <!-- Treasure hunt -->
-    <string name="title_activity_question_locator">Localisation de la question</string>
+    <string name="title_activity_treasure_hunt">Chasse au trésor</string>
     <string name="question_locator_distance">Distance vers la prochaine question :</string>
     <string name="question_locator_bearing">Orientation vers la prochaine question (depuis le nord) :</string>
     <string name="question_locator_error">Impossible de localiser votre téléphone</string>
     <string name="enable_location">Autoriser la localisation</string>
     <string name="question_locator_found">Vous avez trouvé la question!</string>
     <string name="question_locator_answer">Répondre à la question</string>
+    <string name="treasure_hunt_explanation">Vous devez localiser la première question avant de commencer le quiz</string>
+    <string name="treasure_hunt_start">Démarrer la chasse au trésor</string>
 
     <!-- Edit Settings -->
     <string name="edit_dialog_title_settings">Réglages</string>
