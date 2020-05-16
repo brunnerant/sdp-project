@@ -2,10 +2,12 @@ package ch.epfl.qedit.edit;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.model.StringPool.TITLE_ID;
-import static ch.epfl.qedit.util.Util.createMockQuiz;
+import static ch.epfl.qedit.util.Util.createTestQuiz;
+import static ch.epfl.qedit.util.Util.createTestStringPool;
+import static org.hamcrest.core.IsNot.not;
 
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
@@ -21,11 +23,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class EditPreviewFragmentTest {
-    private static final String testTitle = "TestTitle";
-    private static final String testNoTitle = "No TestTitle";
-    private static final String testNoText = "No TestQuestionText";
+    private static final Quiz testQuiz = createTestQuiz();
+    private static final StringPool stringPool = createTestStringPool("TestTitle");
 
-    private static final Quiz mockQuiz = createMockQuiz(testTitle);
     private EditionViewModel model;
 
     @Rule
@@ -34,10 +34,7 @@ public class EditPreviewFragmentTest {
 
     @Before
     public void setUp() {
-        StringPool stringPool = new StringPool();
-        stringPool.update(TITLE_ID, testTitle);
-
-        Quiz.Builder quizBuilder = new Quiz.Builder(mockQuiz);
+        Quiz.Builder quizBuilder = new Quiz.Builder(testQuiz);
 
         model = new ViewModelProvider(testRule.getActivity()).get(EditionViewModel.class);
 
@@ -56,13 +53,18 @@ public class EditPreviewFragmentTest {
     public void testFragmentIsEmptyByDefault() {
         onView(withId(R.id.question_title)).check(matches(withText("")));
         onView(withId(R.id.question_display)).check(matches(withText("")));
+        onView(withId(R.id.answer_fragment_container)).check(matches(not(isDisplayed())));
     }
 
     @Test
     public void testFragmentDisplaysFilledQuestionCorrectly() {
-        Question question = mockQuiz.getQuestions().get(0);
+        Question question = testQuiz.getQuestions().get(0);
         model.getFocusedQuestion().postValue(0);
-        onView(withId(R.id.question_title)).check(matches(withText(question.getTitle())));
-        onView(withId(R.id.question_display)).check(matches(withText(question.getText())));
+
+        onView(withId(R.id.question_title))
+                .check(matches(withText(stringPool.get(question.getTitle()))));
+        onView(withId(R.id.question_display))
+                .check(matches(withText(stringPool.get(question.getText()))));
+        onView(withId(R.id.answer_fragment_container)).check(matches(isDisplayed()));
     }
 }

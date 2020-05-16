@@ -23,7 +23,7 @@ public class MockPermManager implements PermissionManager {
     }
 
     // The state of the permissions. If a permission is not in the map, it is assumed to have
-    // state UnkownPositive.
+    // state UnknownPositive.
     private final Map<String, State> permStates;
 
     // This is for espresso tests to wait
