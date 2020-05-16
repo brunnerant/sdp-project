@@ -28,7 +28,7 @@ import ch.epfl.qedit.backend.location.LocServiceFactory;
 import ch.epfl.qedit.backend.location.MockLocService;
 import ch.epfl.qedit.backend.permission.MockPermManager;
 import ch.epfl.qedit.backend.permission.PermManagerFactory;
-import ch.epfl.qedit.view.quiz.QuestionLocatorActivity;
+import ch.epfl.qedit.view.treasurehunt.QuestionLocatorActivity;
 import java.util.function.Consumer;
 import org.hamcrest.Matcher;
 import org.junit.After;

@@ -74,7 +74,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.quiz.QuestionLocatorActivity"
+            android:name=".view.treasurehunt.QuestionLocatorActivity"
             android:label="@string/title_activity_question_locator"
             android:configChanges="orientation|screenSize" >
             <intent-filter>

@@ -1,4 +1,4 @@
-package ch.epfl.qedit.view.quiz;
+package ch.epfl.qedit.view.treasurehunt;
 
 import android.Manifest;
 import android.content.Context;
