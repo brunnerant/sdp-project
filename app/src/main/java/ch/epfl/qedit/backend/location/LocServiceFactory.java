@@ -4,8 +4,8 @@ import android.content.Context;
 import java.util.function.Function;
 
 /**
- * This factory class can be used to retrieve the singleton location service. Tests can also set
- * the location service, so that they can provide a mock implementation of it.
+ * This factory class can be used to retrieve the singleton location service. Tests can also set the
+ * location service, so that they can provide a mock implementation of it.
  */
 public final class LocServiceFactory {
     /** The singleton instance of the location service */
