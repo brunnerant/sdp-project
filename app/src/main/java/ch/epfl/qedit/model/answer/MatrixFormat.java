@@ -82,7 +82,7 @@ public final class MatrixFormat extends AnswerFormat {
             return new Field(Type.Text, maxCharacters, hint);
         }
 
-        /** Returns a numeric field with the giben characteristics */
+        /** Returns a numeric field with the given characteristics */
         public static Field numericField(
                 boolean decimal, boolean signed, String hint, int maxCharacters) {
             Type type;

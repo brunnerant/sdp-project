@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.camera2" />
     <uses-feature android:name="android.hardware.camera2.params." />
@@ -50,17 +51,17 @@
         </activity>
 
         <activity android:name=".view.QR.ScannerActivity"></activity>
-        <activity android:name=".view.edit.EditSettingsActivity">
+        <activity
+            android:name=".StartActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
             <intent-filter>
-                <action android:name="android.intent.action.EDIT" />
-
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".view.edit.EditQuestionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -70,16 +71,22 @@
             android:parentActivityName=".view.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.LoginActivity"
-            android:label="@string/title_activity_login">
+            android:name=".view.login.LogInActivity"
+            android:label="@string/title_activity_log_in">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.LOGIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.login.SignUpActivity"
+            android:label="@string/title_activity_sign_up">
+            <intent-filter>
+                <action android:name="android.intent.action.SIGNUP" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -87,10 +94,9 @@
             android:name=".view.home.HomeActivity"
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.LoginActivity">
+            android:parentActivityName=".StartActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW_ROLE" />
-
+                <action android:name="android.intent.action.HOME" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -99,7 +105,6 @@
             android:parentActivityName=".view.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

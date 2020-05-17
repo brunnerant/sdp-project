@@ -40,7 +40,7 @@ public class MatrixFragmentTest {
     public void init() {
         MatrixFormat format =
                 new MatrixFormat.Builder(2, 3)
-                        .withField(0, 0, MatrixFormat.Field.preFilledField("prefilled"))
+                        .withField(0, 0, MatrixFormat.Field.preFilledField("pre-filled"))
                         .withField(0, 1, MatrixFormat.Field.textField("h1", 3))
                         .withField(0, 2, MatrixFormat.Field.numericField(false, false, "h2", 4))
                         .withField(1, 0, MatrixFormat.Field.numericField(false, true, "h3", 5))
@@ -97,7 +97,7 @@ public class MatrixFragmentTest {
 
     @Test
     public void testFieldsAreCorrectlyInitialized() {
-        onField(0, 0).check(matches(withText("prefilled")));
+        onField(0, 0).check(matches(withText("pre-filled")));
         onField(0, 1).check(matches(withText("abc")));
         onField(0, 2).check(matches(withText("")));
         onField(1, 0).check(matches(withText("")));
@@ -117,6 +117,7 @@ public class MatrixFragmentTest {
     @Test
     public void testTextField() {
         assertTyping(0, 1, "abc", "abc");
+        //noinspection SpellCheckingInspection
         assertTyping(0, 1, "abcd", "abc");
         assertTyping(0, 1, "=-)", "=-)");
     }

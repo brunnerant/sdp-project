@@ -1,6 +1,10 @@
 package ch.epfl.qedit.backend.database;
 
-import static ch.epfl.qedit.backend.database.Util.updateUser;
+import static ch.epfl.qedit.backend.Util.error;
+import static ch.epfl.qedit.backend.Util.extractLanguages;
+import static ch.epfl.qedit.backend.Util.extractQuiz;
+import static ch.epfl.qedit.backend.Util.extractStringPool;
+import static ch.epfl.qedit.backend.Util.updateUser;
 
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
@@ -31,18 +35,13 @@ public class FirebaseDBService implements DatabaseService {
         return db.collection("quizzes").document(quizID);
     }
 
-    /** This allows to complete the future with a request exception */
-    private static void error(CompletableFuture<?> future, String message) {
-        future.completeExceptionally(new Util.RequestException(message));
-    }
-
     @Override
     public CompletableFuture<List<String>> getQuizLanguages(String quizId) {
         CompletableFuture<List<String>> future = new CompletableFuture<>();
 
         getQuizRef(quizId)
                 .get()
-                .addOnSuccessListener(doc -> Util.extractLanguages(future, doc))
+                .addOnSuccessListener(doc -> extractLanguages(future, doc))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
         return future;
@@ -56,7 +55,7 @@ public class FirebaseDBService implements DatabaseService {
                 .collection("questions")
                 .orderBy("index")
                 .get()
-                .addOnSuccessListener(query -> Util.extractQuiz(future, query))
+                .addOnSuccessListener(query -> extractQuiz(future, query))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
         return future;
@@ -70,7 +69,7 @@ public class FirebaseDBService implements DatabaseService {
                 .collection("string_pools")
                 .document(language)
                 .get()
-                .addOnSuccessListener(doc -> Util.extractStringPool(future, doc))
+                .addOnSuccessListener(doc -> extractStringPool(future, doc))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
         return future;
@@ -92,8 +91,8 @@ public class FirebaseDBService implements DatabaseService {
     @Override
     public CompletableFuture<Void> createUser(String userId, String firstName, String lastName) {
         Map<String, Object> data = new HashMap<>();
-        data.put("first_name", firstName);
-        data.put("last_name", lastName);
+        data.put("firstName", firstName);
+        data.put("lastName", lastName);
         data.put("score", 0);
         data.put("successes", 0);
         data.put("attempts", 0);

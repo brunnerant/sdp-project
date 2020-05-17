@@ -1,10 +1,6 @@
 package ch.epfl.qedit.backend.auth;
 
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Callback;
-import ch.epfl.qedit.util.Error;
-import ch.epfl.qedit.util.Response;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Represents an authentication service, that is a service to which login requests can be sent. It
@@ -12,15 +8,24 @@ import ch.epfl.qedit.util.Response;
  */
 public interface AuthenticationService {
 
-    Error CONNECTION_ERROR = new Error(R.string.connection_error_message);
-    Error WRONG_TOKEN = new Error(R.string.wrong_token_message);
+    /**
+     * Sign Up a new user in the Authentication service. It associate a new ID to each unique pairs
+     * of email-password.
+     *
+     * @param email of the new user
+     * @param password of the new user
+     * @return future that hold an error if sign up fail or the new ID of the user if sign up
+     *     succeed
+     */
+    CompletableFuture<String> signUp(String email, String password);
 
     /**
-     * Sends a request to the authentication service, and receives the response asynchronously
-     * through the callback.
+     * Check if the pair email-password is in the Authentication service and return the ID of the
+     * user if it does.
      *
-     * @param token the token to send to the authentication service
-     * @param responseCallback the callback to handle the response once it arrives
+     * @param email of the user
+     * @param password of the user
+     * @return future that hold an error if log in fail or the new ID of the user if log in succeed
      */
-    void sendRequest(String token, Callback<Response<User>> responseCallback);
+    CompletableFuture<String> logIn(String email, String password);
 }

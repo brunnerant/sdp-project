@@ -1,6 +1,6 @@
 package ch.epfl.qedit.home;
 
-import static ch.epfl.qedit.view.LoginActivity.USER;
+import static ch.epfl.qedit.view.login.Util.USER;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -22,7 +22,7 @@ class HomeFragmentsTestUsingDB extends RecyclerViewHelpers {
 
     public void setup(FragmentTestRule testRule, Fragment fragment) {
         User user = new User("Jon", "Snow", score, successes, attempts);
-        user.addQuiz("quiz0", "Qualification EPFL");
+        user.addQuiz("quiz0", "I am a Mock Quiz!");
 
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
