@@ -2,13 +2,16 @@ package ch.epfl.qedit.backend.location;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import androidx.core.app.ActivityCompat;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.backend.permission.PermissionManager;
 
 public class AndroidLocService implements LocationService {
+
+    // This the minimum distance at which location updates are received, in meters
+    private final int MIN_DISTANCE = 5;
 
     private final Context context;
     private final LocationManager manager;
@@ -24,19 +27,19 @@ public class AndroidLocService implements LocationService {
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
         criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
         criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
+        criteria.setBearingRequired(true);
         criteria.setCostAllowed(false);
         criteria.setSpeedRequired(false);
 
-        // If the application doesn't have the permission, we cannot subscribe
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(
-                                context, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) return false;
+        // We need the permission manager to check the location permissions
+        PermissionManager permManager = PermManagerFactory.getInstance();
+
+        if (!permManager.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                || !permManager.checkPermission(
+                        context, Manifest.permission.ACCESS_COARSE_LOCATION)) return false;
 
         // Otherwise, we subscribe to the location service
-        manager.requestLocationUpdates(interval, 10, criteria, listener, null);
+        manager.requestLocationUpdates(interval, MIN_DISTANCE, criteria, listener, null);
         return true;
     }
 

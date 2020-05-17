@@ -1,8 +1,11 @@
 package ch.epfl.qedit.backend.location;
 
+import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.backend.permission.PermissionManager;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,23 +17,30 @@ public class MockLocService implements LocationService {
     // This is the set of listeners that need to be updated.
     private final Set<LocationListener> listeners;
 
-    // This indicates whether the user has permissions to access this service.
-    // Note that this is for test purposes. It allows to test how the UI reacts when the user
-    // doesn't have the access to the location.
-    private boolean hasPermission;
+    // This is the context of the location service. It is used to retrieve the permissions.
+    private final Context context;
 
     public MockLocService(Context context) {
         listeners = new HashSet<>();
-        hasPermission = false;
+        this.context = context;
     }
 
     @Override
     public boolean subscribe(LocationListener listener, int interval) {
         // In the mock, we will not take into account the interval, because the goal
         // is just to test how the UI responds to the location updates.
-        if (hasPermission) listeners.add(listener);
 
-        return hasPermission;
+        // We need the permission manager to check the location permissions
+        PermissionManager permManager = PermManagerFactory.getInstance();
+
+        if (permManager.checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                && permManager.checkPermission(
+                        context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            listeners.add(listener);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -46,16 +56,11 @@ public class MockLocService implements LocationService {
      */
     public void setLocation(double longitude, double latitude) {
         // We first build the location from the coordinates
-        Location location = new Location(LOCATION_PROVIDER);
+        Location location = new Location("");
         location.setLongitude(longitude);
         location.setLatitude(latitude);
 
         // And then we trigger the listeners
         for (LocationListener listener : listeners) listener.onLocationChanged(location);
-    }
-
-    /** Sets the permission to access the location service. */
-    public void setPermission(boolean hasPermission) {
-        this.hasPermission = hasPermission;
     }
 }
