@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
-import ch.epfl.qedit.backend.permission.PermManagerFactory;
-import ch.epfl.qedit.backend.permission.PermissionManager;
+
 import java.util.HashSet;
 import java.util.Set;
+
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.backend.permission.PermissionManager;
 
 /** This class is used to write tests for the parts of the app that need the location service. */
 public class MockLocService implements LocationService {
@@ -19,6 +21,10 @@ public class MockLocService implements LocationService {
 
     // This is the context of the location service. It is used to retrieve the permissions.
     private final Context context;
+
+    // This is the current location
+    private double longitude = 0;
+    private double latitude = 0;
 
     public MockLocService(Context context) {
         listeners = new HashSet<>();
@@ -55,6 +61,41 @@ public class MockLocService implements LocationService {
      * @param latitude the latitude of the new location
      */
     public void setLocation(double longitude, double latitude) {
+        notifyListeners(longitude, latitude);
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
+    /**
+     * Moves gradually from the current location to the given location, over t seconds.
+     * @param longitude the target longitude
+     * @param latitude the target latitude
+     * @param t the time over which we move, in seconds
+     */
+    public void moveTo(double longitude, double latitude, double t) {
+        // We give 10 updates per second (that's arbitrary)
+        final int UPDATES_PER_SEC = 10;
+        int steps = (int) (t * UPDATES_PER_SEC);
+
+        // We give updates to the listeners along our route
+        for (int i = 1; i <= steps; i++) {
+            double interpolatedLong = interpolate(this.longitude, longitude, (double) i / steps);
+            double interpolatedLat = interpolate(this.latitude, latitude, (double) i / steps);
+            notifyListeners(interpolatedLong, interpolatedLat);
+        }
+
+        // And we finally set the final position
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
+    // Interpolates a value between two end points
+    private double interpolate(double from, double to, double t) {
+        return from * (1 - t) + to * t;
+    }
+
+    // Notifies the listeners about a certain position
+    private void notifyListeners(double longitude, double latitude) {
         // We first build the location from the coordinates
         Location location = new Location("");
         location.setLongitude(longitude);
