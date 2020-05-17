@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.location.LocServiceFactory;
-import ch.epfl.qedit.backend.location.LocationService;
+import ch.epfl.qedit.backend.location.MockLocService;
 import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import ch.epfl.qedit.backend.permission.PermissionActivity;
 import ch.epfl.qedit.backend.permission.PermissionManager;
@@ -43,11 +42,11 @@ public class QuestionLocatorActivity extends PermissionActivity
 
     // This is the location and radius of the question the user has to go to
     private Location questionLoc;
-    private float questionRadius;
+    private double questionRadius;
 
     // This is the location service from which we retrieve the phone's location, and the
     // location manager from which we request permissions
-    private LocationService locService;
+    private MockLocService locService;
     private PermissionManager permManager;
 
     // Those are the text views that display the direction and distance to the user
@@ -74,7 +73,7 @@ public class QuestionLocatorActivity extends PermissionActivity
         // We retrieve the location from the activity arguments
         Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
         questionLoc = (Location) bundle.getParcelable(QUESTION_LOCATION);
-        questionRadius = bundle.getFloat(QUESTION_RADIUS);
+        questionRadius = bundle.getDouble(QUESTION_RADIUS);
 
         // We retrieve the UI elements and set up the default UI
         text1 = findViewById(R.id.question_locator_text1);
@@ -83,11 +82,16 @@ public class QuestionLocatorActivity extends PermissionActivity
         setUnknownUI();
 
         // We retrieve the two singleton backend services
-        locService = LocServiceFactory.getInstance(getApplicationContext());
         permManager = PermManagerFactory.getInstance();
+
+        // Note that we use a mock service to demo the treasure hunt, but that should change
+        LocServiceFactory.setInstance(context -> new MockLocService(context));
+        locService = (MockLocService) LocServiceFactory.getInstance(getApplicationContext());
+        locService.setLocation(1, 0);
 
         // If we couldn't subscribe, we need to ask for permissions for the location
         if (!locService.subscribe(this, LOCATION_INTERVAL)) askPermissions();
+        else setCheatButton();
     }
 
     private void askPermissions() {
@@ -110,7 +114,18 @@ public class QuestionLocatorActivity extends PermissionActivity
 
         // The user finally accepted, so we can hide the button and subscribe to the location
         locService.subscribe(this, LOCATION_INTERVAL);
-        button.setVisibility(View.GONE);
+
+        // We set up this button for demo purposes only
+        setCheatButton();
+    }
+
+    // This function sets the button so that we can fake the user moving to the next question.
+    // This is only for demo purposes and should be removed in the final version.
+    private void setCheatButton() {
+        button.setVisibility(View.VISIBLE);
+        button.setText("Move to next question");
+        button.setOnClickListener(
+                v -> locService.moveTo(questionLoc.getLongitude(), questionLoc.getLatitude(), 10));
     }
 
     // Sets the text of the UI to inform the user that his position is unknown
@@ -130,8 +145,7 @@ public class QuestionLocatorActivity extends PermissionActivity
     private void setFinishUI() {
         text1.setText(getString(R.string.question_locator_found));
         text2.setText("");
-        button.setOnClickListener(
-                v -> Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show());
+        button.setOnClickListener(v -> finish());
         button.setText(getString(R.string.question_locator_answer));
         button.setVisibility(View.VISIBLE);
     }
@@ -149,7 +163,14 @@ public class QuestionLocatorActivity extends PermissionActivity
         float targetBearing = location.bearingTo(questionLoc);
         float currentBearing = location.getBearing();
 
-        updateUI(distance, mod(targetBearing, 360), mod(targetBearing - currentBearing, 360));
+        // We have to make sure to change the UI only on the UI thread
+        runOnUiThread(
+                () -> {
+                    updateUI(
+                            distance,
+                            mod(targetBearing, 360),
+                            mod(targetBearing - currentBearing, 360));
+                });
     }
 
     // This function is used to ensure that the modulo always return a positive number

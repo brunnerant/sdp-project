@@ -17,13 +17,14 @@ public final class Question implements MultiLanguage<Question>, Serializable {
      */
     private final Location location;
 
-    private final int radius;
+    private final double radius;
 
     /** The answer format for this question */
     private final AnswerFormat format;
 
     // This constructor is for treasure hunt questions
-    public Question(String title, String text, AnswerFormat format, Location location, int radius) {
+    public Question(
+            String title, String text, AnswerFormat format, Location location, double radius) {
         this.title = Objects.requireNonNull(title);
         this.text = Objects.requireNonNull(text);
         this.format = Objects.requireNonNull(format);
@@ -64,7 +65,7 @@ public final class Question implements MultiLanguage<Question>, Serializable {
         return location;
     }
 
-    public int getRadius() {
+    public double getRadius() {
         return radius;
     }
 

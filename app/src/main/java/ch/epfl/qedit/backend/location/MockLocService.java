@@ -4,12 +4,10 @@ import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
-
-import java.util.HashSet;
-import java.util.Set;
-
 import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import ch.epfl.qedit.backend.permission.PermissionManager;
+import java.util.HashSet;
+import java.util.Set;
 
 /** This class is used to write tests for the parts of the app that need the location service. */
 public class MockLocService implements LocationService {
@@ -68,21 +66,37 @@ public class MockLocService implements LocationService {
 
     /**
      * Moves gradually from the current location to the given location, over t seconds.
+     *
      * @param longitude the target longitude
      * @param latitude the target latitude
      * @param t the time over which we move, in seconds
      */
     public void moveTo(double longitude, double latitude, double t) {
         // We give 10 updates per second (that's arbitrary)
-        final int UPDATES_PER_SEC = 10;
-        int steps = (int) (t * UPDATES_PER_SEC);
+        final long TIME_PER_UPDATE = 100;
+        int steps = (int) (t * 1000 / TIME_PER_UPDATE);
 
-        // We give updates to the listeners along our route
-        for (int i = 1; i <= steps; i++) {
-            double interpolatedLong = interpolate(this.longitude, longitude, (double) i / steps);
-            double interpolatedLat = interpolate(this.latitude, latitude, (double) i / steps);
-            notifyListeners(interpolatedLong, interpolatedLat);
-        }
+        // We start from the current position
+        double initLong = this.longitude;
+        double initLat = this.latitude;
+
+        new Thread(
+                        () -> {
+                            // We give updates to the listeners along our route
+                            for (int i = 1; i <= steps; i++) {
+                                try {
+                                    Thread.sleep(TIME_PER_UPDATE);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                double interpolatedLong =
+                                        interpolate(initLong, longitude, (double) i / steps);
+                                double interpolatedLat =
+                                        interpolate(initLat, latitude, (double) i / steps);
+                                notifyListeners(interpolatedLong, interpolatedLat);
+                            }
+                        })
+                .start();
 
         // And we finally set the final position
         this.longitude = longitude;

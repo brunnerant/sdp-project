@@ -6,14 +6,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.Arrays;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -22,8 +18,10 @@ import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.Arrays;
 
-public class TreasureHuntActivity extends AppCompatActivity implements ConfirmDialog.ConfirmationListener {
+public class TreasureHuntActivity extends AppCompatActivity
+        implements ConfirmDialog.ConfirmationListener {
 
     // We use the model to communicate the question to the question fragment.
     private QuizViewModel model;
@@ -55,10 +53,13 @@ public class TreasureHuntActivity extends AppCompatActivity implements ConfirmDi
         questionView = findViewById(R.id.treasure_hunt_question);
 
         // We retrieve the quiz from the intent that started the activity
-//        Intent intent = getIntent();
-//        Quiz quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
+        //        Intent intent = getIntent();
+        //        Quiz quiz = (Quiz)
+        // Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
         Location loc = new Location("");
-        AnswerFormat format = MatrixFormat.singleField(MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
+        AnswerFormat format =
+                MatrixFormat.singleField(
+                        MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
         loc.setLongitude(0);
         loc.setLatitude(0);
         quiz =
@@ -72,7 +73,6 @@ public class TreasureHuntActivity extends AppCompatActivity implements ConfirmDi
         // We retrieve the view model
         model = new ViewModelProvider(this).get(QuizViewModel.class);
         model.setQuiz(quiz);
-        model.getFocusedQuestion().setValue(0);
     }
 
     @Override
@@ -82,7 +82,8 @@ public class TreasureHuntActivity extends AppCompatActivity implements ConfirmDi
         // If the helper view needs to be hidden (after the treasure hunt started)
         if (hideHelperView) {
             // We add the question fragment
-            getSupportFragmentManager().beginTransaction()
+            getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.treasure_hunt_question, new QuestionFragment())
                     .commit();
 
@@ -96,7 +97,7 @@ public class TreasureHuntActivity extends AppCompatActivity implements ConfirmDi
             invalidateOptionsMenu(); // tells android to re-draw the options menu
         }
 
-        // We communicate the question index to the question fragment through the view model
+        // Then, we need to communicate the question index to the question fragment
         model.getFocusedQuestion().setValue(nextIndex);
     }
 
@@ -118,7 +119,8 @@ public class TreasureHuntActivity extends AppCompatActivity implements ConfirmDi
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // If the user wants to finish the question, we ask him for confirmation
         if (item.getItemId() == R.id.question_done)
-            ConfirmDialog.create(getString(R.string.treasure_hunt_confirm_next_question), this).show(getSupportFragmentManager(), "confirm_answer");
+            ConfirmDialog.create(getString(R.string.treasure_hunt_confirm_next_question), this)
+                    .show(getSupportFragmentManager(), "confirm_answer");
 
         return true;
     }
@@ -142,10 +144,13 @@ public class TreasureHuntActivity extends AppCompatActivity implements ConfirmDi
         nextIndex = index;
         Question nextQuestion = quiz.getQuestions().get(nextIndex);
 
-        // We give the location and radius as argument to the question locator activity, and start it
+        // We give the location and radius as argument to the question locator activity, and start
+        // it
         Intent intent = new Intent(this, QuestionLocatorActivity.class);
+        Bundle bundle = new Bundle();
         intent.putExtra(QuestionLocatorActivity.QUESTION_LOCATION, nextQuestion.getLocation());
-        intent.putExtra(QuestionLocatorActivity.QUESTION_RADIUS, nextQuestion.getRadius());
+        bundle.putDouble(QuestionLocatorActivity.QUESTION_RADIUS, nextQuestion.getRadius());
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }
