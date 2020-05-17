@@ -77,6 +77,7 @@
     <string name="question_locator_answer">Répondre à la question</string>
     <string name="treasure_hunt_explanation">Vous devez localiser la première question avant de commencer le quiz</string>
     <string name="treasure_hunt_start">Démarrer la chasse au trésor</string>
+    <string name="treasure_hunt_confirm_next_question">Êtes-vous sûr d\'avoir terminé cette question ? Vous ne pourrez plus y revenir.</string>
 
     <!-- Edit Settings -->
     <string name="edit_dialog_title_settings">Réglages</string>

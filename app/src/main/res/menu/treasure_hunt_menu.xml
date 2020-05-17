@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="@string/menu_done"
+        android:id="@+id/question_done"
+        android:icon="@drawable/ic_check_black"
+        app:showAsAction="always"
+        android:visible="false" />
+</menu>

@@ -3,8 +3,11 @@ package ch.epfl.qedit.view.treasurehunt;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,18 +20,28 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
+import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 
-public class TreasureHuntActivity extends AppCompatActivity {
+public class TreasureHuntActivity extends AppCompatActivity implements ConfirmDialog.ConfirmationListener {
 
-    // We have use the model to communicate the question to the question fragment
+    // We use the model to communicate the question to the question fragment.
     private QuizViewModel model;
     private Quiz quiz;
 
-    // Indicates if that the helper view should be hidden, after the treasure hunt was started
-    private boolean hideHelperView;
+    // Indicates if that the helper view should be hidden, after the treasure hunt was started.
+    private boolean hideHelperView = false;
 
-    // Those are the two alternative views of this activity
+    // This tells whether the question done item should be shown in the menu. At the start of
+    // the activity, it should not be visible.
+    private boolean showQuestionDone = false;
+
+    // This is the index of the next question that should be showed when returning from
+    // the question locator activity.
+    private int nextIndex;
+
+    // Those are the two alternative views of this activity. The first view is used at the start,
+    // to help the user, and the second is used to show the question.
     private View helperView;
     private FragmentContainerView questionView;
 
@@ -40,7 +53,6 @@ public class TreasureHuntActivity extends AppCompatActivity {
         // We find the two alternative views
         helperView = findViewById(R.id.treasure_hunt_helper_view);
         questionView = findViewById(R.id.treasure_hunt_question);
-        hideHelperView = false;
 
         // We retrieve the quiz from the intent that started the activity
 //        Intent intent = getIntent();
@@ -63,19 +75,77 @@ public class TreasureHuntActivity extends AppCompatActivity {
         model.getFocusedQuestion().setValue(0);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // If the helper view needs to be hidden (after the treasure hunt started)
+        if (hideHelperView) {
+            // We add the question fragment
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.treasure_hunt_question, new QuestionFragment())
+                    .commit();
+
+            // And swap which view is visible
+            helperView.setVisibility(View.GONE);
+            questionView.setVisibility(View.VISIBLE);
+            hideHelperView = false;
+
+            // We also add the "done" button to the menu, to finish answering the question
+            showQuestionDone = true;
+            invalidateOptionsMenu(); // tells android to re-draw the options menu
+        }
+
+        // We communicate the question index to the question fragment through the view model
+        model.getFocusedQuestion().setValue(nextIndex);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // This function is called when the options menu is created
+        getMenuInflater().inflate(R.menu.treasure_hunt_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // This function is called when the options menu is re-drawn
+        menu.findItem(R.id.question_done).setVisible(showQuestionDone);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // If the user wants to finish the question, we ask him for confirmation
+        if (item.getItemId() == R.id.question_done)
+            ConfirmDialog.create(getString(R.string.treasure_hunt_confirm_next_question), this).show(getSupportFragmentManager(), "confirm_answer");
+
+        return true;
+    }
+
+    @Override
+    public void onConfirm(ConfirmDialog dialog) {
+        // If the user confirmed that he finished answering, we move on to locate the next question
+        locateQuestion(model.getFocusedQuestion().getValue() + 1);
+    }
+
+    // This method is called when clicking on the "start treasure hunt" button (c.f. xml file)
     public void handleTreasureHuntStart(View view) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.treasure_hunt_question, new QuestionFragment())
-                .commit();
-        helperView.setVisibility(View.GONE);
-        questionView.setVisibility(View.VISIBLE);
-
         hideHelperView = true;
-        Intent intent = new Intent(this, QuestionLocatorActivity.class);
+        locateQuestion(0);
+    }
 
-        Question firstQuestion = quiz.getQuestions().get(0);
-        intent.putExtra(QuestionLocatorActivity.QUESTION_LOCATION, firstQuestion.getLocation());
-        intent.putExtra(QuestionLocatorActivity.QUESTION_RADIUS, firstQuestion.getRadius());
+    // Transitions to the question locator view for the given question
+    private void locateQuestion(int index) {
+        // We save the index, so that when this activity is resumed, we can switch to
+        // the next question
+        nextIndex = index;
+        Question nextQuestion = quiz.getQuestions().get(nextIndex);
+
+        // We give the location and radius as argument to the question locator activity, and start it
+        Intent intent = new Intent(this, QuestionLocatorActivity.class);
+        intent.putExtra(QuestionLocatorActivity.QUESTION_LOCATION, nextQuestion.getLocation());
+        intent.putExtra(QuestionLocatorActivity.QUESTION_RADIUS, nextQuestion.getRadius());
         startActivity(intent);
     }
 }

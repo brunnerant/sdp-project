@@ -108,6 +108,7 @@
     <string name="question_locator_answer">Answer the question</string>
     <string name="treasure_hunt_explanation">You have to locate the first question to start the quiz</string>
     <string name="treasure_hunt_start">Start the treasure hunt</string>
+    <string name="treasure_hunt_confirm_next_question">Are you sure that you finished this question ? You will not be able to come back to it.</string>
 
     <!-- Edit Settings -->
     <string name="edit_dialog_title_settings">Settings</string>
