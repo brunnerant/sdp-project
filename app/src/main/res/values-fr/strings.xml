@@ -117,6 +117,10 @@
         <item>Pré-rempli</item>
     </string-array>
 
+    <!-- Map -->
+    <string name="title_activity_edit_maps">Carte</string>
+    <string name="your_location">Votre position</string>
+
     <!-- Miscellaneous -->
     <!-- In French, there is a space before the exclammation point.
          Since we cannot have leading and trailing spaces in string resources,
