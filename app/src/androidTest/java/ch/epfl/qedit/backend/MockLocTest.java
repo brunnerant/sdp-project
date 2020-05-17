@@ -7,34 +7,27 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import android.Manifest;
 import android.content.Context;
 import android.location.LocationListener;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.backend.location.MockLocService;
-import ch.epfl.qedit.util.LocationHelper;
-import org.junit.After;
-import org.junit.Before;
+import ch.epfl.qedit.backend.permission.MockPermManager;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class MockLocTest extends LocationHelper {
+public class MockLocTest {
     private Context context = ApplicationProvider.getApplicationContext();
-
-    @Before
-    public void init() {
-        initLocationProvider(context);
-    }
-
-    @After
-    public void cleanup() {
-        cleanupLocationProvider(context);
-    }
 
     @Test
     public void testListenersAreTriggered() {
         MockLocService locService = new MockLocService(context);
+        MockPermManager permManager = new MockPermManager();
+        PermManagerFactory.setInstance(permManager);
+
         locService.setLocation(0, 0);
 
         LocationListener listener = mock(LocationListener.class);
@@ -43,7 +36,9 @@ public class MockLocTest extends LocationHelper {
         assertFalse(locService.subscribe(listener, 42));
 
         // With permissions, it should be fine
-        locService.setPermission(true);
+        permManager.grantPermissions(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
         assertTrue(locService.subscribe(listener, 42));
 
         // The listener should receive the first location update, but not the second

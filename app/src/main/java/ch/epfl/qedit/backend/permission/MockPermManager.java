@@ -1,9 +1,11 @@
 package ch.epfl.qedit.backend.permission;
 
+import android.app.Activity;
+import android.content.Context;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.idling.CountingIdlingResource;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * This class is used to mock the android permission manager. It can be used to test what happens
@@ -24,8 +26,12 @@ public class MockPermManager implements PermissionManager {
     // state UnknownPositive.
     private final Map<String, State> permStates;
 
+    // This is for espresso tests to wait
+    CountingIdlingResource idlingResource;
+
     public MockPermManager() {
         this.permStates = new HashMap<>();
+        this.idlingResource = new CountingIdlingResource("MockPermService");
     }
 
     /**
@@ -74,12 +80,12 @@ public class MockPermManager implements PermissionManager {
     }
 
     @Override
-    public boolean checkPermission(PermissionActivity activity, String permission) {
+    public boolean checkPermission(Context context, String permission) {
         return getState(permission) == State.Granted;
     }
 
     @Override
-    public boolean shouldAskAgain(PermissionActivity activity, String permission) {
+    public boolean shouldAskAgain(Activity activity, String permission) {
         State state = getState(permission);
 
         // We should only keep asking if the permission was not granted, and if the user
@@ -111,14 +117,21 @@ public class MockPermManager implements PermissionManager {
 
         // We don't pass the result immediately, because it could cause issues. It is not a good
         // idea to grant permissions before the request was terminated, so we wait a little bit.
-        new Timer()
-                .schedule(
-                        new TimerTask() {
-                            @Override
-                            public void run() {
-                                callback.handle(result);
+        idlingResource.increment();
+        new Thread(
+                        () -> {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        },
-                        100);
+                            callback.onPermissionResult(permissions, result);
+                            idlingResource.decrement();
+                        })
+                .run();
+    }
+
+    public IdlingResource getIdlingResource() {
+        return idlingResource;
     }
 }
