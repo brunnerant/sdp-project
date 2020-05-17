@@ -126,9 +126,18 @@ public class TreasureHuntActivity extends AppCompatActivity
     }
 
     @Override
+    // This is called when the user confirmed that he finished answering the question
     public void onConfirm(ConfirmDialog dialog) {
-        // If the user confirmed that he finished answering, we move on to locate the next question
-        locateQuestion(model.getFocusedQuestion().getValue() + 1);
+        int currIndex = model.getFocusedQuestion().getValue();
+
+        if (currIndex == quiz.getQuestions().size() - 1) {
+            // If the last question was answered, we finish the activity.
+            // In the future, we have to go to the result page.
+            finish();
+        } else {
+            // If there are remaining questions, we locate the next one
+            locateQuestion(currIndex + 1);
+        }
     }
 
     // This method is called when clicking on the "start treasure hunt" button (c.f. xml file)
