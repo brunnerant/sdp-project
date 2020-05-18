@@ -66,10 +66,10 @@ public class UtilTest {
                 new MatrixFormat.Builder(2, 3)
                         .withField(0, 0, MatrixFormat.Field.preFilledField("text0"))
                         .withField(0, 1, MatrixFormat.Field.textField("text1", 0))
-                        .withField(0, 2, MatrixFormat.Field.numericField(false, false, "text2", 1))
-                        .withField(1, 0, MatrixFormat.Field.numericField(false, true, "text3", 2))
-                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "text4", 3))
-                        .withField(1, 2, MatrixFormat.Field.numericField(true, true, "text5", 4))
+                        .withField(0, 2, MatrixFormat.Field.numericField(false, false, "text2"))
+                        .withField(1, 0, MatrixFormat.Field.numericField(false, true, "text3"))
+                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "text4"))
+                        .withField(1, 2, MatrixFormat.Field.numericField(true, true, "text5"))
                         .build();
 
         expectedAnswerFormats = new MultiFieldFormat(Collections.nCopies(2, expectedAnswerFormat));

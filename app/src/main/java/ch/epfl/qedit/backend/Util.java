@@ -1,11 +1,14 @@
 package ch.epfl.qedit.backend;
 
+import static ch.epfl.qedit.model.answer.MatrixFormat.Field.TO_MAP_TEXT;
+import static ch.epfl.qedit.model.answer.MatrixFormat.Field.Type.*;
+
 import ch.epfl.qedit.model.Question;
-import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -65,7 +68,8 @@ public final class Util {
     }
 
     /** Extracts the quiz from a Firestore document */
-    public static void extractQuiz(CompletableFuture<Quiz> future, QuerySnapshot query) {
+    public static void extractQuestions(
+            CompletableFuture<List<Question>> future, QuerySnapshot query) {
         List<Question> questions = new ArrayList<>();
 
         try {
@@ -75,13 +79,13 @@ public final class Util {
             return;
         }
 
-        future.complete(new Quiz("main_title", questions));
+        future.complete(questions);
     }
 
     private static Question extractQuestion(QueryDocumentSnapshot doc) throws FormatException {
-        String title = doc.getString("title");
-        String text = doc.getString("text");
-        List<Object> answers = (List<Object>) doc.get("answers");
+        String title = doc.getString(Question.TO_MAP_TITLE);
+        String text = doc.getString(Question.TO_MAP_TEXT);
+        List<Object> answers = (List<Object>) doc.get(Question.TO_MAP_ANSWERS);
 
         if (title == null || text == null || answers == null)
             throw new FormatException("Invalid question: missing title, text or answers");
@@ -102,17 +106,17 @@ public final class Util {
     }
 
     public static AnswerFormat extractAnswerFormat(Map<String, Object> doc) throws FormatException {
-        String type = (String) doc.get("type");
+        String type = (String) doc.get(AnswerFormat.TO_MAP_TYPE);
 
         if (type == null) throw new FormatException("Invalid answer format: missing type");
-        else if (type.equals("matrix")) return extractMatrixFormat(doc);
+        else if (type.equals(MatrixFormat.TYPE)) return extractMatrixFormat(doc);
         else throw new FormatException("Invalid answer format");
     }
 
     public static MatrixFormat extractMatrixFormat(Map<String, Object> doc) throws FormatException {
-        Integer rows = (Integer) doc.get("rows");
-        Integer columns = (Integer) doc.get("columns");
-        Map<String, Object> matrix = (Map<String, Object>) doc.get("matrix");
+        Integer rows = (Integer) doc.get(MatrixFormat.TO_MAP_NUM_ROWS);
+        Integer columns = (Integer) doc.get(MatrixFormat.TO_MAP_NUM_COLUMNS);
+        Map<String, Object> matrix = (Map<String, Object>) doc.get(MatrixFormat.TO_MAP_FIELDS);
 
         if (rows == null || columns == null || matrix == null)
             throw new FormatException("Invalid matrix format: missing rows, columns or matrix");
@@ -149,33 +153,18 @@ public final class Util {
 
     public static MatrixFormat.Field extractField(Map<String, Object> field)
             throws FormatException {
-        String typeString = (String) field.get("type");
-        String text = (String) field.get("text");
-        Integer maxCharacters = (Integer) field.get("max_characters");
+        String typeString = (String) field.get(MatrixFormat.Field.TO_MAP_TYPE);
+        String text = (String) field.get(TO_MAP_TEXT);
 
-        if (typeString == null || text == null || maxCharacters == null)
+        if (typeString == null || text == null)
             throw new FormatException(
                     "Invalid field for matrix format: missing type, text or max_characters");
 
-        return new MatrixFormat.Field(extractFieldType(typeString), maxCharacters, text);
-    }
-
-    public static MatrixFormat.Field.Type extractFieldType(String type) throws FormatException {
-        switch (type) {
-            case "pre_filled":
-                return MatrixFormat.Field.Type.PreFilled;
-            case "text":
-                return MatrixFormat.Field.Type.Text;
-            case "unsigned_int":
-                return MatrixFormat.Field.Type.UnsignedInt;
-            case "signed_int":
-                return MatrixFormat.Field.Type.SignedInt;
-            case "unsigned_float":
-                return MatrixFormat.Field.Type.UnsignedFloat;
-            case "signed_float":
-                return MatrixFormat.Field.Type.SignedFloat;
-            default:
-                throw new FormatException("Unknown field type");
+        try {
+            MatrixFormat.Field.Type type = MatrixFormat.Field.Type.valueOf(typeString);
+            return new MatrixFormat.Field(type, text);
+        } catch (Exception e) {
+            throw new FormatException("Unknown field type");
         }
     }
 
@@ -199,6 +188,14 @@ public final class Util {
         future.complete(new StringPool(result));
     }
 
+    public static void extractTreasureHunt(
+            CompletableFuture<Boolean> future, DocumentSnapshot doc) {
+        Boolean treasureHunt = doc.getBoolean("treasureHunt");
+        if (treasureHunt == null)
+            formatError(future, "A quiz must specified if it is a treasure hunt or not");
+        else future.complete(treasureHunt);
+    }
+
     /** Update data specified in data Map in Firestore User (user ID) */
     public static CompletableFuture<Void> updateUser(
             FirebaseFirestore db, String userId, Map<String, Object> data) {
@@ -209,8 +206,43 @@ public final class Util {
                 .document(userId)
                 .set(data, SetOptions.merge())
                 .addOnSuccessListener(doc -> future.complete(null))
-                .addOnFailureListener(e -> formatError(future, e.getMessage()));
+                .addOnFailureListener(e -> error(future, e.getMessage()));
 
         return future;
+    }
+
+    public static CompletableFuture<Void> uploadStringPool(
+            FirebaseFirestore db, String quizId, StringPool stringPool) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        db.collection("quizzes")
+                .document(quizId)
+                .collection("stringPools")
+                .document(stringPool.getLanguageCode())
+                .set(stringPool.toMap(), SetOptions.merge())
+                .addOnSuccessListener(ref -> future.complete(null))
+                .addOnFailureListener(e -> error(future, e.getMessage()));
+
+        return future;
+    }
+
+    public static CompletableFuture<Void> uploadQuestions(
+            FirebaseFirestore db, String quizId, List<Question> questions) {
+        CollectionReference questionsRef =
+                db.collection("quizzes").document(quizId).collection("questions");
+
+        CompletableFuture[] futures = new CompletableFuture[questions.size()];
+        // There is no efficient way in firestore to upload a full collection in one
+        // operation
+        for (int i = 0; i < questions.size(); i++) {
+            CompletableFuture<Void> future = new CompletableFuture<>();
+            Map<String, Object> doc = questions.get(i).toMap();
+            doc.put("index", i);
+            questionsRef
+                    .add(doc)
+                    .addOnSuccessListener(ref -> future.complete(null))
+                    .addOnFailureListener(e -> error(future, e.getMessage()));
+            futures[i] = future;
+        }
+        return CompletableFuture.allOf(futures);
     }
 }

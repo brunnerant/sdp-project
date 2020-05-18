@@ -11,7 +11,7 @@ public class MultiFieldFormatTest {
     private final MultiFieldFormat multi =
             new MultiFieldFormat(
                     MatrixFormat.uniform(3, 3, MatrixFormat.Field.textField("", 1)),
-                    MatrixFormat.singleField(MatrixFormat.Field.numericField(false, false, "", 3)));
+                    MatrixFormat.singleField(MatrixFormat.Field.numericField(false, false, "")));
 
     @Test
     public void notEqualsTest1() {

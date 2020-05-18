@@ -46,18 +46,13 @@ public class MockDBService implements DatabaseService {
         }
 
         static final MatrixFormat simpleFormat =
-                MatrixFormat.singleField(
-                        MatrixFormat.Field.textField("hint1", MatrixFormat.Field.NO_LIMIT));
+                MatrixFormat.singleField(MatrixFormat.Field.textField("hint1"));
         static final MatrixFormat compoundFormat =
                 new MatrixFormat.Builder(2, 2)
                         .withField(0, 0, MatrixFormat.Field.preFilledField("hint2"))
-                        .withField(0, 1, MatrixFormat.Field.numericField(false, true, "hint3", 4))
-                        .withField(1, 0, MatrixFormat.Field.textField("hint4", 16))
-                        .withField(
-                                1,
-                                1,
-                                MatrixFormat.Field.numericField(
-                                        true, false, "hint5", MatrixFormat.Field.NO_LIMIT))
+                        .withField(0, 1, MatrixFormat.Field.numericField(false, true, "hint3"))
+                        .withField(1, 0, MatrixFormat.Field.textField("hint4"))
+                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "hint5"))
                         .build();
 
         @SuppressWarnings("SpellCheckingInspection")
@@ -255,6 +250,11 @@ public class MockDBService implements DatabaseService {
                     return pool;
                 });
         return future;
+    }
+
+    @Override
+    public CompletableFuture<String> uploadQuiz(Quiz quiz, StringPool stringPool) {
+        return null;
     }
 
     @Override

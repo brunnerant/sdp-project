@@ -42,10 +42,10 @@ public class MatrixFragmentTest {
                 new MatrixFormat.Builder(2, 3)
                         .withField(0, 0, MatrixFormat.Field.preFilledField("pre-filled"))
                         .withField(0, 1, MatrixFormat.Field.textField("h1", 3))
-                        .withField(0, 2, MatrixFormat.Field.numericField(false, false, "h2", 4))
-                        .withField(1, 0, MatrixFormat.Field.numericField(false, true, "h3", 5))
-                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "h4", 6))
-                        .withField(1, 2, MatrixFormat.Field.numericField(true, true, "h5", 7))
+                        .withField(0, 2, MatrixFormat.Field.numericField(false, false, "h2"))
+                        .withField(1, 0, MatrixFormat.Field.numericField(false, true, "h3"))
+                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "h4"))
+                        .withField(1, 2, MatrixFormat.Field.numericField(true, true, "h5"))
                         .build();
         MatrixModel model = new MatrixModel(2, 3);
         model.updateAnswer(0, 1, "abc");

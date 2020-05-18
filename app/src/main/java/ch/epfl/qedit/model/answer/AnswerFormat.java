@@ -1,9 +1,10 @@
 package ch.epfl.qedit.model.answer;
 
 import ch.epfl.qedit.model.MultiLanguage;
+import ch.epfl.qedit.util.Mappable;
 import ch.epfl.qedit.view.answer.AnswerFragment;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -11,8 +12,9 @@ import java.util.Objects;
  * class is merely to represents how the answer fields look like, and not to store what the user
  * entered. To store what the user entered, see AnswerModel.
  */
-public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Serializable {
+public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Serializable, Mappable {
 
+    public static final String TO_MAP_TYPE = "type";
     /**
      * This is the title of the answer, to help the user know what he needs to fill. It can be null
      * if it is not needed.
@@ -65,40 +67,8 @@ public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Seria
         return false;
     }
 
-    /** Parses a simple answer format, that is not recursive */
-    private static AnswerFormat parseSimpleFormat(String field) {
-
-        // Split <format>:<text> into two string
-        String[] formatAndText = field.split(":", 2);
-        String format = formatAndText[0];
-        String text = (formatAndText.length == 2) ? formatAndText[1].trim() : null;
-
-        return MatrixFormat.parse(format, text);
-    }
-
-    /**
-     * Parse AnswerFormat from a string answerFormat, call the override parse method in child
-     * classes
-     *
-     * @param answerFormat string to parse into a AnswerFormat
-     * @return AnswerFormat corresponding to the parsed format string, or null if the string is not
-     *     a correct format
-     */
-    public static AnswerFormat parse(String answerFormat) {
-        if (answerFormat == null) {
-            return null;
-        }
-        // Parse answer format:  <format>:<text> ; <format> ; ... ; <format>:<text>
-        ArrayList<AnswerFormat> fields = new ArrayList<>();
-        for (String field : answerFormat.split(";")) {
-            // <format>:<text> | <format>
-            AnswerFormat result = parseSimpleFormat(field);
-            if (result == null) {
-                return null;
-            }
-            fields.add(result);
-        }
-
-        return (fields.size() == 1) ? fields.get(0) : new MultiFieldFormat(fields);
+    @Override
+    public Map<String, Object> toMap() {
+        return solution.toMap();
     }
 }

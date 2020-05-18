@@ -1,5 +1,6 @@
 package ch.epfl.qedit.model;
 
+import ch.epfl.qedit.util.Mappable;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.UUID;
  * This class is just a lightweight wrapper around a map to add support for string addition with
  * unique keys, update and retrieval.
  */
-public class StringPool implements Serializable {
+public class StringPool implements Serializable, Mappable {
 
     public static final String TITLE_ID = "main_title";
 
@@ -70,6 +71,11 @@ public class StringPool implements Serializable {
         if (!stringPool.containsKey(id)) return id;
 
         return stringPool.get(id);
+    }
+
+    @Override
+    public Map<String, Object> toMap() {
+        return new HashMap<>(stringPool);
     }
 
     /** Getter and setter for the language code */

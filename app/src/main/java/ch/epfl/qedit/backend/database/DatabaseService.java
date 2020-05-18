@@ -46,6 +46,13 @@ public interface DatabaseService {
     CompletableFuture<StringPool> getQuizStringPool(String quizId, String language);
 
     /**
+     * @param quiz
+     * @param stringPool
+     * @return
+     */
+    CompletableFuture<String> uploadQuiz(Quiz quiz, StringPool stringPool);
+
+    /**
      * Asynchronously retrieves the user that correspond to the userId.
      *
      * @param userId the id of the user in the database

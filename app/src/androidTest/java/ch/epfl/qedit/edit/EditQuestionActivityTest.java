@@ -12,7 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.model.answer.MatrixFormat.Field.NO_LIMIT;
 import static ch.epfl.qedit.model.answer.MatrixFormat.Field.textField;
 import static ch.epfl.qedit.model.answer.MatrixFormat.singleField;
 import static ch.epfl.qedit.util.Util.clickOn;
