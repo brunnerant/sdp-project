@@ -1,6 +1,5 @@
 package ch.epfl.qedit.model;
 
-import android.location.Location;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import java.io.Serializable;
 import java.util.Objects;
@@ -26,13 +25,18 @@ public final class Question implements MultiLanguage<Question>, Serializable {
 
     // This constructor is for treasure hunt questions
     public Question(
-            String title, String text, AnswerFormat format, Location location, double radius) {
+            String title,
+            String text,
+            AnswerFormat format,
+            double longitude,
+            double latitude,
+            double radius) {
         this.title = Objects.requireNonNull(title);
         this.text = Objects.requireNonNull(text);
         this.format = Objects.requireNonNull(format);
 
-        this.longitude = location.getLongitude();
-        this.latitude = location.getLatitude();
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.radius = radius;
 
         if (radius <= 0)
@@ -68,12 +72,12 @@ public final class Question implements MultiLanguage<Question>, Serializable {
         return format;
     }
 
-    public Location getLocation() {
-        // In the future, we might need to store the location provider as well
-        Location location = new Location("");
-        location.setLongitude(longitude);
-        location.setLatitude(latitude);
-        return location;
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
     }
 
     public double getRadius() {

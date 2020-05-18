@@ -161,7 +161,8 @@ public class TreasureHuntActivity extends AppCompatActivity
         // it
         Intent intent = new Intent(this, QuestionLocatorActivity.class);
         Bundle bundle = new Bundle();
-        intent.putExtra(QuestionLocatorActivity.QUESTION_LOCATION, nextQuestion.getLocation());
+        bundle.putDouble(QuestionLocatorActivity.QUESTION_LONGITUDE, nextQuestion.getLongitude());
+        bundle.putDouble(QuestionLocatorActivity.QUESTION_LATITUDE, nextQuestion.getLatitude());
         bundle.putDouble(QuestionLocatorActivity.QUESTION_RADIUS, nextQuestion.getRadius());
         intent.putExtras(bundle);
         startActivity(intent);

@@ -12,11 +12,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.not;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
@@ -63,10 +61,7 @@ public class TreasureHuntActivityTest {
         AnswerFormat format =
                 MatrixFormat.singleField(
                         MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
-        Location location = new Location("");
-        location.setLongitude(0);
-        location.setLatitude(0);
-        Question question = new Question("title", "text", format, location, 100);
+        Question question = new Question("title", "text", format, 42, 43, 100);
         Quiz quiz = new Quiz("title", Collections.nCopies(numQuestions, question), true);
 
         bundle.putSerializable(TreasureHuntActivity.QUIZ_ID, quiz);
@@ -94,11 +89,10 @@ public class TreasureHuntActivityTest {
                 allOf(
                         hasComponent(QuestionLocatorActivity.class.getName()),
                         hasExtra(
-                                equalTo(QuestionLocatorActivity.QUESTION_LOCATION),
-                                isA(Location.class)),
+                                equalTo(QuestionLocatorActivity.QUESTION_LONGITUDE), equalTo(42.0)),
+                        hasExtra(equalTo(QuestionLocatorActivity.QUESTION_LATITUDE), equalTo(43.0)),
                         hasExtra(
-                                equalTo(QuestionLocatorActivity.QUESTION_RADIUS),
-                                isA(double.class))));
+                                equalTo(QuestionLocatorActivity.QUESTION_RADIUS), equalTo(100.0))));
     }
 
     @Test
@@ -112,7 +106,7 @@ public class TreasureHuntActivityTest {
     // Finds the question and returns to the treasure hunt activity
     private void findQuestion() {
         // We move to the next question
-        locService.setLocation(0, 0);
+        locService.setLocation(42, 43);
 
         // And ask to answer the question
         onView(withId(R.id.question_locator_button)).perform(click());

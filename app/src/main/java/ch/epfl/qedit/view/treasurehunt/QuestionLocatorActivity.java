@@ -27,7 +27,8 @@ public class QuestionLocatorActivity extends PermissionActivity
         implements LocationListener, PermissionManager.OnPermissionResult {
 
     // Those are the keys of the arguments passed with the bundle to this activity
-    public static final String QUESTION_LOCATION = "ch.epfl.qedit.view.quiz.QUESTION_LOCATION";
+    public static final String QUESTION_LONGITUDE = "ch.epfl.qedit.view.quiz.QUESTION_LONGITUDE";
+    public static final String QUESTION_LATITUDE = "ch.epfl.qedit.view.quiz.QUESTION_LATITUDE";
     public static final String QUESTION_RADIUS = "ch.epfl.qedit.view.quiz.QUESTION_RADIUS";
 
     // Those are the permissions needed by this activity
@@ -73,7 +74,9 @@ public class QuestionLocatorActivity extends PermissionActivity
 
         // We retrieve the location from the activity arguments
         Bundle bundle = Objects.requireNonNull(getIntent().getExtras());
-        questionLoc = (Location) bundle.getParcelable(QUESTION_LOCATION);
+        questionLoc = new Location("");
+        questionLoc.setLongitude(bundle.getDouble(QUESTION_LONGITUDE));
+        questionLoc.setLatitude(bundle.getDouble(QUESTION_LATITUDE));
         questionRadius = bundle.getDouble(QUESTION_RADIUS);
 
         // We retrieve the UI elements and set up the default UI

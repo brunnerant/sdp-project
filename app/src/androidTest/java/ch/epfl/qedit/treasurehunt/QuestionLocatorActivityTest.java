@@ -20,7 +20,6 @@ import static org.mockito.Mockito.verify;
 
 import android.Manifest;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
@@ -55,15 +54,11 @@ public class QuestionLocatorActivityTest {
             };
 
     public void init(Consumer<MockPermManager> action) {
-        Location questionLoc = new Location("");
-        questionLoc.setLongitude(0);
-        questionLoc.setLatitude(0);
-        float questionRadius = 100;
-
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        intent.putExtra(QuestionLocatorActivity.QUESTION_LOCATION, questionLoc);
-        bundle.putDouble(QuestionLocatorActivity.QUESTION_RADIUS, questionRadius);
+        bundle.putDouble(QuestionLocatorActivity.QUESTION_LONGITUDE, 0);
+        bundle.putDouble(QuestionLocatorActivity.QUESTION_LATITUDE, 0);
+        bundle.putDouble(QuestionLocatorActivity.QUESTION_RADIUS, 100);
         intent.putExtras(bundle);
 
         // We mock the location and the permission services
