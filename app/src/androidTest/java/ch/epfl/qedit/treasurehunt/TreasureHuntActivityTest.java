@@ -1,30 +1,5 @@
 package ch.epfl.qedit.treasurehunt;
 
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.util.Collections;
-
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.location.LocServiceFactory;
-import ch.epfl.qedit.backend.location.MockLocService;
-import ch.epfl.qedit.backend.permission.MockPermManager;
-import ch.epfl.qedit.backend.permission.PermManagerFactory;
-import ch.epfl.qedit.model.Question;
-import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.MatrixFormat;
-import ch.epfl.qedit.view.treasurehunt.QuestionLocatorActivity;
-import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -41,6 +16,27 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import android.content.Intent;
+import android.os.Bundle;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.location.LocServiceFactory;
+import ch.epfl.qedit.backend.location.MockLocService;
+import ch.epfl.qedit.backend.permission.MockPermManager;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.answer.AnswerFormat;
+import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.view.treasurehunt.QuestionLocatorActivity;
+import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
+import java.util.Collections;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class TreasureHuntActivityTest {
