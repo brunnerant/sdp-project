@@ -1,4 +1,29 @@
-package ch.epfl.qedit.quiz;
+package ch.epfl.qedit.treasurehunt;
+
+import android.Manifest;
+import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
+
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+
+import org.hamcrest.Matcher;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.function.Consumer;
+
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.location.LocServiceFactory;
+import ch.epfl.qedit.backend.location.MockLocService;
+import ch.epfl.qedit.backend.permission.MockPermManager;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.view.treasurehunt.QuestionLocatorActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -6,6 +31,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.StringStartsWith.startsWith;
@@ -16,29 +43,6 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-import android.Manifest;
-import android.content.Intent;
-import android.location.Location;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.location.LocServiceFactory;
-import ch.epfl.qedit.backend.location.MockLocService;
-import ch.epfl.qedit.backend.permission.MockPermManager;
-import ch.epfl.qedit.backend.permission.PermManagerFactory;
-import ch.epfl.qedit.view.treasurehunt.QuestionLocatorActivity;
-import java.util.function.Consumer;
-import org.hamcrest.Matcher;
-import org.junit.After;
-import org.junit.FixMethodOrder;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class QuestionLocatorActivityTest {
     @Rule
@@ -61,8 +65,10 @@ public class QuestionLocatorActivityTest {
         float questionRadius = 100;
 
         Intent intent = new Intent();
+        Bundle bundle = new Bundle();
         intent.putExtra(QuestionLocatorActivity.QUESTION_LOCATION, questionLoc);
-        intent.putExtra(QuestionLocatorActivity.QUESTION_RADIUS, questionRadius);
+        bundle.putDouble(QuestionLocatorActivity.QUESTION_RADIUS, questionRadius);
+        intent.putExtras(bundle);
 
         // We mock the location and the permission services
         LocServiceFactory.setInstance(
@@ -124,14 +130,14 @@ public class QuestionLocatorActivityTest {
 
     private void testNormalFlow() {
         // The location was not received, so it should display an error message
-        checkView(getString(R.string.question_locator_error), "", -1);
+        checkView(getString(R.string.question_locator_error), "", R.string.question_locator_move);
 
         // Now that the location was received, it should display something
         setLocation(0, 10);
         checkView(
                 startsWith(getString(R.string.question_locator_distance)),
                 startsWith(getString(R.string.question_locator_bearing)),
-                -1);
+                R.string.question_locator_move);
 
         // Now that we arrived at the question, the UI should change
         setLocation(0, 0);
@@ -149,6 +155,11 @@ public class QuestionLocatorActivityTest {
         // The permissions were already granted, so they shouldn't be asked
         verify(permManager, never()).requestPermissions(any(), any(), any());
         testNormalFlow();
+
+        // Clicking on the button should finish the activity
+        assertFalse(testRule.getActivity().isFinishing());
+        onView(withId(R.id.question_locator_button)).perform(click());
+        assertTrue(testRule.getActivity().isFinishing());
     }
 
     @Test

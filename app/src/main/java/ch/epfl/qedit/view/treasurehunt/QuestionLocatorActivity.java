@@ -5,9 +5,13 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Objects;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.location.LocServiceFactory;
 import ch.epfl.qedit.backend.location.MockLocService;
@@ -15,7 +19,6 @@ import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import ch.epfl.qedit.backend.permission.PermissionActivity;
 import ch.epfl.qedit.backend.permission.PermissionManager;
 import ch.epfl.qedit.util.LocaleHelper;
-import java.util.Objects;
 
 /**
  * This activity handles the navigation to the next question in treasure hunt quizzes. Because we
@@ -84,10 +87,9 @@ public class QuestionLocatorActivity extends PermissionActivity
         // We retrieve the two singleton backend services
         permManager = PermManagerFactory.getInstance();
 
-        // Note that we use a mock service to demo the treasure hunt, but that should change
-        LocServiceFactory.setInstance(context -> new MockLocService(context));
+        // Note that we use a mock service to demo the treasure hunt, but that should change.
+        // We make the assumption that the factory always returns a mock version.
         locService = (MockLocService) LocServiceFactory.getInstance(getApplicationContext());
-        locService.setLocation(1, 0);
 
         // If we couldn't subscribe, we need to ask for permissions for the location
         if (!locService.subscribe(this, LOCATION_INTERVAL)) askPermissions();
@@ -123,7 +125,7 @@ public class QuestionLocatorActivity extends PermissionActivity
     // This is only for demo purposes and should be removed in the final version.
     private void setCheatButton() {
         button.setVisibility(View.VISIBLE);
-        button.setText("Move to next question");
+        button.setText(R.string.question_locator_move);
         button.setOnClickListener(
                 v -> locService.moveTo(questionLoc.getLongitude(), questionLoc.getLatitude(), 10));
     }
@@ -183,6 +185,7 @@ public class QuestionLocatorActivity extends PermissionActivity
 
     // This method updates the UI when a new location measurement was made
     private void updateUI(float distance, float targetBearing, float direction) {
+        Log.d("qedit", "d=" + distance + "/" + questionRadius);
         // If the user found the question, we can stop the location service
         if (distance < questionRadius) {
             locService.unsubscribe(this);

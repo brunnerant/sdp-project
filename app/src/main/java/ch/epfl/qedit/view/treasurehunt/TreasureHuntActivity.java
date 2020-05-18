@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.Arrays;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -18,7 +22,6 @@ import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
-import java.util.Arrays;
 
 public class TreasureHuntActivity extends AppCompatActivity
         implements ConfirmDialog.ConfirmationListener {
