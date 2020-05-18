@@ -14,9 +14,11 @@ public final class Question implements MultiLanguage<Question>, Serializable {
 
     /**
      * Treasure hunt questions also have a location and a radius within which they can be answered.
+     * android.Location is not serializable, so we store the longitude and latitude instead.
      */
-    private final Location location;
+    private final double longitude;
 
+    private final double latitude;
     private final double radius;
 
     /** The answer format for this question */
@@ -28,7 +30,9 @@ public final class Question implements MultiLanguage<Question>, Serializable {
         this.title = Objects.requireNonNull(title);
         this.text = Objects.requireNonNull(text);
         this.format = Objects.requireNonNull(format);
-        this.location = Objects.requireNonNull(location);
+
+        this.longitude = location.getLongitude();
+        this.latitude = location.getLatitude();
         this.radius = radius;
 
         if (radius <= 0)
@@ -40,7 +44,10 @@ public final class Question implements MultiLanguage<Question>, Serializable {
         this.title = Objects.requireNonNull(title);
         this.text = Objects.requireNonNull(text);
         this.format = Objects.requireNonNull(format);
-        this.location = null;
+
+        // We store some dummy values, since nobody should try to access them anyway
+        this.longitude = 0;
+        this.latitude = 0;
         this.radius = -1;
     }
 
@@ -62,6 +69,10 @@ public final class Question implements MultiLanguage<Question>, Serializable {
     }
 
     public Location getLocation() {
+        // In the future, we might need to store the location provider as well
+        Location location = new Location("");
+        location.setLongitude(longitude);
+        location.setLatitude(latitude);
         return location;
     }
 
@@ -76,7 +87,8 @@ public final class Question implements MultiLanguage<Question>, Serializable {
             return this.title.equals(other.title)
                     && this.text.equals(other.text)
                     && this.format.equals(other.format)
-                    && Objects.equals(this.location, other.location)
+                    && this.longitude == other.longitude
+                    && this.latitude == other.latitude
                     && this.radius == other.radius;
         }
         return false;

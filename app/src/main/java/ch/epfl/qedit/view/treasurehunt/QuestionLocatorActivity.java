@@ -9,9 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.Objects;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.location.LocServiceFactory;
 import ch.epfl.qedit.backend.location.MockLocService;
@@ -19,6 +16,7 @@ import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import ch.epfl.qedit.backend.permission.PermissionActivity;
 import ch.epfl.qedit.backend.permission.PermissionManager;
 import ch.epfl.qedit.util.LocaleHelper;
+import java.util.Objects;
 
 /**
  * This activity handles the navigation to the next question in treasure hunt quizzes. Because we

@@ -1,30 +1,27 @@
 package ch.epfl.qedit.view.treasurehunt;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.Arrays;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.answer.AnswerFormat;
-import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.Objects;
 
 public class TreasureHuntActivity extends AppCompatActivity
         implements ConfirmDialog.ConfirmationListener {
+
+    // This is the key of the bundle for the quiz id
+    public static final String QUIZ_ID = "ch.epfl.qedit.treasurehunt.QUIZ_ID";
 
     // We use the model to communicate the question to the question fragment.
     private QuizViewModel model;
@@ -56,22 +53,26 @@ public class TreasureHuntActivity extends AppCompatActivity
         questionView = findViewById(R.id.treasure_hunt_question);
 
         // We retrieve the quiz from the intent that started the activity
-        //        Intent intent = getIntent();
-        //        Quiz quiz = (Quiz)
-        // Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
-        Location loc = new Location("");
-        AnswerFormat format =
-                MatrixFormat.singleField(
-                        MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
-        loc.setLongitude(0);
-        loc.setLatitude(0);
-        quiz =
-                new Quiz(
-                        "Title",
-                        Arrays.asList(
-                                new Question("Q1", "How ?", format, loc, 100),
-                                new Question("Q2", "Why ?", format, loc, 100)),
-                        true);
+        Intent intent = getIntent();
+        quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
+
+        // Uncomment those lines (and comments the two above lines) to test the UI on your emulator
+        //        Location loc1 = new Location("");
+        //        loc.setLongitude(1);
+        //        loc.setLatitude(0);
+        //        Location loc2 = new Location("");
+        //        loc.setLongitude(0);
+        //        loc.setLatitude(1);
+        //        AnswerFormat format =
+        //                MatrixFormat.singleField(
+        //                        MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
+        //        quiz =
+        //                new Quiz(
+        //                        "Title",
+        //                        Arrays.asList(
+        //                                new Question("Q1", "How ?", format, loc1, 100),
+        //                                new Question("Q2", "Why ?", format, loc2, 100)),
+        //                        true);
 
         // We retrieve the view model
         model = new ViewModelProvider(this).get(QuizViewModel.class);

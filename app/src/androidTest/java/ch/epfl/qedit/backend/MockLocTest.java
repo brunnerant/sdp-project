@@ -1,23 +1,5 @@
 package ch.epfl.qedit.backend;
 
-import android.Manifest;
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-
-import java.util.List;
-
-import ch.epfl.qedit.backend.location.MockLocService;
-import ch.epfl.qedit.backend.permission.MockPermManager;
-import ch.epfl.qedit.backend.permission.PermManagerFactory;
-
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
@@ -26,6 +8,20 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+
+import android.Manifest;
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.backend.location.MockLocService;
+import ch.epfl.qedit.backend.permission.MockPermManager;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import java.util.List;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MockLocTest {

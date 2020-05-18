@@ -1,30 +1,5 @@
 package ch.epfl.qedit.treasurehunt;
 
-import android.Manifest;
-import android.content.Intent;
-import android.location.Location;
-import android.os.Bundle;
-
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-
-import org.hamcrest.Matcher;
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.util.function.Consumer;
-
-import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.location.LocServiceFactory;
-import ch.epfl.qedit.backend.location.MockLocService;
-import ch.epfl.qedit.backend.permission.MockPermManager;
-import ch.epfl.qedit.backend.permission.PermManagerFactory;
-import ch.epfl.qedit.view.treasurehunt.QuestionLocatorActivity;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -42,6 +17,27 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+
+import android.Manifest;
+import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.location.LocServiceFactory;
+import ch.epfl.qedit.backend.location.MockLocService;
+import ch.epfl.qedit.backend.permission.MockPermManager;
+import ch.epfl.qedit.backend.permission.PermManagerFactory;
+import ch.epfl.qedit.view.treasurehunt.QuestionLocatorActivity;
+import java.util.function.Consumer;
+import org.hamcrest.Matcher;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class QuestionLocatorActivityTest {
@@ -167,7 +163,7 @@ public class QuestionLocatorActivityTest {
         init(permManager -> {});
 
         // The view should display an unknown location error
-        checkView(getString(R.string.question_locator_error), "", -1);
+        checkView(getString(R.string.question_locator_error), "", R.string.question_locator_move);
 
         // The activity should request permissions
         checkRequest();
