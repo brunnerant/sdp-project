@@ -2,7 +2,6 @@ package ch.epfl.qedit.view.util;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,21 +53,8 @@ public class ConfirmDialog extends DialogFragment {
         return new AlertDialog.Builder(requireActivity())
                 .setMessage(message)
                 .setPositiveButton(
-                        R.string.yes,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                listener.onConfirm(ConfirmDialog.this);
-                            }
-                        })
-                .setNegativeButton(
-                        R.string.no,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ConfirmDialog.this.dismiss();
-                            }
-                        })
+                        R.string.yes, (dialog, which) -> listener.onConfirm(ConfirmDialog.this))
+                .setNegativeButton(R.string.no, (dialog, which) -> ConfirmDialog.this.dismiss())
                 .create();
     }
 }

@@ -1,23 +1,18 @@
 package ch.epfl.qedit.treasurehunt;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.Collections;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.location.LocServiceFactory;
 import ch.epfl.qedit.backend.location.MockLocService;
@@ -29,10 +24,23 @@ import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.treasurehunt.QuestionLocatorActivity;
 import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
-import java.util.Collections;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.Intents.times;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class TreasureHuntActivityTest {
@@ -71,6 +79,12 @@ public class TreasureHuntActivityTest {
         testRule.launchActivity(intent);
     }
 
+    @After
+    public void cleanup() {
+        testRule.finishActivity();
+        LocServiceFactory.reset();
+    }
+
     @Test
     public void testWelcomePage() {
         init(1);
@@ -84,15 +98,15 @@ public class TreasureHuntActivityTest {
         onView(withId(R.id.treasure_hunt_question)).check(matches(not(isDisplayed())));
     }
 
-    private void checkIntent() {
+    private void checkIntents(int n) {
         intended(
                 allOf(
                         hasComponent(QuestionLocatorActivity.class.getName()),
                         hasExtra(
                                 equalTo(QuestionLocatorActivity.QUESTION_LONGITUDE), equalTo(42.0)),
                         hasExtra(equalTo(QuestionLocatorActivity.QUESTION_LATITUDE), equalTo(43.0)),
-                        hasExtra(
-                                equalTo(QuestionLocatorActivity.QUESTION_RADIUS), equalTo(100.0))));
+                        hasExtra(equalTo(QuestionLocatorActivity.QUESTION_RADIUS), equalTo(100.0))),
+                times(n));
     }
 
     @Test
@@ -100,7 +114,7 @@ public class TreasureHuntActivityTest {
         init(1);
 
         onView(withText(R.string.treasure_hunt_start)).perform(click());
-        checkIntent();
+        checkIntents(1);
     }
 
     // Finds the question and returns to the treasure hunt activity
@@ -126,5 +140,25 @@ public class TreasureHuntActivityTest {
         // But the question UI should be displayed
         onView(withId(R.id.question_done)).check(matches(isDisplayed()));
         onView(withId(R.id.treasure_hunt_question)).check(matches(isDisplayed()));
+
+        // Clicking on the "done" button should show the confirmation and go to the next question
+        onView(withId(R.id.question_done)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        checkIntents(2);
+    }
+
+    @Test
+    public void testLastQuestionEndsTreasureHunt() {
+        init(1);
+
+        // We locate the next question, and come back
+        onView(withText(R.string.treasure_hunt_start)).perform(click());
+        findQuestion();
+
+        // Clicking on "done" for the last question should finish the activity
+        assertFalse(testRule.getActivity().isFinishing());
+        onView(withId(R.id.question_done)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        assertTrue(testRule.getActivity().isFinishing());
     }
 }
