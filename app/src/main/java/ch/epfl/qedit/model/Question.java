@@ -1,6 +1,5 @@
 package ch.epfl.qedit.model;
 
-import android.location.Location;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.util.Mappable;
 import java.io.Serializable;
@@ -25,20 +24,30 @@ public final class Question implements MultiLanguage<Question>, Serializable, Ma
 
     /**
      * Treasure hunt questions also have a location and a radius within which they can be answered.
+     * android.Location is not serializable, so we store the longitude and latitude instead.
      */
-    private final Location location;
+    private final double longitude;
 
-    private final int radius;
+    private final double latitude;
+    private final double radius;
 
     /** The answer format for this question */
     private final AnswerFormat format;
 
     // This constructor is for treasure hunt questions
-    public Question(String title, String text, AnswerFormat format, Location location, int radius) {
+    public Question(
+            String title,
+            String text,
+            AnswerFormat format,
+            double longitude,
+            double latitude,
+            double radius) {
         this.title = Objects.requireNonNull(title);
         this.text = Objects.requireNonNull(text);
         this.format = Objects.requireNonNull(format);
-        this.location = Objects.requireNonNull(location);
+
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.radius = radius;
 
         if (radius <= 0)
@@ -50,7 +59,10 @@ public final class Question implements MultiLanguage<Question>, Serializable, Ma
         this.title = Objects.requireNonNull(title);
         this.text = Objects.requireNonNull(text);
         this.format = Objects.requireNonNull(format);
-        this.location = null;
+
+        // We store some dummy values, since nobody should try to access them anyway
+        this.longitude = 0;
+        this.latitude = 0;
         this.radius = -1;
     }
 
@@ -66,11 +78,15 @@ public final class Question implements MultiLanguage<Question>, Serializable, Ma
         return format;
     }
 
-    public Location getLocation() {
-        return location;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public int getRadius() {
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getRadius() {
         return radius;
     }
 
@@ -81,7 +97,8 @@ public final class Question implements MultiLanguage<Question>, Serializable, Ma
             return this.title.equals(other.title)
                     && this.text.equals(other.text)
                     && this.format.equals(other.format)
-                    && Objects.equals(this.location, other.location)
+                    && this.longitude == other.longitude
+                    && this.latitude == other.latitude
                     && this.radius == other.radius;
         }
         return false;

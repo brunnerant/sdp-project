@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 
-import android.location.Location;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import java.util.ArrayList;
@@ -151,6 +150,6 @@ public class QuizTest {
     @Test(expected = IllegalArgumentException.class)
     public void builderTreasureHuntFail2() {
         Quiz.Builder builder = new Quiz.Builder();
-        builder.append(new Question("", "", answerFormat, new Location(""), 1));
+        builder.append(new Question("", "", answerFormat, 0, 0, 1));
     }
 }
