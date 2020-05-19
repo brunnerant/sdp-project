@@ -104,6 +104,7 @@ public final class Question implements MultiLanguage<Question>, Serializable {
         String newText = pool.get(text);
         AnswerFormat newFormat = format.instantiateLanguage(pool);
 
-        return new Question(newTitle, newText, newFormat, longitude, latitude, radius);
+        if (radius < 0) return new Question(newTitle, newText, newFormat);
+        else return new Question(newTitle, newText, newFormat, longitude, latitude, radius);
     }
 }

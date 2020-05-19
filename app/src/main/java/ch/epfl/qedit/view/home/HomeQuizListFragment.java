@@ -21,12 +21,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.Util;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
 import ch.epfl.qedit.view.quiz.QuizActivity;
@@ -39,7 +39,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
@@ -169,18 +168,9 @@ public class HomeQuizListFragment extends Fragment
         final String quizID = quizzes.get(position).getKey();
         progressBar.setVisibility(VISIBLE);
 
-        // We retrieve the quiz structure and the quiz string pool in parallel
-        CompletableFuture<StringPool> stringPool =
-                db.getQuizLanguages(quizID)
-                        .thenCompose(
-                                languages ->
-                                        db.getQuizStringPool(quizID, getBestLanguage(languages)));
-        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
-
-        // We wait for the two futures to complete, and then launch the quiz
-        CompletableFuture.allOf(stringPool, quizStructure)
+        Util.getQuiz(db, quizID, requireContext())
                 .whenComplete(
-                        (aVoid, throwable) -> {
+                        (pair, throwable) -> {
                             if (throwable != null) {
                                 Toast.makeText(
                                                 requireContext(),
@@ -189,10 +179,7 @@ public class HomeQuizListFragment extends Fragment
                                         .show();
                             } else {
                                 progressBar.setVisibility(View.GONE);
-                                launchQuizActivity(
-                                        quizStructure
-                                                .join()
-                                                .instantiateLanguage(stringPool.join()));
+                                launchQuizActivity(pair.first.instantiateLanguage(pair.second));
                             }
                         });
     }
@@ -202,29 +189,19 @@ public class HomeQuizListFragment extends Fragment
         final String quizID = quizzes.get(position).getKey();
         progressBar.setVisibility(VISIBLE);
 
-        CompletableFuture<StringPool> stringPool =
-                db.getQuizLanguages(quizID)
-                        .thenCompose(
-                                languages ->
-                                        db.getQuizStringPool(quizID, getBestLanguage(languages)));
-
-        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
-
-        CompletableFuture.allOf(stringPool, quizStructure)
+        Util.getQuiz(db, quizID, requireContext())
                 .whenComplete(
-                        (aVoid, throwable) -> {
-                            if (throwable != null)
+                        (pair, throwable) -> {
+                            if (throwable != null) {
                                 Toast.makeText(
                                                 requireContext(),
                                                 R.string.database_error,
                                                 Toast.LENGTH_SHORT)
                                         .show();
-                            else {
+                            } else {
                                 // Hide progress bar
                                 progressBar.setVisibility(GONE);
-
-                                launchModifyQuizDialog(
-                                        stringPool.join(), quizStructure.join(), position);
+                                launchModifyQuizDialog(pair.second, pair.first, position);
                             }
                         });
     }
@@ -239,16 +216,6 @@ public class HomeQuizListFragment extends Fragment
         modifySettingsDialog.setTextFilter(textFilter);
         modifySettingsDialog.show(getParentFragmentManager(), "modify_dialog");
         modifyIndex = position;
-    }
-
-    private String getBestLanguage(List<String> languages) {
-        String appLanguage = LocaleHelper.getLanguage(requireContext());
-
-        // If the quiz was translated in the application language, pick that version,
-        // otherwise we pick the first one. Note that we could have some more complex logic
-        // here, for example trying english first, and then falling back.
-        if (languages.contains(appLanguage)) return appLanguage;
-        else return languages.get(0);
     }
 
     // Launches the quiz activity with the given quiz. This is used when a quiz is selected.

@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -30,6 +31,8 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
+import ch.epfl.qedit.view.quiz.QuizActivity;
+import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
 import org.junit.Before;
@@ -127,5 +130,23 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
                         hasComponent(EditQuizActivity.class.getName()),
                         hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class)),
                         hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class))));
+    }
+
+    @Test
+    public void testParticipateToNormalQuiz() {
+        item(0).perform(click());
+        intended(
+                allOf(
+                        hasComponent(QuizActivity.class.getName()),
+                        hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class))));
+    }
+
+    @Test
+    public void testParticipateToTreasureHunt() {
+        item(1).perform(click());
+        intended(
+                allOf(
+                        hasComponent(TreasureHuntActivity.class.getName()),
+                        hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class))));
     }
 }
