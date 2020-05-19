@@ -21,6 +21,7 @@
     <!-- Navigation drawer compulsory strings-->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
     <!-- App and logo -->
     <string name="app_name" translatable="false"><b>QED<font color="#FF0000" tools:ignore="UnusedResources">it</font></b></string>
     <string name="qedit_logo_description">QEDit Logo</string>
@@ -86,6 +87,8 @@
     <string name="menu_previous">Previous</string>
     <string name="menu_next">Next</string>
     <string name="menu_done">Done</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_edit">Edit</string>
 
     <!-- Burger Menu -->
     <string name="menu_home">HOME</string>

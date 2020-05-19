@@ -1,14 +1,5 @@
 package ch.epfl.qedit.view.home;
 
-import static android.app.Activity.RESULT_OK;
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static ch.epfl.qedit.model.StringPool.TITLE_ID;
-import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
-import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
-import static ch.epfl.qedit.view.login.Util.USER;
-import static ch.epfl.qedit.view.login.Util.USER_ID;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,8 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
@@ -32,15 +35,18 @@ import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
 import ch.epfl.qedit.view.login.LogInActivity;
 import ch.epfl.qedit.view.login.Util;
+import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
-import com.google.firebase.auth.FirebaseAuth;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
+
+import static android.app.Activity.RESULT_OK;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static ch.epfl.qedit.model.StringPool.TITLE_ID;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.login.Util.USER;
+import static ch.epfl.qedit.view.login.Util.USER_ID;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
@@ -117,22 +123,21 @@ public class HomeQuizListFragment extends Fragment
         // Retrieve the quizzes from the user
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
+        // Those are the items of the popup menu
+        List<String> popupMenuItems = Arrays.asList(getString(R.string.menu_edit), getString(R.string.menu_delete));
+
         // Create the list adapter
-        listAdapter = new ListEditView.Adapter<>(quizzes, Map.Entry::getValue);
+        listAdapter = new ListEditView.Adapter<>(quizzes, Map.Entry::getValue, popupMenuItems);
 
         // Listen to the data changes
         listAdapter.setItemListener(
-                (position, type) -> {
-                    switch (type) {
-                        case RemoveRequest:
-                            deleteConfirmation(position);
-                            break;
-                        case EditRequest:
-                            editQuiz(position);
-                            break;
-                        default:
-                            break;
-                    }
+                (position, code) -> {
+                    if (code == ListEditView.ItemListener.CLICK)
+                        ;
+                    else if (code == 0)
+                        editQuiz(position);
+                    else if (code == 1)
+                        deleteConfirmation(position);
                 });
     }
 
@@ -191,36 +196,24 @@ public class HomeQuizListFragment extends Fragment
     }
 
     // Handles when a user clicked on the button to show a quiz
-    //    private void showQuiz(int position) { // TODO next sprint
-    //        final String quizID = quizzes.get(position).getKey();
-    //        progressBar.setVisibility(VISIBLE);
-    //
-    //        CompletableFuture<StringPool> stringPool =
-    //                db.getQuizLanguages(quizID)
-    //                        .thenCompose(
-    //                                languages ->
-    //                                        db.getQuizStringPool(quizID,
-    // getBestLanguage(languages)));
-    //
-    //        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
-    //
-    //        CompletableFuture.allOf(stringPool, quizStructure)
-    //                .whenComplete(
-    //                        (aVoid, throwable) -> {
-    //                            if (throwable != null)
-    //                                Toast.makeText(
-    //                                                requireContext(),
-    //                                                R.string.database_error,
-    //                                                Toast.LENGTH_SHORT)
-    //                                        .show();
-    //                            else
-    //                                launchQuizActivity(
-    //                                        quizStructure
-    //                                                .join()
-    //                                                .instantiateLanguage(stringPool.join()));
-    //                        });
-    //
-    //    }
+    private void showQuiz(int position) { // TODO next sprint
+        final String quizID = quizzes.get(position).getKey();
+        progressBar.setVisibility(VISIBLE);
+
+        CompletableFuture<StringPool> stringPool = db.getQuizLanguages(quizID).thenCompose(languages -> db.getQuizStringPool(quizID, getBestLanguage(languages)));
+
+        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
+
+        CompletableFuture.allOf(stringPool, quizStructure)
+                .whenComplete(
+                        (aVoid, throwable) -> {
+                            if (throwable != null)
+                                Toast.makeText(requireContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
+                            else
+                                launchQuizActivity(quizStructure.join().instantiateLanguage(stringPool.join()));
+                        });
+
+    }
 
     // Handles when a user clicked on the button to edit a quiz
     private void editQuiz(int position) {
@@ -277,13 +270,13 @@ public class HomeQuizListFragment extends Fragment
     }
 
     // Launches the quiz activity with the given quiz. This is used when a quiz is selected.
-    //    private void launchQuizActivity(Quiz quiz) { TODO next sprint
-    //        Intent intent = new Intent(requireActivity(), QuizActivity.class);
-    //        Bundle bundle = new Bundle();
-    //        bundle.putSerializable(QUIZ_ID, quiz);
-    //        intent.putExtras(bundle);
-    //        startActivity(intent);
-    //    }
+    private void launchQuizActivity(Quiz quiz) {
+        Intent intent = new Intent(requireActivity(), QuizActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(QUIZ_ID, quiz);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

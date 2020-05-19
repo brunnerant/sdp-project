@@ -106,6 +106,7 @@ public class ListEditView extends RecyclerView {
 
                 // The popup menu contains the items specified in the adapter
                 for (int i = 0; i < adapter.popupMenuItems.size(); i++)
+                    // The cast is somehow necessary
                     menu.getMenu().add(Menu.NONE, i, i, (CharSequence) adapter.popupMenuItems.get(i));
 
                 menu.show();
