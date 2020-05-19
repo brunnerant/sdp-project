@@ -1,25 +1,29 @@
 package ch.epfl.qedit.view.edit;
 
-import static android.app.Activity.RESULT_OK;
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.util.ListEditView;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
-import java.util.ArrayList;
-import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment {
@@ -104,31 +108,28 @@ public class EditOverviewFragment extends Fragment {
     }
 
     private void createAdapter() {
+        // Those are the items of the popup menu
+        List<String> popupMenuItems = Arrays.asList(getString(R.string.menu_edit), getString(R.string.menu_delete));
+
         // Create an adapter for the title list
-        adapter = new ListEditView.Adapter<>(titles, item -> item);
+        adapter = new ListEditView.Adapter<>(titles, item -> item, popupMenuItems);
     }
 
     private void setItemListener() {
         adapter.setItemListener(
-                (position, type) -> {
-                    switch (type) {
-                        case Select:
-                            model.getFocusedQuestion().postValue(position);
-                            break;
-                        case RemoveRequest:
-                            model.getFocusedQuestion().postValue(null);
-                            model.getQuizBuilder().remove(position);
-                            adapter.removeItem(position);
-                            handleEmptyHint();
-                            break;
-                        case EditRequest:
-                            launchEditQuestionActivity(
-                                    model.getQuizBuilder()
-                                            .getQuestions()
-                                            .get(model.getFocusedQuestion().getValue()));
-                            break;
-                        default:
-                            break;
+                (position, code) -> {
+                    if (code == ListEditView.ItemListener.CLICK) {
+                        model.getFocusedQuestion().postValue(position);
+                    } else if (code == 0) { // edit was clicked
+                        launchEditQuestionActivity(
+                                model.getQuizBuilder()
+                                        .getQuestions()
+                                        .get(model.getFocusedQuestion().getValue()));
+                    } else if (code == 1) { // delete was clicked
+                        model.getFocusedQuestion().postValue(null);
+                        model.getQuizBuilder().remove(position);
+                        adapter.removeItem(position);
+                        handleEmptyHint();
                     }
                 });
     }

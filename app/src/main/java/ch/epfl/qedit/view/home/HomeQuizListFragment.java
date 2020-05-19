@@ -128,10 +128,10 @@ public class HomeQuizListFragment extends Fragment
         listAdapter.setItemListener(
                 (position, code) -> {
                     if (code == ListEditView.ItemListener.CLICK)
-                        ;
-                    else if (code == 0)
+                        startQuiz(position);
+                    else if (code == 0) // edit was clicked
                         editQuiz(position);
-                    else if (code == 1)
+                    else if (code == 1) // delete was clicked
                         deleteConfirmation(position);
                 });
     }
