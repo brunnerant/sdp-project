@@ -2,6 +2,7 @@ package ch.epfl.qedit.view.treasurehunt;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import ch.epfl.qedit.backend.permission.PermissionActivity;
 import ch.epfl.qedit.backend.permission.PermissionManager;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.Objects;
 
 /**
@@ -209,4 +211,14 @@ public class QuestionLocatorActivity extends PermissionActivity
 
     @Override
     public void onProviderDisabled(String provider) {}
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, HomeActivity.class);
+
+        // This flag tells android to close the treasure hunt activity and go back to home
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+    }
 }

@@ -120,9 +120,7 @@ public class EditOverviewFragment extends Fragment {
                         model.getFocusedQuestion().postValue(position);
                     } else if (code == 0) { // edit was clicked
                         launchEditQuestionActivity(
-                                model.getQuizBuilder()
-                                        .getQuestions()
-                                        .get(model.getFocusedQuestion().getValue()));
+                                model.getQuizBuilder().getQuestions().get(position));
                     } else if (code == 1) { // delete was clicked
                         model.getFocusedQuestion().postValue(null);
                         model.getQuizBuilder().remove(position);
