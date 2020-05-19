@@ -6,6 +6,7 @@ import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -142,8 +143,27 @@ public final class Util {
             MatrixFormat.Field field = extractField((Map<String, Object>) entry.getValue());
             builder.withField(index[0], index[1], field);
         }
+        MatrixFormat answer = builder.build();
+        answer.setCorrectAnswer(extractMatrixSolution(doc));
+        return answer;
+    }
 
-        return builder.build();
+    public static MatrixModel extractMatrixSolution(Map<String, Object> doc)
+            throws FormatException {
+        Integer rows = (Integer) doc.get(MatrixModel.TO_MAP_NUM_ROWS);
+        Integer columns = (Integer) doc.get(MatrixModel.TO_MAP_NUM_COLUMNS);
+        Map<String, String> solution = (Map<String, String>) doc.get(MatrixModel.TO_MAP_DATA);
+
+        if (rows == null || columns == null || solution == null)
+            throw new FormatException("Invalid matrix format: missing solution");
+
+        MatrixModel model = new MatrixModel(rows, columns);
+        for (Map.Entry<String, String> entry : solution.entrySet()) {
+            int[] index = extractFieldIndex(entry.getKey(), rows, columns);
+            model.updateAnswer(index[0], index[1], entry.getValue());
+        }
+
+        return model;
     }
 
     /** A field in a matrix that is store in firestore as a document field name : "i,j" */
