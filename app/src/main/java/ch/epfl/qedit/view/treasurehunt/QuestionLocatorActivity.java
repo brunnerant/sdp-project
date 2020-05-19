@@ -5,7 +5,6 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -186,7 +185,6 @@ public class QuestionLocatorActivity extends PermissionActivity
 
     // This method updates the UI when a new location measurement was made
     private void updateUI(float distance, float targetBearing, float direction) {
-        Log.d("qedit", "d=" + distance + "/" + questionRadius);
         // If the user found the question, we can stop the location service
         if (distance < questionRadius) {
             locService.unsubscribe(this);

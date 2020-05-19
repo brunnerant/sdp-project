@@ -11,6 +11,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -68,7 +69,7 @@ public class TreasureHuntActivityTest {
         Question question = new Question("title", "text", format, 42, 43, 100);
         Quiz quiz = new Quiz("title", Collections.nCopies(numQuestions, question), true);
 
-        bundle.putSerializable(TreasureHuntActivity.QUIZ_ID, quiz);
+        bundle.putSerializable(QUIZ_ID, quiz);
         intent.putExtras(bundle);
 
         // Finally, we launch the activity

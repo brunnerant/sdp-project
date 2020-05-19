@@ -30,6 +30,7 @@ import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
 import ch.epfl.qedit.view.quiz.QuizActivity;
+import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
 import java.util.AbstractMap;
@@ -252,10 +253,16 @@ public class HomeQuizListFragment extends Fragment
 
     // Launches the quiz activity with the given quiz. This is used when a quiz is selected.
     private void launchQuizActivity(Quiz quiz) {
-        Intent intent = new Intent(requireActivity(), QuizActivity.class);
+        // Depending on the type of quiz, we might need to go to the treasure hunt activity
+        Class targetClass = quiz.isTreasureHunt() ? TreasureHuntActivity.class : QuizActivity.class;
+        Intent intent = new Intent(requireActivity(), targetClass);
+
+        // We put the quiz into the bundle
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZ_ID, quiz);
         intent.putExtras(bundle);
+
+        // And start the activity
         startActivity(intent);
     }
 
