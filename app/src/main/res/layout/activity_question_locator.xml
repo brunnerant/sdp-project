@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:layout_marginHorizontal="@dimen/activity_horizontal_margin" >
+    android:layout_marginHorizontal="@dimen/activity_horizontal_margin">
 
     <ImageView
         android:id="@+id/question_locator_arrow"
@@ -24,6 +23,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:freezesText="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/question_locator_arrow"
@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:freezesText="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/question_locator_text1"
@@ -44,6 +45,7 @@
         android:id="@+id/question_locator_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:freezesText="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/question_locator_text2"
