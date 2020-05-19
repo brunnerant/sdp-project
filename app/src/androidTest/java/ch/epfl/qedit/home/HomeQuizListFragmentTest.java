@@ -68,8 +68,8 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Test
     public void testDeleteItem() {
-        item(0).perform(click());
-        itemView(0, R.id.delete_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_delete);
 
         // Check that the confirmation dialog is displayed
         onView(withText(testRule.getActivity().getString(R.string.warning_delete)))
@@ -81,7 +81,9 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
         item(0).check(matches(isDisplayed()));
 
         // Now delete for real and see if it was deleted
-        itemView(0, R.id.delete_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_delete);
+
         onView(withId(android.R.id.button1)).perform(click());
         onView(withText("I am a Mock Quiz!")).check(doesNotExist());
     }
@@ -90,8 +92,8 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Test
     public void testClickOnEditLaunchesDialogModify() {
-        item(0).perform(click());
-        itemView(0, R.id.edit_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_edit);
 
         onView(withText(testRule.getActivity().getString(R.string.edit_dialog_title_settings)))
                 .inRoot(isDialog())
@@ -103,8 +105,8 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Test
     public void testEnterTitle() {
-        item(0).perform(click());
-        itemView(0, R.id.edit_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_edit);
 
         onDialog(R.id.edit_quiz_title).check(matches(withText("I am a Mock Quiz!")));
 
@@ -116,8 +118,8 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Test
     public void testDoneButton() {
-        item(0).perform(click());
-        itemView(0, R.id.edit_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_edit);
 
         clickOn(android.R.id.button1, false);
         intended(
