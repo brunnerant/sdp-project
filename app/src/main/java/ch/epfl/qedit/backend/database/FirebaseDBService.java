@@ -1,13 +1,13 @@
 package ch.epfl.qedit.backend.database;
 
-import static ch.epfl.qedit.backend.Util.error;
-import static ch.epfl.qedit.backend.Util.extractLanguages;
-import static ch.epfl.qedit.backend.Util.extractQuestions;
-import static ch.epfl.qedit.backend.Util.extractStringPool;
-import static ch.epfl.qedit.backend.Util.extractTreasureHunt;
-import static ch.epfl.qedit.backend.Util.updateUser;
-import static ch.epfl.qedit.backend.Util.uploadQuestions;
-import static ch.epfl.qedit.backend.Util.uploadStringPool;
+import static ch.epfl.qedit.backend.database.Util.error;
+import static ch.epfl.qedit.backend.database.Util.extractLanguages;
+import static ch.epfl.qedit.backend.database.Util.extractQuestions;
+import static ch.epfl.qedit.backend.database.Util.extractStringPool;
+import static ch.epfl.qedit.backend.database.Util.extractTreasureHunt;
+import static ch.epfl.qedit.backend.database.Util.updateUser;
+import static ch.epfl.qedit.backend.database.Util.uploadQuestions;
+import static ch.epfl.qedit.backend.database.Util.uploadStringPool;
 
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;

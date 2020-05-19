@@ -4,7 +4,6 @@ import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import ch.epfl.qedit.backend.Util;
 import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -25,12 +24,21 @@ public class MockDBService implements DatabaseService {
     /** This class simulates a quiz that is stored in Firestore */
     private static class MockQuiz {
 
+        private boolean treasureHunt;
         private ImmutableList<Question> questions;
         private Map<String, StringPool> stringPools;
 
         MockQuiz(List<Question> questions, Map<String, StringPool> stringPools) {
+            this(questions, stringPools, false);
+        }
+
+        MockQuiz(
+                List<Question> questions,
+                Map<String, StringPool> stringPools,
+                boolean treasureHunt) {
             this.questions = ImmutableList.copyOf(questions);
             this.stringPools = stringPools;
+            this.treasureHunt = treasureHunt;
         }
 
         public List<Question> getQuestions() {
@@ -43,6 +51,10 @@ public class MockDBService implements DatabaseService {
 
         StringPool getStringPool(String language) {
             return stringPools.get(language);
+        }
+
+        boolean getTreasureHunt() {
+            return treasureHunt;
         }
 
         static final MatrixFormat simpleFormat =
@@ -148,6 +160,7 @@ public class MockDBService implements DatabaseService {
     private HashMap<String, MockQuiz> quizzes;
     private HashMap<String, User> users;
     private CountingIdlingResource idlingResource;
+    private int idCount;
 
     public MockDBService() {
         idlingResource = new CountingIdlingResource("MockDBService");
@@ -160,6 +173,8 @@ public class MockDBService implements DatabaseService {
         users = new HashMap<>();
         users.put(MockAuthService.ANTHONY_IOZZIA_ID, createAnthony());
         users.put(MockAuthService.COSME_JORDAN_ID, createCosme());
+
+        idCount = 0;
     }
 
     public static User createAnthony() {
@@ -234,7 +249,11 @@ public class MockDBService implements DatabaseService {
     @Override
     public CompletableFuture<Quiz> getQuizStructure(String quizId) {
         CompletableFuture<Quiz> future = new CompletableFuture<>();
-        waitForQuiz(future, quizId, mockQuiz -> new Quiz(TITLE_ID, mockQuiz.getQuestions()));
+        waitForQuiz(
+                future,
+                quizId,
+                mockQuiz ->
+                        new Quiz(TITLE_ID, mockQuiz.getQuestions(), mockQuiz.getTreasureHunt()));
         return future;
     }
 
@@ -254,7 +273,25 @@ public class MockDBService implements DatabaseService {
 
     @Override
     public CompletableFuture<String> uploadQuiz(Quiz quiz, StringPool stringPool) {
-        return null;
+        CompletableFuture<String> future = new CompletableFuture<>();
+        new Thread(
+                        () -> {
+                            wait2second();
+                            Map<String, StringPool> stringPoolMap = new HashMap<>();
+                            stringPoolMap.put(stringPool.getLanguageCode(), stringPool);
+                            MockQuiz mockQuiz =
+                                    new MockQuiz(
+                                            quiz.getQuestions(),
+                                            stringPoolMap,
+                                            quiz.isTreasureHunt());
+                            String quizId = Integer.toString(idCount++);
+                            quizzes.put(quizId, mockQuiz);
+                            future.complete(quizId);
+                            idlingResource.decrement();
+                        })
+                .run();
+
+        return future;
     }
 
     @Override
