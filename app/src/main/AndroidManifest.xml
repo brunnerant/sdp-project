@@ -26,7 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+      
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -49,8 +49,6 @@
             </intent-filter>
             -->
         </activity>
-
-        <activity android:name=".view.QR.ScannerActivity"></activity>
         <activity
             android:name=".StartActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
@@ -59,6 +57,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.QR.ScannerActivity" />
         <activity android:name=".view.edit.EditQuestionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
@@ -110,10 +109,19 @@
         </activity>
         <activity
             android:name=".view.treasurehunt.QuestionLocatorActivity"
-            android:label="@string/title_activity_question_locator"
-            android:configChanges="orientation|screenSize" >
+            android:label="@string/title_activity_treasure_hunt">
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.treasurehunt.TreasureHuntActivity"
+            android:label="@string/title_activity_treasure_hunt">
+            <intent-filter>
+                <action android:name="android.intent.action.QUICK_VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

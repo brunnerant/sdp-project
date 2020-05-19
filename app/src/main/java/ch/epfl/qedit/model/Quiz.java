@@ -147,7 +147,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
 
         /** Checks that the question has the same treasure-hunt settings as the quiz */
         private void checkQuestion(Question question) {
-            boolean questionTreasureHunt = question.getLocation() != null;
+            boolean questionTreasureHunt = question.getRadius() != -1;
             if (questionTreasureHunt != treasureHunt)
                 throw new IllegalArgumentException(
                         "Cannot mix treasure-hunt and non treasure-hunt questions");

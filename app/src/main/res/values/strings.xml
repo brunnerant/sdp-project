@@ -102,13 +102,17 @@
     <string name="title_activity_edit_quiz">Edit</string>
 
     <!-- Treasure hunt -->
-    <string name="title_activity_question_locator">Question location</string>
+    <string name="title_activity_treasure_hunt">Treasure Hunt</string>
     <string name="question_locator_distance">Distance to the next question :</string>
     <string name="question_locator_bearing">Bearing to the next question (from the north) :</string>
     <string name="question_locator_error">Cannot locate your phone</string>
     <string name="enable_location">Grant location permission</string>
     <string name="question_locator_found">You have found the question!</string>
     <string name="question_locator_answer">Answer the question</string>
+    <string name="treasure_hunt_explanation">You have to locate the first question to start the quiz</string>
+    <string name="treasure_hunt_start">Start the treasure hunt</string>
+    <string name="treasure_hunt_confirm_next_question">Are you sure that you finished this question ? You will not be able to come back to it.</string>
+    <string name="question_locator_move">Move to next question</string>
 
     <!-- Edit Settings -->
     <string name="edit_dialog_title_settings">Settings</string>
@@ -159,6 +163,5 @@
     <string name="exclamation_point">!</string>
     <string name="database_error">An error occurred connecting to the database</string>
     <string name="card_icon">card icon</string>
-
 
 </resources>
