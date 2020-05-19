@@ -11,10 +11,16 @@ import java.util.Objects;
 /** Represents the question of a quiz. For now, it is simply represented as a string. */
 public final class Question implements MultiLanguage<Question>, Serializable, Mappable {
 
+    /**
+     * These attributes are used to convert a Question into a Map that can be later store into
+     * firestore
+     */
     public static final String TO_MAP_TITLE = "title";
+
     public static final String TO_MAP_TEXT = "text";
     public static final String TO_MAP_RADIUS = "radius";
-    public static final String TO_MAP_LOCATION = "location";
+    public static final String TO_MAP_LATITUDE = "latitude";
+    public static final String TO_MAP_LONGITUDE = "longitude";
     public static final String TO_MAP_ANSWERS = "answers";
 
     /** A question consists of a title, and a text */
@@ -118,10 +124,12 @@ public final class Question implements MultiLanguage<Question>, Serializable, Ma
         Map<String, Object> map = new HashMap<>();
         map.put(TO_MAP_TITLE, title);
         map.put(TO_MAP_TEXT, text);
-        if (radius != -1 && location != null) {
+        if (radius != -1) {
             map.put(TO_MAP_RADIUS, radius);
-            map.put(TO_MAP_LOCATION, location);
+            map.put(TO_MAP_LONGITUDE, longitude);
+            map.put(TO_MAP_LATITUDE, latitude);
         }
+        // For now we don't consider MultiField
         map.put(TO_MAP_ANSWERS, Arrays.asList(format.toMap()));
         return map;
     }

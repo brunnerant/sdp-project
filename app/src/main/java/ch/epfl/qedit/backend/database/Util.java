@@ -90,7 +90,19 @@ public final class Util {
         if (title == null || text == null || answers == null)
             throw new FormatException("Invalid question: missing title, text or answers");
 
-        return new Question(title, text, extractAnswerFormats(answers));
+        AnswerFormat formats = extractAnswerFormats(answers);
+
+        // Extract treasure hunt parameters
+        Double radius = doc.getDouble(Question.TO_MAP_RADIUS);
+        if (radius == null) return new Question(title, text, formats);
+
+        Double latitude = doc.getDouble(Question.TO_MAP_LATITUDE);
+        Double longitude = doc.getDouble(Question.TO_MAP_LONGITUDE);
+
+        if (longitude == null || latitude == null)
+            throw new FormatException("Invalid question: missing latitude or longitude");
+
+        return new Question(title, text, formats, longitude, latitude, radius);
     }
 
     /** Extract an answer format if it is a MultiField */
