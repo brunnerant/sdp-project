@@ -14,8 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,8 +31,6 @@ import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
-import ch.epfl.qedit.view.login.LogInActivity;
-import ch.epfl.qedit.view.login.Util;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
@@ -46,7 +42,6 @@ import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.login.Util.USER;
-import static ch.epfl.qedit.view.login.Util.USER_ID;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
@@ -157,36 +152,12 @@ public class HomeQuizListFragment extends Fragment
                 addSettingsDialog.setTextFilter(textFilter);
                 addSettingsDialog.show(getParentFragmentManager(), "add_dialog");
                 break;
-            case R.id.log_out:
-                logOut();
-                break;
             case android.R.id.home:
                 requireActivity().onBackPressed();
                 break;
         }
 
         return true;
-    }
-
-    private void logOut() {
-        // Retrieve cached user id
-        String uid = Util.getStringInPrefs(requireActivity(), USER_ID);
-
-        // Remove cached user id
-        Util.removeStringInPrefs(getActivity(), USER_ID);
-
-        // Log out
-        FirebaseAuth.getInstance().signOut();
-
-        // Go to log in activity
-        startActivity(new Intent(getActivity(), LogInActivity.class));
-
-        // Show toast
-        Toast.makeText(
-                        getContext(),
-                        getResources().getString(R.string.log_out_success),
-                        Toast.LENGTH_SHORT)
-                .show();
     }
 
     // Handles when a user clicked on the button to remove a quiz
@@ -196,14 +167,15 @@ public class HomeQuizListFragment extends Fragment
     }
 
     // Handles when a user clicked on the button to show a quiz
-    private void showQuiz(int position) { // TODO next sprint
+    private void startQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
         progressBar.setVisibility(VISIBLE);
 
+        // We retrieve the quiz structure and the quiz string pool in parallel
         CompletableFuture<StringPool> stringPool = db.getQuizLanguages(quizID).thenCompose(languages -> db.getQuizStringPool(quizID, getBestLanguage(languages)));
-
         CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
 
+        // We wait for the two futures to complete, and then launch the quiz
         CompletableFuture.allOf(stringPool, quizStructure)
                 .whenComplete(
                         (aVoid, throwable) -> {
