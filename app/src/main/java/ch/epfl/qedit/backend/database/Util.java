@@ -239,6 +239,7 @@ public final class Util {
         // There is no efficient way in firestore to upload a full collection in one
         // operation
         for (int i = 0; i < questions.size(); i++) {
+            // Upload a single question to firestore
             CompletableFuture<Void> future = new CompletableFuture<>();
             Map<String, Object> doc = questions.get(i).toMap();
             doc.put("index", i);
@@ -248,7 +249,7 @@ public final class Util {
                     .addOnFailureListener(e -> error(future, e.getMessage()));
             futures[i] = future;
         }
-
+        // Combine all the futures of each question
         return CompletableFuture.allOf(futures);
     }
 }
