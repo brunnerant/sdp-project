@@ -140,4 +140,16 @@ public class QuizTest {
         builder.build();
         builder.remove(0);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void builderTreasureHuntFail1() {
+        Quiz.Builder builder = new Quiz.Builder(true);
+        builder.append(new Question("", "", answerFormat));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void builderTreasureHuntFail2() {
+        Quiz.Builder builder = new Quiz.Builder();
+        builder.append(new Question("", "", answerFormat, 0, 0, 1));
+    }
 }

@@ -68,6 +68,8 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** Append a question the quiz's list of question */
         public Builder append(Question question) {
             checkState();
+            checkQuestion(question);
+
             questions.add(question);
             return this;
         }
@@ -75,6 +77,8 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** Put a question at a certain index in the quiz */
         public Builder insert(int index, Question question) {
             checkState();
+            checkQuestion(question);
+
             questions.add(index, question);
             return this;
         }
@@ -82,6 +86,8 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** Change the question at a certain index */
         public Builder update(int index, Question question) {
             checkState();
+            checkQuestion(question);
+
             questions.set(index, question);
             return this;
         }
@@ -137,6 +143,14 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
             if (questions == null) {
                 throw new IllegalStateException("Builder already build once.");
             }
+        }
+
+        /** Checks that the question has the same treasure-hunt settings as the quiz */
+        private void checkQuestion(Question question) {
+            boolean questionTreasureHunt = question.getRadius() != -1;
+            if (questionTreasureHunt != treasureHunt)
+                throw new IllegalArgumentException(
+                        "Cannot mix treasure-hunt and non treasure-hunt questions");
         }
     }
 
