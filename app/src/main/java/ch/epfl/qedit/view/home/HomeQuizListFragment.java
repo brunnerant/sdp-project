@@ -1,5 +1,13 @@
 package ch.epfl.qedit.view.home;
 
+import static android.app.Activity.RESULT_OK;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static ch.epfl.qedit.model.StringPool.TITLE_ID;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
+import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.login.Util.USER;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,18 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
@@ -34,14 +32,13 @@ import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
-
-import static android.app.Activity.RESULT_OK;
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static ch.epfl.qedit.model.StringPool.TITLE_ID;
-import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
-import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
-import static ch.epfl.qedit.view.login.Util.USER;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
@@ -119,7 +116,8 @@ public class HomeQuizListFragment extends Fragment
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Those are the items of the popup menu
-        List<String> popupMenuItems = Arrays.asList(getString(R.string.menu_edit), getString(R.string.menu_delete));
+        List<String> popupMenuItems =
+                Arrays.asList(getString(R.string.menu_edit), getString(R.string.menu_delete));
 
         // Create the list adapter
         listAdapter = new ListEditView.Adapter<>(quizzes, Map.Entry::getValue, popupMenuItems);
@@ -127,12 +125,11 @@ public class HomeQuizListFragment extends Fragment
         // Listen to the data changes
         listAdapter.setItemListener(
                 (position, code) -> {
-                    if (code == ListEditView.ItemListener.CLICK)
-                        startQuiz(position);
+                    if (code == ListEditView.ItemListener.CLICK) startQuiz(position);
                     else if (code == 0) // edit was clicked
-                        editQuiz(position);
+                    editQuiz(position);
                     else if (code == 1) // delete was clicked
-                        deleteConfirmation(position);
+                    deleteConfirmation(position);
                 });
     }
 
@@ -172,19 +169,31 @@ public class HomeQuizListFragment extends Fragment
         progressBar.setVisibility(VISIBLE);
 
         // We retrieve the quiz structure and the quiz string pool in parallel
-        CompletableFuture<StringPool> stringPool = db.getQuizLanguages(quizID).thenCompose(languages -> db.getQuizStringPool(quizID, getBestLanguage(languages)));
+        CompletableFuture<StringPool> stringPool =
+                db.getQuizLanguages(quizID)
+                        .thenCompose(
+                                languages ->
+                                        db.getQuizStringPool(quizID, getBestLanguage(languages)));
         CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
 
         // We wait for the two futures to complete, and then launch the quiz
         CompletableFuture.allOf(stringPool, quizStructure)
                 .whenComplete(
                         (aVoid, throwable) -> {
-                            if (throwable != null)
-                                Toast.makeText(requireContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
-                            else
-                                launchQuizActivity(quizStructure.join().instantiateLanguage(stringPool.join()));
+                            if (throwable != null) {
+                                Toast.makeText(
+                                                requireContext(),
+                                                R.string.database_error,
+                                                Toast.LENGTH_SHORT)
+                                        .show();
+                            } else {
+                                progressBar.setVisibility(View.GONE);
+                                launchQuizActivity(
+                                        quizStructure
+                                                .join()
+                                                .instantiateLanguage(stringPool.join()));
+                            }
                         });
-
     }
 
     // Handles when a user clicked on the button to edit a quiz

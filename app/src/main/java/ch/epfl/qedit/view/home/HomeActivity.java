@@ -1,31 +1,27 @@
 package ch.epfl.qedit.view.home;
 
+import static ch.epfl.qedit.view.login.Util.USER;
+import static ch.epfl.qedit.view.login.Util.USER_ID;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.QR.ScannerActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
 import ch.epfl.qedit.view.login.Util;
-
-import static ch.epfl.qedit.view.login.Util.USER;
-import static ch.epfl.qedit.view.login.Util.USER_ID;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -147,10 +143,7 @@ public class HomeActivity extends AppCompatActivity
         startActivity(new Intent(this, LogInActivity.class));
 
         // Show toast
-        Toast.makeText(
-                this,
-                getResources().getString(R.string.log_out_success),
-                Toast.LENGTH_SHORT)
+        Toast.makeText(this, getResources().getString(R.string.log_out_success), Toast.LENGTH_SHORT)
                 .show();
     }
 }

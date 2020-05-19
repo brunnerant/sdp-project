@@ -55,10 +55,10 @@ public class ListEditView extends RecyclerView {
         int CLICK = -1;
 
         /**
-         * This handles an event on a specific item of the list. The event can either be
-         * an item being clicked on, or an item of the "three dots" menu being clicked on. In the
-         * former case, the code CLICK is passed. Otherwise, the index of the menu item is passed.
-         * This allows custom menus to be built in an easy way.
+         * This handles an event on a specific item of the list. The event can either be an item
+         * being clicked on, or an item of the "three dots" menu being clicked on. In the former
+         * case, the code CLICK is passed. Otherwise, the index of the menu item is passed. This
+         * allows custom menus to be built in an easy way.
          *
          * @param position the position of the item on which the event occurred.
          * @param eventCode the code of the event that occurred.
@@ -84,7 +84,8 @@ public class ListEditView extends RecyclerView {
     private boolean dragAndDrop = false;
 
     // This class is holding the view and data for one item
-    private final class ItemHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
+    private final class ItemHolder extends RecyclerView.ViewHolder
+            implements PopupMenu.OnMenuItemClickListener {
         private final TextView text;
         private final ImageButton threeDots;
 
@@ -95,22 +96,29 @@ public class ListEditView extends RecyclerView {
             threeDots = itemView.findViewById(R.id.list_item_three_dots);
 
             // When an item is clicked on, we pass the CLICK event to the listener
-            itemView.setOnClickListener(v -> {
-                adapter.notifyItem(getAdapterPosition(), ItemListener.CLICK);
-            });
+            itemView.setOnClickListener(
+                    v -> {
+                        adapter.notifyItem(getAdapterPosition(), ItemListener.CLICK);
+                    });
 
+            threeDots.setOnClickListener(
+                    v -> {
+                        PopupMenu menu = new PopupMenu(itemView.getContext(), threeDots);
+                        menu.setOnMenuItemClickListener(this);
 
-            threeDots.setOnClickListener(v -> {
-                PopupMenu menu = new PopupMenu(itemView.getContext(), itemView);
-                menu.setOnMenuItemClickListener(this);
+                        // The popup menu contains the items specified in the adapter
+                        for (int i = 0; i < adapter.popupMenuItems.size(); i++)
+                            // The cast is somehow necessary
+                            menu.getMenu()
+                                    .add(
+                                            Menu.NONE, // the group id (no group)
+                                            i, // the item id
+                                            i, // the order
+                                            (CharSequence)
+                                                    adapter.popupMenuItems.get(i)); // the text
 
-                // The popup menu contains the items specified in the adapter
-                for (int i = 0; i < adapter.popupMenuItems.size(); i++)
-                    // The cast is somehow necessary
-                    menu.getMenu().add(Menu.NONE, i, i, (CharSequence) adapter.popupMenuItems.get(i));
-
-                menu.show();
-            });
+                        menu.show();
+                    });
         }
 
         // This changes the text of an item when the recycler view wants to reuse it
@@ -183,7 +191,8 @@ public class ListEditView extends RecyclerView {
          *
          * @param items the list of items to display
          * @param getText a function to retrieve the text from one item
-         * @param popupMenuItems the list of items to show in the popup menu, when clicking on the three dots
+         * @param popupMenuItems the list of items to show in the popup menu, when clicking on the
+         *     three dots
          */
         public Adapter(List<T> items, Function<T, String> getText, List<String> popupMenuItems) {
             this.items = Objects.requireNonNull(items);
@@ -243,7 +252,8 @@ public class ListEditView extends RecyclerView {
         @NonNull
         @Override
         public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return listEditView.new ItemHolder(
+            return listEditView
+            .new ItemHolder(
                     LayoutInflater.from(parent.getContext())
                             .inflate(R.layout.list_edit_item, parent, false));
         }
