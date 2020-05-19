@@ -69,7 +69,7 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
         itemView(0, android.R.id.text1).check(matches(withText("I am a Mock Quiz!")));
     }
 
-    @Teswait2secondt
+    @Test
     public void testDeleteItem() {
         itemView(0, R.id.list_item_three_dots).perform(click());
         clickOnPopup(testRule.getActivity(), R.string.menu_delete);
