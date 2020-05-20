@@ -131,7 +131,7 @@ public class ListEditView extends RecyclerView {
             // We pass as an event the index of the item in the popup menu
             adapter.notifyItem(getAdapterPosition(), id);
 
-            return true; // the even was handled
+            return true; // the event was handled
         }
     }
 
