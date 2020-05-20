@@ -270,7 +270,7 @@ public class HomeQuizListFragment extends Fragment
             }
             // When the user decides to stop the edition without saving the changes the
             // EditQuizActivity will return with RESULT_CANCELED. But we do not need to do anything
-            // in thing in this case.
+            // in this case.
         }
     }
 
