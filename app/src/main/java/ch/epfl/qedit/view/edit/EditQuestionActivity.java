@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view.edit;
 
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.TREASURE_HUNT;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 import android.content.Context;
@@ -30,6 +31,8 @@ public class EditQuestionActivity extends AppCompatActivity {
     private StringPool stringPool;
     private AnswerFormat answerFormat;
 
+    private boolean hasTreasureHunt;
+
     private EditText titleView;
     private EditText textView;
 
@@ -53,7 +56,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         setDoneButtonListener();
         setCancelButtonListener();
 
-        // Get the StringPool, the title and the text from the Intent
+        // Get the StringPool, the title and the text and treasure hunt from the Intent
         extractFromIntent();
     }
 
@@ -71,6 +74,9 @@ public class EditQuestionActivity extends AppCompatActivity {
             textView.setText(stringPool.get(textId));
             setAnswerFormat(question.getFormat());
         }
+
+        hasTreasureHunt = (boolean) bundle.getSerializable(TREASURE_HUNT);
+
     }
 
     /**
@@ -126,7 +132,7 @@ public class EditQuestionActivity extends AppCompatActivity {
     private void setSolutionButtonListener(ImageButton button, final boolean text) {
         button.setOnClickListener(
                 v -> {
-                    DialogFragment editFieldFragment = EditFieldFragment.newInstance(text);
+                    DialogFragment editFieldFragment = EditFieldFragment.newInstance(text, false);
                     editFieldFragment.show(getSupportFragmentManager(), SOL_DIALOG_TAG);
                 });
     }

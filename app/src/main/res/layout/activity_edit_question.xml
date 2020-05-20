@@ -45,6 +45,55 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_question_title" />
 
+            <Button
+                android:id="@+id/choose_location"
+                android:background="@color/transparent"
+                android:textColor="@color/colorAccent"
+                android:layout_margin="@dimen/regular_padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose Location" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+
+            <TextView
+            android:id="@+id/longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/answer_text_helper_padding"
+        android:text="longitude"
+        android:textSize="@dimen/helper_text_size" />
+
+            <EditText
+                android:id="@+id/radius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:hint="radius"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="@dimen/answer_text_helper_padding"
+                android:text="latitude"
+                android:textSize="@dimen/helper_text_size" />
+        </LinearLayout>
             <TextView
                 android:id="@+id/choose_answer_text"
                 android:layout_width="wrap_content"

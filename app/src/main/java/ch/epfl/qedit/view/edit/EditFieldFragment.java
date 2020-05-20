@@ -67,7 +67,7 @@ public class EditFieldFragment extends DialogFragment {
      * @param isText boolean argument passed through a bundle to the new Fragment
      * @return a EditFieldFragment with the default parameters set in function of isText
      */
-    public static EditFieldFragment newInstance(boolean isText) {
+    public static EditFieldFragment newInstance(boolean isText, boolean isTreasureHunt) {
         EditFieldFragment dialog = new EditFieldFragment();
 
         Bundle args = new Bundle();
@@ -188,6 +188,10 @@ public class EditFieldFragment extends DialogFragment {
     // METHODS THAT HANDLE THE LAYOUT //
 
     private void setCheckBoxesOnClickListener() {
+        //if() {
+
+        //}
+
         decimalCheckbox.setOnClickListener(
                 v -> {
                     isDecimal = ((CheckBox) v).isChecked();
