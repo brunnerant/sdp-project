@@ -228,7 +228,7 @@ public final class Util {
             CompletableFuture<Boolean> future, DocumentSnapshot doc) {
         Boolean treasureHunt = doc.getBoolean("treasureHunt");
         if (treasureHunt == null)
-            formatError(future, "A quiz must specified if it is a treasure hunt or not");
+            formatError(future, "A quiz must specify if it is a treasure hunt or not");
         else future.complete(treasureHunt);
     }
 
