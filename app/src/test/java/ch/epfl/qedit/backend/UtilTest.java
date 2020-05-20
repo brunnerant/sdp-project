@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThrows;
 import ch.epfl.qedit.backend.database.Util;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,14 +32,33 @@ public class UtilTest {
                 MatrixFormat.Field.Type.UnsignedFloat.name(),
                 MatrixFormat.Field.Type.SignedFloat.name()
             };
+    private String[] solutions = new String[] {"Hello", "text", "1", "-2", "4.2", "-8.9"};
 
     @Before
     public void init() {
-        createAnswerFormats();
+        createAnswerFormats(true);
         createExpectedAnswerFormats();
     }
 
-    public void createAnswerFormats() {
+    private void addSolution() {
+        Map<String, Object> matrix = new HashMap<>();
+        for (int i = 0; i < 6; i++) {
+            matrix.put((i / 3) + "," + (i % 3), solutions[i]);
+        }
+        answerFormat.put(MatrixModel.TO_MAP_DATA, matrix);
+        answerFormat.put(MatrixModel.TO_MAP_NUM_ROWS, 2);
+        answerFormat.put(MatrixModel.TO_MAP_NUM_COLUMNS, 3);
+    }
+
+    private MatrixModel createExpectedSolution() {
+        MatrixModel model = new MatrixModel(2, 3);
+        for (int i = 0; i < 6; i++) {
+            model.updateAnswer((i / 3), (i % 3), solutions[i]);
+        }
+        return model;
+    }
+
+    private void createAnswerFormats(boolean addSolution) {
         answerFormat = new HashMap<>();
         answerFormat.put(MatrixFormat.TO_MAP_TYPE, MatrixFormat.TYPE);
         answerFormat.put(MatrixFormat.TO_MAP_NUM_ROWS, 2);
@@ -53,13 +73,14 @@ public class UtilTest {
         }
 
         answerFormat.put(MatrixFormat.TO_MAP_FIELDS, matrix);
+        if (addSolution) addSolution();
 
         answerFormats = new ArrayList<>();
         answerFormats.add(answerFormat);
         answerFormats.add(answerFormat);
     }
 
-    public void createExpectedAnswerFormats() {
+    private void createExpectedAnswerFormats() {
         expectedAnswerFormat =
                 new MatrixFormat.Builder(2, 3)
                         .withField(0, 0, MatrixFormat.Field.preFilledField("text0"))
@@ -69,7 +90,7 @@ public class UtilTest {
                         .withField(1, 1, MatrixFormat.Field.numericField(true, false, "text4"))
                         .withField(1, 2, MatrixFormat.Field.numericField(true, true, "text5"))
                         .build();
-
+        expectedAnswerFormat.setCorrectAnswer(createExpectedSolution());
         expectedAnswerFormats = new MultiFieldFormat(Collections.nCopies(2, expectedAnswerFormat));
     }
 
@@ -83,6 +104,13 @@ public class UtilTest {
         assertEquals(
                 expectedAnswerFormat,
                 Util.extractAnswerFormats(Collections.singletonList(answerFormat)));
+    }
+
+    @Test(expected = Util.FormatException.class)
+    public void assertAnswerFormatsCannotBeExtracted() throws Util.FormatException {
+        answerFormat = new HashMap<>();
+        createAnswerFormats(false);
+        AnswerFormat actualAnswerFormat = Util.extractAnswerFormat(answerFormat);
     }
 
     @Test
