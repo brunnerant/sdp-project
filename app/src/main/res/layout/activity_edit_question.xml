@@ -46,7 +46,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/edit_question_title" />
 
             <Button
-                android:id="@+id/choose_location"
+                android:id="@+id/edit_choose_location"
                 android:background="@color/transparent"
                 android:textColor="@color/colorAccent"
                 android:layout_margin="@dimen/regular_padding"
@@ -62,7 +62,7 @@
 
 
             <TextView
-            android:id="@+id/longitude"
+            android:id="@+id/longitude_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -71,7 +71,7 @@
         android:textSize="@dimen/helper_text_size" />
 
             <EditText
-                android:id="@+id/radius"
+                android:id="@+id/radius_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -86,7 +86,7 @@
 
 
             <TextView
-                android:id="@+id/latitude"
+                android:id="@+id/latitude_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

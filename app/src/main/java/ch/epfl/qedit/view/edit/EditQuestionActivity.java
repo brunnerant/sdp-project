@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,6 +37,10 @@ public class EditQuestionActivity extends AppCompatActivity {
     private EditText titleView;
     private EditText textView;
 
+    private TextView longitudeText;
+    private TextView latitudeText;
+    private EditText radius;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,22 @@ public class EditQuestionActivity extends AppCompatActivity {
 
         // Get the StringPool, the title and the text and treasure hunt from the Intent
         extractFromIntent();
+
+        setTreasureHunt();
+    }
+
+    private void setTreasureHunt() {
+        longitudeText = findViewById(R.id.longitude_text);
+        latitudeText = findViewById(R.id.latitude_text);
+        radius = findViewById(R.id.radius_text);
+
+        if(hasTreasureHunt) {
+            // TODO: Do something... maybe
+        } else {
+            latitudeText.setVisibility(View.INVISIBLE);
+            longitudeText.setVisibility(View.INVISIBLE);
+            radius.setVisibility(View.INVISIBLE);
+        }
     }
 
     /** Extract string pool and question attributes to modify */
