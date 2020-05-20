@@ -75,7 +75,7 @@ public class EditQuestionActivity extends AppCompatActivity {
 
         if(hasTreasureHunt) {
             // TODO: Do something... maybe
-            int type = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED;
+            int type = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
             radius.setInputType(type);
         } else {
             latitudeText.setVisibility(View.INVISIBLE);
