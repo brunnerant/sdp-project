@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public class StringPool implements Serializable {
 
-    public static final String TITLE_ID = "title";
+    public static final String TITLE_ID = "main_title";
 
     private Map<String, String> stringPool;
     private String languageCode;
