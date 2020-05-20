@@ -205,7 +205,7 @@ public final class Util {
 
     /** Extracts the string pool from a Firestore document */
     public static void extractStringPool(
-            CompletableFuture<StringPool> future, DocumentSnapshot doc) {
+            CompletableFuture<StringPool> future, DocumentSnapshot doc, String language) {
         Map<String, Object> data = doc.getData();
         Map<String, String> result = new HashMap<>();
 
@@ -219,8 +219,9 @@ public final class Util {
                 return;
             }
         }
-
-        future.complete(new StringPool(result));
+        StringPool stringPool = new StringPool(result);
+        stringPool.setLanguageCode(language);
+        future.complete(stringPool);
     }
 
     public static void extractTreasureHunt(

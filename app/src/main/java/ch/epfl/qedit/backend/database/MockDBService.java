@@ -274,6 +274,7 @@ public class MockDBService implements DatabaseService {
     @Override
     public CompletableFuture<String> uploadQuiz(Quiz quiz, StringPool stringPool) {
         CompletableFuture<String> future = new CompletableFuture<>();
+        idlingResource.increment();
         new Thread(
                         () -> {
                             wait2second();

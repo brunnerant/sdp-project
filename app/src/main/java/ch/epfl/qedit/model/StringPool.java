@@ -4,6 +4,7 @@ import ch.epfl.qedit.util.Mappable;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -85,5 +86,13 @@ public class StringPool implements Serializable, Mappable {
 
     public void setLanguageCode(String languageCode) {
         this.languageCode = languageCode;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof StringPool)) return false;
+        StringPool other = (StringPool) object;
+        return Objects.equals(this.languageCode, other.languageCode)
+                && Objects.equals(this.stringPool, other.stringPool);
     }
 }

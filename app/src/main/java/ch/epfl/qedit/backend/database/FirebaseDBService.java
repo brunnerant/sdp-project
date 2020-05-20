@@ -82,7 +82,7 @@ public class FirebaseDBService implements DatabaseService {
                 .collection("stringPools")
                 .document(language)
                 .get()
-                .addOnSuccessListener(doc -> extractStringPool(future, doc))
+                .addOnSuccessListener(doc -> extractStringPool(future, doc, language))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
         return future;
