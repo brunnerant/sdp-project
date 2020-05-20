@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -74,6 +75,8 @@ public class EditQuestionActivity extends AppCompatActivity {
 
         if(hasTreasureHunt) {
             // TODO: Do something... maybe
+            int type = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED;
+            radius.setInputType(type);
         } else {
             latitudeText.setVisibility(View.INVISIBLE);
             longitudeText.setVisibility(View.INVISIBLE);
@@ -96,8 +99,8 @@ public class EditQuestionActivity extends AppCompatActivity {
             setAnswerFormat(question.getFormat());
         }
 
+        // TODO: Rename treasure hunt is needed
         hasTreasureHunt = (boolean) bundle.getSerializable(TREASURE_HUNT);
-
     }
 
     /**
@@ -177,6 +180,11 @@ public class EditQuestionActivity extends AppCompatActivity {
         // use & operator because we want to evaluate both side
         boolean noError = setErrorIfEmpty(titleId, R.id.edit_question_title);
         noError &= setErrorIfEmpty(textId, R.id.edit_question_text);
+
+        if(hasTreasureHunt) {
+            noError &= setErrorIfEmpty(radius.getText().toString(), R.id.radius_text);
+        }
+
         if (answerFormat == null) {
             noError = false;
             TextView answerView = findViewById(R.id.choose_answer_text);
@@ -202,6 +210,15 @@ public class EditQuestionActivity extends AppCompatActivity {
      */
     private boolean setErrorIfEmpty(String str, int strViewId) {
         if (str == null || stringPool.get(str) == null || stringPool.get(str).isEmpty()) {
+            EditText strView = findViewById(strViewId);
+            strView.setError(getString(R.string.cannot_be_empty));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean setErrorTreasureHunt(String str, int strViewId) {
+        if (str == null) {
             EditText strView = findViewById(strViewId);
             strView.setError(getString(R.string.cannot_be_empty));
             return false;
