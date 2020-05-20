@@ -163,7 +163,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
                 new Question(
                         stringPool.add("This is a new title"),
                         stringPool.add("This is a new text"),
-                        MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
+                        MatrixFormat.singleField(MatrixFormat.Field.textField("")));
 
         Intent dataIntent = new Intent();
         dataIntent.putExtra(QUESTION, question);

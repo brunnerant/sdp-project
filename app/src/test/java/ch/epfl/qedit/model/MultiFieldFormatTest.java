@@ -10,20 +10,20 @@ public class MultiFieldFormatTest {
 
     private final MultiFieldFormat multi =
             new MultiFieldFormat(
-                    MatrixFormat.uniform(3, 3, MatrixFormat.Field.textField("", 1)),
-                    MatrixFormat.singleField(MatrixFormat.Field.numericField(false, false, "", 3)));
+                    MatrixFormat.uniform(3, 3, MatrixFormat.Field.textField("")),
+                    MatrixFormat.singleField(MatrixFormat.Field.numericField(false, false, "")));
 
     @Test
     public void notEqualsTest1() {
         assertNotEquals(multi, "Not me");
-        assertNotEquals(MatrixFormat.uniform(45, 1, MatrixFormat.Field.textField("", 42)), multi);
+        assertNotEquals(MatrixFormat.uniform(45, 1, MatrixFormat.Field.textField("")), multi);
     }
 
     @Test
     public void notEqualsTest2() {
         MultiFieldFormat multi1 =
                 new MultiFieldFormat(
-                        MatrixFormat.uniform(3, 3, MatrixFormat.Field.textField("", 1)),
+                        MatrixFormat.uniform(3, 3, MatrixFormat.Field.textField("")),
                         MatrixFormat.uniform(2, 1, MatrixFormat.Field.preFilledField("a")));
         assertNotEquals(multi1, multi);
         assertNotEquals(multi, multi1);

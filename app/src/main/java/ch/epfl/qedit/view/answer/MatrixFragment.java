@@ -2,7 +2,6 @@ package ch.epfl.qedit.view.answer;
 
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -116,10 +115,6 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
         editText.setInputType(inputType);
         editText.setText(answer);
         editText.setHint(field.getText());
-
-        if (field.getMaxCharacters() != MatrixFormat.Field.NO_LIMIT)
-            editText.setFilters(
-                    new InputFilter[] {new InputFilter.LengthFilter(field.getMaxCharacters())});
 
         return editText;
     }
