@@ -68,7 +68,7 @@ public class QuestionFragment extends Fragment {
 
         if (goodAnswers != null) {
             if (goodAnswers.get(index) == 0) questionDisplay.setTextColor(Color.RED);
-            else questionDisplay.setTextColor(Color.BLACK);
+            else questionDisplay.setTextColor(Color.GREEN);
         }
         // Set everything up for the concrete AnswerFragment and launch it
         prepareAnswerFormatFragment(question, index, 0);
