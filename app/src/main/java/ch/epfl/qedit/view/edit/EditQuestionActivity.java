@@ -117,12 +117,11 @@ public class EditQuestionActivity extends AppCompatActivity {
     }
 
     private void setChooseLocation() {
-        button_choose_location.setOnClickListener(v -> launchMapActivity());
-    }
-
-    private void launchMapActivity() {
-        Intent mapActivityIntent = new Intent(this, EditMapsActivity.class);
-        startActivityForResult(mapActivityIntent, MAP_REQUEST_CODE);
+        button_choose_location.setOnClickListener(
+                v -> {
+                    Intent mapActivityIntent = new Intent(this, EditMapsActivity.class);
+                    startActivityForResult(mapActivityIntent, MAP_REQUEST_CODE);
+                });
     }
 
     @Override
@@ -220,8 +219,13 @@ public class EditQuestionActivity extends AppCompatActivity {
         boolean noError = setErrorIfEmpty(titleId, R.id.edit_question_title);
         noError &= setErrorIfEmpty(textId, R.id.edit_question_text);
 
-        noError &= errorTreasureHunt(noError);
+        if (isTreasureHunt) {
+            noError &= setErrorIfEmpty(radiusText.getText().toString(), R.id.radius_text);
 
+            noError &= setErrorTextView(R.id.longitude_text, hasBeenSet);
+            noError &= setErrorTextView(R.id.latitude_text, hasBeenSet);
+        }
+        //        noError &= errorTreasureHunt(noError);
         if (answerFormat == null) {
             noError = false;
             TextView answerView = findViewById(R.id.choose_answer_text);
@@ -239,18 +243,16 @@ public class EditQuestionActivity extends AppCompatActivity {
         }
     }
 
-    private boolean errorTreasureHunt(boolean noError) {
-        if (isTreasureHunt) {
-            noError &= setErrorIfEmpty(radiusText.getText().toString(), R.id.radius_text);
-
-            System.out.println(
-                    "Strangeeee eioa eioe aoien ioevn oiv no novin eoi vo " + hasBeenSet);
-            noError &= setErrorTextView(R.id.longitude_text, hasBeenSet);
-            noError &= setErrorTextView(R.id.latitude_text, hasBeenSet);
-        }
-
-        return noError;
-    }
+    //    private boolean errorTreasureHunt(boolean noError) {
+    //        if (isTreasureHunt) {
+    //            noError &= setErrorIfEmpty(radiusText.getText().toString(), R.id.radius_text);
+    //
+    //            noError &= setErrorTextView(R.id.longitude_text, hasBeenSet);
+    //            noError &= setErrorTextView(R.id.latitude_text, hasBeenSet);
+    //        }
+    //
+    //        return noError;
+    //    }
 
     private Question getQuestionForReturnResult() {
         Question question;
