@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
@@ -166,9 +167,18 @@ public class HomeQuizListFragment extends Fragment
     // Handles when a user clicked on the button to show a quiz
     private void startQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
+        boolean test = progressBar.isShown();
+        test = progressBar.getVisibility() == GONE;
+
         progressBar.setVisibility(VISIBLE);
         progressBar.bringToFront();
         progressBar.invalidate();
+        this.getView().invalidate();
+
+        FragmentTransaction ftr = this.getParentFragmentManager().beginTransaction();
+        ftr.detach(HomeQuizListFragment.this).attach(HomeQuizListFragment.this).commit();
+
+        test = progressBar.isShown();
 
         Util.getQuiz(db, quizID, requireContext())
                 .whenComplete(
@@ -180,7 +190,7 @@ public class HomeQuizListFragment extends Fragment
                                                 Toast.LENGTH_SHORT)
                                         .show();
                             } else {
-                                progressBar.setVisibility(View.GONE);
+                                progressBar.setVisibility(GONE);
                                 launchQuizActivity(pair.first.instantiateLanguage(pair.second));
                             }
                         });
@@ -190,7 +200,6 @@ public class HomeQuizListFragment extends Fragment
     private void editQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
         progressBar.setVisibility(VISIBLE);
-        progressBar.bringToFront();
 
         Util.getQuiz(db, quizID, requireContext())
                 .whenComplete(
