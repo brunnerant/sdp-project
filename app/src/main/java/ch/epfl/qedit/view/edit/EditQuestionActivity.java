@@ -113,7 +113,9 @@ public class EditQuestionActivity extends AppCompatActivity {
         }
 
         // TODO: Rename treasure hunt is needed
-        isTreasureHunt = (boolean) bundle.getSerializable(TREASURE_HUNT);
+        if (bundle.getSerializable(TREASURE_HUNT) != null) {
+            isTreasureHunt = (boolean) bundle.getSerializable(TREASURE_HUNT);
+        }
     }
 
     private void setChooseLocation() {
@@ -225,7 +227,7 @@ public class EditQuestionActivity extends AppCompatActivity {
             noError &= setErrorTextView(R.id.longitude_text, hasBeenSet);
             noError &= setErrorTextView(R.id.latitude_text, hasBeenSet);
         }
-        //        noError &= errorTreasureHunt(noError);
+
         if (answerFormat == null) {
             noError = false;
             TextView answerView = findViewById(R.id.choose_answer_text);
@@ -242,17 +244,6 @@ public class EditQuestionActivity extends AppCompatActivity {
             finish();
         }
     }
-
-    //    private boolean errorTreasureHunt(boolean noError) {
-    //        if (isTreasureHunt) {
-    //            noError &= setErrorIfEmpty(radiusText.getText().toString(), R.id.radius_text);
-    //
-    //            noError &= setErrorTextView(R.id.longitude_text, hasBeenSet);
-    //            noError &= setErrorTextView(R.id.latitude_text, hasBeenSet);
-    //        }
-    //
-    //        return noError;
-    //    }
 
     private Question getQuestionForReturnResult() {
         Question question;
