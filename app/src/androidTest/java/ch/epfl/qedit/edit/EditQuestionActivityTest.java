@@ -3,7 +3,9 @@ package ch.epfl.qedit.edit;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData;
@@ -173,6 +175,13 @@ public class EditQuestionActivityTest {
                 hasResultData(IntentMatchers.hasExtraWithKey(STRING_POOL)));
     }
 
+    @Test
+    public void testReturnResultTreasureHunt() {
+        testOnActivityResult();
+        onView(withId(R.id.radius_text)).perform(clearText(), typeText("232.2"));
+        testReturnResult();
+    }
+
     private void hasErrorEmpty(int id) {
         String errorMsg = testRule.getActivity().getString(R.string.cannot_be_empty);
         onView(withId(id)).check(matches(hasErrorText(errorMsg)));
@@ -198,7 +207,8 @@ public class EditQuestionActivityTest {
         Intent dataIntent = new Intent();
         dataIntent.putExtra(LATITUDE, 42.348);
         dataIntent.putExtra(LONGITUDE, 1.23);
-
+        cleanUp();
+        setUp(true, true);
         intending(hasComponent(EditMapsActivity.class.getName()))
                 .respondWith(new Instrumentation.ActivityResult(MAP_REQUEST_CODE, dataIntent));
         testRule.getActivity()

@@ -43,9 +43,9 @@ public class EditQuestionActivity extends AppCompatActivity {
     private EditText textView;
     private Button button_choose_location;
 
-    private double longitude;
-    private double latitude;
-    private double radius;
+    private double longitude = 0.0;
+    private double latitude = 0.0;
+    private double radius = 0.0;
     private boolean hasBeenSet = false;
 
     private TextView longitudeText;
