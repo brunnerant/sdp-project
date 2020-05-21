@@ -87,7 +87,7 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
 
         switch (id) {
             case R.id.done:
-                returnResult();
+                onBackPressed();
                 break;
             default:
                 break;
@@ -98,12 +98,6 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        returnResult();
-        this.finish();
-    }
-
-    private void returnResult() {
         Intent intent = new Intent();
         intent.putExtra(LONGITUDE, latLng.longitude);
         intent.putExtra(LATITUDE, latLng.latitude);
