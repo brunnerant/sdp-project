@@ -216,4 +216,11 @@ public class EditQuestionActivityTest {
                         new Intent(testRule.getActivity(), EditMapsActivity.class),
                         MAP_REQUEST_CODE);
     }
+
+    @Test
+    public void testMap() {
+        cleanUp();
+        setUp(true, true);
+        onView(withId(R.id.choose_answer_text)).perform(click());
+    }
 }
