@@ -87,6 +87,7 @@ public class HomeQuizListFragment extends Fragment
 
         // The progress bar is needed while waiting from the database
         progressBar = view.findViewById(R.id.quiz_loading);
+        progressBar.setVisibility(GONE);
 
         // Instantiate Handler and the DatabaseService
         db = DatabaseFactory.getInstance();
@@ -167,6 +168,7 @@ public class HomeQuizListFragment extends Fragment
     private void startQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
         progressBar.setVisibility(VISIBLE);
+        progressBar.bringToFront();
 
         Util.getQuiz(db, quizID, requireContext())
                 .whenComplete(
@@ -188,6 +190,7 @@ public class HomeQuizListFragment extends Fragment
     private void editQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
         progressBar.setVisibility(VISIBLE);
+        progressBar.bringToFront();
 
         Util.getQuiz(db, quizID, requireContext())
                 .whenComplete(
