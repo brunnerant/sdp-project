@@ -37,7 +37,7 @@ public class EditQuestionActivity extends AppCompatActivity {
     private StringPool stringPool;
     private AnswerFormat answerFormat;
 
-    private boolean hasTreasureHunt;
+    private boolean isTreasureHunt;
 
     private EditText titleView;
     private EditText textView;
@@ -84,7 +84,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         radiusText = findViewById(R.id.radius_text);
         button_choose_location = findViewById(R.id.edit_choose_location);
 
-        if (hasTreasureHunt) {
+        if (isTreasureHunt) {
             // TODO: Do something... maybe
             int type = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
             radiusText.setInputType(type);
@@ -113,7 +113,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         }
 
         // TODO: Rename treasure hunt is needed
-        hasTreasureHunt = (boolean) bundle.getSerializable(TREASURE_HUNT);
+        isTreasureHunt = (boolean) bundle.getSerializable(TREASURE_HUNT);
     }
 
     private void setChooseLocation() {
@@ -220,7 +220,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         boolean noError = setErrorIfEmpty(titleId, R.id.edit_question_title);
         noError &= setErrorIfEmpty(textId, R.id.edit_question_text);
 
-        if (hasTreasureHunt) {
+        if (isTreasureHunt) {
             noError &= setErrorIfEmpty(radiusText.getText().toString(), R.id.radius_text);
 
             System.out.println(
@@ -237,7 +237,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         if (noError) {
             // return the Question created by this activity to the callee activity
             Question question = new Question(titleId, textId, answerFormat);
-            if (hasTreasureHunt) {
+            if (isTreasureHunt) {
                 radius = Double.parseDouble(radiusText.getText().toString());
                 question = new Question(titleId, textId, answerFormat, longitude, latitude, radius);
             } else {
