@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view.home;
 
 import static ch.epfl.qedit.view.login.Util.USER;
+import static ch.epfl.qedit.view.login.Util.USER_ID;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +17,10 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.QR.ScannerActivity;
+import ch.epfl.qedit.view.login.LogInActivity;
+import ch.epfl.qedit.view.login.Util;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity
@@ -112,5 +116,34 @@ public class HomeActivity extends AppCompatActivity
                         R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    // This method will be called when an item of the top bar is clicked on
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.log_out) {
+            logOut();
+            return true; // the event was handled
+        }
+
+        return false; // the event was not handled
+    }
+
+    private void logOut() {
+        // Retrieve cached user id
+        String uid = Util.getStringInPrefs(this, USER_ID);
+
+        // Remove cached user id
+        Util.removeStringInPrefs(this, USER_ID);
+
+        // Log out
+        FirebaseAuth.getInstance().signOut();
+
+        // Go to log in activity
+        startActivity(new Intent(this, LogInActivity.class));
+
+        // Show toast
+        Toast.makeText(this, getResources().getString(R.string.log_out_success), Toast.LENGTH_SHORT)
+                .show();
     }
 }

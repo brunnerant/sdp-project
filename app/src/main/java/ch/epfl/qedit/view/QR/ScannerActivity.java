@@ -1,7 +1,6 @@
 package ch.epfl.qedit.view.QR;
 
 import static android.Manifest.permission.CAMERA;
-import static ch.epfl.qedit.backend.Util.getBestLanguage;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 
 import android.content.Intent;
@@ -16,13 +15,12 @@ import androidx.core.content.ContextCompat;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
-
+import ch.epfl.qedit.backend.database.Util;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import com.google.zxing.Result;
-import java.util.concurrent.CompletableFuture;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /** * this class is largely inspired from priyanka pakhale work available on github ** */
@@ -126,20 +124,16 @@ public class ScannerActivity extends AppCompatActivity
 
     @Override
     public void onConfirm(ConfirmDialog dialog) {
-        CompletableFuture<StringPool> stringPool =
-                db.getQuizLanguages(quizId)
-                        .thenCompose(
-                                languages ->
-                                        db.getQuizStringPool(
-                                                quizId,getBestLanguage(languages, this)));
-        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizId);
-        CompletableFuture.allOf(stringPool, quizStructure)
+
+        Util.getQuiz(db, quizId, this)
                 .whenComplete(
-                        (aVoid, throwable) -> {
-                            if (throwable != null)
+                        (pair, throwable) -> {
+                            if (throwable != null) {
                                 Toast.makeText(this, R.string.database_error, Toast.LENGTH_SHORT)
                                         .show();
-                            else launchQuizActivity(quizStructure.join(), stringPool.join());
+                            } else {
+                                launchQuizActivity(pair.first, pair.second);
+                            }
                         });
     }
 

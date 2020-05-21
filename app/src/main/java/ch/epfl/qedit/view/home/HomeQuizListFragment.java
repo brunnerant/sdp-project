@@ -7,7 +7,6 @@ import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.login.Util.USER;
-import static ch.epfl.qedit.view.login.Util.USER_ID;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,26 +20,27 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
+import ch.epfl.qedit.backend.database.Util;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.view.QR.QRGeneratorFragment;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
-import ch.epfl.qedit.view.login.LogInActivity;
-import ch.epfl.qedit.view.login.Util;
+import ch.epfl.qedit.view.quiz.QuizActivity;
+import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
-import com.google.firebase.auth.FirebaseAuth;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
@@ -117,23 +117,40 @@ public class HomeQuizListFragment extends Fragment
         // Retrieve the quizzes from the user
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
+        // Those are the items of the popup menu
+        List<String> popupMenuItems =
+                Arrays.asList(
+                        getString(R.string.menu_edit),
+                        getString(R.string.menu_delete),
+                        getString(R.string.menu_qr));
+
         // Create the list adapter
-        listAdapter = new ListEditView.Adapter<>(quizzes, Map.Entry::getValue);
+        listAdapter = new ListEditView.Adapter<>(quizzes, Map.Entry::getValue, popupMenuItems);
 
         // Listen to the data changes
         listAdapter.setItemListener(
-                (position, type) -> {
-                    switch (type) {
-                        case RemoveRequest:
-                            deleteConfirmation(position);
-                            break;
-                        case EditRequest:
-                            editQuiz(position);
-                            break;
-                        default:
-                            break;
-                    }
+                (position, code) -> {
+                    if (code == ListEditView.ItemListener.CLICK) startQuiz(position);
+                    else if (code == 0) // edit was clicked
+                    editQuiz(position);
+                    else if (code == 1) // delete was clicked
+                    deleteConfirmation(position);
+                    else if (code == 2) // QR Code was clicked
+                    generateQR(position);
                 });
+    }
+
+    private void generateQR(int position) {
+        FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+        QRGeneratorFragment fragment = new QRGeneratorFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(QUIZ_ID, quizzes.get(position).getKey());
+        fragment.setArguments(bundle);
+
+        ft.replace(R.id.home_qr_container, fragment);
+        ft.commit();
     }
 
     @Override
@@ -152,36 +169,12 @@ public class HomeQuizListFragment extends Fragment
                 addSettingsDialog.setTextFilter(textFilter);
                 addSettingsDialog.show(getParentFragmentManager(), "add_dialog");
                 break;
-            case R.id.log_out:
-                logOut();
-                break;
             case android.R.id.home:
                 requireActivity().onBackPressed();
                 break;
         }
 
         return true;
-    }
-
-    private void logOut() {
-        // Retrieve cached user id
-        String uid = Util.getStringInPrefs(requireActivity(), USER_ID);
-
-        // Remove cached user id
-        Util.removeStringInPrefs(getActivity(), USER_ID);
-
-        // Log out
-        FirebaseAuth.getInstance().signOut();
-
-        // Go to log in activity
-        startActivity(new Intent(getActivity(), LogInActivity.class));
-
-        // Show toast
-        Toast.makeText(
-                        getContext(),
-                        getResources().getString(R.string.log_out_success),
-                        Toast.LENGTH_SHORT)
-                .show();
     }
 
     // Handles when a user clicked on the button to remove a quiz
@@ -191,67 +184,44 @@ public class HomeQuizListFragment extends Fragment
     }
 
     // Handles when a user clicked on the button to show a quiz
-    //    private void showQuiz(int position) { // TODO next sprint
-    //        final String quizID = quizzes.get(position).getKey();
-    //        progressBar.setVisibility(VISIBLE);
-    //
-    //        CompletableFuture<StringPool> stringPool =
-    //                db.getQuizLanguages(quizID)
-    //                        .thenCompose(
-    //                                languages ->
-    //                                        db.getQuizStringPool(quizID,
-    // getBestLanguage(languages)));
-    //
-    //        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
-    //
-    //        CompletableFuture.allOf(stringPool, quizStructure)
-    //                .whenComplete(
-    //                        (aVoid, throwable) -> {
-    //                            if (throwable != null)
-    //                                Toast.makeText(
-    //                                                requireContext(),
-    //                                                R.string.database_error,
-    //                                                Toast.LENGTH_SHORT)
-    //                                        .show();
-    //                            else
-    //                                launchQuizActivity(
-    //                                        quizStructure
-    //                                                .join()
-    //                                                .instantiateLanguage(stringPool.join()));
-    //                        });
-    //
-    //    }
+    private void startQuiz(int position) {
+        final String quizID = quizzes.get(position).getKey();
+        progressBar.setVisibility(VISIBLE);
+
+        Util.getQuiz(db, quizID, requireContext())
+                .whenComplete(
+                        (pair, throwable) -> {
+                            if (throwable != null) {
+                                Toast.makeText(
+                                                requireContext(),
+                                                R.string.database_error,
+                                                Toast.LENGTH_SHORT)
+                                        .show();
+                            } else {
+                                progressBar.setVisibility(View.GONE);
+                                launchQuizActivity(pair.first.instantiateLanguage(pair.second));
+                            }
+                        });
+    }
 
     // Handles when a user clicked on the button to edit a quiz
     private void editQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
         progressBar.setVisibility(VISIBLE);
 
-        CompletableFuture<StringPool> stringPool =
-                db.getQuizLanguages(quizID)
-                        .thenCompose(
-                                languages ->
-                                        db.getQuizStringPool(
-                                                quizID,
-                                                getBestLanguage(languages)));
-
-        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizID);
-
-        CompletableFuture.allOf(stringPool, quizStructure)
+        Util.getQuiz(db, quizID, requireContext())
                 .whenComplete(
-                        (aVoid, throwable) -> {
-                            if (throwable != null)
+                        (pair, throwable) -> {
+                            if (throwable != null) {
                                 Toast.makeText(
                                                 requireContext(),
                                                 R.string.database_error,
                                                 Toast.LENGTH_SHORT)
                                         .show();
-                            else {
+                            } else {
                                 // Hide progress bar
                                 progressBar.setVisibility(GONE);
-
-                                launchModifyQuizDialog(
-                                        stringPool.join(), quizStructure.join(), position);
+                                launchModifyQuizDialog(pair.second, pair.first, position);
                             }
                         });
     }
@@ -268,24 +238,20 @@ public class HomeQuizListFragment extends Fragment
         modifyIndex = position;
     }
 
-    private String getBestLanguage(List<String> languages) {
-        String appLanguage = LocaleHelper.getLanguage(requireContext());
-
-        // If the quiz was translated in the application language, pick that version,
-        // otherwise we pick the first one. Note that we could have some more complex logic
-        // here, for example trying english first, and then falling back.
-        if (languages.contains(appLanguage)) return appLanguage;
-        else return languages.get(0);
-    }
-
     // Launches the quiz activity with the given quiz. This is used when a quiz is selected.
-    //    private void launchQuizActivity(Quiz quiz) { TODO next sprint
-    //        Intent intent = new Intent(requireActivity(), QuizActivity.class);
-    //        Bundle bundle = new Bundle();
-    //        bundle.putSerializable(QUIZ_ID, quiz);
-    //        intent.putExtras(bundle);
-    //        startActivity(intent);
-    //    }
+    private void launchQuizActivity(Quiz quiz) {
+        // Depending on the type of quiz, we might need to go to the treasure hunt activity
+        Class targetClass = quiz.isTreasureHunt() ? TreasureHuntActivity.class : QuizActivity.class;
+        Intent intent = new Intent(requireActivity(), targetClass);
+
+        // We put the quiz into the bundle
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(QUIZ_ID, quiz);
+        intent.putExtras(bundle);
+
+        // And start the activity
+        startActivity(intent);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /** Represents a quiz. For now, it is simply a immutable list of question. */
 public final class Quiz implements MultiLanguage<Quiz>, Serializable {
@@ -161,6 +162,15 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
 
         for (Question q : questions) newQuestions.add(q.instantiateLanguage(pool));
 
-        return new Quiz(newTitle, newQuestions);
+        return new Quiz(newTitle, newQuestions, treasureHunt);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Quiz)) return false;
+        Quiz other = (Quiz) object;
+        return this.treasureHunt == other.treasureHunt
+                && Objects.equals(this.title, other.title)
+                && Objects.equals(this.questions, other.questions);
     }
 }

@@ -9,9 +9,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import ch.epfl.qedit.R;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * This class is a utility class that allows to create editable lists. It supports the addition,
@@ -42,23 +46,21 @@ public class ListEditView extends RecyclerView {
         String getText(T item);
     }
 
-    /** This enumerates the events that can occur on an item */
-    public enum EventType {
-        Select,
-        RemoveRequest,
-        EditRequest
-    }
-
     /** This interface is used to react to events that happen on an item. */
     public interface ItemListener {
+        /** The event code for an item being clicked on */
+        int CLICK = -1;
+
         /**
-         * This handles an event on a specific item of the list. Note that in case an item is
-         * deselected, position will be -1.
+         * This handles an event on a specific item of the list. The event can either be an item
+         * being clicked on, or an item of the "three dots" menu being clicked on. In the former
+         * case, the code CLICK is passed. Otherwise, the index of the menu item is passed. This
+         * allows custom menus to be built in an easy way.
          *
-         * @param position the position of the item on which the event occurred
-         * @param type the type of event that occurred
+         * @param position the position of the item on which the event occurred.
+         * @param eventCode the code of the event that occurred.
          */
-        void onItemEvent(int position, EventType type);
+        void onItemEvent(int position, int eventCode);
     }
 
     /**
@@ -79,34 +81,41 @@ public class ListEditView extends RecyclerView {
     private boolean dragAndDrop = false;
 
     // This class is holding the view and data for one item
-    private final class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private final class ItemHolder extends RecyclerView.ViewHolder
+            implements PopupMenu.OnMenuItemClickListener {
         private final TextView text;
-        private final LinearLayout overlayButtons;
+        private final ImageButton threeDots;
 
         ItemHolder(@NonNull View itemView) {
             super(itemView);
+
             text = itemView.findViewById(android.R.id.text1);
-            overlayButtons = itemView.findViewById(R.id.overlay_buttons);
-            itemView.setOnClickListener(this);
+            threeDots = itemView.findViewById(R.id.list_item_three_dots);
 
-            itemView.findViewById(R.id.edit_button)
-                    .setOnClickListener(
-                            new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    adapter.notifyItem(getLayoutPosition(), EventType.EditRequest);
-                                }
-                            });
+            // When an item is clicked on, we pass the CLICK event to the listener
+            itemView.setOnClickListener(
+                    v -> {
+                        adapter.notifyItem(getAdapterPosition(), ItemListener.CLICK);
+                    });
 
-            itemView.findViewById(R.id.delete_button)
-                    .setOnClickListener(
-                            new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    adapter.notifyItem(
-                                            getLayoutPosition(), EventType.RemoveRequest);
-                                }
-                            });
+            threeDots.setOnClickListener(
+                    v -> {
+                        PopupMenu menu = new PopupMenu(itemView.getContext(), threeDots);
+                        menu.setOnMenuItemClickListener(this);
+
+                        // The popup menu contains the items specified in the adapter
+                        for (int i = 0; i < adapter.popupMenuItems.size(); i++)
+                            // The cast is somehow necessary
+                            menu.getMenu()
+                                    .add(
+                                            Menu.NONE, // the group id (no group)
+                                            i, // the item id
+                                            i, // the order
+                                            (CharSequence)
+                                                    adapter.popupMenuItems.get(i)); // the text
+
+                        menu.show();
+                    });
         }
 
         // This changes the text of an item when the recycler view wants to reuse it
@@ -114,26 +123,15 @@ public class ListEditView extends RecyclerView {
             text.setText(newText);
         }
 
-        // This toggles the visibility
-        void onSelected(boolean selected) {
-            overlayButtons.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
-        }
-
-        // This handles the toggling of the overlay buttons when an item is clicked
         @Override
-        public void onClick(View v) {
-            int previousQuestion = adapter.selectedQuestion;
-            adapter.selectedQuestion = getLayoutPosition();
+        // This is called when an item in the popup menu is clicked
+        public boolean onMenuItemClick(MenuItem item) {
+            int id = item.getItemId();
 
-            if (previousQuestion == adapter.selectedQuestion) {
-                adapter.selectedQuestion = NO_POSITION;
-                adapter.notifyItemChanged(previousQuestion);
-            } else {
-                adapter.notifyItemChanged(previousQuestion);
-                adapter.notifyItemChanged(adapter.selectedQuestion);
-            }
+            // We pass as an event the index of the item in the popup menu
+            adapter.notifyItem(getAdapterPosition(), id);
 
-            adapter.notifyItem(adapter.selectedQuestion, EventType.Select);
+            return true; // the event was handled
         }
     }
 
@@ -146,12 +144,19 @@ public class ListEditView extends RecyclerView {
      */
     public static class Adapter<T> extends RecyclerView.Adapter<ItemHolder> {
 
-        private final List<T> items;
-        private int selectedQuestion = NO_POSITION;
-        private final GetItemText<T> getText;
+        // The bound list edit view
         private ListEditView listEditView;
+
+        // The items, and a function to retrieve their text
+        private final List<T> items;
+        private final Function<T, String> getText;
+
+        // The listeners that should be given events
         private ItemListener itemListener = null;
         private MoveListener moveListener = null;
+
+        // This is the list of strings that the popup menus should contain
+        private final List<String> popupMenuItems;
 
         // This class is used to enable drag-and-drop of items
         private class ItemTouchCallback extends ItemTouchHelper.Callback {
@@ -178,14 +183,18 @@ public class ListEditView extends RecyclerView {
 
         /**
          * An adapter is used to hold the items of the list edit view. It contains a generic list of
-         * items, along with a function to retrieve the text from an item.
+         * items, along with a function to retrieve the text from an item. It also contains a list
+         * of items that should be displayed when clicking on the "three dots" button
          *
          * @param items the list of items to display
          * @param getText a function to retrieve the text from one item
+         * @param popupMenuItems the list of items to show in the popup menu, when clicking on the
+         *     three dots
          */
-        public Adapter(List<T> items, GetItemText<T> getText) {
+        public Adapter(List<T> items, Function<T, String> getText, List<String> popupMenuItems) {
             this.items = Objects.requireNonNull(items);
             this.getText = Objects.requireNonNull(getText);
+            this.popupMenuItems = Objects.requireNonNull(popupMenuItems);
         }
 
         /**
@@ -204,8 +213,6 @@ public class ListEditView extends RecyclerView {
          * @param position the item to remove
          */
         public void removeItem(int position) {
-            if (position == selectedQuestion) selectedQuestion = NO_POSITION;
-
             items.remove(position);
             notifyItemRemoved(position);
         }
@@ -230,34 +237,13 @@ public class ListEditView extends RecyclerView {
         }
 
         /**
-         * Registers an move listener for the items of the list. It can be used to be notified when
+         * Registers a move listener for the items of the list. It can be used to be notified when
          * an item is moved through the list.
          *
          * @param listener the listener that wants to be notified
          */
         public void setMoveListener(MoveListener listener) {
             this.moveListener = listener;
-        }
-
-        /**
-         * Selects the item at the given position. If position is -1, it deselects what was
-         * selected.
-         *
-         * @param pos the position of the item that must be selected
-         */
-        public void selectItem(int pos) {
-            if (pos < -1 || pos >= items.size()) throw new IllegalArgumentException();
-
-            int previous = selectedQuestion;
-            selectedQuestion = pos;
-
-            if (pos == -1) {
-                notifyItemChanged(previous);
-            } else if (pos != previous) {
-                notifyItemChanged(previous);
-                notifyItemChanged(pos);
-                notifyItem(pos, EventType.Select);
-            }
         }
 
         @NonNull
@@ -271,8 +257,7 @@ public class ListEditView extends RecyclerView {
 
         @Override
         public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
-            holder.onTextChanged(getText.getText(items.get(position)));
-            holder.onSelected(position == selectedQuestion);
+            holder.onTextChanged(getText.apply(items.get(position)));
         }
 
         @Override
@@ -285,10 +270,6 @@ public class ListEditView extends RecyclerView {
             if (from == to) return;
             items.add(to, items.remove(from));
 
-            if (from == selectedQuestion) selectedQuestion = to;
-            else if (from < selectedQuestion && to >= selectedQuestion) selectedQuestion--;
-            else if (from > selectedQuestion && to <= selectedQuestion) selectedQuestion++;
-
             notifyItemMoved(from, to);
             if (moveListener != null) moveListener.onItemMoved(from, to);
         }
@@ -297,8 +278,8 @@ public class ListEditView extends RecyclerView {
             this.listEditView = listEditView;
         }
 
-        private void notifyItem(int position, EventType type) {
-            if (itemListener != null) itemListener.onItemEvent(position, type);
+        private void notifyItem(int position, int eventCode) {
+            if (itemListener != null) itemListener.onItemEvent(position, eventCode);
         }
     }
 

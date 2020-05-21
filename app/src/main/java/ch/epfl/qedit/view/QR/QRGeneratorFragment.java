@@ -1,53 +1,43 @@
 package ch.epfl.qedit.view.QR;
 
-import static android.content.Context.WINDOW_SERVICE;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class QRGeneratorFragment extends Fragment {
     String quizId;
     ImageView qrCode;
-    Bitmap bitmap;
-    QRGEncoder encoder;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_q_r_generator, container, false);
-
         qrCode = (ImageView) view.findViewById(R.id.qr_code);
+
         quizId = requireArguments().getString(QUIZ_ID);
+
         if (quizId.length() > 0) {
-            WindowManager manager =
-                    (WindowManager) requireActivity().getSystemService(WINDOW_SERVICE);
-            Display display = manager.getDefaultDisplay();
-            Point point = new Point();
-            display.getSize(point);
-            int width = point.x;
-            int height = point.y;
-            int smallerDimension = width < height ? width : height;
-            smallerDimension *= 3 / 4;
-            encoder = new QRGEncoder(quizId, null, QRGContents.Type.TEXT, smallerDimension);
+            MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             try {
-                bitmap = encoder.encodeAsBitmap();
+                BitMatrix bitMatrix =
+                        multiFormatWriter.encode(quizId, BarcodeFormat.QR_CODE, 200, 200);
+                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                 qrCode.setImageBitmap(bitmap);
             } catch (WriterException e) {
-                Log.v("QRGeneration", e.toString());
+                e.printStackTrace();
             }
         }
         return view;

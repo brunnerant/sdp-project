@@ -4,7 +4,6 @@ import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import ch.epfl.qedit.backend.Util;
 import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -27,10 +26,19 @@ public class MockDBService implements DatabaseService {
 
         private ImmutableList<Question> questions;
         private Map<String, StringPool> stringPools;
+        private boolean treasureHunt;
 
-        MockQuiz(List<Question> questions, Map<String, StringPool> stringPools) {
+        MockQuiz(
+                List<Question> questions,
+                Map<String, StringPool> stringPools,
+                boolean treasureHunt) {
             this.questions = ImmutableList.copyOf(questions);
             this.stringPools = stringPools;
+            this.treasureHunt = treasureHunt;
+        }
+
+        MockQuiz(List<Question> questions, Map<String, StringPool> stringPools) {
+            this(questions, stringPools, false);
         }
 
         public List<Question> getQuestions() {
@@ -45,19 +53,18 @@ public class MockDBService implements DatabaseService {
             return stringPools.get(language);
         }
 
+        boolean isTreasureHunt() {
+            return treasureHunt;
+        }
+
         static final MatrixFormat simpleFormat =
-                MatrixFormat.singleField(
-                        MatrixFormat.Field.textField("hint1", MatrixFormat.Field.NO_LIMIT));
+                MatrixFormat.singleField(MatrixFormat.Field.textField("hint1"));
         static final MatrixFormat compoundFormat =
                 new MatrixFormat.Builder(2, 2)
                         .withField(0, 0, MatrixFormat.Field.preFilledField("hint2"))
-                        .withField(0, 1, MatrixFormat.Field.numericField(false, true, "hint3", 4))
-                        .withField(1, 0, MatrixFormat.Field.textField("hint4", 16))
-                        .withField(
-                                1,
-                                1,
-                                MatrixFormat.Field.numericField(
-                                        true, false, "hint5", MatrixFormat.Field.NO_LIMIT))
+                        .withField(0, 1, MatrixFormat.Field.numericField(false, true, "hint3"))
+                        .withField(1, 0, MatrixFormat.Field.textField("hint4"))
+                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "hint5"))
                         .build();
 
         @SuppressWarnings("SpellCheckingInspection")
@@ -148,29 +155,56 @@ public class MockDBService implements DatabaseService {
 
             return new MockQuiz(questions, stringPools);
         }
+
+        static MockQuiz createTestMockQuiz3() {
+            HashMap<String, String> stringPool_en = new HashMap<>();
+            stringPool_en.put(TITLE_ID, "Treasure Hunt Quiz");
+            stringPool_en.put("q1_title", "Explain me");
+            stringPool_en.put("q1_text", "Why ?");
+            stringPool_en.put("q2_title", "Teach me");
+            stringPool_en.put("q2_text", "How ?");
+            stringPool_en.put("hint1", "text field");
+
+            HashMap<String, StringPool> stringPools = new HashMap<>();
+
+            StringPool stringPool = new StringPool(stringPool_en);
+            stringPool.setLanguageCode("en");
+            stringPools.put("en", stringPool);
+
+            List<Question> questions =
+                    Arrays.asList(
+                            new Question("q1_title", "q1_text", simpleFormat, 1, 0, 100),
+                            new Question("q2_title", "q2_text", simpleFormat, 1, 1, 100));
+
+            return new MockQuiz(questions, stringPools, true);
+        }
     }
 
     private HashMap<String, MockQuiz> quizzes;
     private HashMap<String, User> users;
     private CountingIdlingResource idlingResource;
+    private int idCount;
 
     public MockDBService() {
         idlingResource = new CountingIdlingResource("MockDBService");
         quizzes = new HashMap<>();
         quizzes.put("quiz0", MockQuiz.createTestMockQuiz1());
         quizzes.put("quiz1", MockQuiz.createTestMockQuiz2());
-        quizzes.put("quiz2", MockQuiz.createTestMockQuiz2());
+        quizzes.put("quiz2", MockQuiz.createTestMockQuiz3());
         quizzes.put("quiz3", MockQuiz.createTestMockQuiz2());
 
         users = new HashMap<>();
         users.put(MockAuthService.ANTHONY_IOZZIA_ID, createAnthony());
         users.put(MockAuthService.COSME_JORDAN_ID, createCosme());
+
+        idCount = 0;
     }
 
     public static User createAnthony() {
         User anthony = new User("Anthony", "Iozzia", 78, 7, 3);
         anthony.addQuiz("quiz0", "I am a Mock Quiz!");
         anthony.addQuiz("quiz1", "An other Quiz");
+        anthony.addQuiz("quiz2", "Treasure Hunt Quiz");
 
         return anthony;
     }
@@ -178,14 +212,15 @@ public class MockDBService implements DatabaseService {
     public static User createCosme() {
         User cosme = new User("Cosme", "Jordan");
         cosme.addQuiz("quiz0", "I am a Mock Quiz!");
+        cosme.addQuiz("quiz2", "Treasure Hunt Quiz");
 
         return cosme;
     }
 
-    /** Simply make the current thread wait 2 second */
-    private static void wait2second() {
+    /** Simply make the current thread wait 0.5 seconds, to do as if the request takes time */
+    private static void fakeWait() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -202,7 +237,7 @@ public class MockDBService implements DatabaseService {
 
         new Thread(
                         () -> {
-                            wait2second();
+                            fakeWait();
                             MockQuiz quiz = quizzes.get(quizId);
                             if (quiz == null) error(future, "Invalid quiz id");
                             else future.complete(f.apply(quiz));
@@ -216,7 +251,7 @@ public class MockDBService implements DatabaseService {
         idlingResource.increment();
         new Thread(
                         () -> {
-                            wait2second();
+                            fakeWait();
                             if (error) error(future, "Invalid user id");
                             else {
                                 users.put(userId, user);
@@ -239,7 +274,10 @@ public class MockDBService implements DatabaseService {
     @Override
     public CompletableFuture<Quiz> getQuizStructure(String quizId) {
         CompletableFuture<Quiz> future = new CompletableFuture<>();
-        waitForQuiz(future, quizId, mockQuiz -> new Quiz(TITLE_ID, mockQuiz.getQuestions()));
+        waitForQuiz(
+                future,
+                quizId,
+                mockQuiz -> new Quiz(TITLE_ID, mockQuiz.getQuestions(), mockQuiz.isTreasureHunt()));
         return future;
     }
 
@@ -258,12 +296,36 @@ public class MockDBService implements DatabaseService {
     }
 
     @Override
+    public CompletableFuture<String> uploadQuiz(Quiz quiz, StringPool stringPool) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        idlingResource.increment();
+        new Thread(
+                        () -> {
+                            fakeWait();
+                            Map<String, StringPool> stringPoolMap = new HashMap<>();
+                            stringPoolMap.put(stringPool.getLanguageCode(), stringPool);
+                            MockQuiz mockQuiz =
+                                    new MockQuiz(
+                                            quiz.getQuestions(),
+                                            stringPoolMap,
+                                            quiz.isTreasureHunt());
+                            String quizId = Integer.toString(idCount++);
+                            quizzes.put(quizId, mockQuiz);
+                            future.complete(quizId);
+                            idlingResource.decrement();
+                        })
+                .run();
+
+        return future;
+    }
+
+    @Override
     public CompletableFuture<User> getUser(String userId) {
         CompletableFuture<User> future = new CompletableFuture<>();
         idlingResource.increment();
         new Thread(
                         () -> {
-                            wait2second();
+                            fakeWait();
                             User user = users.get(userId);
                             if (user == null) error(future, "Invalid user id");
                             else future.complete(user);

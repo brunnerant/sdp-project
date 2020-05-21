@@ -25,6 +25,7 @@ import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import java.util.HashMap;
 
 public final class Util {
@@ -33,11 +34,14 @@ public final class Util {
 
     public static Quiz createTestQuiz() {
         Quiz.Builder builder = new Quiz.Builder();
-        builder.append(new Question("q1_title", "q1_text", "matrix3x3"))
-                .append(new Question("q2_title", "q2_text", "matrix1x1"))
-                .append(new Question("q3_title", "q3_text", "matrix1x1"))
-                .append(new Question("q4_title", "q4_text", "matrix3x3"))
-                .append(new Question("q5_title", "q5_text", "matrix1x1"));
+        MatrixFormat.Field field = MatrixFormat.Field.numericField(false, false, "0");
+        MatrixFormat mat3 = MatrixFormat.uniform(3, 3, field);
+        MatrixFormat singleField = MatrixFormat.singleField(field);
+        builder.append(new Question("q1_title", "q1_text", mat3))
+                .append(new Question("q2_title", "q2_text", singleField))
+                .append(new Question("q3_title", "q3_text", singleField))
+                .append(new Question("q4_title", "q4_text", mat3))
+                .append(new Question("q5_title", "q5_text", singleField));
 
         return builder.build();
     }
