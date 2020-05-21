@@ -20,6 +20,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.google.common.collect.ImmutableMap;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
@@ -36,18 +39,23 @@ import ch.epfl.qedit.view.util.ListEditView;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
 
     public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
     public static final String STRING_POOL = "ch.epfl.qedit.view.STRING_POOL";
-    private static final int EDIT_QUIZ_REQUEST_CODE = 2;
+    private static final int EDIT_NEW_QUIZ_REQUEST_CODE = 2;
+    private static final int EDIT_EXISTING_QUIZ_REQUEST_CODE = 3;
 
     private DatabaseService db;
+    private User user;
 
     private ProgressBar progressBar;
     private ListEditView.Adapter<Map.Entry<String, String>> listAdapter;
@@ -77,7 +85,7 @@ public class HomeQuizListFragment extends Fragment
         createTextFilter();
 
         // Get user from the bundle created by the parent activity and get his/her quizzes
-        User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
+        user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter and bind it to the list edit view
@@ -236,14 +244,48 @@ public class HomeQuizListFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EDIT_QUIZ_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                // Get the quiz and the extended StringPool from the returned data
-                Quiz quiz = (Quiz) data.getExtras().getSerializable(QUIZ_ID);
-                StringPool extendedStringPool =
-                        (StringPool) data.getExtras().getSerializable(STRING_POOL);
-                // TODO send back to data base etc.
+        if (resultCode == RESULT_OK) {
+            // Get the quiz and the extended StringPool from the returned data
+            Quiz quiz = (Quiz) data.getExtras().getSerializable(QUIZ_ID);
+            StringPool extendedStringPool =
+                    (StringPool) data.getExtras().getSerializable(STRING_POOL);
+
+            // Get the title of the quiz
+            String title = extendedStringPool.get(TITLE_ID);
+
+            if (requestCode == EDIT_NEW_QUIZ_REQUEST_CODE) {
+                // The user edited an new quiz
+                try {
+                    // Upload the new quiz and stringPool to the database
+                    String quizId = db.uploadQuiz(quiz, extendedStringPool).get();
+
+                    // Extend the list of quizzes of the user
+                    quizzes.add(new AbstractMap.SimpleEntry<>(quizId, title));
+
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace(); //TODO handle properly
+                }
+            } else if (requestCode == EDIT_EXISTING_QUIZ_REQUEST_CODE) {
+                // The user edited an already existing Quiz
+                // First get its id
+                String id = quizzes.get(modifyIndex).getKey();
+
+                // Update the quiz in the database
+                // db.updateQuiz(id, quiz, extendedStringPool); //TODO
+
+                // Update the existing entry in the list of quizzes
+                AbstractMap.SimpleImmutableEntry<String, String> newEntry =
+                        new AbstractMap.SimpleImmutableEntry<>(id, title);
+                quizzes.set(modifyIndex, newEntry);
+                listAdapter.updateItem(modifyIndex);
+                modifyIndex = -1;
+
+                // Update the quiz list of the local user
+               // user.updateQuizWithId(String id, String newTitle); TODO
             }
+
+            // Update the list of quizzes of the user
+            // db.updateUserQuizList(user.getId, ImmutableMap.copyOf(quizzes)); //TODO
         }
     }
 
@@ -259,20 +301,14 @@ public class HomeQuizListFragment extends Fragment
     // clicking on "Start editing"
     @Override
     public void onSubmit(StringPool stringPool, Quiz.Builder quizBuilder) {
-        String title = stringPool.get(TITLE_ID);
+        int requestCode;
 
         if (modifyIndex < 0) {
-            // Edit a new Quiz, add an new entry in the list of quizzes
-            listAdapter.addItem(new AbstractMap.SimpleEntry<>("key", title));
+            // Edit a new Quiz
+            requestCode = EDIT_NEW_QUIZ_REQUEST_CODE;
         } else {
-            // Edit an already existing Quiz, so we have to update the existing entry in the list of
-            // quizzes
-            Map.Entry<String, String> oldEntry = quizzes.get(modifyIndex);
-            AbstractMap.SimpleImmutableEntry<String, String> newEntry =
-                    new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), title);
-            quizzes.set(modifyIndex, newEntry);
-            listAdapter.updateItem(modifyIndex);
-            modifyIndex = -1;
+            // Edit an already existing Quiz
+            requestCode = EDIT_EXISTING_QUIZ_REQUEST_CODE;
         }
 
         // Launch the EditQuizActivity with the extras
@@ -281,6 +317,6 @@ public class HomeQuizListFragment extends Fragment
         bundle.putSerializable(QUIZ_BUILDER, quizBuilder);
         bundle.putSerializable(STRING_POOL, stringPool);
         intent.putExtras(bundle);
-        startActivityForResult(intent, EDIT_QUIZ_REQUEST_CODE);
+        startActivityForResult(intent, requestCode);
     }
 }

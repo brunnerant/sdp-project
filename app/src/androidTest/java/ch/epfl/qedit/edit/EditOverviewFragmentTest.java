@@ -150,6 +150,13 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
                 .startActivityForResult(
                         new Intent(testRule.getFragment().getContext(), EditQuestionActivity.class),
                         NEW_QUESTION_REQUEST_CODE);
+
+//        intending(hasComponent(EditMapsActivity.class.getName()))
+//                .respondWith(new Instrumentation.ActivityResult(MAP_REQUEST_CODE, dataIntent));
+//        testRule.getActivity()
+//                .startActivityForResult(
+//                        new Intent(testRule.getActivity(), EditMapsActivity.class),
+//                        MAP_REQUEST_CODE);
     }
 
     @Test
