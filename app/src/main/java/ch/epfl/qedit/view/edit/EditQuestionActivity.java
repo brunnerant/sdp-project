@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -85,7 +84,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         radiusText = findViewById(R.id.radius_text);
         button_choose_location = findViewById(R.id.edit_choose_location);
 
-        if(hasTreasureHunt) {
+        if (hasTreasureHunt) {
             // TODO: Do something... maybe
             int type = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
             radiusText.setInputType(type);
@@ -130,7 +129,7 @@ public class EditQuestionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == MAP_REQUEST_CODE) {
+        if (requestCode == MAP_REQUEST_CODE) {
             longitude = (double) data.getExtras().getSerializable(LONGITUDE);
             latitude = (double) data.getExtras().getSerializable(LATITUDE);
             hasBeenSet = true;
@@ -221,10 +220,11 @@ public class EditQuestionActivity extends AppCompatActivity {
         boolean noError = setErrorIfEmpty(titleId, R.id.edit_question_title);
         noError &= setErrorIfEmpty(textId, R.id.edit_question_text);
 
-        if(hasTreasureHunt) {
+        if (hasTreasureHunt) {
             noError &= setErrorIfEmpty(radiusText.getText().toString(), R.id.radius_text);
 
-            System.out.println("Strangeeee eioa eioe aoien ioevn oiv no novin eoi vo " + hasBeenSet);
+            System.out.println(
+                    "Strangeeee eioa eioe aoien ioevn oiv no novin eoi vo " + hasBeenSet);
             noError &= setErrorTextView(R.id.longitude_text, hasBeenSet);
             noError &= setErrorTextView(R.id.latitude_text, hasBeenSet);
         }
@@ -237,7 +237,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         if (noError) {
             // return the Question created by this activity to the callee activity
             Question question = new Question(titleId, textId, answerFormat);
-            if(hasTreasureHunt) {
+            if (hasTreasureHunt) {
                 radius = Double.parseDouble(radiusText.getText().toString());
                 question = new Question(titleId, textId, answerFormat, longitude, latitude, radius);
             } else {

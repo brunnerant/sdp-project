@@ -188,9 +188,9 @@ public class EditFieldFragment extends DialogFragment {
     // METHODS THAT HANDLE THE LAYOUT //
 
     private void setCheckBoxesOnClickListener() {
-        //if() {
+        // if() {
 
-        //}
+        // }
 
         decimalCheckbox.setOnClickListener(
                 v -> {

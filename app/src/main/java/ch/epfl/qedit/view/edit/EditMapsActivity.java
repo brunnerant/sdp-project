@@ -1,10 +1,13 @@
 package ch.epfl.qedit.view.edit;
 
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.LATITUDE;
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.LONGITUDE;
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.MAP_REQUEST_CODE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
@@ -15,12 +18,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
-import static ch.epfl.qedit.view.edit.EditQuestionActivity.LATITUDE;
-import static ch.epfl.qedit.view.edit.EditQuestionActivity.LONGITUDE;
-import static ch.epfl.qedit.view.edit.EditQuestionActivity.MAP_REQUEST_CODE;
-import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;
@@ -84,20 +81,20 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
         return true;
     }
 
-        @Override
-        public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-            int id = item.getItemId();
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
 
-            // TODO in future PR: implement menu options
-            switch (id) {
-                case R.id.done:
-                    returnResult();
-                    break;
-                default:
-                    break;
-            }
+        // TODO in future PR: implement menu options
+        switch (id) {
+            case R.id.done:
+                returnResult();
+                break;
+            default:
+                break;
+        }
 
-            return true;
+        return true;
     }
 
     @Override
