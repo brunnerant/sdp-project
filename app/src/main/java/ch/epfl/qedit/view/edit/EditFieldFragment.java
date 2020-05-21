@@ -188,10 +188,6 @@ public class EditFieldFragment extends DialogFragment {
     // METHODS THAT HANDLE THE LAYOUT //
 
     private void setCheckBoxesOnClickListener() {
-        // if() {
-
-        // }
-
         decimalCheckbox.setOnClickListener(
                 v -> {
                     isDecimal = ((CheckBox) v).isChecked();

@@ -85,7 +85,6 @@ public class EditQuestionActivity extends AppCompatActivity {
         button_choose_location = findViewById(R.id.edit_choose_location);
 
         if (isTreasureHunt) {
-            // TODO: Do something... maybe
             int type = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
             radiusText.setInputType(type);
             setChooseLocation();
