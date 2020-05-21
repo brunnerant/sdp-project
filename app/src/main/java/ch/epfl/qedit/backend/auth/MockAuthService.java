@@ -1,6 +1,6 @@
 package ch.epfl.qedit.backend.auth;
 
-import static ch.epfl.qedit.backend.Util.error;
+import static ch.epfl.qedit.backend.database.Util.error;
 
 import android.util.Pair;
 import androidx.test.espresso.IdlingResource;

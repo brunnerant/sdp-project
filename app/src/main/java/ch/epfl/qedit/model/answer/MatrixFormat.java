@@ -1,14 +1,15 @@
 package ch.epfl.qedit.model.answer;
 
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.util.Mappable;
 import ch.epfl.qedit.view.answer.AnswerFragment;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class represents matrices where the user can enter his answers. Fields of the matrices can
@@ -20,9 +21,7 @@ public final class MatrixFormat extends AnswerFormat {
      * This class represents a field of a matrix. It can be pre-filled with text (meaning the user
      * cannot enter something in it), it can be a text input, or a number input.
      */
-    public static class Field implements Serializable {
-        /** This is used to represent unlimited length for fields */
-        public static final int NO_LIMIT = -1;
+    public static class Field implements Serializable, Mappable {
 
         /** Those are the types of fields of a matrix format */
         public enum Type {
@@ -56,8 +55,10 @@ public final class MatrixFormat extends AnswerFormat {
             }
         }
 
+        public static final String TO_MAP_TYPE = "type";
+        public static final String TO_MAP_TEXT = "text";
+
         private Type type;
-        private int maxCharacters;
 
         // This is the text of a pre-filled field, or the hint for the other types
         private String text;
@@ -66,25 +67,23 @@ public final class MatrixFormat extends AnswerFormat {
          * Constructs a field with the given characteristics. Note that this constructor is exposed
          * for the backend, so you should preferably call the static factory methods if you can.
          */
-        public Field(Type type, int maxCharacters, String text) {
+        public Field(Type type, String text) {
             this.type = type;
-            this.maxCharacters = maxCharacters;
             this.text = text;
         }
 
         /** Returns a field pre-filled with the given text */
         public static Field preFilledField(String text) {
-            return new Field(Type.PreFilled, NO_LIMIT, text);
+            return new Field(Type.PreFilled, text);
         }
 
         /** Returns a text field with the given hint and maximum characters */
-        public static Field textField(String hint, int maxCharacters) {
-            return new Field(Type.Text, maxCharacters, hint);
+        public static Field textField(String hint) {
+            return new Field(Type.Text, hint);
         }
 
         /** Returns a numeric field with the given characteristics */
-        public static Field numericField(
-                boolean decimal, boolean signed, String hint, int maxCharacters) {
+        public static Field numericField(boolean decimal, boolean signed, String hint) {
             Type type;
 
             if (decimal) {
@@ -95,15 +94,11 @@ public final class MatrixFormat extends AnswerFormat {
                 else type = Type.UnsignedInt;
             }
 
-            return new Field(type, maxCharacters, hint);
+            return new Field(type, hint);
         }
 
         public Type getType() {
             return type;
-        }
-
-        public int getMaxCharacters() {
-            return maxCharacters;
         }
 
         public String getText() {
@@ -114,16 +109,22 @@ public final class MatrixFormat extends AnswerFormat {
         public boolean equals(Object o) {
             if (o instanceof Field) {
                 Field that = (Field) o;
-                return maxCharacters == that.maxCharacters
-                        && type == that.type
-                        && text.equals(that.text);
+                return type == that.type && text.equals(that.text);
             }
             return false;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(type, maxCharacters, text);
+            return Objects.hash(type, text);
+        }
+
+        @Override
+        public Map<String, Object> toMap() {
+            Map<String, Object> map = new HashMap<>();
+            map.put(TO_MAP_TYPE, type.name());
+            map.put(TO_MAP_TEXT, text);
+            return map;
         }
     }
 
@@ -152,7 +153,7 @@ public final class MatrixFormat extends AnswerFormat {
             Field field = Field.preFilledField("");
             this.fields = new ArrayList<>(numRows);
             for (int i = 0; i < numRows; i++) {
-                fields.add(new ArrayList<Field>(numColumns));
+                fields.add(new ArrayList<>(numColumns));
                 for (int j = 0; j < numColumns; j++) fields.get(i).add(field);
             }
         }
@@ -177,6 +178,11 @@ public final class MatrixFormat extends AnswerFormat {
             return this;
         }
     }
+
+    public static final String TYPE = "matrix";
+    public static final String TO_MAP_NUM_ROWS = "matrixFormatNumRows";
+    public static final String TO_MAP_NUM_COLUMNS = "matrixFormatNumCols";
+    public static final String TO_MAP_FIELDS = "matrixFormatFields";
 
     private int numRows;
     private int numColumns;
@@ -230,21 +236,6 @@ public final class MatrixFormat extends AnswerFormat {
         return new MatrixFragment();
     }
 
-    static MatrixFormat parse(String format, String text) {
-        /** Match format: 'matrixNxM' where N and M are [0-9]+ */
-        if (Pattern.compile("^(\\s*)matrix(\\d+)x(\\d+)(\\s*)$").matcher(format).find()) {
-            /** Extract the row and column size */
-            Matcher number = Pattern.compile("(\\d+)").matcher(format);
-            number.find();
-            int numRows = Integer.parseInt(number.group(1));
-            number.find();
-            int numColumns = Integer.parseInt(number.group(1));
-            return uniform(numRows, numColumns, Field.textField("", Field.NO_LIMIT));
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (super.equals(o) && o instanceof MatrixFormat) {
@@ -264,11 +255,26 @@ public final class MatrixFormat extends AnswerFormat {
             for (int j = 0; j < numColumns; j++) {
                 Field f = getField(i, j);
                 String newText = pool.get(f.getText());
-                Field newField = new Field(f.getType(), f.getMaxCharacters(), newText);
+                Field newField = new Field(f.getType(), newText);
                 b.withField(i, j, newField);
             }
         }
 
         return b.build();
+    }
+
+    @Override
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = super.toMap();
+        map.put(TO_MAP_TYPE, TYPE);
+        map.put(TO_MAP_NUM_ROWS, numRows);
+        map.put(TO_MAP_NUM_COLUMNS, numColumns);
+        Map<String, Object> fieldsMap = new HashMap<>();
+        for (int i = 0; i < numRows; i++)
+            for (int j = 0; j < numColumns; j++)
+                fieldsMap.put(i + "," + j, fields.get(i).get(j).toMap());
+
+        map.put(TO_MAP_FIELDS, fieldsMap);
+        return map;
     }
 }

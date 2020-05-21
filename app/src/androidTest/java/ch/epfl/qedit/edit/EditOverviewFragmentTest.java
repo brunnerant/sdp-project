@@ -172,7 +172,7 @@ public class EditOverviewFragmentTest extends EditTest {
                 new Question(
                         stringPool.add("This is a new title"),
                         stringPool.add("This is a new text"),
-                        MatrixFormat.singleField(MatrixFormat.Field.textField("", 20)));
+                        MatrixFormat.singleField(MatrixFormat.Field.textField("")));
 
         Intent dataIntent = new Intent();
         dataIntent.putExtra(QUESTION, question);
