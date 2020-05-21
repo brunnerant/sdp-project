@@ -47,12 +47,12 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
     public static class Builder implements Serializable {
 
         private List<Question> questions;
-        private boolean treasureHunt;
+        private boolean isTreasureHunt;
 
         /** This is the used to create a generic quiz builder */
         public Builder(boolean treasureHunt) {
             this.questions = new ArrayList<>();
-            this.treasureHunt = treasureHunt;
+            this.isTreasureHunt = treasureHunt;
         }
 
         /** This is used to create a non treasure-hunt quiz builder */
@@ -63,7 +63,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** Useful when we want to modify a quiz already existent */
         public Builder(Quiz quiz) {
             this.questions = new ArrayList<>(quiz.getQuestions());
-            this.treasureHunt = quiz.treasureHunt;
+            this.isTreasureHunt = quiz.treasureHunt;
         }
 
         /** Append a question the quiz's list of question */
@@ -120,6 +120,10 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
             return ImmutableList.copyOf(questions);
         }
 
+        public boolean isTreasureHunt() {
+            return isTreasureHunt;
+        }
+
         /** return the current number of question in the Quiz */
         public int size() {
             checkState();
@@ -136,7 +140,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
 
             List<Question> quizQuestion = questions;
             questions = null;
-            return new Quiz(StringPool.TITLE_ID, quizQuestion, treasureHunt);
+            return new Quiz(StringPool.TITLE_ID, quizQuestion, isTreasureHunt);
         }
 
         /** Checks if the builder is valid i.e. build() has not been called yet */
@@ -149,7 +153,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         /** Checks that the question has the same treasure-hunt settings as the quiz */
         private void checkQuestion(Question question) {
             boolean questionTreasureHunt = question.getRadius() != -1;
-            if (questionTreasureHunt != treasureHunt)
+            if (questionTreasureHunt != isTreasureHunt)
                 throw new IllegalArgumentException(
                         "Cannot mix treasure-hunt and non treasure-hunt questions");
         }

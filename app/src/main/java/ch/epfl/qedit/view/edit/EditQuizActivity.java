@@ -43,7 +43,6 @@ public class EditQuizActivity extends AppCompatActivity {
         StringPool stringPool =
                 (StringPool)
                         Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
-
         // Show the overview
         overviewActive = true;
 
