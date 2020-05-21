@@ -7,6 +7,8 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -23,11 +25,15 @@ import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.util.Util.onScrollView;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.TREASURE_HUNT;
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.LATITUDE;
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.LONGITUDE;
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.MAP_REQUEST_CODE;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.test.espresso.Espresso;
@@ -40,6 +46,7 @@ import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.view.edit.EditFieldFragment;
+import ch.epfl.qedit.view.edit.EditMapsActivity;
 import ch.epfl.qedit.view.edit.EditQuestionActivity;
 import org.junit.After;
 import org.junit.Before;
@@ -184,5 +191,19 @@ public class EditQuestionActivityTest {
         setUp(true, true);
         clickOn(R.id.button_done_question_editing, true);
         hasErrorEmpty(R.id.radius_text);
+    }
+
+    @Test
+    public void testOnActivityResult() {
+        Intent dataIntent = new Intent();
+        dataIntent.putExtra(LATITUDE, 42.348);
+        dataIntent.putExtra(LONGITUDE, 1.23);
+
+        intending(hasComponent(EditMapsActivity.class.getName()))
+                .respondWith(new Instrumentation.ActivityResult(MAP_REQUEST_CODE, dataIntent));
+        testRule.getActivity()
+                .startActivityForResult(
+                        new Intent(testRule.getActivity(), EditMapsActivity.class),
+                        MAP_REQUEST_CODE);
     }
 }
