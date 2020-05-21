@@ -127,7 +127,7 @@ public class EditQuizActivityTest extends EditTest {
 
     @Test
     public void testSaveEmptyQuiz() {
-        emptyQuizList(quiz);
+        emptyQuizList(quiz, testRule);
 
         onView(withId(R.id.done)).perform(click());
         onView(withText(testRule.getActivity().getString(R.string.warning_save_empty_quiz)))

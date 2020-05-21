@@ -49,12 +49,15 @@
     <string name="score">QEDit SCORE</string>
     <string name="successes">NOMBRE DE QUIZ RÉUSSIS</string>
     <string name="attempts">NOMBRE TOTAL D\'ESSAIS</string>
+
     <!-- Menu -->
     <string name="menu_overview">Aperçu</string>
     <string name="menu_timer">Minuteur</string>
     <string name="menu_previous">Précédent</string>
     <string name="menu_next">Suivant</string>
     <string name="menu_done">Terminer et sauvegarder</string>
+    <string name="menu_delete">Supprimer</string>
+    <string name="menu_edit">Éditer</string>
 
     <!-- Burger Menu -->
     <string name="menu_home">ACCUEIL</string>

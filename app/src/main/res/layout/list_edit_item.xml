@@ -1,36 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/small_margin" >
 
     <include layout="@android:layout/simple_list_item_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical" />
 
-    <LinearLayout
-        android:id="@+id/overlay_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutDirection="rtl"
-        android:visibility="invisible" >
-
-        <ImageButton
-            android:id="@+id/delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete_black"
-            android:background="?android:selectableItemBackground"
-            android:layout_gravity="center_vertical" />
-
-        <ImageButton
-            android:id="@+id/edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit_black"
-            android:background="?android:selectableItemBackground"
-            android:layout_gravity="center_vertical" />
-
-    </LinearLayout>
-
+    <ImageButton
+        android:id="@+id/list_item_three_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:src="@drawable/ic_more_horiz_black_24dp"
+        android:background="@color/transparent" />
 </FrameLayout>

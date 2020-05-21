@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.treasurehunt;
 
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,9 +21,6 @@ import java.util.Objects;
 
 public class TreasureHuntActivity extends AppCompatActivity
         implements ConfirmDialog.ConfirmationListener {
-
-    // This is the key of the bundle for the quiz id
-    public static final String QUIZ_ID = "ch.epfl.qedit.treasurehunt.QUIZ_ID";
 
     // We use the model to communicate the question to the question fragment.
     private QuizViewModel model;

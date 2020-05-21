@@ -162,7 +162,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
 
         for (Question q : questions) newQuestions.add(q.instantiateLanguage(pool));
 
-        return new Quiz(newTitle, newQuestions);
+        return new Quiz(newTitle, newQuestions, treasureHunt);
     }
 
     @Override
