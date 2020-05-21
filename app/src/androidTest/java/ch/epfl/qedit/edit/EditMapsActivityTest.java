@@ -27,7 +27,6 @@ public class EditMapsActivityTest {
 
     @Test
     public void testThatActivityIsDisplayed() {
-        onView(withText(R.string.title_activity_edit_maps)).check(matches(isDisplayed()));
         onView(withId(R.id.map)).check(matches(isDisplayed()));
     }
 }
