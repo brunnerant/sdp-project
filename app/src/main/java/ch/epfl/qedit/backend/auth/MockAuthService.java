@@ -1,6 +1,6 @@
 package ch.epfl.qedit.backend.auth;
 
-import static ch.epfl.qedit.backend.Util.error;
+import static ch.epfl.qedit.backend.database.Util.error;
 
 import android.util.Pair;
 import androidx.test.espresso.IdlingResource;
@@ -34,10 +34,10 @@ public class MockAuthService implements AuthenticationService {
         return idlingResource;
     }
 
-    /** Simply make the current thread wait 2 second */
-    private static void wait2second() {
+    /** Simply make the current thread wait 0.5 seconds, to do as if the request takes time */
+    private static void fakeWait() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -49,7 +49,7 @@ public class MockAuthService implements AuthenticationService {
         idlingResource.increment();
         new Thread(
                         () -> {
-                            wait2second();
+                            fakeWait();
                             Pair<String, String> info = new Pair<>(email, password);
                             // sign up fail if email password is already in authentication service
                             if (users.containsKey(info)) error(future, "Sign up fail");
@@ -71,7 +71,7 @@ public class MockAuthService implements AuthenticationService {
         idlingResource.increment();
         new Thread(
                         () -> {
-                            wait2second();
+                            fakeWait();
                             Pair<String, String> info = new Pair<>(email, password);
                             String id = users.get(info);
                             if (id == null) error(future, "Authentication fail");

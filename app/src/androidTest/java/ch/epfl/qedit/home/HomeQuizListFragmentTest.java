@@ -16,6 +16,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -30,6 +31,8 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
+import ch.epfl.qedit.view.quiz.QuizActivity;
+import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
 import com.android21buttons.fragmenttestrule.FragmentTestRule;
 import org.junit.After;
 import org.junit.Before;
@@ -68,8 +71,8 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Test
     public void testDeleteItem() {
-        item(0).perform(click());
-        itemView(0, R.id.delete_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_delete);
 
         // Check that the confirmation dialog is displayed
         onView(withText(testRule.getActivity().getString(R.string.warning_delete)))
@@ -81,7 +84,9 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
         item(0).check(matches(isDisplayed()));
 
         // Now delete for real and see if it was deleted
-        itemView(0, R.id.delete_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_delete);
+
         onView(withId(android.R.id.button1)).perform(click());
         onView(withText("I am a Mock Quiz!")).check(doesNotExist());
     }
@@ -90,8 +95,8 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Test
     public void testClickOnEditLaunchesDialogModify() {
-        item(0).perform(click());
-        itemView(0, R.id.edit_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_edit);
 
         onView(withText(testRule.getActivity().getString(R.string.edit_dialog_title_settings)))
                 .inRoot(isDialog())
@@ -103,8 +108,8 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Test
     public void testEnterTitle() {
-        item(0).perform(click());
-        itemView(0, R.id.edit_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_edit);
 
         onDialog(R.id.edit_quiz_title).check(matches(withText("I am a Mock Quiz!")));
 
@@ -116,8 +121,8 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
 
     @Test
     public void testDoneButton() {
-        item(0).perform(click());
-        itemView(0, R.id.edit_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_edit);
 
         clickOn(android.R.id.button1, false);
         intended(
@@ -125,5 +130,23 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
                         hasComponent(EditQuizActivity.class.getName()),
                         hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class)),
                         hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class))));
+    }
+
+    @Test
+    public void testParticipateToNormalQuiz() {
+        item(0).perform(click());
+        intended(
+                allOf(
+                        hasComponent(QuizActivity.class.getName()),
+                        hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class))));
+    }
+
+    @Test
+    public void testParticipateToTreasureHunt() {
+        item(1).perform(click());
+        intended(
+                allOf(
+                        hasComponent(TreasureHuntActivity.class.getName()),
+                        hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class))));
     }
 }

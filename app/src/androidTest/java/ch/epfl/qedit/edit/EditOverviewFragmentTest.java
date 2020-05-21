@@ -83,30 +83,11 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         itemView(position, android.R.id.text1).check(matches(withText(text)));
     }
 
-    private void assertOverlayAt(int position, int size) {
-        for (int i = 0; i < size; i++) {
-            if (i == position) overlay(i).check(matches(isDisplayed()));
-            else overlay(i).check(matches(not(isDisplayed())));
-        }
-    }
-
-    @Test
-    public void testCanSelectItem() {
-        assertOverlayAt(-1, 5);
-        item(0).perform(click());
-        assertOverlayAt(0, 5);
-        item(3).perform(click());
-        assertOverlayAt(3, 5);
-        item(3).perform(click());
-        assertOverlayAt(-1, 5);
-    }
-
     @Test
     public void testCanDeleteItem() {
-        item(0).perform(click());
-        itemView(0, R.id.delete_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_delete);
         onView(withText(testQuiz.getQuestions().get(0).getTitle())).check(doesNotExist());
-        assertOverlayAt(-1, 4);
     }
 
     @Test
@@ -129,15 +110,8 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         checkText(0, titles[1]);
         checkText(1, titles[0]);
 
-        item(0).perform(click());
-        assertOverlayAt(0, 5);
         onView(withId(R.id.question_list)).perform(dragAndDrop(1, 0));
-        assertOverlayAt(1, 5);
-
-        item(4).perform(click());
-        assertOverlayAt(4, 5);
         onView(withId(R.id.question_list)).perform(dragAndDrop(4, 0));
-        assertOverlayAt(0, 5);
 
         checkText(0, titles[4]);
         checkText(1, titles[0]);
@@ -163,7 +137,7 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
                 new Question(
                         stringPool.add("This is a new title"),
                         stringPool.add("This is a new text"),
-                        MatrixFormat.singleField(MatrixFormat.Field.textField("", 25)));
+                        MatrixFormat.singleField(MatrixFormat.Field.textField("")));
 
         Intent dataIntent = new Intent();
         dataIntent.putExtra(QUESTION, question);
@@ -181,7 +155,9 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
     @Test
     public void testLaunchesEditQuestionActivity() {
         item(0).perform(click());
-        itemView(0, R.id.edit_button).perform(click());
+
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_edit);
 
         intended(
                 allOf(
@@ -194,8 +170,8 @@ public class EditOverviewFragmentTest extends RecyclerViewHelpers {
         onView(withId(R.id.empty_list_hint)).check(matches(not(isDisplayed())));
 
         for (int i = 0; i < testQuiz.getQuestions().size(); ++i) {
-            item(0).perform(click());
-            itemView(0, R.id.delete_button).perform(click());
+            itemView(0, R.id.list_item_three_dots).perform(click());
+            clickOnPopup(testRule.getActivity(), R.string.menu_delete);
         }
 
         onView(withId(R.id.empty_list_hint)).check(matches(isDisplayed()));

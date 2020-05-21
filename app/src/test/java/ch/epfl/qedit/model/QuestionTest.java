@@ -9,8 +9,7 @@ import org.junit.Test;
 
 public class QuestionTest {
 
-    private MatrixFormat format =
-            MatrixFormat.singleField(MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
+    private MatrixFormat format = MatrixFormat.singleField(MatrixFormat.Field.textField(""));
 
     private final String TITLE_ID = "ID0", TEXT_ID = "ID1", PRE_FILLED_ID = "ID2";
     private final MatrixFormat answer =
@@ -43,17 +42,7 @@ public class QuestionTest {
     @Test
     public void questionEqualsTest() {
         Question q1 = new Question("Question 1", "How old are you?", format);
-        Question q2 = new Question("Question 1", "How old are you?", "matrix1x1");
-        Question q4 = new Question("Question 2", "How old are you?", "matrix1x1");
-
-        assertEquals(q1, q2);
         assertNotEquals(q1, "Pomme de Terre");
-        assertNotEquals(q1, q4);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void invalidQuestionsCannotBeBuilt1() {
-        new Question("", "", "");
     }
 
     @Test(expected = NullPointerException.class)
