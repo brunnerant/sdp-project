@@ -197,7 +197,7 @@ public class EditQuestionActivity extends AppCompatActivity {
     private void setSolutionButtonListener(ImageButton button, final boolean text) {
         button.setOnClickListener(
                 v -> {
-                    DialogFragment editFieldFragment = EditFieldFragment.newInstance(text, false);
+                    DialogFragment editFieldFragment = EditFieldFragment.newInstance(text);
                     editFieldFragment.show(getSupportFragmentManager(), SOL_DIALOG_TAG);
                 });
     }
