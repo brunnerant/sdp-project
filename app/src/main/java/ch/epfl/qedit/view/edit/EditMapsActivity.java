@@ -85,12 +85,8 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        switch (id) {
-            case R.id.done:
-                onBackPressed();
-                break;
-            default:
-                break;
+        if (id == R.id.done) {
+            onBackPressed();
         }
 
         return true;
