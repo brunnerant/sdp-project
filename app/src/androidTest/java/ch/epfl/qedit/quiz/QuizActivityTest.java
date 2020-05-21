@@ -27,6 +27,7 @@ import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerModel;
+import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
@@ -83,17 +84,18 @@ public class QuizActivityTest {
         stringPool = new StringPool();
         stringPool.update(TITLE_ID, "Title");
 
+        MatrixFormat.Field field = MatrixFormat.Field.numericField(false, false, "0");
         Quiz.Builder builder = new Quiz.Builder();
         builder.append(
                         new Question(
                                 stringPool.add("Bananas"),
                                 stringPool.add("How many?"),
-                                "matrix1x1"))
+                                MatrixFormat.singleField(field)))
                 .append(
                         new Question(
                                 stringPool.add("Vector"),
                                 stringPool.add("Fill this Vector!"),
-                                "matrix7x1"));
+                                MatrixFormat.uniform(7, 1, field)));
 
         quiz = builder.build().instantiateLanguage(stringPool);
     }

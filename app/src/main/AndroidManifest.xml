@@ -3,10 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ch.epfl.qedit">
 
+    <!--
+          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+          Google Maps Android API v2, but you must specify either coarse or fine
+          location permissions for the 'MyLocation' functionality.
+     -->
     <uses-permission android:name="android.permission.CAMERA" /> <!-- The app needs those permissions to access the device's location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.camera2" />
     <uses-feature android:name="android.hardware.camera2.params." />
@@ -20,11 +26,41 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.QR.ScannerActivity"></activity>
+      
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".view.edit.EditMapsActivity"
+            android:label="@string/title_activity_edit_maps">
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+        <activity
+            android:name=".StartActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.QR.ScannerActivity" />
         <activity android:name=".view.edit.EditQuestionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,16 +70,22 @@
             android:parentActivityName=".view.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.LoginActivity"
-            android:label="@string/title_activity_login">
+            android:name=".view.login.LogInActivity"
+            android:label="@string/title_activity_log_in">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.LOGIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.login.SignUpActivity"
+            android:label="@string/title_activity_sign_up">
+            <intent-filter>
+                <action android:name="android.intent.action.SIGNUP" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -51,16 +93,32 @@
             android:name=".view.home.HomeActivity"
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"
-            android:parentActivityName=".view.LoginActivity">
+            android:parentActivityName=".StartActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW_ROLE" />
-
+                <action android:name="android.intent.action.HOME" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".view.quiz.QuizActivity"
             android:parentActivityName=".view.home.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.QUICK_VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.treasurehunt.QuestionLocatorActivity"
+            android:label="@string/title_activity_treasure_hunt">
+            <intent-filter>
+                <action android:name="android.intent.action.QUICK_VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.treasurehunt.TreasureHuntActivity"
+            android:label="@string/title_activity_treasure_hunt">
             <intent-filter>
                 <action android:name="android.intent.action.QUICK_VIEW" />
 

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /** Represents a quiz. For now, it is simply a immutable list of question. */
 public final class Quiz implements MultiLanguage<Quiz>, Serializable {
@@ -147,7 +148,7 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
 
         /** Checks that the question has the same treasure-hunt settings as the quiz */
         private void checkQuestion(Question question) {
-            boolean questionTreasureHunt = question.getLocation() != null;
+            boolean questionTreasureHunt = question.getRadius() != -1;
             if (questionTreasureHunt != treasureHunt)
                 throw new IllegalArgumentException(
                         "Cannot mix treasure-hunt and non treasure-hunt questions");
@@ -162,5 +163,14 @@ public final class Quiz implements MultiLanguage<Quiz>, Serializable {
         for (Question q : questions) newQuestions.add(q.instantiateLanguage(pool));
 
         return new Quiz(newTitle, newQuestions);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Quiz)) return false;
+        Quiz other = (Quiz) object;
+        return this.treasureHunt == other.treasureHunt
+                && Objects.equals(this.title, other.title)
+                && Objects.equals(this.questions, other.questions);
     }
 }

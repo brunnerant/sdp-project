@@ -12,7 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.model.answer.MatrixFormat.Field.NO_LIMIT;
 import static ch.epfl.qedit.model.answer.MatrixFormat.Field.textField;
 import static ch.epfl.qedit.model.answer.MatrixFormat.singleField;
 import static ch.epfl.qedit.util.Util.clickOn;
@@ -57,7 +56,7 @@ public class EditQuestionActivityTest {
         StringPool stringPool = new StringPool();
         bundle.putSerializable(STRING_POOL, stringPool);
         if (question) {
-            MatrixFormat answer = singleField(textField("???", NO_LIMIT));
+            MatrixFormat answer = singleField(textField("???"));
             Question q =
                     new Question(stringPool.add("Test"), stringPool.add("Test question"), answer);
             bundle.putSerializable(QUESTION, q);

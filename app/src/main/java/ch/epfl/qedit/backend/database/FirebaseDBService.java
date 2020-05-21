@@ -1,12 +1,21 @@
 package ch.epfl.qedit.backend.database;
 
+import static ch.epfl.qedit.backend.database.Util.error;
+import static ch.epfl.qedit.backend.database.Util.extractLanguages;
+import static ch.epfl.qedit.backend.database.Util.extractQuestions;
+import static ch.epfl.qedit.backend.database.Util.extractStringPool;
+import static ch.epfl.qedit.backend.database.Util.extractTreasureHunt;
 import static ch.epfl.qedit.backend.database.Util.updateUser;
+import static ch.epfl.qedit.backend.database.Util.uploadQuestions;
+import static ch.epfl.qedit.backend.database.Util.uploadStringPool;
 
+import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,18 +40,13 @@ public class FirebaseDBService implements DatabaseService {
         return db.collection("quizzes").document(quizID);
     }
 
-    /** This allows to complete the future with a request exception */
-    private static void error(CompletableFuture<?> future, String message) {
-        future.completeExceptionally(new Util.RequestException(message));
-    }
-
     @Override
     public CompletableFuture<List<String>> getQuizLanguages(String quizId) {
         CompletableFuture<List<String>> future = new CompletableFuture<>();
 
         getQuizRef(quizId)
                 .get()
-                .addOnSuccessListener(doc -> Util.extractLanguages(future, doc))
+                .addOnSuccessListener(doc -> extractLanguages(future, doc))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
         return future;
@@ -50,16 +54,24 @@ public class FirebaseDBService implements DatabaseService {
 
     @Override
     public CompletableFuture<Quiz> getQuizStructure(String quizId) {
-        CompletableFuture<Quiz> future = new CompletableFuture<>();
 
+        CompletableFuture<Boolean> treasureHuntFuture = new CompletableFuture<>();
+        getQuizRef(quizId)
+                .get()
+                .addOnSuccessListener(ref -> extractTreasureHunt(treasureHuntFuture, ref))
+                .addOnFailureListener(e -> error(treasureHuntFuture, e.getMessage()));
+
+        CompletableFuture<List<Question>> future = new CompletableFuture<>();
         getQuizRef(quizId)
                 .collection("questions")
                 .orderBy("index")
                 .get()
-                .addOnSuccessListener(query -> Util.extractQuiz(future, query))
+                .addOnSuccessListener(query -> extractQuestions(future, query))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
-        return future;
+        return future.thenCombine(
+                treasureHuntFuture,
+                (questions, treasureHunt) -> new Quiz("title", questions, treasureHunt));
     }
 
     @Override
@@ -67,13 +79,33 @@ public class FirebaseDBService implements DatabaseService {
         CompletableFuture<StringPool> future = new CompletableFuture<>();
 
         getQuizRef(quizId)
-                .collection("string_pools")
+                .collection("stringPools")
                 .document(language)
                 .get()
-                .addOnSuccessListener(doc -> Util.extractStringPool(future, doc))
+                .addOnSuccessListener(doc -> extractStringPool(future, doc, language))
                 .addOnFailureListener(e -> error(future, "The required document does not exist"));
 
         return future;
+    }
+
+    @Override
+    public CompletableFuture<String> uploadQuiz(Quiz quiz, StringPool stringPool) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        Map<String, Object> doc = new HashMap<>();
+        doc.put("treasureHunt", quiz.isTreasureHunt());
+        doc.put("languages", Arrays.asList(stringPool.getLanguageCode()));
+
+        db.collection("quizzes")
+                .add(doc)
+                .addOnSuccessListener(DocumentReference::getId)
+                .addOnFailureListener(e -> error(future, e.getMessage()));
+
+        return future.thenCompose(
+                id ->
+                        CompletableFuture.allOf(
+                                        uploadQuestions(db, id, quiz.getQuestions()),
+                                        uploadStringPool(db, id, stringPool))
+                                .thenApply(empty -> id));
     }
 
     @Override
@@ -92,8 +124,8 @@ public class FirebaseDBService implements DatabaseService {
     @Override
     public CompletableFuture<Void> createUser(String userId, String firstName, String lastName) {
         Map<String, Object> data = new HashMap<>();
-        data.put("first_name", firstName);
-        data.put("last_name", lastName);
+        data.put("firstName", firstName);
+        data.put("lastName", lastName);
         data.put("score", 0);
         data.put("successes", 0);
         data.put("attempts", 0);

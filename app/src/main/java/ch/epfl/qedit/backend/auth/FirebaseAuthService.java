@@ -1,49 +1,42 @@
 package ch.epfl.qedit.backend.auth;
 
-import androidx.annotation.NonNull;
-import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Callback;
-import ch.epfl.qedit.util.Response;
-import com.google.android.gms.tasks.OnCompleteListener;
+import static ch.epfl.qedit.backend.database.Util.error;
+
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import java.util.concurrent.CompletableFuture;
 
 public class FirebaseAuthService implements AuthenticationService {
 
-    private final FirebaseFirestore db;
+    private final FirebaseAuth auth;
 
-    public FirebaseAuthService() {
-        // Access a Cloud Firestore instance
-        db = FirebaseFirestore.getInstance();
-    }
-
-    private User getUserFromDocument(DocumentSnapshot document) {
-        return new User(
-                document.get("first_name", String.class), document.get("last_name", String.class));
+    FirebaseAuthService() {
+        // Access Firebase authentication service
+        auth = FirebaseAuth.getInstance();
     }
 
     @Override
-    public void sendRequest(String token, final Callback<Response<User>> responseCallback) {
-        db.collection("users")
-                .document(token)
-                .get()
-                .addOnCompleteListener(
-                        new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                Response<User> response;
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document != null && document.exists())
-                                        response = Response.ok(getUserFromDocument(document));
-                                    else response = Response.error(WRONG_TOKEN);
-                                } else {
-                                    response = Response.error(CONNECTION_ERROR);
-                                }
+    public CompletableFuture<String> signUp(String email, String password) {
+        return futureOnResult(auth.createUserWithEmailAndPassword(email, password));
+    }
 
-                                responseCallback.onReceive(response);
-                            }
-                        });
+    @Override
+    public CompletableFuture<String> logIn(String email, String password) {
+        return futureOnResult(auth.signInWithEmailAndPassword(email, password));
+    }
+
+    private CompletableFuture<String> futureOnResult(Task<AuthResult> task) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        task.addOnSuccessListener(result -> setCurrentUserId(future))
+                .addOnFailureListener(e -> error(future, e.getMessage()));
+        return future;
+    }
+
+    private void setCurrentUserId(CompletableFuture<String> future) {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null) error(future, "No current user connected");
+        else future.complete(user.getUid());
     }
 }

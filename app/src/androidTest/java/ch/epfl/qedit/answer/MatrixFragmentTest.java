@@ -40,12 +40,12 @@ public class MatrixFragmentTest {
     public void init() {
         MatrixFormat format =
                 new MatrixFormat.Builder(2, 3)
-                        .withField(0, 0, MatrixFormat.Field.preFilledField("prefilled"))
-                        .withField(0, 1, MatrixFormat.Field.textField("h1", 3))
-                        .withField(0, 2, MatrixFormat.Field.numericField(false, false, "h2", 4))
-                        .withField(1, 0, MatrixFormat.Field.numericField(false, true, "h3", 5))
-                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "h4", 6))
-                        .withField(1, 2, MatrixFormat.Field.numericField(true, true, "h5", 7))
+                        .withField(0, 0, MatrixFormat.Field.preFilledField("pre-filled"))
+                        .withField(0, 1, MatrixFormat.Field.textField("h1"))
+                        .withField(0, 2, MatrixFormat.Field.numericField(false, false, "h2"))
+                        .withField(1, 0, MatrixFormat.Field.numericField(false, true, "h3"))
+                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "h4"))
+                        .withField(1, 2, MatrixFormat.Field.numericField(true, true, "h5"))
                         .build();
         MatrixModel model = new MatrixModel(2, 3);
         model.updateAnswer(0, 1, "abc");
@@ -97,7 +97,7 @@ public class MatrixFragmentTest {
 
     @Test
     public void testFieldsAreCorrectlyInitialized() {
-        onField(0, 0).check(matches(withText("prefilled")));
+        onField(0, 0).check(matches(withText("pre-filled")));
         onField(0, 1).check(matches(withText("abc")));
         onField(0, 2).check(matches(withText("")));
         onField(1, 0).check(matches(withText("")));
@@ -117,7 +117,6 @@ public class MatrixFragmentTest {
     @Test
     public void testTextField() {
         assertTyping(0, 1, "abc", "abc");
-        assertTyping(0, 1, "abcd", "abc");
         assertTyping(0, 1, "=-)", "=-)");
     }
 
@@ -127,7 +126,6 @@ public class MatrixFragmentTest {
         assertTyping(0, 2, "-23", "23");
         assertTyping(0, 2, "23.2", "232");
         assertTyping(0, 2, "x1y2", "12");
-        assertTyping(0, 2, "10901", "1090");
     }
 
     @Test
@@ -135,7 +133,6 @@ public class MatrixFragmentTest {
         assertTyping(1, 0, "-12", "-12");
         assertTyping(1, 0, "--12", "-12");
         assertTyping(1, 0, "-12.2", "-122");
-        assertTyping(1, 0, "-12222", "-1222");
         assertTyping(1, 0, "-12a2", "-122");
     }
 
@@ -144,7 +141,7 @@ public class MatrixFragmentTest {
         assertTyping(1, 1, "3.14", "3.14");
         assertTyping(1, 1, "-3.14", "3.14");
         assertTyping(1, 1, "3.a14", "3.14");
-        assertTyping(1, 1, "3.14444", "3.1444");
+        assertTyping(1, 1, "3.1444", "3.1444");
     }
 
     @Test
@@ -152,7 +149,7 @@ public class MatrixFragmentTest {
         assertTyping(1, 2, "-3.14", "-3.14");
         assertTyping(1, 2, "-3a.1x4", "-3.14");
         assertTyping(1, 2, "--3.14", "-3.14");
-        assertTyping(1, 2, "-3.14444", "-3.1444");
+        assertTyping(1, 2, "-3.1444", "-3.1444");
     }
 
     @Test
