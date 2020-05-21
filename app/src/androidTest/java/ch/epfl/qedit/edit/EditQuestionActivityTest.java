@@ -9,6 +9,7 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultData;
+import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
@@ -34,6 +35,7 @@ import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.AllOf.allOf;
 
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -41,6 +43,7 @@ import android.os.Bundle;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
+import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
@@ -59,6 +62,10 @@ public class EditQuestionActivityTest {
     @Rule
     public final ActivityTestRule<EditQuestionActivity> testRule =
             new ActivityTestRule<>(EditQuestionActivity.class, false, false);
+
+    @Rule
+    public final IntentsTestRule<EditQuestionActivity> resultTestRule =
+            new IntentsTestRule<>(EditQuestionActivity.class, false, false);
 
     private void setUp(boolean question, boolean isTreasureHunt) {
         Intents.init();
@@ -220,7 +227,8 @@ public class EditQuestionActivityTest {
     @Test
     public void testMap() {
         cleanUp();
-        setUp(true, true);
-        onView(withId(R.id.choose_answer_text)).perform(click());
+        setUp(false, true);
+        onView(withId(R.id.edit_choose_location)).perform(click());
+        intended(allOf(hasComponent(EditMapsActivity.class.getName())));
     }
 }
