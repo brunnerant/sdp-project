@@ -2,17 +2,14 @@ package ch.epfl.qedit.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
 
-import android.location.Location;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import org.junit.Test;
 
 public class QuestionTest {
 
-    private MatrixFormat format =
-            MatrixFormat.singleField(MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
+    private MatrixFormat format = MatrixFormat.singleField(MatrixFormat.Field.textField(""));
 
     private final String TITLE_ID = "ID0", TEXT_ID = "ID1", PRE_FILLED_ID = "ID2";
     private final MatrixFormat answer =
@@ -25,36 +22,27 @@ public class QuestionTest {
         assertEquals(q.getTitle(), "Question 1");
         assertEquals(q.getText(), "How old are you?");
         assertEquals(q.getFormat(), format);
-        assertNull(q.getLocation());
-        assertEquals(q.getRadius(), -1);
+        assertEquals(0, q.getLongitude(), 0);
+        assertEquals(0, q.getLatitude(), 0);
+        assertEquals(-1, q.getRadius(), 0);
     }
 
     @Test
     public void questionConstructorIsCorrect2() {
-        Location loc = new Location("");
-        Question q = new Question("Question 1", "How old are you?", format, loc, 100);
+        Question q = new Question("Question 1", "How old are you?", format, 42, 43, 100);
 
-        assertEquals(q.getTitle(), "Question 1");
-        assertEquals(q.getText(), "How old are you?");
-        assertEquals(q.getFormat(), format);
-        assertEquals(q.getLocation(), loc);
-        assertEquals(q.getRadius(), 100);
+        assertEquals("Question 1", q.getTitle());
+        assertEquals("How old are you?", q.getText());
+        assertEquals(format, q.getFormat());
+        assertEquals(42, q.getLongitude(), 0);
+        assertEquals(43, q.getLatitude(), 0);
+        assertEquals(100, q.getRadius(), 0);
     }
 
     @Test
     public void questionEqualsTest() {
         Question q1 = new Question("Question 1", "How old are you?", format);
-        Question q2 = new Question("Question 1", "How old are you?", "matrix1x1");
-        Question q4 = new Question("Question 2", "How old are you?", "matrix1x1");
-
-        assertEquals(q1, q2);
         assertNotEquals(q1, "Pomme de Terre");
-        assertNotEquals(q1, q4);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void invalidQuestionsCannotBeBuilt1() {
-        new Question("", "", "");
     }
 
     @Test(expected = NullPointerException.class)
@@ -72,13 +60,8 @@ public class QuestionTest {
         new Question("", "", (AnswerFormat) null);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void invalidQuestionsCannotBeBuilt5() {
-        new Question("", "", format, null, 1);
-    }
-
     @Test(expected = IllegalArgumentException.class)
-    public void invalidQuestionsCannotBeBuilt6() {
-        new Question("", "", format, new Location(""), -1);
+    public void invalidQuestionsCannotBeBuilt5() {
+        new Question("", "", format, 0, 0, -1);
     }
 }

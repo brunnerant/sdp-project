@@ -22,7 +22,7 @@ public class MatrixFormatTest {
         assertNotEquals(field, null);
         assertNotEquals(null, field);
         assertNotEquals(field, "string");
-        assertNotEquals(field, MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
+        assertNotEquals(field, MatrixFormat.Field.textField(""));
     }
 
     @Test

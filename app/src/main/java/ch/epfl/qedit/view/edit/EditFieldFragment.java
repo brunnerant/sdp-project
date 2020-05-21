@@ -1,7 +1,5 @@
 package ch.epfl.qedit.view.edit;
 
-import static ch.epfl.qedit.model.answer.MatrixFormat.Field.NO_LIMIT;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -114,8 +112,8 @@ public class EditFieldFragment extends DialogFragment {
     /** return Field resulting of the current state of the parameter of this fragment */
     private Field result() {
         if (isPreFilled) return Field.preFilledField(solution);
-        else if (isText) return Field.textField(getHint(), NO_LIMIT);
-        else return Field.numericField(isDecimal, isDecimal, getHint(), NO_LIMIT);
+        else if (isText) return Field.textField(getHint());
+        else return Field.numericField(isDecimal, isDecimal, getHint());
     }
 
     /** Return result of this dialog in the callee activity if solution is non-empty */

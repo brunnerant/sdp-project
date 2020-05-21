@@ -12,7 +12,7 @@ public final class AuthenticationFactory {
 
     public static AuthenticationService getInstance() {
         if (authService == null) {
-            authService = new MockAuthService();
+            authService = new FirebaseAuthService();
         }
 
         return authService;

@@ -1,5 +1,7 @@
 package ch.epfl.qedit.backend.permission;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import java.util.HashMap;
@@ -23,13 +25,13 @@ public class AndroidPermManager implements PermissionManager {
     }
 
     @Override
-    public boolean checkPermission(PermissionActivity activity, String permission) {
-        return ActivityCompat.checkSelfPermission(activity, permission)
+    public boolean checkPermission(Context context, String permission) {
+        return ActivityCompat.checkSelfPermission(context, permission)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
-    public boolean shouldAskAgain(PermissionActivity activity, String permission) {
+    public boolean shouldAskAgain(Activity activity, String permission) {
         return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }
 
@@ -43,7 +45,7 @@ public class AndroidPermManager implements PermissionManager {
     // This method will be called by the permission activity when a permission result arrives.
     // This design makes it possible to mock the permission manager, because it is the central
     // class through which all requests and responses go.
-    void onRequestPermissionResult(int requestCode, int[] grantResults) {
+    void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
         boolean[] granted = new boolean[grantResults.length];
 
         for (int i = 0; i < granted.length; i++)
@@ -51,6 +53,6 @@ public class AndroidPermManager implements PermissionManager {
 
         OnPermissionResult callback = callbacks.get(requestCode);
         callbacks.remove(requestCode);
-        callback.handle(granted);
+        callback.onPermissionResult(permissions, granted);
     }
 }
