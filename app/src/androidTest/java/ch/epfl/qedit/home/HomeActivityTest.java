@@ -103,6 +103,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
 
     @Test
     public void testInfoIsDisplayed() {
+        onView(withText(R.string.title_activity_home)).check(matches(isDisplayed())); // TODO
         isDisplayed(R.id.home_info_container, false);
     }
 
