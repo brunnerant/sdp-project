@@ -68,7 +68,7 @@ public class EditQuizActivityTest extends EditTest {
         onView(withId(R.id.quiz_overview_container)).check(matches(isDisplayed()));
         onView(withId(R.id.question_details_container)).check(matches(isDisplayed()));
 
-        onView(withText(R.string.title_activity_edit_quiz)).check(matches(isDisplayed())); //TODO
+        onView(withText(R.string.title_activity_edit_quiz)).check(matches(isDisplayed())); // TODO
     }
 
     @Test
