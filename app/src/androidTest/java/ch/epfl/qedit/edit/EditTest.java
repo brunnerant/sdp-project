@@ -15,7 +15,6 @@ public class EditTest extends RecyclerViewHelpers {
 
     public void emptyQuizList(Quiz quiz, ActivityTestRule testRule) {
         for (int i = 0; i < quiz.getQuestions().size(); ++i) {
-            item(0).perform(click());
             itemView(0, R.id.list_item_three_dots).perform(click());
             clickOnPopup(testRule.getActivity(), R.string.menu_delete);
             onDialog(android.R.id.button1).perform(click());

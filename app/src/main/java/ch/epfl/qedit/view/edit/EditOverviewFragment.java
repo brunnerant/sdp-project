@@ -140,10 +140,10 @@ public class EditOverviewFragment extends Fragment implements ConfirmDialog.Conf
                         launchEditQuestionActivity(
                                 model.getQuizBuilder().getQuestions().get(position));
                     } else if (code == 1) { // delete was clicked
-                        model.getFocusedQuestion().postValue(null);
-                        model.getQuizBuilder().remove(position);
-                        adapter.removeItem(position);
-                        handleEmptyHint();
+                        // Open the ConfirmDialog that asks if the user really wants to remove
+                        // the question
+                        deleteIndex = position;
+                        deleteQuestionDialog.show(getParentFragmentManager(), "delete_dialog");
                     }
                 });
     }
