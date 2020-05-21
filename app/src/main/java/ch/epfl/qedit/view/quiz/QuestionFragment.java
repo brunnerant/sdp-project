@@ -1,5 +1,8 @@
 package ch.epfl.qedit.view.quiz;
 
+import static ch.epfl.qedit.view.quiz.QuizActivity.GOOD_ANSWERS;
+
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class QuestionFragment extends Fragment {
@@ -25,6 +29,7 @@ public class QuestionFragment extends Fragment {
     private TextView questionTitle;
     private TextView questionDisplay;
     private QuizViewModel quizViewModel;
+    private ArrayList<Integer> goodAnswers;
 
     @Nullable
     @Override
@@ -36,7 +41,7 @@ public class QuestionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_quiz_question, container, false);
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
-
+        goodAnswers = getArguments().getIntegerArrayList(GOOD_ANSWERS);
         quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         quizViewModel
@@ -61,8 +66,12 @@ public class QuestionFragment extends Fragment {
         questionTitle.setText(questionTitleStr);
         questionDisplay.setText(question.getText());
 
+        if (goodAnswers != null) {
+            if (goodAnswers.get(index) == 0) questionDisplay.setTextColor(Color.RED);
+            else questionDisplay.setTextColor(Color.BLACK);
+        }
         // Set everything up for the concrete AnswerFragment and launch it
-        prepareAnswerFormatFragment(question, index);
+        prepareAnswerFormatFragment(question, index, 0);
     }
 
     /**
@@ -74,7 +83,7 @@ public class QuestionFragment extends Fragment {
      * @param question The question that is going to be shown
      * @param index The index of that Question in the Quiz, the question list
      */
-    private void prepareAnswerFormatFragment(Question question, Integer index) {
+    private void prepareAnswerFormatFragment(Question question, Integer index, int correctAnswer) {
         // Get the AnswerFormat of the question
         AnswerFormat answerFormat = question.getFormat();
 

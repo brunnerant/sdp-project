@@ -17,19 +17,29 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.answer.AnswerModel;
+import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.google.common.collect.ImmutableList;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class QuizActivity extends AppCompatActivity implements ConfirmDialog.ConfirmationListener {
+    public static final String PARTICIPANT_ANSWERS = "ch.epfl.qedit.quiz.PARTICIPANT_ANSWERS";
+    public static final String QUESTIONS = "ch.epfl.qedit.quiz.QUESTIONS";
+    public static final String GOOD_ANSWERS = "ch.epfl.qedit.quiz.GOOD_ANSWERS";
     private QuizViewModel model;
     private Boolean overviewActive;
 
     private ConfirmDialog validateDialog;
     private Quiz quiz;
+
+    private ArrayList<Integer> correctedQuestions;
+    private ArrayList<Integer> goodAnswers = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +50,10 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
         Intent intent = getIntent();
         quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
 
+        goodAnswers = (ArrayList<Integer>) intent.getExtras().getSerializable(GOOD_ANSWERS);
         model = new ViewModelProvider(this).get(QuizViewModel.class);
         model.setQuiz(quiz);
-
+        correctedQuestions = new ArrayList<>();
         overviewActive = false;
         handleToggleOverview();
 
@@ -50,6 +61,10 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
 
         QuestionFragment questionFragment = new QuestionFragment();
         QuizOverviewFragment overview = new QuizOverviewFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putIntegerArrayList(GOOD_ANSWERS, goodAnswers);
+        questionFragment.setArguments(bundle);
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -116,18 +131,56 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
         overviewActive = !overviewActive;
     }
 
-    @Override
-    public void onConfirm(ConfirmDialog dialog) {
+    // create a list of questions with prefilled fields with values equal to the answers given by
+    // the participant
+    private List<Question> correctedQuestions() {
         ImmutableList<Question> questions = quiz.getQuestions();
         HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
-        int goodAnswers = 0;
+        List<Question> corrected = new ArrayList<Question>();
         for (int i = 0; i < questions.size(); i++) {
-            if (questions.get(i).getFormat().correct(answers.get(i))) goodAnswers++;
+            if (questions.get(i).getFormat() instanceof MatrixFormat) {
+                MatrixModel answerModel = (MatrixModel) answers.get(i);
+
+                Integer goodAnswer = questions.get(i).getFormat().correct(answerModel) ? 1 : 0;
+                correctedQuestions.add(i, goodAnswer);
+
+                corrected.add(i, makePrefilledMatrixQuestion(answerModel, questions.get(i)));
+            }
         }
-        Toast.makeText(
-                        getApplicationContext(),
-                        "number of good answers = " + goodAnswers,
-                        Toast.LENGTH_SHORT)
-                .show();
+        return corrected;
+    }
+    // make a prefilled matrix question
+    private Question makePrefilledMatrixQuestion(MatrixModel answerModel, Question quizQuestion) {
+        MatrixFormat.Builder builder =
+                new MatrixFormat.Builder(answerModel.getNumRows(), answerModel.getNumCols());
+
+        for (int x = 0; x < answerModel.getNumRows(); x++) {
+            for (int y = 0; y < answerModel.getNumCols(); y++) {
+                builder.withField(
+                        x, y, MatrixFormat.Field.preFilledField(answerModel.getAnswer(x, y)));
+            }
+        }
+
+        return new Question(quizQuestion.getTitle(), quizQuestion.getText(), builder.build());
+    }
+
+    @Override
+    public void onConfirm(ConfirmDialog dialog) {
+        /* ImmutableList<Question> questions = quiz.getQuestions();
+        HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(PARTICIPANT_ANSWERS,answers);
+        bundle.putSerializable(QUESTIONS,questions);
+
+        Intent intent = new Intent(this,QuizResultActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);*/
+        Quiz questionsLocked = new Quiz("Correction", correctedQuestions());
+        Intent intent = new Intent(this, QuizActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(QUIZ_ID, questionsLocked);
+        bundle.putIntegerArrayList(GOOD_ANSWERS, correctedQuestions);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

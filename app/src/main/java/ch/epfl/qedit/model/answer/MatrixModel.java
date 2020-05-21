@@ -68,6 +68,14 @@ public class MatrixModel extends AnswerModel {
         }
     }
 
+    public int getNumCols() {
+        return numCols;
+    }
+
+    public int getNumRows() {
+        return numRows;
+    }
+
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();

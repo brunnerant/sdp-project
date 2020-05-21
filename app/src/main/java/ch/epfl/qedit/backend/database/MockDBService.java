@@ -10,6 +10,7 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.model.answer.MatrixModel;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +60,7 @@ public class MockDBService implements DatabaseService {
 
         static final MatrixFormat simpleFormat =
                 MatrixFormat.singleField(MatrixFormat.Field.textField("hint1"));
+
         static final MatrixFormat compoundFormat =
                 new MatrixFormat.Builder(2, 2)
                         .withField(0, 0, MatrixFormat.Field.preFilledField("hint2"))
@@ -69,6 +71,17 @@ public class MockDBService implements DatabaseService {
 
         @SuppressWarnings("SpellCheckingInspection")
         static MockQuiz createTestMockQuiz1() {
+            MatrixModel solution42 = new MatrixModel(1, 1);
+            solution42.updateAnswer(0, 0, "42");
+            simpleFormat.setCorrectAnswer(solution42);
+
+            MatrixModel compoundSolution = new MatrixModel(2, 2);
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 2; j++) {
+                    compoundSolution.updateAnswer(i, j, "42");
+                }
+            }
+            compoundFormat.setCorrectAnswer(compoundSolution);
             HashMap<String, String> stringPool_en = new HashMap<>();
             stringPool_en.put(TITLE_ID, "I am a Mock Quiz!");
             stringPool_en.put("q1_title", "Banana");
@@ -128,6 +141,10 @@ public class MockDBService implements DatabaseService {
 
         @SuppressWarnings("SpellCheckingInspection")
         static MockQuiz createTestMockQuiz2() {
+            MatrixModel solution42 = new MatrixModel(1, 1);
+            solution42.updateAnswer(0, 0, "42");
+            simpleFormat.setCorrectAnswer(solution42);
+
             HashMap<String, String> stringPool_en = new HashMap<>();
             stringPool_en.put(TITLE_ID, "An other Quiz");
             stringPool_en.put("q1_title", "Banana");
