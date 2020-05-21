@@ -26,6 +26,7 @@ import java.util.List;
 /** This fragment is used to view and edit the list of questions of a quiz. */
 public class EditOverviewFragment extends Fragment implements ConfirmDialog.ConfirmationListener {
     public static final String QUESTION = "ch.epfl.qedit.view.edit.QUESTION";
+    public static final String TREASURE_HUNT = "ch.epfl.qedit.view.edit.QUESTION.TREASURE_HUNT";
     public static final int NEW_QUESTION_REQUEST_CODE = 0;
     public static final int MODIFY_QUESTION_REQUEST_CODE = 1;
 
@@ -167,6 +168,7 @@ public class EditOverviewFragment extends Fragment implements ConfirmDialog.Conf
             bundle.putSerializable(QUESTION, question);
         }
 
+        bundle.putBoolean(TREASURE_HUNT, model.getQuizBuilder().isTreasureHunt());
         bundle.putSerializable(STRING_POOL, model.getStringPool());
         intent.putExtras(bundle);
         startActivityForResult(intent, requestCode);
