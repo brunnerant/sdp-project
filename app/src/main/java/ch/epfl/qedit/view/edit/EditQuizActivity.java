@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view.edit;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
@@ -9,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
@@ -18,6 +19,8 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.util.LocaleHelper;
+import ch.epfl.qedit.view.util.ConfirmDialog;
+import ch.epfl.qedit.view.util.InfoDialog;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 import java.util.Objects;
 
@@ -25,10 +28,16 @@ import java.util.Objects;
  * This class prepares the ViewModel and launches the Overview and the Preview fragment used for
  * editing quizzes
  */
-public class EditQuizActivity extends AppCompatActivity {
+public class EditQuizActivity extends AppCompatActivity
+        implements ConfirmDialog.ConfirmationListener {
+
     private EditionViewModel model;
     private Quiz.Builder quizBuilder;
     private Boolean overviewActive;
+
+    private ConfirmDialog exitDialog;
+    private ConfirmDialog doneDialog;
+    private InfoDialog cantSaveEmptyQuizDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +56,9 @@ public class EditQuizActivity extends AppCompatActivity {
         // Show the overview
         overviewActive = true;
 
+        // Configure ConfirmationDialogs
+        setupDialogs();
+
         // Hide up navigation
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
@@ -61,6 +73,13 @@ public class EditQuizActivity extends AppCompatActivity {
                 .replace(R.id.quiz_overview_container, new EditOverviewFragment())
                 .replace(R.id.question_details_container, new EditPreviewFragment())
                 .commit();
+    }
+
+    /** This method configures the two Confirmation Dialogs that we use in this activity */
+    private void setupDialogs() {
+        exitDialog = ConfirmDialog.create(getString(R.string.warning_exit_edition), this);
+        doneDialog = ConfirmDialog.create(getString(R.string.warning_done_edition), this);
+        cantSaveEmptyQuizDialog = InfoDialog.create(getString(R.string.warning_save_empty_quiz));
     }
 
     @Override
@@ -87,8 +106,16 @@ public class EditQuizActivity extends AppCompatActivity {
             case R.id.overview:
                 handleToggleOverview();
                 break;
+            case R.id.exit:
+                exitDialog.show(getSupportFragmentManager(), "exit_confirmation");
+                break;
             case R.id.done:
-                returnResult();
+                if (quizBuilder.size() == 0) {
+                    cantSaveEmptyQuizDialog.show(
+                            getSupportFragmentManager(), "save_empty_quiz_information");
+                } else {
+                    doneDialog.show(getSupportFragmentManager(), "done_confirmation");
+                }
                 break;
         }
 
@@ -109,17 +136,33 @@ public class EditQuizActivity extends AppCompatActivity {
 
     /** This function handles toggling the overview fragment */
     private void handleToggleOverview() {
-        findViewById(R.id.quiz_overview_container)
-                .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
+        if (overviewActive) {
+            findViewById(R.id.quiz_overview_container).setVisibility(GONE);
+            findViewById(R.id.separator).setVisibility(GONE);
+        } else {
+            findViewById(R.id.quiz_overview_container).setVisibility(VISIBLE);
+            findViewById(R.id.separator).setVisibility(VISIBLE);
+        }
         overviewActive = !overviewActive;
     }
 
-    /** This method builds the quiz and returns it along with string pool */
-    private void returnResult() {
+    /** This method builds the edited quiz and returns it along with the string pool */
+    private void returnEditedResult() {
         Intent intent = new Intent();
         intent.putExtra(QUIZ_ID, model.getQuizBuilder().build());
         intent.putExtra(STRING_POOL, model.getStringPool());
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    public void onConfirm(ConfirmDialog dialog) {
+        if (dialog == exitDialog) {
+            // Return that the edition has been canceled, no need to do anything
+            setResult(RESULT_CANCELED);
+            finish();
+        } else { // Then it must be the doneDialog
+            returnEditedResult();
+        }
     }
 }

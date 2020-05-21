@@ -85,7 +85,7 @@
     <string name="menu_timer">Timer</string>
     <string name="menu_previous">Previous</string>
     <string name="menu_next">Next</string>
-    <string name="menu_done">Done</string>
+    <string name="menu_done">Save and Exit</string>
 
     <!-- Burger Menu -->
     <string name="menu_home">HOME</string>
@@ -123,9 +123,16 @@
     <string name="done">Done</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="warning_delete">Are you sure you want to delete this quiz? It will delete all questions from this quiz.</string>
+    <string name="add_quiz_message">Enter the name of your quiz</string>
+    <string name="edit_title">Rename</string>
+    <string name="warning_delete_quiz">Are you sure you want to delete this quiz? It will delete all questions from this quiz.</string>
+    <string name="warning_delete_question">Are you sure you want to delete this question?</string>
+    <string name="warning_exit_edition">Are you sure you want to cancel the edition of the quiz? The changes you made will be discarded.</string>
+    <string name="warning_done_edition">Are you sure you want to stop the edition of the quiz and save the changes?</string>
+    <string name="warning_save_empty_quiz">You can\'t save an empty quiz. At least add one question to it.</string>
     <string name="add_quiz">Add</string>
     <string name="empty_question_list_hint_text">Add a question</string>
+
 
     <!-- Edit Question -->
     <string name="edit_question_title">Enter the title of the question here.</string>

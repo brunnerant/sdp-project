@@ -13,7 +13,6 @@ import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
@@ -72,7 +71,7 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
         itemView(0, R.id.delete_button).perform(click());
 
         // Check that the confirmation dialog is displayed
-        onView(withText(testRule.getActivity().getString(R.string.warning_delete)))
+        onView(withText(testRule.getActivity().getString(R.string.warning_delete_quiz)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
 
@@ -115,11 +114,11 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
     }
 
     @Test
-    public void testDoneButton() {
+    public void testStartEditing() {
         item(0).perform(click());
         itemView(0, R.id.edit_button).perform(click());
 
-        clickOn(android.R.id.button1, false);
+        onDialog(android.R.id.button1).perform(click());
         intended(
                 allOf(
                         hasComponent(EditQuizActivity.class.getName()),
