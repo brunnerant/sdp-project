@@ -277,6 +277,7 @@ public class EditQuestionActivity extends AppCompatActivity {
     private boolean setErrorTextView(int strViewId, boolean b) {
         if (!b) {
             TextView strView = findViewById(strViewId);
+            strView.requestFocus();
             strView.setError(getString(R.string.cannot_be_empty));
             return false;
         } else {

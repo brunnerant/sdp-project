@@ -22,6 +22,7 @@ import static ch.epfl.qedit.util.Util.isDisplayed;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.util.Util.onScrollView;
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.TREASURE_HUNT;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -50,7 +51,7 @@ public class EditQuestionActivityTest {
     public final ActivityTestRule<EditQuestionActivity> testRule =
             new ActivityTestRule<>(EditQuestionActivity.class, false, false);
 
-    private void setUp(boolean question) {
+    private void setUp(boolean question, boolean isTreasureHunt) {
         Intents.init();
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -62,6 +63,9 @@ public class EditQuestionActivityTest {
                     new Question(stringPool.add("Test"), stringPool.add("Test question"), answer);
             bundle.putSerializable(QUESTION, q);
         }
+
+        bundle.putBoolean(TREASURE_HUNT, isTreasureHunt);
+
         intent.putExtras(bundle);
         testRule.launchActivity(intent);
         Espresso.closeSoftKeyboard();
@@ -69,7 +73,7 @@ public class EditQuestionActivityTest {
 
     @Before
     public void setUp() {
-        setUp(false);
+        setUp(false, false);
     }
 
     @After
@@ -101,7 +105,7 @@ public class EditQuestionActivityTest {
     @Test
     public void testChangeQuestion() {
         cleanUp();
-        setUp(true);
+        setUp(true, false);
         onScrollView(R.id.edit_question_title).check(matches(withText(containsString("Test"))));
         onScrollView(R.id.edit_question_text)
                 .check(matches(withText(containsString("Test question"))));
@@ -172,5 +176,13 @@ public class EditQuestionActivityTest {
         clickOn(R.id.button_done_question_editing, true);
         hasErrorEmpty(R.id.edit_question_title);
         hasErrorEmpty(R.id.edit_question_text);
+    }
+
+    @Test
+    public void testTreasureHuntInvisible() {
+        cleanUp();
+        setUp(true, true);
+        clickOn(R.id.button_done_question_editing, true);
+        hasErrorEmpty(R.id.radius_text);
     }
 }

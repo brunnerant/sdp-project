@@ -67,6 +67,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="@dimen/answer_text_helper_padding"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
         android:text="longitude"
         android:textSize="@dimen/helper_text_size" />
 
@@ -90,6 +92,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:padding="@dimen/answer_text_helper_padding"
                 android:text="latitude"
                 android:textSize="@dimen/helper_text_size" />

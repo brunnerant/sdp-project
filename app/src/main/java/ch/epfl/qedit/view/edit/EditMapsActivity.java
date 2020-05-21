@@ -85,7 +85,6 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        // TODO in future PR: implement menu options
         switch (id) {
             case R.id.done:
                 returnResult();
