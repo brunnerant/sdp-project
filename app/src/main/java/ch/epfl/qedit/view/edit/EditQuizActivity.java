@@ -59,7 +59,7 @@ public class EditQuizActivity extends AppCompatActivity
         setupDialogs();
 
         // Hide up navigation
-        // Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false); //TODO
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
         // Initialize the ViewModel
         model = new ViewModelProvider(this).get(EditionViewModel.class);
