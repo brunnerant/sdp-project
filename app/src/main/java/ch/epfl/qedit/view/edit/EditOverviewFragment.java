@@ -157,7 +157,8 @@ public class EditOverviewFragment extends Fragment {
             bundle.putSerializable(QUESTION, question);
         }
 
-        bundle.putSerializable(TREASURE_HUNT, model.getQuizBuilder().isTreasureHunt());
+        bundle.putBoolean(TREASURE_HUNT, model.getQuizBuilder().isTreasureHunt());
+        //bundle.putSerializable(TREASURE_HUNT, model.getQuizBuilder().isTreasureHunt());
         bundle.putSerializable(STRING_POOL, model.getStringPool());
         intent.putExtras(bundle);
         startActivityForResult(intent, requestCode);

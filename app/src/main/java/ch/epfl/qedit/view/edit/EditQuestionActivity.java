@@ -113,8 +113,9 @@ public class EditQuestionActivity extends AppCompatActivity {
         }
 
         // TODO: Rename treasure hunt is needed
-        if (bundle.getSerializable(TREASURE_HUNT) != null) {
-            isTreasureHunt = (boolean) bundle.getSerializable(TREASURE_HUNT);
+        Object b = bundle.getBoolean(TREASURE_HUNT);
+        if (b != null) {
+            isTreasureHunt = (boolean) b;
         }
     }
 
