@@ -2,9 +2,7 @@ package ch.epfl.qedit.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
 
-import android.location.Location;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import org.junit.Test;
@@ -25,20 +23,21 @@ public class QuestionTest {
         assertEquals(q.getTitle(), "Question 1");
         assertEquals(q.getText(), "How old are you?");
         assertEquals(q.getFormat(), format);
-        assertNull(q.getLocation());
-        assertEquals(q.getRadius(), -1);
+        assertEquals(0, q.getLongitude(), 0);
+        assertEquals(0, q.getLatitude(), 0);
+        assertEquals(-1, q.getRadius(), 0);
     }
 
     @Test
     public void questionConstructorIsCorrect2() {
-        Location loc = new Location("");
-        Question q = new Question("Question 1", "How old are you?", format, loc, 100);
+        Question q = new Question("Question 1", "How old are you?", format, 42, 43, 100);
 
-        assertEquals(q.getTitle(), "Question 1");
-        assertEquals(q.getText(), "How old are you?");
-        assertEquals(q.getFormat(), format);
-        assertEquals(q.getLocation(), loc);
-        assertEquals(q.getRadius(), 100);
+        assertEquals("Question 1", q.getTitle());
+        assertEquals("How old are you?", q.getText());
+        assertEquals(format, q.getFormat());
+        assertEquals(42, q.getLongitude(), 0);
+        assertEquals(43, q.getLatitude(), 0);
+        assertEquals(100, q.getRadius(), 0);
     }
 
     @Test
@@ -72,13 +71,8 @@ public class QuestionTest {
         new Question("", "", (AnswerFormat) null);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void invalidQuestionsCannotBeBuilt5() {
-        new Question("", "", format, null, 1);
-    }
-
     @Test(expected = IllegalArgumentException.class)
-    public void invalidQuestionsCannotBeBuilt6() {
-        new Question("", "", format, new Location(""), -1);
+    public void invalidQuestionsCannotBeBuilt5() {
+        new Question("", "", format, 0, 0, -1);
     }
 }

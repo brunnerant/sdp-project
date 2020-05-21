@@ -1,4 +1,4 @@
-package ch.epfl.qedit.backend.database;
+package ch.epfl.qedit.backend;
 
 import android.content.Context;
 import ch.epfl.qedit.model.Question;
@@ -23,13 +23,13 @@ import java.util.concurrent.CompletableFuture;
 public final class Util {
 
     // This class is only a namespace for helper functions, so it should not be instantiable
-    private Util() {};
+    private Util() {}
 
     /**
      * This type of exception indicates that a request couldn't be answered, either because of a
      * connection error, or a malformed request.
      */
-    static class RequestException extends Exception {
+    public static class RequestException extends Exception {
         public RequestException(String message) {
             super(message);
         }
@@ -45,23 +45,29 @@ public final class Util {
         }
     }
 
+    /** This allows to complete the future with a request exception */
+    public static void error(CompletableFuture<?> future, String message) {
+        future.completeExceptionally(new RequestException(message));
+    }
+
     /** Completes the given future with an exception */
-    static <T> void error(CompletableFuture<T> future, String error) {
+    private static <T> void formatError(CompletableFuture<T> future, String error) {
         future.completeExceptionally(new FormatException(error));
     }
 
     /** Extracts the list of languages from a Firestore document */
-    static void extractLanguages(CompletableFuture<List<String>> future, DocumentSnapshot doc) {
+    public static void extractLanguages(
+            CompletableFuture<List<String>> future, DocumentSnapshot doc) {
         Object languages = doc.get("languages");
 
         if (languages == null)
-            error(future, "The quiz should contain a list of supported languages");
+            formatError(future, "The quiz should contain a list of supported languages");
 
         future.complete((List<String>) languages);
     }
 
     /** Extracts the quiz from a Firestore document */
-    static void extractQuiz(CompletableFuture<Quiz> future, QuerySnapshot query) {
+    public static void extractQuiz(CompletableFuture<Quiz> future, QuerySnapshot query) {
         List<Question> questions = new ArrayList<>();
 
         try {
@@ -176,7 +182,8 @@ public final class Util {
     }
 
     /** Extracts the string pool from a Firestore document */
-    static void extractStringPool(CompletableFuture<StringPool> future, DocumentSnapshot doc) {
+    public static void extractStringPool(
+            CompletableFuture<StringPool> future, DocumentSnapshot doc) {
         Map<String, Object> data = doc.getData();
         Map<String, String> result = new HashMap<>();
 
@@ -186,7 +193,7 @@ public final class Util {
             if (value instanceof String) {
                 result.put(entry.getKey(), (String) value);
             } else {
-                error(future, "A string pool should only contain string values");
+                formatError(future, "A string pool should only contain string values");
                 return;
             }
         }
@@ -204,7 +211,7 @@ public final class Util {
                 .document(userId)
                 .set(data, SetOptions.merge())
                 .addOnSuccessListener(doc -> future.complete(null))
-                .addOnFailureListener(e -> error(future, e.getMessage()));
+                .addOnFailureListener(e -> formatError(future, e.getMessage()));
 
         return future;
     }
