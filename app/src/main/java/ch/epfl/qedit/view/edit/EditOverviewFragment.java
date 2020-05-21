@@ -20,6 +20,7 @@ import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
 import ch.epfl.qedit.viewmodel.EditionViewModel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /** This fragment is used to view and edit the list of questions of a quiz. */
@@ -55,7 +56,7 @@ public class EditOverviewFragment extends Fragment implements ConfirmDialog.Conf
 
         // Retrieve and configure the recycler view
         final ListEditView listEditView = view.findViewById(R.id.question_list);
-        adapter = new ListEditView.Adapter<>(titles, item -> item);
+        createAdapter();
         adapter.setMoveListener((from, to) -> model.getQuizBuilder().swap(from, to));
         setItemListener();
         listEditView.setAdapter(adapter);
@@ -119,29 +120,30 @@ public class EditOverviewFragment extends Fragment implements ConfirmDialog.Conf
         handleEmptyHint();
     }
 
+    /** Create the adapter for the ListEditView */
+    private void createAdapter() {
+        // Those are the items of the popup menu
+        List<String> popupMenuItems =
+                Arrays.asList(getString(R.string.menu_edit), getString(R.string.menu_delete));
+
+        // Create an adapter for the title list
+        adapter = new ListEditView.Adapter<>(titles, item -> item, popupMenuItems);
+    }
+
     /** Fix the behavior the EditListView when the user interacts with it */
     private void setItemListener() {
         adapter.setItemListener(
-                (position, type) -> {
-                    switch (type) {
-                        case Select:
-                            model.getFocusedQuestion().postValue(position);
-                            break;
-                        case RemoveRequest:
-                            // Open the ConfirmDialog that asks if the user really wants to remove
-                            // the question
-                            deleteIndex = position;
-                            deleteQuestionDialog.show(getParentFragmentManager(), "delete_dialog");
-                            break;
-                        case EditRequest:
-                            // Edit an existing question
-                            launchEditQuestionActivity(
-                                    model.getQuizBuilder()
-                                            .getQuestions()
-                                            .get(model.getFocusedQuestion().getValue()));
-                            break;
-                        default:
-                            break;
+                (position, code) -> {
+                    if (code == ListEditView.ItemListener.CLICK) {
+                        model.getFocusedQuestion().postValue(position);
+                    } else if (code == 0) { // edit was clicked
+                        launchEditQuestionActivity(
+                                model.getQuizBuilder().getQuestions().get(position));
+                    } else if (code == 1) { // delete was clicked
+                        model.getFocusedQuestion().postValue(null);
+                        model.getQuizBuilder().remove(position);
+                        adapter.removeItem(position);
+                        handleEmptyHint();
                     }
                 });
     }

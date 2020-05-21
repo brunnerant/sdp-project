@@ -21,6 +21,7 @@
     <!-- Navigation drawer compulsory strings-->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
     <!-- App and logo -->
     <string name="app_name" translatable="false"><b>QED<font color="#FF0000" tools:ignore="UnusedResources">it</font></b></string>
     <string name="qedit_logo_description">QEDit Logo</string>
@@ -86,6 +87,8 @@
     <string name="menu_previous">Previous</string>
     <string name="menu_next">Next</string>
     <string name="menu_done">Save and Exit</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_edit">Edit</string>
 
     <!-- Burger Menu -->
     <string name="menu_home">HOME</string>
@@ -132,7 +135,6 @@
     <string name="warning_save_empty_quiz">You can\'t save an empty quiz. At least add one question to it.</string>
     <string name="add_quiz">Add</string>
     <string name="empty_question_list_hint_text">Add a question</string>
-
 
     <!-- Edit Question -->
     <string name="edit_question_title">Enter the title of the question here.</string>

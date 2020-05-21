@@ -24,13 +24,9 @@ public class MockDBService implements DatabaseService {
     /** This class simulates a quiz that is stored in Firestore */
     private static class MockQuiz {
 
-        private boolean treasureHunt;
         private ImmutableList<Question> questions;
         private Map<String, StringPool> stringPools;
-
-        MockQuiz(List<Question> questions, Map<String, StringPool> stringPools) {
-            this(questions, stringPools, false);
-        }
+        private boolean treasureHunt;
 
         MockQuiz(
                 List<Question> questions,
@@ -39,6 +35,10 @@ public class MockDBService implements DatabaseService {
             this.questions = ImmutableList.copyOf(questions);
             this.stringPools = stringPools;
             this.treasureHunt = treasureHunt;
+        }
+
+        MockQuiz(List<Question> questions, Map<String, StringPool> stringPools) {
+            this(questions, stringPools, false);
         }
 
         public List<Question> getQuestions() {
@@ -53,7 +53,7 @@ public class MockDBService implements DatabaseService {
             return stringPools.get(language);
         }
 
-        boolean getTreasureHunt() {
+        boolean isTreasureHunt() {
             return treasureHunt;
         }
 
@@ -155,6 +155,29 @@ public class MockDBService implements DatabaseService {
 
             return new MockQuiz(questions, stringPools);
         }
+
+        static MockQuiz createTestMockQuiz3() {
+            HashMap<String, String> stringPool_en = new HashMap<>();
+            stringPool_en.put(TITLE_ID, "Treasure Hunt Quiz");
+            stringPool_en.put("q1_title", "Explain me");
+            stringPool_en.put("q1_text", "Why ?");
+            stringPool_en.put("q2_title", "Teach me");
+            stringPool_en.put("q2_text", "How ?");
+            stringPool_en.put("hint1", "text field");
+
+            HashMap<String, StringPool> stringPools = new HashMap<>();
+
+            StringPool stringPool = new StringPool(stringPool_en);
+            stringPool.setLanguageCode("en");
+            stringPools.put("en", stringPool);
+
+            List<Question> questions =
+                    Arrays.asList(
+                            new Question("q1_title", "q1_text", simpleFormat, 1, 0, 100),
+                            new Question("q2_title", "q2_text", simpleFormat, 1, 1, 100));
+
+            return new MockQuiz(questions, stringPools, true);
+        }
     }
 
     private HashMap<String, MockQuiz> quizzes;
@@ -167,7 +190,7 @@ public class MockDBService implements DatabaseService {
         quizzes = new HashMap<>();
         quizzes.put("quiz0", MockQuiz.createTestMockQuiz1());
         quizzes.put("quiz1", MockQuiz.createTestMockQuiz2());
-        quizzes.put("quiz2", MockQuiz.createTestMockQuiz2());
+        quizzes.put("quiz2", MockQuiz.createTestMockQuiz3());
         quizzes.put("quiz3", MockQuiz.createTestMockQuiz2());
 
         users = new HashMap<>();
@@ -181,6 +204,7 @@ public class MockDBService implements DatabaseService {
         User anthony = new User("Anthony", "Iozzia", 78, 7, 3);
         anthony.addQuiz("quiz0", "I am a Mock Quiz!");
         anthony.addQuiz("quiz1", "An other Quiz");
+        anthony.addQuiz("quiz2", "Treasure Hunt Quiz");
 
         return anthony;
     }
@@ -188,14 +212,15 @@ public class MockDBService implements DatabaseService {
     public static User createCosme() {
         User cosme = new User("Cosme", "Jordan");
         cosme.addQuiz("quiz0", "I am a Mock Quiz!");
+        cosme.addQuiz("quiz2", "Treasure Hunt Quiz");
 
         return cosme;
     }
 
-    /** Simply make the current thread wait 2 second */
-    private static void wait2second() {
+    /** Simply make the current thread wait 0.5 seconds, to do as if the request takes time */
+    private static void fakeWait() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -212,7 +237,7 @@ public class MockDBService implements DatabaseService {
 
         new Thread(
                         () -> {
-                            wait2second();
+                            fakeWait();
                             MockQuiz quiz = quizzes.get(quizId);
                             if (quiz == null) error(future, "Invalid quiz id");
                             else future.complete(f.apply(quiz));
@@ -226,7 +251,7 @@ public class MockDBService implements DatabaseService {
         idlingResource.increment();
         new Thread(
                         () -> {
-                            wait2second();
+                            fakeWait();
                             if (error) error(future, "Invalid user id");
                             else {
                                 users.put(userId, user);
@@ -252,8 +277,7 @@ public class MockDBService implements DatabaseService {
         waitForQuiz(
                 future,
                 quizId,
-                mockQuiz ->
-                        new Quiz(TITLE_ID, mockQuiz.getQuestions(), mockQuiz.getTreasureHunt()));
+                mockQuiz -> new Quiz(TITLE_ID, mockQuiz.getQuestions(), mockQuiz.isTreasureHunt()));
         return future;
     }
 
@@ -277,7 +301,7 @@ public class MockDBService implements DatabaseService {
         idlingResource.increment();
         new Thread(
                         () -> {
-                            wait2second();
+                            fakeWait();
                             Map<String, StringPool> stringPoolMap = new HashMap<>();
                             stringPoolMap.put(stringPool.getLanguageCode(), stringPool);
                             MockQuiz mockQuiz =
@@ -301,7 +325,7 @@ public class MockDBService implements DatabaseService {
         idlingResource.increment();
         new Thread(
                         () -> {
-                            wait2second();
+                            fakeWait();
                             User user = users.get(userId);
                             if (user == null) error(future, "Invalid user id");
                             else future.complete(user);

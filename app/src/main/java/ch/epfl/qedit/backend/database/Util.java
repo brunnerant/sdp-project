@@ -2,12 +2,16 @@ package ch.epfl.qedit.backend.database;
 
 import static ch.epfl.qedit.model.answer.MatrixFormat.Field.TO_MAP_TEXT;
 
+import android.content.Context;
+import android.util.Pair;
 import ch.epfl.qedit.model.Question;
+import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.model.answer.MultiFieldFormat;
+import ch.epfl.qedit.util.LocaleHelper;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -245,6 +249,47 @@ public final class Util {
                 .addOnFailureListener(e -> error(future, e.getMessage()));
 
         return future;
+    }
+
+    /** Returns the best language from the list of languages given the application context */
+    private static String getBestLanguage(List<String> languages, Context context) {
+        String appLanguage = LocaleHelper.getLanguage(context);
+
+        // If the quiz was translated in the application language, pick that version,
+        // otherwise we pick the first one. Note that we could have some more complex logic
+        // here, for example trying english first, and then falling back.
+        if (languages.contains(appLanguage)) return appLanguage;
+        else return languages.get(0);
+    }
+
+    /**
+     * Retrieves a quiz from the database in the right language. It fetches the available languages,
+     * chooses the best one, and fetches the quiz structure in parallel. It returns a future that
+     * completes with the quiz and the string pool once the operation is over.
+     */
+    public static CompletableFuture<Pair<Quiz, StringPool>> getQuiz(
+            DatabaseService db, String quizId, Context context) {
+        CompletableFuture<Pair<Quiz, StringPool>> result = new CompletableFuture<>();
+
+        CompletableFuture<StringPool> stringPool =
+                db.getQuizLanguages(quizId)
+                        .thenCompose(
+                                languages ->
+                                        db.getQuizStringPool(
+                                                quizId, getBestLanguage(languages, context)));
+
+        CompletableFuture<Quiz> quizStructure = db.getQuizStructure(quizId);
+
+        CompletableFuture.allOf(stringPool, quizStructure)
+                .whenComplete(
+                        (aVoid, throwable) -> {
+                            if (throwable != null) result.completeExceptionally(throwable);
+                            else
+                                result.complete(
+                                        new Pair<>(quizStructure.join(), stringPool.join()));
+                        });
+
+        return result;
     }
 
     /** Helper function to upload a string pool of a quiz */

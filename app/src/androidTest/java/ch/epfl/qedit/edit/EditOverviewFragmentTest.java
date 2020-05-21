@@ -80,29 +80,11 @@ public class EditOverviewFragmentTest extends EditTest {
         itemView(position, android.R.id.text1).check(matches(withText(text)));
     }
 
-    private void assertOverlayAt(int position, int size) {
-        for (int i = 0; i < size; i++) {
-            if (i == position) overlay(i).check(matches(isDisplayed()));
-            else overlay(i).check(matches(not(isDisplayed())));
-        }
-    }
-
-    @Test
-    public void testCanSelectItem() {
-        assertOverlayAt(-1, 5);
-        item(0).perform(click());
-        assertOverlayAt(0, 5);
-        item(3).perform(click());
-        assertOverlayAt(3, 5);
-        item(3).perform(click());
-        assertOverlayAt(-1, 5);
-    }
-
     @Test
     public void testCanDeleteItem() {
         String firstQuestionTitle = stringPool.get(testQuiz.getQuestions().get(0).getTitle());
-        onView(withText(firstQuestionTitle)).perform(click());
-        itemView(0, R.id.delete_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_delete);
 
         onView(withText(testRule.getActivity().getString(R.string.warning_delete_question)))
                 .inRoot(isDialog())
@@ -111,11 +93,10 @@ public class EditOverviewFragmentTest extends EditTest {
         onDialog(android.R.id.button2).perform(click());
         onView(withText(firstQuestionTitle)).check(matches(isDisplayed()));
 
-        itemView(0, R.id.delete_button).perform(click());
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_delete);
         onDialog(android.R.id.button1).perform(click());
         onView(withText(firstQuestionTitle)).check(doesNotExist());
-
-        assertOverlayAt(-1, 4);
     }
 
     @Test
@@ -138,15 +119,8 @@ public class EditOverviewFragmentTest extends EditTest {
         checkText(0, titles[1]);
         checkText(1, titles[0]);
 
-        item(0).perform(click());
-        assertOverlayAt(0, 5);
         onView(withId(R.id.question_list)).perform(dragAndDrop(1, 0));
-        assertOverlayAt(1, 5);
-
-        item(4).perform(click());
-        assertOverlayAt(4, 5);
         onView(withId(R.id.question_list)).perform(dragAndDrop(4, 0));
-        assertOverlayAt(0, 5);
 
         checkText(0, titles[4]);
         checkText(1, titles[0]);
@@ -190,7 +164,9 @@ public class EditOverviewFragmentTest extends EditTest {
     @Test
     public void testLaunchesEditQuestionActivity() {
         item(0).perform(click());
-        itemView(0, R.id.edit_button).perform(click());
+
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_edit);
 
         intended(
                 allOf(
@@ -202,7 +178,7 @@ public class EditOverviewFragmentTest extends EditTest {
     public void testEmptyHint() {
         onView(withId(R.id.empty_list_hint)).check(matches(not(isDisplayed())));
 
-        emptyQuizList(testQuiz);
+        emptyQuizList(testQuiz, testRule);
 
         onView(withId(R.id.empty_list_hint)).check(matches(isDisplayed()));
     }
