@@ -63,9 +63,7 @@ public class TreasureHuntActivityTest {
                 });
 
         // We prepare a mock quiz to test the activity
-        AnswerFormat format =
-                MatrixFormat.singleField(
-                        MatrixFormat.Field.textField("", MatrixFormat.Field.NO_LIMIT));
+        AnswerFormat format = MatrixFormat.singleField(MatrixFormat.Field.textField(""));
         Question question = new Question("title", "text", format, 42, 43, 100);
         Quiz quiz = new Quiz("title", Collections.nCopies(numQuestions, question), true);
 

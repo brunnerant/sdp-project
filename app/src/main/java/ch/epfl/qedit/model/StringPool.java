@@ -1,15 +1,17 @@
 package ch.epfl.qedit.model;
 
+import ch.epfl.qedit.util.Mappable;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
  * This class is just a lightweight wrapper around a map to add support for string addition with
  * unique keys, update and retrieval.
  */
-public class StringPool implements Serializable {
+public class StringPool implements Serializable, Mappable {
 
     public static final String TITLE_ID = "main_title";
 
@@ -72,6 +74,11 @@ public class StringPool implements Serializable {
         return stringPool.get(id);
     }
 
+    @Override
+    public Map<String, Object> toMap() {
+        return new HashMap<>(stringPool);
+    }
+
     /** Getter and setter for the language code */
     public String getLanguageCode() {
         return languageCode;
@@ -79,5 +86,13 @@ public class StringPool implements Serializable {
 
     public void setLanguageCode(String languageCode) {
         this.languageCode = languageCode;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof StringPool)) return false;
+        StringPool other = (StringPool) object;
+        return Objects.equals(this.languageCode, other.languageCode)
+                && Objects.equals(this.stringPool, other.stringPool);
     }
 }

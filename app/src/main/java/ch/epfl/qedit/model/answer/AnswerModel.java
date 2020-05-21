@@ -1,6 +1,7 @@
 package ch.epfl.qedit.model.answer;
 
 import androidx.annotation.Nullable;
+import ch.epfl.qedit.util.Mappable;
 import java.io.Serializable;
 
 /**
@@ -8,7 +9,7 @@ import java.io.Serializable;
  * one-to-one correspondence with the types of answers represented by the AnswerFormat class
  * hierarchy.
  */
-public abstract class AnswerModel implements Serializable {
+public abstract class AnswerModel implements Serializable, Mappable {
     @Override
     public abstract boolean equals(@Nullable Object obj);
 }

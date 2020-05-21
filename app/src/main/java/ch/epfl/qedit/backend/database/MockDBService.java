@@ -4,7 +4,6 @@ import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import ch.epfl.qedit.backend.Util;
 import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -59,18 +58,13 @@ public class MockDBService implements DatabaseService {
         }
 
         static final MatrixFormat simpleFormat =
-                MatrixFormat.singleField(
-                        MatrixFormat.Field.textField("hint1", MatrixFormat.Field.NO_LIMIT));
+                MatrixFormat.singleField(MatrixFormat.Field.textField("hint1"));
         static final MatrixFormat compoundFormat =
                 new MatrixFormat.Builder(2, 2)
                         .withField(0, 0, MatrixFormat.Field.preFilledField("hint2"))
-                        .withField(0, 1, MatrixFormat.Field.numericField(false, true, "hint3", 4))
-                        .withField(1, 0, MatrixFormat.Field.textField("hint4", 16))
-                        .withField(
-                                1,
-                                1,
-                                MatrixFormat.Field.numericField(
-                                        true, false, "hint5", MatrixFormat.Field.NO_LIMIT))
+                        .withField(0, 1, MatrixFormat.Field.numericField(false, true, "hint3"))
+                        .withField(1, 0, MatrixFormat.Field.textField("hint4"))
+                        .withField(1, 1, MatrixFormat.Field.numericField(true, false, "hint5"))
                         .build();
 
         @SuppressWarnings("SpellCheckingInspection")
@@ -189,6 +183,7 @@ public class MockDBService implements DatabaseService {
     private HashMap<String, MockQuiz> quizzes;
     private HashMap<String, User> users;
     private CountingIdlingResource idlingResource;
+    private int idCount;
 
     public MockDBService() {
         idlingResource = new CountingIdlingResource("MockDBService");
@@ -201,6 +196,8 @@ public class MockDBService implements DatabaseService {
         users = new HashMap<>();
         users.put(MockAuthService.ANTHONY_IOZZIA_ID, createAnthony());
         users.put(MockAuthService.COSME_JORDAN_ID, createCosme());
+
+        idCount = 0;
     }
 
     public static User createAnthony() {
@@ -295,6 +292,30 @@ public class MockDBService implements DatabaseService {
                     if (pool == null) error(future, "Language does not exist");
                     return pool;
                 });
+        return future;
+    }
+
+    @Override
+    public CompletableFuture<String> uploadQuiz(Quiz quiz, StringPool stringPool) {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        idlingResource.increment();
+        new Thread(
+                        () -> {
+                            fakeWait();
+                            Map<String, StringPool> stringPoolMap = new HashMap<>();
+                            stringPoolMap.put(stringPool.getLanguageCode(), stringPool);
+                            MockQuiz mockQuiz =
+                                    new MockQuiz(
+                                            quiz.getQuestions(),
+                                            stringPoolMap,
+                                            quiz.isTreasureHunt());
+                            String quizId = Integer.toString(idCount++);
+                            quizzes.put(quizId, mockQuiz);
+                            future.complete(quizId);
+                            idlingResource.decrement();
+                        })
+                .run();
+
         return future;
     }
 
