@@ -201,7 +201,7 @@ public class EditQuizSettingsDialog extends DialogFragment
         editTitle.setSelection(editTitle.getText().length());
 
         // Hide unneeded elements of the view
-        hasTreasureHuntCheckBox = false;
+        hasTreasureHuntCheckBox = quizBuilder.isTreasureHunt();
         view.findViewById(R.id.edit_language_selection).setVisibility(GONE);
         view.findViewById(R.id.treasure_hunt_checkbox).setVisibility(GONE);
     }

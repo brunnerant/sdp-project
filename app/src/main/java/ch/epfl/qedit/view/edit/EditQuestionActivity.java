@@ -1,17 +1,21 @@
 package ch.epfl.qedit.view.edit;
 
 import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.TREASURE_HUNT;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import ch.epfl.qedit.R;
@@ -24,14 +28,29 @@ import java.util.Objects;
 public class EditQuestionActivity extends AppCompatActivity {
 
     public static final String SOL_DIALOG_TAG = "ch.epfl.qedit.view.edit.EDIT_SOL_DIALOG_TAG";
+    public static final int MAP_REQUEST_CODE = 1;
+    public static final String LATITUDE = "ch.epfl.qedit.view.edit.LATITUDE";
+    public static final String LONGITUDE = "ch.epfl.qedit.view.edit.LONGITUDE";
 
     private String titleId;
     private String textId;
     private StringPool stringPool;
     private AnswerFormat answerFormat;
 
+    private boolean isTreasureHunt;
+
     private EditText titleView;
     private EditText textView;
+    private Button button_choose_location;
+
+    private double longitude = 0.0;
+    private double latitude = 0.0;
+    private double radius = 0.0;
+    private boolean hasBeenSet = false;
+
+    private TextView longitudeText;
+    private TextView latitudeText;
+    private EditText radiusText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +72,28 @@ public class EditQuestionActivity extends AppCompatActivity {
         setDoneButtonListener();
         setCancelButtonListener();
 
-        // Get the StringPool, the title and the text from the Intent
+        // Get the StringPool, the title and the text and treasure hunt from the Intent
         extractFromIntent();
+
+        setTreasureHunt();
+    }
+
+    private void setTreasureHunt() {
+        longitudeText = findViewById(R.id.longitude_text);
+        latitudeText = findViewById(R.id.latitude_text);
+        radiusText = findViewById(R.id.radius_text);
+        button_choose_location = findViewById(R.id.edit_choose_location);
+
+        if (isTreasureHunt) {
+            int type = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL;
+            radiusText.setInputType(type);
+            setChooseLocation();
+        } else {
+            latitudeText.setVisibility(View.INVISIBLE);
+            longitudeText.setVisibility(View.INVISIBLE);
+            radiusText.setVisibility(View.INVISIBLE);
+            button_choose_location.setVisibility(View.INVISIBLE);
+        }
     }
 
     /** Extract string pool and question attributes to modify */
@@ -70,6 +109,37 @@ public class EditQuestionActivity extends AppCompatActivity {
             titleView.setText(stringPool.get(titleId));
             textView.setText(stringPool.get(textId));
             setAnswerFormat(question.getFormat());
+        }
+
+        // TODO: Rename treasure hunt is needed
+        Object b = bundle.getBoolean(TREASURE_HUNT);
+        if (b != null) {
+            isTreasureHunt = (boolean) b;
+        }
+    }
+
+    private void setChooseLocation() {
+        button_choose_location.setOnClickListener(
+                v -> {
+                    Intent mapActivityIntent = new Intent(this, EditMapsActivity.class);
+                    startActivityForResult(mapActivityIntent, MAP_REQUEST_CODE);
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == MAP_REQUEST_CODE) {
+            longitude = (double) data.getExtras().getSerializable(LONGITUDE);
+            latitude = (double) data.getExtras().getSerializable(LATITUDE);
+            hasBeenSet = true;
+
+            longitudeText.setText(Double.toString(longitude));
+            longitudeText.setError(null);
+
+            latitudeText.setText(Double.toString(latitude));
+            latitudeText.setError(null);
         }
     }
 
@@ -150,6 +220,14 @@ public class EditQuestionActivity extends AppCompatActivity {
         // use & operator because we want to evaluate both side
         boolean noError = setErrorIfEmpty(titleId, R.id.edit_question_title);
         noError &= setErrorIfEmpty(textId, R.id.edit_question_text);
+
+        if (isTreasureHunt) {
+            noError &= setErrorIfEmpty(radiusText.getText().toString(), R.id.radius_text);
+
+            noError &= setErrorTextView(R.id.longitude_text, hasBeenSet);
+            noError &= setErrorTextView(R.id.latitude_text, hasBeenSet);
+        }
+
         if (answerFormat == null) {
             noError = false;
             TextView answerView = findViewById(R.id.choose_answer_text);
@@ -157,13 +235,26 @@ public class EditQuestionActivity extends AppCompatActivity {
         }
         if (noError) {
             // return the Question created by this activity to the callee activity
-            Question question = new Question(titleId, textId, answerFormat);
+            Question question = getQuestionForReturnResult();
+
             Intent intent = new Intent();
             intent.putExtra(QUESTION, question);
             intent.putExtra(STRING_POOL, stringPool);
             setResult(RESULT_OK, intent);
             finish();
         }
+    }
+
+    private Question getQuestionForReturnResult() {
+        Question question;
+        if (isTreasureHunt) {
+            radius = Double.parseDouble(radiusText.getText().toString());
+            question = new Question(titleId, textId, answerFormat, longitude, latitude, radius);
+        } else {
+            question = new Question(titleId, textId, answerFormat);
+        }
+
+        return question;
     }
 
     /**
@@ -178,6 +269,19 @@ public class EditQuestionActivity extends AppCompatActivity {
             EditText strView = findViewById(strViewId);
             strView.setError(getString(R.string.cannot_be_empty));
             return false;
+        }
+        return true;
+    }
+
+    private boolean setErrorTextView(int strViewId, boolean b) {
+        if (!b) {
+            TextView strView = findViewById(strViewId);
+            strView.requestFocus();
+            strView.setError(getString(R.string.cannot_be_empty));
+            return false;
+        } else {
+            TextView strView = findViewById(strViewId);
+            strView.setError(null);
         }
         return true;
     }
