@@ -1,7 +1,11 @@
 package ch.epfl.qedit.view.edit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import com.google.android.gms.maps.CameraUpdate;
@@ -12,11 +16,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
-    public static final String LATITUDE = "ch.epfl.qedit.view.edit.LATITUDE";
-    public static final String LONGITUDE = "ch.epfl.qedit.view.edit.LONGITUDE";
+import static ch.epfl.qedit.view.edit.EditOverviewFragment.QUESTION;
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.LATITUDE;
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.LONGITUDE;
+import static ch.epfl.qedit.view.edit.EditQuestionActivity.MAP_REQUEST_CODE;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
 
-    private GoogleMap mMap;
+public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private GoogleMap map;
     private LatLng latLng;
 
     @Override
@@ -26,10 +33,10 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
         mapFragment.getMapAsync(this);
 
         // This below will be the default location if user refuse location permission
-        // TODO in future PR: get current location
         double latitude = 46.518442;
         double longitude = 6.561983;
         latLng = new LatLng(latitude, longitude);
@@ -45,19 +52,19 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        map = googleMap;
 
         // Add a marker on your current position and move the camera
-        mMap.addMarker(
+        map.addMarker(
                 new MarkerOptions().position(latLng).title(getString(R.string.your_location)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         CameraUpdate latLngLocation = CameraUpdateFactory.newLatLngZoom(latLng, 12);
-        mMap.animateCamera(latLngLocation);
+        map.animateCamera(latLngLocation);
 
-        mMap.setOnMapClickListener(
+        map.setOnMapClickListener(
                 point -> {
-                    mMap.clear();
-                    mMap.addMarker(new MarkerOptions().position(point));
+                    map.clear();
+                    map.addMarker(new MarkerOptions().position(point));
                     latLng = point;
                 });
     }
@@ -66,24 +73,46 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
     public boolean onCreateOptionsMenu(Menu menu) {
         // TODO in future PR: Add a new item to go back to current location
         getMenuInflater().inflate(R.menu.edit_menu, menu);
+        MenuItem next = menu.findItem(R.id.next);
+        MenuItem previous = menu.findItem(R.id.previous);
+        MenuItem overview = menu.findItem(R.id.overview);
+
+        // We don't need below for the map
+        next.setVisible(false);
+        previous.setVisible(false);
+        overview.setVisible(false);
         return true;
     }
-    //
-    //    @Override
-    //    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    //        int id = item.getItemId();
-    //
-    //        // TODO in future PR: implement menu options
-    //        switch (id) {
-    //            case R.id.next:
-    //            case R.id.previous:
-    //                break;
-    //            case R.id.overview:
-    //                break;
-    //            case R.id.done:
-    //                break;
-    //        }
-    //
-    //        return true;
-    //    }
+
+        @Override
+        public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+            int id = item.getItemId();
+
+            // TODO in future PR: implement menu options
+            switch (id) {
+                case R.id.done:
+                    returnResult();
+                    break;
+                default:
+                    break;
+            }
+
+            return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        returnResult();
+        this.finish();
+    }
+
+    private void returnResult() {
+        Intent intent = new Intent();
+        intent.putExtra(LONGITUDE, latLng.longitude);
+        intent.putExtra(LATITUDE, latLng.latitude);
+
+        setResult(MAP_REQUEST_CODE, intent);
+        finish();
+    }
 }
