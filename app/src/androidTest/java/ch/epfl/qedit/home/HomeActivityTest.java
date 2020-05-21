@@ -130,6 +130,13 @@ public class HomeActivityTest extends RecyclerViewHelpers {
     }
 
     @Test
+    public void testClickOnQRDisplaysQR() {
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_qr);
+        onView(withId(R.id.home_qr_container)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void testAddItem() {
         clickOn(R.id.add, false);
 
