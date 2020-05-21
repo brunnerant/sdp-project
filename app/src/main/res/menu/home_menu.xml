@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/add"
-        android:icon="@drawable/ic_add_editor_mode"
+        android:icon="@drawable/ic_add_black"
         android:title="@string/add_quiz"
         app:showAsAction="always" />
 
