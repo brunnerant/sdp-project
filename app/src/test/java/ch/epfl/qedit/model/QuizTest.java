@@ -1,6 +1,7 @@
 package ch.epfl.qedit.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 
@@ -151,5 +152,12 @@ public class QuizTest {
     public void builderTreasureHuntFail2() {
         Quiz.Builder builder = new Quiz.Builder();
         builder.append(new Question("", "", answerFormat, 0, 0, 1));
+    }
+
+    @Test
+    public void testEquals() {
+        Quiz quiz = new Quiz(StringPool.TITLE_ID, new ArrayList<>());
+        assertNotEquals("Not a quiz", quiz);
+        assertNotEquals(quiz, "Not a quiz");
     }
 }
