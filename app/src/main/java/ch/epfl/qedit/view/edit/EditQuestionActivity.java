@@ -220,6 +220,26 @@ public class EditQuestionActivity extends AppCompatActivity {
         boolean noError = setErrorIfEmpty(titleId, R.id.edit_question_title);
         noError &= setErrorIfEmpty(textId, R.id.edit_question_text);
 
+        noError &= errorTreasureHunt(noError);
+
+        if (answerFormat == null) {
+            noError = false;
+            TextView answerView = findViewById(R.id.choose_answer_text);
+            answerView.setError(getString(R.string.cannot_be_empty));
+        }
+        if (noError) {
+            // return the Question created by this activity to the callee activity
+            Question question = getQuestionForReturnResult();
+
+            Intent intent = new Intent();
+            intent.putExtra(QUESTION, question);
+            intent.putExtra(STRING_POOL, stringPool);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    private boolean errorTreasureHunt(boolean noError) {
         if (isTreasureHunt) {
             noError &= setErrorIfEmpty(radiusText.getText().toString(), R.id.radius_text);
 
@@ -229,27 +249,19 @@ public class EditQuestionActivity extends AppCompatActivity {
             noError &= setErrorTextView(R.id.latitude_text, hasBeenSet);
         }
 
-        if (answerFormat == null) {
-            noError = false;
-            TextView answerView = findViewById(R.id.choose_answer_text);
-            answerView.setError(getString(R.string.cannot_be_empty));
-        }
-        if (noError) {
-            // return the Question created by this activity to the callee activity
-            Question question = new Question(titleId, textId, answerFormat);
-            if (isTreasureHunt) {
-                radius = Double.parseDouble(radiusText.getText().toString());
-                question = new Question(titleId, textId, answerFormat, longitude, latitude, radius);
-            } else {
-                question = new Question(titleId, textId, answerFormat);
-            }
+        return noError;
+    }
 
-            Intent intent = new Intent();
-            intent.putExtra(QUESTION, question);
-            intent.putExtra(STRING_POOL, stringPool);
-            setResult(RESULT_OK, intent);
-            finish();
+    private Question getQuestionForReturnResult() {
+        Question question;
+        if (isTreasureHunt) {
+            radius = Double.parseDouble(radiusText.getText().toString());
+            question = new Question(titleId, textId, answerFormat, longitude, latitude, radius);
+        } else {
+            question = new Question(titleId, textId, answerFormat);
         }
+
+        return question;
     }
 
     /**
