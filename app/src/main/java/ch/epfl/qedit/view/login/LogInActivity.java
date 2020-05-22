@@ -14,9 +14,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
+import ch.epfl.qedit.backend.cache.CacheManagerTemp;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.util.LocaleHelper;
@@ -164,7 +166,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                             }
                         });
         // Put the current user id in cache
-        Util.putStringInPrefs(this, USER_ID, userId);
+        CacheManagerTemp.putStringInPrefs(this, USER_ID, userId);
     }
 
     private void onLogInFailed() {
