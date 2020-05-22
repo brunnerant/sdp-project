@@ -1,5 +1,6 @@
 package ch.epfl.qedit.home;
 
+import static android.app.Activity.RESULT_OK;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -7,6 +8,7 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
@@ -14,22 +16,32 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.util.Util.clickOn;
+import static ch.epfl.qedit.util.Util.createTestQuiz;
+import static ch.epfl.qedit.util.Util.createTestStringPool;
 import static ch.epfl.qedit.util.Util.onDialog;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
+import static ch.epfl.qedit.view.home.HomeQuizListFragment.EDIT_NEW_QUIZ_REQUEST_CODE;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.STRING_POOL;
+import static ch.epfl.qedit.view.login.Util.USER;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsNot.not;
 
+import android.app.Instrumentation;
+import android.content.Intent;
+import android.os.Bundle;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
+import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
+import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.home.HomeQuizListFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
@@ -47,6 +59,10 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
     @Rule
     public final FragmentTestRule<?, HomeQuizListFragment> testRule =
             FragmentTestRule.create(HomeQuizListFragment.class, false, false);
+
+    @Rule
+    public final ActivityTestRule<HomeActivity> resultTestRule =
+            new ActivityTestRule<>(HomeActivity.class, false, false);
 
     public HomeQuizListFragmentTest() {
         super(R.id.home_quiz_list);
@@ -148,5 +164,35 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
                 allOf(
                         hasComponent(TreasureHuntActivity.class.getName()),
                         hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class))));
+    }
+
+    @Test
+    public void testOnActivityResult() {
+        User user = new User("Marcel", "Doe");
+        user.addQuiz("quiz0", "I am a Mock Quiz!");
+
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER, user);
+        intent.putExtras(bundle);
+
+        Quiz quiz = createTestQuiz();
+        StringPool stringPool = createTestStringPool("Test");
+
+        Intent dataIntent = new Intent();
+        dataIntent.putExtra(QUIZ_ID, quiz);
+        dataIntent.putExtra(STRING_POOL, stringPool);
+
+        resultTestRule.launchActivity(intent);
+
+        intending(hasComponent(EditQuizActivity.class.getName()))
+                .respondWith(new Instrumentation.ActivityResult(RESULT_OK, dataIntent));
+        resultTestRule
+                .getActivity()
+                .startActivityForResult(
+                        new Intent(resultTestRule.getActivity(), EditQuizActivity.class),
+                        EDIT_NEW_QUIZ_REQUEST_CODE);
+
+        resultTestRule.finishActivity();
     }
 }

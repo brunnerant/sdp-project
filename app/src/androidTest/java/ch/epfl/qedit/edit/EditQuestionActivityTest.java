@@ -42,7 +42,6 @@ import android.os.Bundle;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
@@ -61,10 +60,6 @@ public class EditQuestionActivityTest {
     @Rule
     public final ActivityTestRule<EditQuestionActivity> testRule =
             new ActivityTestRule<>(EditQuestionActivity.class, false, false);
-
-    @Rule
-    public final IntentsTestRule<EditQuestionActivity> resultTestRule =
-            new IntentsTestRule<>(EditQuestionActivity.class, false, false);
 
     private void setUp(boolean question, boolean isTreasureHunt) {
         Intents.init();

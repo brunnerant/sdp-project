@@ -10,6 +10,7 @@ import static ch.epfl.qedit.view.login.Util.USER;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,9 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import com.google.common.collect.ImmutableMap;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
@@ -43,15 +41,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
 
     public static final String QUIZ_ID = "ch.epfl.qedit.view.QUIZ_ID";
     public static final String STRING_POOL = "ch.epfl.qedit.view.STRING_POOL";
-    private static final int EDIT_NEW_QUIZ_REQUEST_CODE = 2;
+    public static final int EDIT_NEW_QUIZ_REQUEST_CODE = 2;
     private static final int EDIT_EXISTING_QUIZ_REQUEST_CODE = 3;
 
     private DatabaseService db;
@@ -67,6 +63,8 @@ public class HomeQuizListFragment extends Fragment
     private int modifyIndex = -1;
 
     private List<Map.Entry<String, String>> quizzes;
+    private HashMap<String, Pair<Quiz, StringPool>>
+            cachedQuizzes; // TODO only temporary, will be handled by really cache
 
     @Override
     public View onCreateView(
@@ -87,6 +85,8 @@ public class HomeQuizListFragment extends Fragment
         // Get user from the bundle created by the parent activity and get his/her quizzes
         user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
+
+        cachedQuizzes = new HashMap<>();
 
         // Create the list adapter and bind it to the list edit view
         createAdapter(user);
@@ -174,44 +174,56 @@ public class HomeQuizListFragment extends Fragment
     // Handles when a user clicked on the button to show a quiz
     private void startQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
-        progressBar.setVisibility(VISIBLE);
 
-        Util.getQuiz(db, quizID, requireContext())
-                .whenComplete(
-                        (pair, throwable) -> {
-                            if (throwable != null) {
-                                Toast.makeText(
-                                                requireContext(),
-                                                R.string.database_error,
-                                                Toast.LENGTH_SHORT)
-                                        .show();
-                            } else {
-                                progressBar.setVisibility(View.GONE);
-                                launchQuizActivity(pair.first.instantiateLanguage(pair.second));
-                            }
-                        });
+        if (cachedQuizzes.containsKey(quizID)) {
+            Pair pair = Objects.requireNonNull(cachedQuizzes.get(quizID));
+            launchQuizActivity(((Quiz) pair.first).instantiateLanguage((StringPool) pair.second));
+        } else {
+            progressBar.setVisibility(VISIBLE);
+            Util.getQuiz(db, quizID, requireContext())
+                    .whenComplete(
+                            (pair, throwable) -> {
+                                if (throwable != null) {
+                                    Toast.makeText(
+                                                    requireContext(),
+                                                    R.string.database_error,
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+                                } else {
+                                    progressBar.setVisibility(View.GONE);
+                                    launchQuizActivity(pair.first.instantiateLanguage(pair.second));
+                                    cachedQuizzes.put(quizID, new Pair<>(pair.first, pair.second));
+                                }
+                            });
+        }
     }
 
     // Handles when a user clicked on the button to edit a quiz
     private void editQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
-        progressBar.setVisibility(VISIBLE);
 
-        Util.getQuiz(db, quizID, requireContext())
-                .whenComplete(
-                        (pair, throwable) -> {
-                            if (throwable != null) {
-                                Toast.makeText(
-                                                requireContext(),
-                                                R.string.database_error,
-                                                Toast.LENGTH_SHORT)
-                                        .show();
-                            } else {
-                                // Hide progress bar
-                                progressBar.setVisibility(GONE);
-                                launchModifyQuizDialog(pair.second, pair.first, position);
-                            }
-                        });
+        if (cachedQuizzes.containsKey(quizID)) {
+            Pair pair = Objects.requireNonNull(cachedQuizzes.get(quizID));
+            launchModifyQuizDialog((StringPool) pair.second, (Quiz) pair.first, position);
+        } else {
+            progressBar.setVisibility(VISIBLE);
+
+            Util.getQuiz(db, quizID, requireContext())
+                    .whenComplete(
+                            (pair, throwable) -> {
+                                if (throwable != null) {
+                                    Toast.makeText(
+                                                    requireContext(),
+                                                    R.string.database_error,
+                                                    Toast.LENGTH_SHORT)
+                                            .show();
+                                } else {
+                                    // Hide progress bar
+                                    progressBar.setVisibility(GONE);
+                                    launchModifyQuizDialog(pair.second, pair.first, position);
+                                }
+                            });
+        }
     }
 
     /**
@@ -253,39 +265,46 @@ public class HomeQuizListFragment extends Fragment
             // Get the title of the quiz
             String title = extendedStringPool.get(TITLE_ID);
 
+            String quizId = null;
+
             if (requestCode == EDIT_NEW_QUIZ_REQUEST_CODE) {
                 // The user edited an new quiz
-                try {
-                    // Upload the new quiz and stringPool to the database
-                    String quizId = db.uploadQuiz(quiz, extendedStringPool).get();
 
-                    // Extend the list of quizzes of the user
-                    quizzes.add(new AbstractMap.SimpleEntry<>(quizId, title));
+                // Upload the new quiz and stringPool to the database
+                quizId = db.uploadQuiz(quiz, extendedStringPool).join();
 
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace(); //TODO handle properly
-                }
+                // Extend the list of quizzes of the user
+                quizzes.add(new AbstractMap.SimpleEntry<>(quizId, title));
+
             } else if (requestCode == EDIT_EXISTING_QUIZ_REQUEST_CODE) {
                 // The user edited an already existing Quiz
-                // First get its id
-                String id = quizzes.get(modifyIndex).getKey();
+                // First get the old entry
+                Map.Entry<String, String> oldEntry = quizzes.get(modifyIndex);
+                quizId = oldEntry.getKey();
 
                 // Update the quiz in the database
-                // db.updateQuiz(id, quiz, extendedStringPool); //TODO
+                // db.updateQuiz(id, quiz, extendedStringPool); //TODO not yet supported by backend
 
                 // Update the existing entry in the list of quizzes
                 AbstractMap.SimpleImmutableEntry<String, String> newEntry =
-                        new AbstractMap.SimpleImmutableEntry<>(id, title);
+                        new AbstractMap.SimpleImmutableEntry<>(quizId, title);
                 quizzes.set(modifyIndex, newEntry);
                 listAdapter.updateItem(modifyIndex);
                 modifyIndex = -1;
 
                 // Update the quiz list of the local user
-               // user.updateQuizWithId(String id, String newTitle); TODO
+                user.updateQuizOnValue(oldEntry.getValue(), newEntry.getValue());
             }
 
-            // Update the list of quizzes of the user
-            // db.updateUserQuizList(user.getId, ImmutableMap.copyOf(quizzes)); //TODO
+            // When we one of the above ifs was executed
+            if (quizId != null) {
+                // Update the list of quizzes of the user
+                // db.updateUserQuizList(user.getId, ImmutableMap.copyOf(quizzes)); // TODO the user
+                // has no ID stored inside the class
+
+                // Cache the quiz
+                cachedQuizzes.put(quizId, new Pair<>(quiz, extendedStringPool));
+            }
         }
     }
 
