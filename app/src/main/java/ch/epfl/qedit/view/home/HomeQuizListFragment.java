@@ -269,31 +269,10 @@ public class HomeQuizListFragment extends Fragment
 
             if (requestCode == EDIT_NEW_QUIZ_REQUEST_CODE) {
                 // The user edited an new quiz
-
-                // Upload the new quiz and stringPool to the database
-                quizId = db.uploadQuiz(quiz, extendedStringPool).join();
-
-                // Extend the list of quizzes of the user
-                quizzes.add(new AbstractMap.SimpleEntry<>(quizId, title));
-
+                quizId = handleNewQuizResult(quiz, extendedStringPool, title);
             } else if (requestCode == EDIT_EXISTING_QUIZ_REQUEST_CODE) {
                 // The user edited an already existing Quiz
-                // First get the old entry
-                Map.Entry<String, String> oldEntry = quizzes.get(modifyIndex);
-                quizId = oldEntry.getKey();
-
-                // Update the quiz in the database
-                // db.updateQuiz(id, quiz, extendedStringPool); //TODO not yet supported by backend
-
-                // Update the existing entry in the list of quizzes
-                AbstractMap.SimpleImmutableEntry<String, String> newEntry =
-                        new AbstractMap.SimpleImmutableEntry<>(quizId, title);
-                quizzes.set(modifyIndex, newEntry);
-                listAdapter.updateItem(modifyIndex);
-                modifyIndex = -1;
-
-                // Update the quiz list of the local user
-                user.updateQuizOnValue(oldEntry.getValue(), newEntry.getValue());
+                quizId = handleModifyQuizResult(quiz, extendedStringPool, title);
             }
 
             // When we one of the above ifs was executed
@@ -306,6 +285,42 @@ public class HomeQuizListFragment extends Fragment
                 cachedQuizzes.put(quizId, new Pair<>(quiz, extendedStringPool));
             }
         }
+    }
+
+    /** Handles the case where the user edited a new quiz */
+    private String handleNewQuizResult(Quiz quiz, StringPool stringPool, String title) {
+        // Upload the new quiz and stringPool to the database
+        String quizId = db.uploadQuiz(quiz, stringPool).join();
+
+        // Extend the list of quizzes of the user
+        quizzes.add(new AbstractMap.SimpleEntry<>(quizId, title));
+
+        // Add the quiz to the local user
+        user.addQuiz(quizId, title);
+
+        return quizId;
+    }
+
+    /** Handles the case where the user edited an already existing quiz */
+    private String handleModifyQuizResult(Quiz quiz, StringPool stringPool, String title) {
+        // First get the old entry
+        Map.Entry<String, String> oldEntry = quizzes.get(modifyIndex);
+        String quizId = oldEntry.getKey();
+
+        // Update the quiz in the database
+        // db.updateQuiz(id, quiz, extendedStringPool); //TODO not yet supported by backend
+
+        // Update the existing entry in the list of quizzes
+        AbstractMap.SimpleImmutableEntry<String, String> newEntry =
+                new AbstractMap.SimpleImmutableEntry<>(quizId, title);
+        quizzes.set(modifyIndex, newEntry);
+        listAdapter.updateItem(modifyIndex);
+        modifyIndex = -1;
+
+        // Update the quiz list of the local user
+        user.updateQuizOnValue(oldEntry.getValue(), newEntry.getValue());
+
+        return quizId;
     }
 
     // This method will be called when the user confirms the deletion by clicking on "yes"
