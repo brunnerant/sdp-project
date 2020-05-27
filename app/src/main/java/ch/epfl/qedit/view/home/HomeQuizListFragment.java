@@ -7,6 +7,7 @@ import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.login.Util.USER;
+import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -227,7 +228,9 @@ public class HomeQuizListFragment extends Fragment
         // We put the quiz into the bundle
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZ_ID, quiz);
+        bundle.putBoolean(CORRECTION,false);
         intent.putExtras(bundle);
+
 
         // And start the activity
         startActivity(intent);
