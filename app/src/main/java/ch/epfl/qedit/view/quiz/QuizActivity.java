@@ -161,6 +161,7 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
     private void handleToggleOverview() {
         findViewById(R.id.quiz_overview_container)
                 .setVisibility(overviewActive ? View.GONE : View.VISIBLE);
+        findViewById(R.id.separator).setVisibility(overviewActive ? View.GONE : View.VISIBLE);
         overviewActive = !overviewActive;
     }
 
