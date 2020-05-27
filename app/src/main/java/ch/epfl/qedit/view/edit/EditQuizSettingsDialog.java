@@ -195,9 +195,7 @@ public class EditQuizSettingsDialog extends DialogFragment
         quizBuilder = new Quiz.Builder(quiz);
 
         // Set the title
-        String title = stringPool.get(TITLE_ID);
-        // TODO Support old questions that store the strings directly as well
-        editTitle.setText((title == null) ? quiz.getTitle() : title);
+        editTitle.setText(stringPool.get(TITLE_ID));
         editTitle.setSelection(editTitle.getText().length());
 
         // Hide unneeded elements of the view

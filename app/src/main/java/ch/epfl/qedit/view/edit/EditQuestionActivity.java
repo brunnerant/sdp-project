@@ -89,10 +89,10 @@ public class EditQuestionActivity extends AppCompatActivity {
             radiusText.setInputType(type);
             setChooseLocation();
         } else {
-            latitudeText.setVisibility(View.INVISIBLE);
-            longitudeText.setVisibility(View.INVISIBLE);
-            radiusText.setVisibility(View.INVISIBLE);
-            button_choose_location.setVisibility(View.INVISIBLE);
+            latitudeText.setVisibility(View.GONE);
+            longitudeText.setVisibility(View.GONE);
+            radiusText.setVisibility(View.GONE);
+            button_choose_location.setVisibility(View.GONE);
         }
     }
 

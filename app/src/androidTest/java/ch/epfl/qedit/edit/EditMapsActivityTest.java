@@ -6,7 +6,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.ActivityResultMatchers.hasResultCode;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.view.edit.EditQuestionActivity.MAP_REQUEST_CODE;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -31,7 +30,6 @@ public class EditMapsActivityTest {
 
     @Test
     public void testThatActivityIsDisplayed() {
-        onView(withText(R.string.title_activity_edit_maps)).check(matches(isDisplayed()));
         onView(withId(R.id.map)).check(matches(isDisplayed()));
     }
 
