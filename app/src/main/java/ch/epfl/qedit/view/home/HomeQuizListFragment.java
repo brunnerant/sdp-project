@@ -308,7 +308,7 @@ public class HomeQuizListFragment extends Fragment
         String quizId = oldEntry.getKey();
 
         // Update the quiz in the database
-        // db.updateQuiz(id, quiz, extendedStringPool); //TODO not yet supported by backend
+        // db.updateQuiz(id, quiz, stringPool); //TODO not yet supported by backend
 
         // Update the existing entry in the list of quizzes
         AbstractMap.SimpleImmutableEntry<String, String> newEntry =
