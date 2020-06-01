@@ -76,7 +76,7 @@ public class HomeQuizListFragment extends Fragment
         setHasOptionsMenu(true);
 
         // Initialize the dialog shown on deletion
-        deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete), this);
+        deleteDialog = ConfirmDialog.create(getString(R.string.warning_delete_quiz), this);
 
         // Create the filter that is applied on the titles enter by the user when changing the title
         // of the quiz
@@ -284,6 +284,9 @@ public class HomeQuizListFragment extends Fragment
                 // Cache the quiz
                 cachedQuizzes.put(quizId, new Pair<>(quiz, extendedStringPool));
             }
+            // When the user decides to stop the edition without saving the changes the
+            // EditQuizActivity will return with RESULT_CANCELED. But we do not need to do anything
+            // in this case.
         }
     }
 
