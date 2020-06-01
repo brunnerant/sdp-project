@@ -4,6 +4,12 @@ import android.content.Context;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -18,13 +24,16 @@ public class CacheDBService implements DatabaseService {
     // This is the underlying database service that is being decorated
     private final DatabaseService dbService;
 
-    // This is the context of the application, that we need in order to access the cache
-    private final Context context;
+    // This it the cache directory
+    private final File userCacheDir;
 
     /** Creates a cache that decorates the given database service */
     public CacheDBService(DatabaseService dbService, Context context) {
         this.dbService = dbService;
-        this.context = context;
+        this.userCacheDir = new File(context.getCacheDir(), "users");
+
+        // Create an empty directory if it does not already exist
+        if (!userCacheDir.exists()) userCacheDir.mkdirs();
     }
 
     @Override
@@ -49,7 +58,27 @@ public class CacheDBService implements DatabaseService {
 
     @Override
     public CompletableFuture<User> getUser(String userId) {
-        return dbService.getUser(userId);
+        CompletableFuture<User> future = new CompletableFuture<>();
+
+        File userFile = new File(userCacheDir, userId);
+        User fromCache = lookup(userFile);
+
+        if (fromCache == null) {
+            // If the user was not in the cache, we retrieve it from the real database
+            dbService
+                    .getUser(userId)
+                    .thenAccept(
+                            user -> {
+                                // We store the user in the files for the next time
+                                store(userFile, user);
+                                future.complete(user);
+                            });
+        } else {
+            // If the user was in the cache, no need to access the database
+            future.complete(fromCache);
+        }
+
+        return future;
     }
 
     @Override
@@ -68,7 +97,25 @@ public class CacheDBService implements DatabaseService {
         return dbService.updateUserQuizList(userId, quizzes);
     }
 
-    private static User getUserFromCache(String userId) {
-        return null;
+    /** Lookups an item in the file storage if it exists. Returns null if not present. */
+    private <T extends Serializable> T lookup(File file) {
+        // If the file does not exist, the item was not cached
+        if (!file.exists()) return null;
+
+        // Otherwise, try to read it from the file
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file))) {
+            return (T) inputStream.readObject();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /** Stores an item in the file storage. */
+    private <T extends Serializable> void store(File file, T data) {
+        // Try to store the data in the cache
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file))) {
+            outputStream.writeObject(data);
+        } catch (Exception ignored) {
+        }
     }
 }
