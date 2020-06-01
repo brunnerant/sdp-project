@@ -31,7 +31,7 @@ class HomeFragmentsTestUsingDB extends RecyclerViewHelpers {
 
         MockDBService dbService = new MockDBService();
         idlingResource = dbService.getIdlingResource();
-        DatabaseFactory.setInstance(dbService);
+        DatabaseFactory.setInstance(context -> dbService);
         IdlingRegistry.getInstance().register(idlingResource);
 
         testRule.launchFragment(fragment);

@@ -22,7 +22,7 @@ public class QuizFragmentsTestUsingDB {
         MockDBService dbService = new MockDBService();
         idlingResource = dbService.getIdlingResource();
         IdlingRegistry.getInstance().register(idlingResource);
-        DatabaseFactory.setInstance(dbService);
+        DatabaseFactory.setInstance(context -> dbService);
 
         QuizViewModel model =
                 new ViewModelProvider((ViewModelStoreOwner) testRule.getActivity())
