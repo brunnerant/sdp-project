@@ -20,9 +20,7 @@ import java.util.function.Supplier;
 /**
  * This class decorates a database service so that some of the requests are cached on the internal
  * storage. This is used to reduce the delay of accessing the database and allowing the user to use
- * the app without internet connection. An important assumption that is made is that the data that
- * is in the database will not be updated. If this assumption is not valid, the cache might contain
- * stale data.
+ * the app without internet connection.
  */
 public class CacheDBService implements DatabaseService {
 
@@ -52,7 +50,7 @@ public class CacheDBService implements DatabaseService {
         // Lists are not serializable, but array lists are, so we just need to wrap the lists
         // into array lists before storing them in the cache. Since array lists are lists,
         // nothing needs to be done to deserialize.
-        return retrieve(
+        return this.<List<String>, ArrayList<String>>retrieve(
                 new File(langCacheDir, quizId),
                 () -> dbService.getQuizLanguages(quizId),
                 list -> new ArrayList<>(list),
@@ -90,11 +88,30 @@ public class CacheDBService implements DatabaseService {
     @Override
     public CompletableFuture<Void> updateUserStatistics(
             String userId, int score, int successes, int attempts) {
+        // For now, we don't implement a complex caching policy at all. Upon a write, we
+        // simply invalidate the local cache.
+        // A better approach would be to update the data locally and write it back later, for
+        // example when the application exits. The problem with that approach is that it is
+        // harder to avoid stale data, so we stick to the simple solution for now.
+
+        // Invalidate the local cache
+        File userFile = new File(userCacheDir, userId);
+        userFile.delete();
+
+        // And update the database
         return dbService.updateUserStatistics(userId, score, successes, attempts);
     }
 
     @Override
     public CompletableFuture<Void> updateUserQuizList(String userId, Map<String, String> quizzes) {
+        // See the comment in the method updateUserStatistics to understand the choices
+        // that were made in this functions.
+
+        // Invalidate the local cache
+        File userFile = new File(userCacheDir, userId);
+        userFile.delete();
+
+        // And update the database
         return dbService.updateUserQuizList(userId, quizzes);
     }
 
@@ -130,7 +147,9 @@ public class CacheDBService implements DatabaseService {
      * Stores an item in the file storage. It does so in a separate thread so that the rest of the
      * logic can already be executed.
      */
-    private <T extends Serializable> void storeInCache(File file, T data) {
+    private <T extends Serializable> CompletableFuture<Void> storeInCache(File file, T data) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
         new Thread(
                         () -> {
                             // Try to store the data in the cache (append = false, so that it is
@@ -138,10 +157,15 @@ public class CacheDBService implements DatabaseService {
                             try (ObjectOutputStream outputStream =
                                     new ObjectOutputStream(new FileOutputStream(file, false))) {
                                 outputStream.writeObject(data);
-                            } catch (Exception ignored) {
+                            } catch (Throwable t) {
+                                future.completeExceptionally(t);
                             }
+
+                            future.complete(null);
                         })
                 .run();
+
+        return future;
     }
 
     /**
@@ -176,6 +200,9 @@ public class CacheDBService implements DatabaseService {
                                 // Once it arrives, we cache it locally
                                 f.thenAccept(
                                         fromDB -> {
+                                            // We don't care if the data was successfully written
+                                            // or not because we can re-fetch it later in case
+                                            // of a failure.
                                             storeInCache(cache, serialize.apply(fromDB));
                                         });
 
