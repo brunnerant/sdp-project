@@ -41,8 +41,15 @@ public class CacheDBService implements DatabaseService {
         this.poolCacheDir = new File(context.getCacheDir(), "pools");
         this.langCacheDir = new File(context.getCacheDir(), "languages");
 
-        // Create an empty directory if it does not already exist
-        if (!userCacheDir.exists()) userCacheDir.mkdirs();
+        // Create the subdirectories if they do not already exist
+        createDir(userCacheDir);
+        createDir(quizCacheDir);
+        createDir(poolCacheDir);
+        createDir(langCacheDir);
+    }
+
+    private static void createDir(File dir) {
+        if (!dir.exists()) dir.mkdirs();
     }
 
     @Override
@@ -66,7 +73,7 @@ public class CacheDBService implements DatabaseService {
     @Override
     public CompletableFuture<StringPool> getQuizStringPool(String quizId, String language) {
         return retrieve(
-                new File(quizCacheDir, quizId + "-" + language),
+                new File(poolCacheDir, quizId + "-" + language),
                 () -> dbService.getQuizStringPool(quizId, language));
     }
 
