@@ -10,10 +10,12 @@ import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.backend.database.CacheDBService;
+import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.backend.database.MockDBService;
-import ch.epfl.qedit.model.User;
 import java.io.File;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,15 +60,47 @@ public class CacheDBServiceTest {
         clearCache();
     }
 
+    // Tests that doing two subsequent requests to the same data calls the database only once
+    private <T> void assertCached(Function<DatabaseService, CompletableFuture<T>> request) {
+        CompletableFuture<T> future1 = request.apply(cache);
+        CompletableFuture<T> future2 = request.apply(cache);
+
+        T result1 = future1.join();
+        T result2 = future2.join();
+
+        // Only the first request should have gone to the database, the second one being cached
+        request.apply(verify(db, times(1)));
+
+        // The cached result should be the same as the result from the database
+        assertEquals(result1, result2);
+    }
+
     @Test
     public void testCacheCachesRequests() {
-        CompletableFuture<User> f1 = cache.getUser(ANTHONY_IOZZIA_ID);
-        CompletableFuture<User> f2 = cache.getUser(ANTHONY_IOZZIA_ID);
+        assertCached(db -> db.getUser(ANTHONY_IOZZIA_ID));
+        assertCached(db -> db.getQuizLanguages("quiz0"));
+        assertCached(db -> db.getQuizStructure("quiz0"));
+        assertCached(db -> db.getQuizStringPool("quiz0", "en"));
+    }
 
-        User u1 = f1.join();
-        User u2 = f2.join();
+    // Checks that the action invalidates the cache for a user
+    private void assertInvalidatesUser(Runnable action) {
+        cache.getUser(ANTHONY_IOZZIA_ID).join();
+        action.run();
+        cache.getUser(ANTHONY_IOZZIA_ID).join();
 
-        verify(db, times(1)).getUser(ANTHONY_IOZZIA_ID);
-        assertEquals(u1, u2);
+        // The database should be called twice because of invalidation
+        verify(db, times(2)).getUser(ANTHONY_IOZZIA_ID);
+    }
+
+    @Test
+    public void testUpdateStatisticsInvalidatesCache() {
+        assertInvalidatesUser(() -> cache.updateUserStatistics(ANTHONY_IOZZIA_ID, 0, 0, 0));
+    }
+
+    @Test
+    public void testUpdateQuizListInvalidatesCache() {
+        assertInvalidatesUser(
+                () -> cache.updateUserQuizList(ANTHONY_IOZZIA_ID, Collections.emptyMap()));
     }
 }
