@@ -13,11 +13,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 /**
  * This class decorates a database service so that some of the requests are cached on the internal
  * storage. This is used to reduce the delay of accessing the database and allowing the user to use
- * the app without internet connection.
+ * the app without internet connection. An important assumption that is made is that the data that
+ * is in the database will not be updated. If this assumption is not valid, the cache might contain
+ * stale data.
  */
 public class CacheDBService implements DatabaseService {
 
@@ -58,27 +61,7 @@ public class CacheDBService implements DatabaseService {
 
     @Override
     public CompletableFuture<User> getUser(String userId) {
-        CompletableFuture<User> future = new CompletableFuture<>();
-
-        File userFile = new File(userCacheDir, userId);
-        User fromCache = lookup(userFile);
-
-        if (fromCache == null) {
-            // If the user was not in the cache, we retrieve it from the real database
-            dbService
-                    .getUser(userId)
-                    .thenAccept(
-                            user -> {
-                                // We store the user in the files for the next time
-                                store(userFile, user);
-                                future.complete(user);
-                            });
-        } else {
-            // If the user was in the cache, no need to access the database
-            future.complete(fromCache);
-        }
-
-        return future;
+        return retrieve(new File(userCacheDir, userId), () -> dbService.getUser(userId));
     }
 
     @Override
@@ -97,25 +80,77 @@ public class CacheDBService implements DatabaseService {
         return dbService.updateUserQuizList(userId, quizzes);
     }
 
-    /** Lookups an item in the file storage if it exists. Returns null if not present. */
-    private <T extends Serializable> T lookup(File file) {
-        // If the file does not exist, the item was not cached
-        if (!file.exists()) return null;
+    /**
+     * Lookups an item in the file storage if it exists. Returns a completable future that returns
+     * the result once available, or null if the data was not found in the cache.
+     */
+    private <T extends Serializable> CompletableFuture<T> lookup(File file) {
+        CompletableFuture<T> future = new CompletableFuture<>();
 
-        // Otherwise, try to read it from the file
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file))) {
-            return (T) inputStream.readObject();
-        } catch (Exception e) {
-            return null;
-        }
+        new Thread(
+                        () -> {
+                            // If the file does not exist, the item was not cached
+                            if (!file.exists()) future.complete(null);
+
+                            // Otherwise, try to read it from the file
+                            try (ObjectInputStream inputStream =
+                                    new ObjectInputStream(new FileInputStream(file))) {
+                                future.complete((T) inputStream.readObject());
+                            } catch (Exception e) {
+                                // We don't return exceptionally here, because we might still be
+                                // able to
+                                // find the data in the real database.
+                                future.complete(null);
+                            }
+                        })
+                .run();
+
+        return future;
     }
 
-    /** Stores an item in the file storage. */
-    private <T extends Serializable> void store(File file, T data) {
-        // Try to store the data in the cache
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file))) {
-            outputStream.writeObject(data);
-        } catch (Exception ignored) {
-        }
+    /**
+     * Stores an item in the file storage. It does so in a separate thread so that the rest of the
+     * logic can already be executed.
+     */
+    private <T extends Serializable> void storeInCache(File file, T data) {
+        new Thread(
+                        () -> {
+                            // Try to store the data in the cache (append = false, so that it is
+                            // overwritten)
+                            try (ObjectOutputStream outputStream =
+                                    new ObjectOutputStream(new FileOutputStream(file, false))) {
+                                outputStream.writeObject(data);
+                            } catch (Exception ignored) {
+                            }
+                        })
+                .run();
+    }
+
+    /**
+     * Performs a retrieval from the cache or the database, depending on their availability. The
+     * data is first searched in the cache. If it is not present there, it is fetched from the
+     * database and stored in the cache for the next retrievals.
+     */
+    private <T extends Serializable> CompletableFuture<T> retrieve(
+            File cache, Supplier<CompletableFuture<T>> database) {
+        return lookup(cache)
+                .thenCompose(
+                        fromCache -> {
+                            if (fromCache != null) {
+                                // If the data is already available, we can return it immediately
+                                return CompletableFuture.<T>completedFuture(fromCache);
+                            } else {
+                                // Otherwise, we fetch it from the real database
+                                CompletableFuture<T> f = database.get();
+
+                                // Once it arrives, we cache it locally
+                                f.thenAccept(
+                                        fromDB -> {
+                                            storeInCache(cache, fromDB);
+                                        });
+
+                                return f;
+                            }
+                        });
     }
 }
