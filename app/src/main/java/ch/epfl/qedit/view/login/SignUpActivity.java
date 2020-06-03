@@ -177,10 +177,12 @@ public class SignUpActivity extends AppCompatActivity
 
         auth.signUp(email, password)
                 .whenComplete(
-                        (userId, error) -> {
-                            if (error != null) onSignUpFail();
-                            else onSignUpSuccessful(userId);
-                        });
+                        (userId, error) ->
+                                runOnUiThread(
+                                        () -> {
+                                            if (error != null) onSignUpFail();
+                                            else onSignUpSuccessful(userId);
+                                        }));
     }
 
     private void onSignUpFail() {
@@ -189,23 +191,24 @@ public class SignUpActivity extends AppCompatActivity
     }
 
     private void onSignUpSuccessful(String userId) {
-        Intent intent = new Intent(this, LogInActivity.class);
-
         DatabaseService db = DatabaseFactory.getInstance();
         db.createUser(userId, firstName, lastName)
-                .whenComplete(
-                        (result, throwable) -> {
-                            progressBar.setVisibility(View.GONE);
-                            if (throwable != null) {
-                                Util.showToast(R.string.database_error, context, resources);
-                            } else {
-                                startActivity(intent);
-                            }
-                        });
+                .whenComplete((v, throwable) -> runOnUiThread(() -> onDatabaseResult(throwable)));
+
         // Put the current user id in cache
         Util.putStringInPrefs(this, Util.USER_ID, userId);
-
         Util.showToast(R.string.sign_up_success, context, resources);
+    }
+
+    private void onDatabaseResult(Throwable throwable) {
+        progressBar.setVisibility(View.GONE);
+
+        if (throwable != null) {
+            Util.showToast(R.string.database_error, context, resources);
+        } else {
+            Intent intent = new Intent(this, LogInActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void logInInstead() {
