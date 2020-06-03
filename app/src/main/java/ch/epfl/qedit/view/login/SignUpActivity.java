@@ -192,7 +192,7 @@ public class SignUpActivity extends AppCompatActivity
 
     private void onSignUpSuccessful(String userId) {
         DatabaseService db = DatabaseFactory.getInstance(getApplicationContext());
-        
+
         db.createUser(userId, firstName, lastName)
                 .whenComplete((v, throwable) -> runOnUiThread(() -> onDatabaseResult(throwable)));
 
