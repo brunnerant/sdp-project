@@ -20,7 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
@@ -40,6 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 public class HomeQuizListFragment extends Fragment
         implements ConfirmDialog.ConfirmationListener, EditQuizSettingsDialog.SubmissionListener {
@@ -167,55 +167,37 @@ public class HomeQuizListFragment extends Fragment
     // Handles when a user clicked on the button to show a quiz
     private void startQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
-        boolean test = progressBar.isShown();
-        test = progressBar.getVisibility() == GONE;
-
         progressBar.setVisibility(VISIBLE);
-        progressBar.bringToFront();
-        progressBar.invalidate();
-        this.getView().invalidate();
-
-        FragmentTransaction ftr = this.getParentFragmentManager().beginTransaction();
-        ftr.detach(HomeQuizListFragment.this).attach(HomeQuizListFragment.this).commit();
-
-        test = progressBar.isShown();
-
-        Util.getQuiz(db, quizID, requireContext())
-                .whenComplete(
-                        (pair, throwable) -> {
-                            if (throwable != null) {
-                                Toast.makeText(
-                                                requireContext(),
-                                                R.string.database_error,
-                                                Toast.LENGTH_SHORT)
-                                        .show();
-                            } else {
-                                progressBar.setVisibility(GONE);
-                                launchQuizActivity(pair.first.instantiateLanguage(pair.second));
-                            }
-                        });
+        withQuiz(quizID, (quiz, pool) -> launchQuizActivity(quiz.instantiateLanguage(pool)));
     }
 
     // Handles when a user clicked on the button to edit a quiz
     private void editQuiz(int position) {
         final String quizID = quizzes.get(position).getKey();
         progressBar.setVisibility(VISIBLE);
+        withQuiz(quizID, (quiz, pool) -> launchModifyQuizDialog(pool, quiz, position));
+    }
 
-        Util.getQuiz(db, quizID, requireContext())
+    // Loads a quiz from the database and performs the given action once it arrives
+    private void withQuiz(String quizId, BiConsumer<Quiz, StringPool> action) {
+        Util.getQuiz(db, quizId, requireContext())
                 .whenComplete(
-                        (pair, throwable) -> {
-                            if (throwable != null) {
-                                Toast.makeText(
-                                                requireContext(),
-                                                R.string.database_error,
-                                                Toast.LENGTH_SHORT)
-                                        .show();
-                            } else {
-                                // Hide progress bar
-                                progressBar.setVisibility(GONE);
-                                launchModifyQuizDialog(pair.second, pair.first, position);
-                            }
-                        });
+                        (pair, throwable) ->
+                                requireActivity()
+                                        .runOnUiThread(
+                                                () -> {
+                                                    if (throwable != null) {
+                                                        Toast.makeText(
+                                                                        requireContext(),
+                                                                        R.string.database_error,
+                                                                        Toast.LENGTH_SHORT)
+                                                                .show();
+                                                    } else {
+                                                        // Hide progress bar
+                                                        progressBar.setVisibility(GONE);
+                                                        action.accept(pair.first, pair.second);
+                                                    }
+                                                }));
     }
 
     /**
