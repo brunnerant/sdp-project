@@ -186,6 +186,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private void signUpInstead() {
         Intent intent = new Intent(this, SignUpActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // We want to reuse the activity
         startActivity(intent);
     }
 }

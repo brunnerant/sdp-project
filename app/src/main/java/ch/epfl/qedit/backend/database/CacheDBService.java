@@ -145,7 +145,7 @@ public class CacheDBService implements DatabaseService {
                                 future.complete(null);
                             }
                         })
-                .run();
+                .start();
 
         return future;
     }
@@ -170,7 +170,7 @@ public class CacheDBService implements DatabaseService {
 
                             future.complete(null);
                         })
-                .run();
+                .start();
 
         return future;
     }

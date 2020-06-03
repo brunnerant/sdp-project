@@ -214,6 +214,7 @@ public class SignUpActivity extends AppCompatActivity
 
     private void logInInstead() {
         Intent intent = new Intent(this, LogInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // We want to reuse the activity
         startActivity(intent);
     }
 }
