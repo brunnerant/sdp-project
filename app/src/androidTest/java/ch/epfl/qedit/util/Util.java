@@ -71,7 +71,7 @@ public final class Util {
         IdlingResource idlingResource = authService.getIdlingResource();
         IdlingRegistry.getInstance().register(idlingResource);
         AuthenticationFactory.setInstance(authService);
-        DatabaseFactory.setInstance(dbService);
+        DatabaseFactory.setInstance(context -> dbService);
         testRule.launchActivity(null);
         Intents.init();
         Espresso.closeSoftKeyboard();

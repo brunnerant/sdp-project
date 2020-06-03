@@ -155,7 +155,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
     private void onLogInSuccessful(String userId) {
         // We extract the complete user information from the database thanks to the user id given by
         // the authentication service
-        DatabaseService db = DatabaseFactory.getInstance();
+        DatabaseService db = DatabaseFactory.getInstance(getApplicationContext());
         db.getUser(userId)
                 .whenComplete(
                         (user, throwable) ->
