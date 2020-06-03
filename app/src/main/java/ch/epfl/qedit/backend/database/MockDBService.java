@@ -243,7 +243,7 @@ public class MockDBService implements DatabaseService {
                             else future.complete(f.apply(quiz));
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
     }
 
     private CompletableFuture<Void> updateUser(String userId, User user, boolean error) {
@@ -259,7 +259,7 @@ public class MockDBService implements DatabaseService {
                             }
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
 
         return future;
     }
@@ -314,7 +314,7 @@ public class MockDBService implements DatabaseService {
                             future.complete(quizId);
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
 
         return future;
     }
@@ -331,7 +331,7 @@ public class MockDBService implements DatabaseService {
                             else future.complete(user);
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
 
         return future;
     }

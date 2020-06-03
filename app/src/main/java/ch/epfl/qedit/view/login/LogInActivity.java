@@ -137,6 +137,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         email = email.trim();
 
         progressBar.setVisibility(View.VISIBLE);
+
         // Ask the authentication service for login
         auth.logIn(email, password)
                 .whenComplete(
@@ -158,7 +159,12 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                         (user, throwable) -> {
                             progressBar.setVisibility(View.GONE);
                             if (throwable != null) {
-                                Util.showToast(R.string.database_error, context, resources);
+                                runOnUiThread(
+                                        () ->
+                                                Util.showToast(
+                                                        R.string.database_error,
+                                                        context,
+                                                        resources));
                             } else {
                                 bundle.putSerializable(USER, user);
                                 intent.putExtras(bundle);
@@ -171,7 +177,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private void onLogInFailed() {
         progressBar.setVisibility(View.GONE);
-        Util.showToast(R.string.log_in_fail, context, resources);
+        runOnUiThread(() -> Util.showToast(R.string.log_in_fail, context, resources));
     }
 
     private void signUpInstead() {
