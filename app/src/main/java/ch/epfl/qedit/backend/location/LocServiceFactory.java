@@ -11,7 +11,7 @@ public final class LocServiceFactory {
     /** The singleton instance of the location service */
     private static LocationService locService = null;
 
-    /** The callback used to instantiate a new instance, once the context was aquired */
+    /** The callback used to instantiate a new instance, once the context was acquired */
     private static Function<Context, LocationService> builder = null;
 
     public static LocationService getInstance(Context context) {

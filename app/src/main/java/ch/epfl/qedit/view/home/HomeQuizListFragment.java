@@ -89,7 +89,7 @@ public class HomeQuizListFragment extends Fragment
         progressBar = view.findViewById(R.id.quiz_loading);
 
         // Instantiate Handler and the DatabaseService
-        db = DatabaseFactory.getInstance();
+        db = DatabaseFactory.getInstance(requireContext());
 
         return view;
     }
