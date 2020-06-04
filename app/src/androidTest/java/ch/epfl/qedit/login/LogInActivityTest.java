@@ -37,16 +37,16 @@ public class LogInActivityTest extends LoginHelper {
     @Before
     public void init() {
         super.init();
-        Intents.init();
         testRule.launchActivity(null);
+        Intents.init();
         Espresso.closeSoftKeyboard();
     }
 
     @After
     public void cleanup() {
         super.cleanup();
-        testRule.finishActivity();
         Intents.release();
+        testRule.finishActivity();
     }
 
     private void performLogIn(String email, String password) {
