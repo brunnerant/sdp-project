@@ -1,7 +1,6 @@
 package ch.epfl.qedit.view.login;
 
 import static ch.epfl.qedit.view.home.HomeActivity.USER;
-import static ch.epfl.qedit.view.login.Util.USER_ID;
 
 import android.content.Context;
 import android.content.Intent;
@@ -158,9 +157,6 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
                 .whenComplete(
                         (user, throwable) ->
                                 runOnUiThread(() -> onDatabaseResult(user, throwable)));
-
-        // Put the current user id in cache
-        Util.putStringInPrefs(this, USER_ID, userId);
     }
 
     private void onDatabaseResult(User user, Throwable throwable) {

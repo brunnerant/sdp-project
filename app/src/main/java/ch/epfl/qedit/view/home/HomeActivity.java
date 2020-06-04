@@ -1,7 +1,5 @@
 package ch.epfl.qedit.view.home;
 
-import static ch.epfl.qedit.view.login.Util.USER_ID;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.QR.ScannerActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
-import ch.epfl.qedit.view.login.Util;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.Objects;
@@ -133,12 +130,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void logOut() {
-        // Retrieve cached user id
-        String uid = Util.getStringInPrefs(this, USER_ID);
-
-        // Remove cached user id
-        Util.removeStringInPrefs(this, USER_ID);
-
         // Log out
         FirebaseAuth.getInstance().signOut();
 

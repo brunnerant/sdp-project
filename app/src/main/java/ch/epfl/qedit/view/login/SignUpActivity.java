@@ -196,8 +196,6 @@ public class SignUpActivity extends AppCompatActivity
         db.createUser(userId, firstName, lastName)
                 .whenComplete((v, throwable) -> runOnUiThread(() -> onDatabaseResult(throwable)));
 
-        // Put the current user id in cache
-        Util.putStringInPrefs(this, Util.USER_ID, userId);
         Util.showToast(R.string.sign_up_success, context, resources);
     }
 

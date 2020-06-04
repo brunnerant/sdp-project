@@ -1,10 +1,7 @@
 package ch.epfl.qedit.view.login;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.text.TextUtils;
 import android.widget.AdapterView;
@@ -141,45 +138,5 @@ public final class Util {
      */
     public static void showToast(int stringId, Context context, Resources resources) {
         showToast(resources.getString(stringId), context);
-    }
-
-    /**
-     * Put a string in the preferences.
-     *
-     * @param activity current activity
-     * @param key key to put
-     * @param value value to put with the key
-     */
-    @SuppressWarnings("SameParameterValue")
-    static void putStringInPrefs(Activity activity, String key, String value) {
-        SharedPreferences prefs = activity.getSharedPreferences(USER_DATA, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-    /**
-     * Get a string from a key in the preferences.
-     *
-     * @param activity current activity
-     * @param key key associated with the value to retrieve
-     * @return the string associated with the key in the preferences
-     */
-    public static String getStringInPrefs(Activity activity, String key) {
-        SharedPreferences prefs = activity.getSharedPreferences(USER_DATA, MODE_PRIVATE);
-        return prefs.getString(key, "");
-    }
-
-    /**
-     * Remove a string in the preferences.
-     *
-     * @param activity current activity
-     * @param key key to remove
-     */
-    public static void removeStringInPrefs(Activity activity, String key) {
-        SharedPreferences prefs = activity.getSharedPreferences(USER_DATA, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove(key);
-        editor.apply();
     }
 }
