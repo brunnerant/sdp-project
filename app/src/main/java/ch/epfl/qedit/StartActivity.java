@@ -5,13 +5,14 @@ import static ch.epfl.qedit.view.login.Util.USER;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import ch.epfl.qedit.backend.database.FirebaseDBService;
+import ch.epfl.qedit.backend.auth.AuthenticationFactory;
+import ch.epfl.qedit.backend.auth.AuthenticationService;
+import ch.epfl.qedit.backend.database.DatabaseFactory;
+import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
 import ch.epfl.qedit.view.login.Util;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 /**
  * This ghost activity is launch first in the QEDit app. It redirects the flow on the Home activity
@@ -23,14 +24,15 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            // User is signed in
-            String uid = firebaseUser.getUid();
+        AuthenticationService authService = AuthenticationFactory.getInstance();
+        String userId = authService.getUser();
 
-            FirebaseDBService firebaseDBService = new FirebaseDBService();
-            firebaseDBService
-                    .getUser(uid)
+        if (userId != null) {
+            // If a user is already logged-in, we retrieve its information from the
+            // database (or from the cache depending on the implementation of the service).
+            DatabaseService dbService = DatabaseFactory.getInstance(this);
+            dbService
+                    .getUser(userId)
                     .whenComplete(
                             (result, throwable) -> {
                                 if (throwable != null) {
@@ -39,11 +41,12 @@ public class StartActivity extends Activity {
                                             getBaseContext(),
                                             getResources());
                                 } else {
+                                    // Then, we launch the home activity
                                     launchHomeActivity(result);
                                 }
                             });
         } else {
-            // No user is signed in
+            // No user is signed in, so we go to the login activity
             launchLoginActivity();
         }
     }
