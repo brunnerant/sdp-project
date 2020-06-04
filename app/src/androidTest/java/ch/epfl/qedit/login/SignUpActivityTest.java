@@ -9,17 +9,16 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.qedit.util.Util.clickOn;
-import static ch.epfl.qedit.util.Util.initActivityWithMockAuthAndDBService;
 import static ch.epfl.qedit.view.login.Util.USER;
 import static org.hamcrest.Matchers.allOf;
 
-import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
 import ch.epfl.qedit.view.login.SignUpActivity;
@@ -30,9 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class SignUpActivityTest {
-
-    private IdlingResource idlingResource;
+public class SignUpActivityTest extends LoginHelper {
 
     @Rule
     public final ActivityTestRule<SignUpActivity> testRule =
@@ -40,12 +37,17 @@ public class SignUpActivityTest {
 
     @Before
     public void init() {
-        idlingResource = initActivityWithMockAuthAndDBService(testRule);
+        super.init();
+        Intents.init();
+        testRule.launchActivity(null);
+        Espresso.closeSoftKeyboard();
     }
 
     @After
     public void cleanup() {
-        Util.cleanup(testRule, idlingResource);
+        super.cleanup();
+        testRule.finishActivity();
+        Intents.release();
     }
 
     private void fillFields(

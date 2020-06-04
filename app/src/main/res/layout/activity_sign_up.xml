@@ -33,10 +33,9 @@
                 android:contentDescription="@string/qedit_logo_description"
                 app:layout_constraintBottom_toTopOf="@+id/spinner_language_selection"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.492"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.212"
+                app:layout_constraintVertical_bias="0.1"
                 app:srcCompat="@mipmap/qedit_light" />
 
             <EditText

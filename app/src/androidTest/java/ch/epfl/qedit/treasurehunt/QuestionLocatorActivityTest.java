@@ -82,7 +82,6 @@ public class QuestionLocatorActivityTest {
     @After
     public void cleanup() {
         IdlingRegistry.getInstance().unregister(idlingResource);
-        LocServiceFactory.reset();
     }
 
     private String getString(int id) {

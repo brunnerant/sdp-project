@@ -60,7 +60,7 @@ public class MockAuthService implements AuthenticationService {
                             }
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
 
         return future;
     }
@@ -78,7 +78,7 @@ public class MockAuthService implements AuthenticationService {
                             else future.complete(id);
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
 
         return future;
     }

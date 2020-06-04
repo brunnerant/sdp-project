@@ -60,13 +60,19 @@ public class CacheDBServiceTest {
         clearCache();
     }
 
+    private void wait(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Tests that doing two subsequent requests to the same data calls the database only once
     private <T> void assertCached(Function<DatabaseService, CompletableFuture<T>> request) {
-        CompletableFuture<T> future1 = request.apply(cache);
-        CompletableFuture<T> future2 = request.apply(cache);
-
-        T result1 = future1.join();
-        T result2 = future2.join();
+        T result1 = request.apply(cache).join();
+        wait(200); // There might be better, but I didn't want to waste a lot of time on that
+        T result2 = request.apply(cache).join();
 
         // Only the first request should have gone to the database, the second one being cached
         request.apply(verify(db, times(1)));
@@ -86,7 +92,9 @@ public class CacheDBServiceTest {
     // Checks that the action invalidates the cache for a user
     private void assertInvalidatesUser(Runnable action) {
         cache.getUser(ANTHONY_IOZZIA_ID).join();
+        wait(200);
         action.run();
+        wait(200);
         cache.getUser(ANTHONY_IOZZIA_ID).join();
 
         // The database should be called twice because of invalidation
@@ -95,12 +103,12 @@ public class CacheDBServiceTest {
 
     @Test
     public void testUpdateStatisticsInvalidatesCache() {
-        assertInvalidatesUser(() -> cache.updateUserStatistics(ANTHONY_IOZZIA_ID, 0, 0, 0));
+        assertInvalidatesUser(() -> cache.updateUserStatistics(ANTHONY_IOZZIA_ID, 0, 0, 0).join());
     }
 
     @Test
     public void testUpdateQuizListInvalidatesCache() {
         assertInvalidatesUser(
-                () -> cache.updateUserQuizList(ANTHONY_IOZZIA_ID, Collections.emptyMap()));
+                () -> cache.updateUserQuizList(ANTHONY_IOZZIA_ID, Collections.emptyMap()).join());
     }
 }
