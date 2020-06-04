@@ -11,12 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.QR.ScannerActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity
@@ -131,7 +131,7 @@ public class HomeActivity extends AppCompatActivity
 
     private void logOut() {
         // Log out
-        FirebaseAuth.getInstance().signOut();
+        AuthenticationFactory.getInstance().logOut();
 
         // Go to log in activity
         startActivity(new Intent(this, LogInActivity.class));

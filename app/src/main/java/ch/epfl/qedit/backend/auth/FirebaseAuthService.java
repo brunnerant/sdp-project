@@ -24,6 +24,11 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
+    public void logOut() {
+        auth.signOut();
+    }
+
+    @Override
     public CompletableFuture<String> signUp(String email, String password) {
         return futureOnResult(auth.createUserWithEmailAndPassword(email, password));
     }

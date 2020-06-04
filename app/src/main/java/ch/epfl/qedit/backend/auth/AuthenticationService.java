@@ -16,6 +16,9 @@ public interface AuthenticationService {
      */
     String getUser();
 
+    /** Logs the current user out, or does nothing if nobody was logged in. */
+    void logOut();
+
     /**
      * Sign Up a new user in the Authentication service. It associate a new ID to each unique pairs
      * of email-password.
