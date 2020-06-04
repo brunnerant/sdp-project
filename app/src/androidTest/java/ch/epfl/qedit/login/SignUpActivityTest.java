@@ -9,7 +9,7 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static ch.epfl.qedit.util.Util.clickOn;
-import static ch.epfl.qedit.view.login.Util.USER;
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
 import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.espresso.Espresso;

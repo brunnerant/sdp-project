@@ -1,6 +1,5 @@
 package ch.epfl.qedit.view.home;
 
-import static ch.epfl.qedit.view.login.Util.USER;
 import static ch.epfl.qedit.view.login.Util.USER_ID;
 
 import android.content.Context;
@@ -25,6 +24,10 @@ import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    // Key of user passed in bundle to home activity
+    public static final String USER = "ch.epfl.qedit.view.login.USER";
+
     private DrawerLayout drawer;
 
     @Override

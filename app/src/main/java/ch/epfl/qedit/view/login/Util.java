@@ -23,9 +23,6 @@ public final class Util {
     static final String REGEX_EMAIL = "^(\\s)*[A-Za-z0-9+_.-]+@(.+)(\\s)*$";
     static final String REGEX_NAME = "^(\\s)*[A-Za-z0-9\\s\\-]+(\\s)*$";
 
-    // Key of user passed in bundle to home activity
-    public static final String USER = "ch.epfl.qedit.view.login.USER";
-
     // This is the name of the shared preference file, and the key for the user id
     public static final String USER_DATA = "user_data";
     public static final String USER_ID = "user_id";

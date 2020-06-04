@@ -47,6 +47,11 @@ public class MockAuthService implements AuthenticationService {
         }
     }
 
+    /** This allows the test cases to fake that a user was already logged-in */
+    public void setUser(String user) {
+        this.currentUser = user;
+    }
+
     @Override
     public String getUser() {
         return currentUser;
