@@ -37,8 +37,8 @@ public class LogInActivityTest extends LoginHelper {
     @Before
     public void init() {
         super.init();
-        testRule.launchActivity(null);
         Intents.init();
+        testRule.launchActivity(null);
         Espresso.closeSoftKeyboard();
     }
 

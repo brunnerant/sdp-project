@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -141,7 +140,6 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         progressBar.setVisibility(View.VISIBLE);
 
         // Ask the authentication service for login
-        Log.d("qedit", "login");
         auth.logIn(email, password)
                 .whenComplete(
                         (userId, error) ->
