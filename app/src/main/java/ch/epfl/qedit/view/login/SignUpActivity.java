@@ -191,7 +191,7 @@ public class SignUpActivity extends AppCompatActivity
     private void onSignUpSuccessful(String userId) {
         Intent intent = new Intent(this, LogInActivity.class);
 
-        DatabaseService db = DatabaseFactory.getInstance();
+        DatabaseService db = DatabaseFactory.getInstance(getApplicationContext());
         db.createUser(userId, firstName, lastName)
                 .whenComplete(
                         (result, throwable) -> {
