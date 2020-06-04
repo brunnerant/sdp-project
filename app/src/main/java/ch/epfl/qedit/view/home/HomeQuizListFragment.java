@@ -10,7 +10,6 @@ import static ch.epfl.qedit.view.home.HomeActivity.USER;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.backend.database.Util;
@@ -34,10 +34,10 @@ import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
+import com.google.common.collect.ImmutableMap;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -52,7 +52,6 @@ public class HomeQuizListFragment extends Fragment
     private static final int EDIT_EXISTING_QUIZ_REQUEST_CODE = 3;
 
     private DatabaseService db;
-    private User user;
 
     private ProgressBar progressBar;
     private ListEditView.Adapter<Map.Entry<String, String>> listAdapter;
@@ -60,12 +59,13 @@ public class HomeQuizListFragment extends Fragment
     private ConfirmDialog deleteDialog;
     private EditQuizSettingsDialog.TextFilter textFilter = NO_FILTER;
 
-    private int deleteIndex;
+    // The indices of the quizzes that are being deleted and modified, respectively
+    private int deleteIndex = -1;
     private int modifyIndex = -1;
 
+    // The user and its quizzes (id and title of the quizzes)
+    private User user;
     private List<Map.Entry<String, String>> quizzes;
-    private HashMap<String, Pair<Quiz, StringPool>>
-            cachedQuizzes; // TODO only temporary, will be handled by really cache
 
     @Override
     public View onCreateView(
@@ -86,8 +86,6 @@ public class HomeQuizListFragment extends Fragment
         // Get user from the bundle created by the parent activity and get his/her quizzes
         user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
-
-        cachedQuizzes = new HashMap<>();
 
         // Create the list adapter and bind it to the list edit view
         createAdapter(user);
@@ -115,15 +113,12 @@ public class HomeQuizListFragment extends Fragment
                             return getString(R.string.dup_quiz_name_error);
                     }
 
-                    return null;
+                    return null; // null = no error occurred
                 };
     }
 
     // This function is used to create the list of quizzes for the given user
     private void createAdapter(User user) {
-        // Retrieve the quizzes from the user
-        quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
-
         // Those are the items of the popup menu
         List<String> popupMenuItems =
                 Arrays.asList(getString(R.string.menu_edit), getString(R.string.menu_delete));
@@ -247,25 +242,18 @@ public class HomeQuizListFragment extends Fragment
             // Get the title of the quiz
             String title = extendedStringPool.get(TITLE_ID);
 
-            String quizId = null;
-
             if (requestCode == EDIT_NEW_QUIZ_REQUEST_CODE) {
                 // The user edited an new quiz
-                quizId = handleNewQuizResult(quiz, extendedStringPool, title);
+                handleNewQuizResult(quiz, extendedStringPool, title);
             } else if (requestCode == EDIT_EXISTING_QUIZ_REQUEST_CODE) {
                 // The user edited an already existing Quiz
-                quizId = handleModifyQuizResult(quiz, extendedStringPool, title);
+                handleModifyQuizResult(title);
             }
 
-            // When we one of the above ifs was executed
-            if (quizId != null) {
-                // Update the list of quizzes of the user
-                // db.updateUserQuizList(user.getId, ImmutableMap.copyOf(quizzes)); // TODO the user
-                // has no ID stored inside the class
+            // We update the list of quizzes of the user
+            String userId = AuthenticationFactory.getInstance().getUser();
+            db.updateUserQuizList(userId, ImmutableMap.copyOf(quizzes));
 
-                // Cache the quiz
-                cachedQuizzes.put(quizId, new Pair<>(quiz, extendedStringPool));
-            }
             // When the user decides to stop the edition without saving the changes the
             // EditQuizActivity will return with RESULT_CANCELED. But we do not need to do anything
             // in this case.
@@ -273,39 +261,33 @@ public class HomeQuizListFragment extends Fragment
     }
 
     /** Handles the case where the user edited a new quiz */
-    private String handleNewQuizResult(Quiz quiz, StringPool stringPool, String title) {
+    private void handleNewQuizResult(Quiz quiz, StringPool stringPool, String title) {
         // Upload the new quiz and stringPool to the database
+        // We should handle the case when a quiz fails to upload to the database here
         String quizId = db.uploadQuiz(quiz, stringPool).join();
 
         // Extend the list of quizzes of the user
-        quizzes.add(new AbstractMap.SimpleEntry<>(quizId, title));
+        listAdapter.addItem(new AbstractMap.SimpleEntry<>(quizId, title));
 
         // Add the quiz to the local user
         user.addQuiz(quizId, title);
-
-        return quizId;
     }
 
     /** Handles the case where the user edited an already existing quiz */
-    private String handleModifyQuizResult(Quiz quiz, StringPool stringPool, String title) {
+    private void handleModifyQuizResult(String title) {
         // First get the old entry
         Map.Entry<String, String> oldEntry = quizzes.get(modifyIndex);
         String quizId = oldEntry.getKey();
 
-        // Update the quiz in the database
-        // db.updateQuiz(id, quiz, stringPool); //TODO not yet supported by backend
+        // Updating the quiz in the database is not yet supported, so for now the changes only
+        // occur locally.
 
         // Update the existing entry in the list of quizzes
-        AbstractMap.SimpleImmutableEntry<String, String> newEntry =
-                new AbstractMap.SimpleImmutableEntry<>(quizId, title);
-        quizzes.set(modifyIndex, newEntry);
-        listAdapter.updateItem(modifyIndex);
+        listAdapter.updateItem(modifyIndex, new AbstractMap.SimpleImmutableEntry<>(quizId, title));
         modifyIndex = -1;
 
         // Update the quiz list of the local user
-        user.updateQuizOnValue(oldEntry.getValue(), newEntry.getValue());
-
-        return quizId;
+        user.updateQuizTitle(quizId, title);
     }
 
     // This method will be called when the user confirms the deletion by clicking on "yes"
@@ -313,7 +295,10 @@ public class HomeQuizListFragment extends Fragment
     public void onConfirm(ConfirmDialog dialog) {
         if (dialog != deleteDialog) return;
 
+        // For now the deletion only occurs locally since we didn't implement removal from
+        // the database.
         listAdapter.removeItem(deleteIndex);
+        deleteIndex = -1;
     }
 
     // This method will be called when the user submits the settings made in the SettingsDialog by

@@ -222,7 +222,8 @@ public class ListEditView extends RecyclerView {
          *
          * @param position of the item in the list that will be updated
          */
-        public void updateItem(int position) {
+        public void updateItem(int position, T newValue) {
+            items.set(position, newValue);
             notifyItemChanged(position);
         }
 
