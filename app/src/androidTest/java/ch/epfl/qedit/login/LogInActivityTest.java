@@ -7,18 +7,17 @@ import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static ch.epfl.qedit.util.Util.clickOn;
-import static ch.epfl.qedit.util.Util.initActivityWithMockAuthAndDBService;
 import static ch.epfl.qedit.util.Util.onScrollView;
 import static ch.epfl.qedit.view.login.Util.USER;
 import static org.hamcrest.Matchers.allOf;
 
-import androidx.test.espresso.IdlingResource;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.MockDBService;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.util.Util;
 import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
 import ch.epfl.qedit.view.login.SignUpActivity;
@@ -29,9 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class LogInActivityTest {
-
-    private IdlingResource idlingResource;
+public class LogInActivityTest extends LoginHelper {
 
     @Rule
     public final ActivityTestRule<LogInActivity> testRule =
@@ -39,12 +36,17 @@ public class LogInActivityTest {
 
     @Before
     public void init() {
-        idlingResource = initActivityWithMockAuthAndDBService(testRule);
+        super.init();
+        testRule.launchActivity(null);
+        Intents.init();
+        Espresso.closeSoftKeyboard();
     }
 
     @After
     public void cleanup() {
-        Util.cleanup(testRule, idlingResource);
+        super.cleanup();
+        Intents.release();
+        testRule.finishActivity();
     }
 
     private void performLogIn(String email, String password) {

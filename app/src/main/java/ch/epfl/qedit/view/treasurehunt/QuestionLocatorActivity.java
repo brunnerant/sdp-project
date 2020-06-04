@@ -106,12 +106,8 @@ public class QuestionLocatorActivity extends PermissionActivity
     public void onPermissionResult(String[] permissions, boolean[] granted) {
         for (int i = 0; i < granted.length; i++) {
             if (!granted[i]) {
-                // If the permissions were not granted, we just show an error UI to the user
-                // If it is the first time the user denies, we show the button, otherwise we
-                // just give up and show nothing.
-                if (permManager.shouldAskAgain(this, permissions[i])) setPermissionUI();
-                else button.setVisibility(View.GONE);
-
+                final int i_ = i;
+                runOnUiThread(() -> handlePermissionDenied(permissions[i_]));
                 return;
             }
         }
@@ -120,7 +116,15 @@ public class QuestionLocatorActivity extends PermissionActivity
         locService.subscribe(this, LOCATION_INTERVAL);
 
         // We set up this button for demo purposes only
-        setCheatButton();
+        runOnUiThread(this::setCheatButton);
+    }
+
+    private void handlePermissionDenied(String permission) {
+        // If the permissions were not granted, we just show an error UI to the user
+        // If it is the first time the user denies, we show the button, otherwise we
+        // just give up and show nothing.
+        if (permManager.shouldAskAgain(this, permission)) setPermissionUI();
+        else button.setVisibility(View.GONE);
     }
 
     // This function sets the button so that we can fake the user moving to the next question.

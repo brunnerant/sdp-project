@@ -17,9 +17,13 @@ public final class DatabaseFactory {
     private DatabaseFactory() {}
 
     public static DatabaseService getInstance(Context context) {
-        if (dbService == null) {
-            if (builder == null) dbService = new MockDBService();
-            else dbService = builder.apply(context);
+        if (builder != null) {
+            // If the builder is not null, we have to replace the database service
+            dbService = builder.apply(context);
+            builder = null;
+        } else if (dbService == null) {
+            // If no database service exists, we create a mock by default
+            dbService = new MockDBService();
         }
 
         return dbService;
