@@ -21,6 +21,9 @@ public class MockAuthService implements AuthenticationService {
     // map of <email, password> to userId
     private Map<Pair<String, String>, String> users;
 
+    // Id of the currently logged-in user
+    private String currentUser;
+
     public MockAuthService() {
         // increment the counter to get a new id
         idCounter = 1; // (we already have Cosme and Anthony in the database)
@@ -28,6 +31,7 @@ public class MockAuthService implements AuthenticationService {
         users.put(new Pair<>("anthony@mock.test", "123456"), ANTHONY_IOZZIA_ID);
         users.put(new Pair<>("cosme@mock.test", "tree15"), COSME_JORDAN_ID);
         idlingResource = new CountingIdlingResource("MockAuthService");
+        currentUser = null;
     }
 
     public IdlingResource getIdlingResource() {
@@ -41,6 +45,11 @@ public class MockAuthService implements AuthenticationService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getUser() {
+        return currentUser;
     }
 
     @Override
@@ -75,7 +84,11 @@ public class MockAuthService implements AuthenticationService {
                             Pair<String, String> info = new Pair<>(email, password);
                             String id = users.get(info);
                             if (id == null) error(future, "Authentication fail");
-                            else future.complete(id);
+                            else {
+                                currentUser = id;
+                                future.complete(id);
+                            }
+
                             idlingResource.decrement();
                         })
                 .start();

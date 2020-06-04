@@ -9,6 +9,14 @@ import java.util.concurrent.CompletableFuture;
 public interface AuthenticationService {
 
     /**
+     * Returns the user that is currently logged in the application, or null if nobody is logged in
+     * yet.
+     *
+     * @return the currently logged-in user, or null if nobody is.
+     */
+    String getUser();
+
+    /**
      * Sign Up a new user in the Authentication service. It associate a new ID to each unique pairs
      * of email-password.
      *

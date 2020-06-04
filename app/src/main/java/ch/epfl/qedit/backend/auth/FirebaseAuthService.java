@@ -18,6 +18,12 @@ public class FirebaseAuthService implements AuthenticationService {
     }
 
     @Override
+    public String getUser() {
+        FirebaseUser user = auth.getCurrentUser();
+        return user == null ? null : user.getUid();
+    }
+
+    @Override
     public CompletableFuture<String> signUp(String email, String password) {
         return futureOnResult(auth.createUserWithEmailAndPassword(email, password));
     }
