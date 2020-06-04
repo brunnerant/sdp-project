@@ -27,6 +27,10 @@ public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Seria
     public void setCorrectAnswer(AnswerModel correctAnswer) {
         this.solution = correctAnswer;
     }
+    // to debug, should be removed
+    public AnswerModel getCorrectAnswer() {
+        return this.solution;
+    }
 
     public boolean correct(AnswerModel participantAnswer) {
         if (participantAnswer == null || solution == null) return false;

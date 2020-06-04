@@ -170,4 +170,6 @@
     <string name="database_error">An error occurred connecting to the database</string>
     <string name="card_icon">card icon</string>
 
+    <string name="correct_answers">Correct answers :</string>
+
 </resources>

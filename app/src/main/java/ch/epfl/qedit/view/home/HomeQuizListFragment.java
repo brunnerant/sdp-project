@@ -58,7 +58,7 @@ public class HomeQuizListFragment extends Fragment
 
     private int deleteIndex;
     private int modifyIndex = -1;
-
+    private User user;
     private List<Map.Entry<String, String>> quizzes;
 
     @Override
@@ -78,7 +78,7 @@ public class HomeQuizListFragment extends Fragment
         createTextFilter();
 
         // Get user from the bundle created by the parent activity and get his/her quizzes
-        User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
+        user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter and bind it to the list edit view
@@ -228,9 +228,9 @@ public class HomeQuizListFragment extends Fragment
         // We put the quiz into the bundle
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZ_ID, quiz);
-        bundle.putBoolean(CORRECTION,false);
+        bundle.putSerializable(USER, user);
+        bundle.putBoolean(CORRECTION, false);
         intent.putExtras(bundle);
-
 
         // And start the activity
         startActivity(intent);

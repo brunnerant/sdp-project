@@ -41,7 +41,12 @@ public class QuestionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_quiz_question, container, false);
         questionTitle = view.findViewById(R.id.question_title);
         questionDisplay = view.findViewById(R.id.question_display);
-        goodAnswers = getArguments().getIntegerArrayList(GOOD_ANSWERS);
+        try {
+            goodAnswers = getArguments().getIntegerArrayList(GOOD_ANSWERS);
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
         quizViewModel

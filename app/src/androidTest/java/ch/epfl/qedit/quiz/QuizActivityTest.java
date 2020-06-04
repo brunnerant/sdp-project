@@ -5,16 +5,19 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+import static ch.epfl.qedit.view.login.Util.USER;
 import static ch.epfl.qedit.view.quiz.QuestionFragment.FRAGMENT_TAG;
+import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
 import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 import android.content.Intent;
@@ -26,6 +29,7 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
@@ -33,7 +37,6 @@ import ch.epfl.qedit.view.answer.MatrixFragment;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.HashMap;
-import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,12 +55,16 @@ public class QuizActivityTest {
             new IntentsTestRule<>(QuizActivity.class, false, false);
 
     public void launchActivity() {
+        User user = new User("Albert", "Einstein");
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
 
         initializeStringPoolAndQuiz();
 
         bundle.putSerializable(QUIZ_ID, quiz);
+        bundle.putSerializable(USER, user);
+
+        bundle.putBoolean(CORRECTION, false);
         intent.putExtras(bundle);
 
         testRule.launchActivity(intent);
@@ -147,19 +154,6 @@ public class QuizActivityTest {
     }
 
     @Test
-    public void testTimeIsClicked() {
-        launchActivity();
-        onView(withId(R.id.time)).perform(click());
-        onView(withText("Unimplemented Feature"))
-                .inRoot(
-                        withDecorView(
-                                Matchers.not(
-                                        is(testRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
-        finishActivity();
-    }
-
-    @Test
     public void testValidateClicked() {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
@@ -179,12 +173,7 @@ public class QuizActivityTest {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withText("number of good answers = 0"))
-                .inRoot(
-                        withDecorView(
-                                Matchers.not(
-                                        is(testRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
+        intended(allOf(hasComponent(QuizActivity.class.getName())));
         finishActivity();
     }
 

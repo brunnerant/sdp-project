@@ -7,6 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.os.Bundle;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.quiz.QuizFragmentsTestUsingDB;
@@ -29,6 +30,9 @@ public class QuestionFragmentTest extends QuizFragmentsTestUsingDB {
 
     @Before
     public void setup() {
+
+        Bundle bundle = new Bundle();
+
         model = super.setup(testRule, new QuestionFragment());
     }
 

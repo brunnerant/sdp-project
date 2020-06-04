@@ -2,35 +2,31 @@ package ch.epfl.qedit.view.quiz;
 
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.login.Util.USER;
-import static ch.epfl.qedit.view.login.Util.USER_ID;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.database.DatabaseFactory;
-import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.home.HomeActivity;
-import ch.epfl.qedit.view.login.Util;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +39,7 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
     private QuizViewModel model;
     private Boolean overviewActive;
 
+    private User user;
     private ConfirmDialog validateDialog;
     private Quiz quiz;
     private Boolean correction;
@@ -57,15 +54,16 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
         // Get the Intent that started this activity and extract the quiz
         Intent intent = getIntent();
         quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
+        user = (User) Objects.requireNonNull(intent.getExtras().getSerializable(USER));
+
         correction = (Boolean) Objects.requireNonNull(intent.getExtras().getBoolean(CORRECTION));
         goodAnswers = (ArrayList<Integer>) intent.getExtras().getSerializable(GOOD_ANSWERS);
+
         model = new ViewModelProvider(this).get(QuizViewModel.class);
         model.setQuiz(quiz);
         correctedQuestions = new ArrayList<>();
         overviewActive = false;
         handleToggleOverview();
-
-
 
         QuestionFragment questionFragment = new QuestionFragment();
         QuizOverviewFragment overview = new QuizOverviewFragment();
@@ -74,11 +72,31 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
         bundle.putIntegerArrayList(GOOD_ANSWERS, goodAnswers);
         questionFragment.setArguments(bundle);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.question_details_container, questionFragment)
-                .replace(R.id.quiz_overview_container, overview)
-                .commit();
+        if (correction) {
+            int nbOfGoodAnswers = Collections.frequency(goodAnswers, 1);
+            float ratio = nbOfGoodAnswers / goodAnswers.size();
+
+            user.incrementScore(nbOfGoodAnswers);
+            if (ratio >= 0.8) {
+                user.incrementSuccess();
+
+            } else {
+                user.incrementAttempt();
+            }
+            CorrectionFragment correctionFragment = new CorrectionFragment(goodAnswers);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.question_details_container, questionFragment)
+                    .replace(R.id.quiz_overview_container, overview)
+                    .replace(R.id.correction_details_container, correctionFragment)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.question_details_container, questionFragment)
+                    .replace(R.id.quiz_overview_container, overview)
+                    .commit();
+        }
     }
 
     @Override
@@ -102,47 +120,38 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
             case R.id.previous:
                 handleNavigation(id == R.id.next ? 1 : -1);
                 break;
-            case R.id.time:
-                Toast.makeText(this, "Unimplemented Feature", Toast.LENGTH_SHORT).show();
-                break;
+
             case R.id.overview:
                 handleToggleOverview();
                 break;
             case android.R.id.home:
-                if(correction)
-                    getBackHome();
+                if (correction) backHome();
                 onBackPressed();
                 break;
             case R.id.validate:
-                if(correction) {
+                if (correction) {
                     validateDialog = ConfirmDialog.create("Quit quiz results ?", this);
-                    validateDialog.show(getSupportFragmentManager(),null);
+                    validateDialog.show(getSupportFragmentManager(), null);
+                } else {
+                    validateDialog =
+                            ConfirmDialog.create(
+                                    "Are you sure you want to correct this quiz ?", this);
+                    validateDialog.show(getSupportFragmentManager(), null);
                 }
-                validateDialog = ConfirmDialog.create("Are you sure you want to correct this quiz ?", this);
-                validateDialog.show(getSupportFragmentManager(), null);
+
                 break;
         }
 
         return true;
     }
 
-    private void getBackHome(){
-
-        Intent intent = new Intent(this,HomeActivity.class);
+    private void backHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
         Bundle bundle = new Bundle();
-        DatabaseService db = DatabaseFactory.getInstance();
-        db.getUser(Util.getStringInPrefs(this,USER_ID))
-                .whenComplete(
-                        (user, throwable) -> {
-
-                            if (throwable != null) {
-                                Util.showToast(R.string.database_error, this,new Resources(null,null,null));
-                            } else {
-                                bundle.putSerializable(USER, user);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                            }
-                        });
+        bundle.putSerializable(USER, user);
+        intent.putExtras(bundle);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
     /** This function handles navigating back and forth between questions */
     private void handleNavigation(int offset) {
@@ -152,6 +161,7 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
 
         if (index == null) {
             focusedQuestion.setValue(0);
+
         } else if ((index + offset) < quiz.getQuestions().size() && (index + offset) >= 0) {
             focusedQuestion.setValue(index + offset);
         }
@@ -175,10 +185,18 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
             if (questions.get(i).getFormat() instanceof MatrixFormat) {
                 MatrixModel answerModel = (MatrixModel) answers.get(i);
 
-                Integer goodAnswer = questions.get(i).getFormat().correct(answerModel) ? 1 : 0;
+                int goodAnswer = questions.get(i).getFormat().correct(answerModel) ? 1 : 0;
                 correctedQuestions.add(i, goodAnswer);
-
-                corrected.add(i, makePrefilledMatrixQuestion(answerModel, questions.get(i)));
+                if (answerModel == null) {
+                    corrected.add(
+                            i,
+                            makePrefilledMatrixQuestion(
+                                    (MatrixModel)
+                                            questions.get(i).getFormat().getEmptyAnswerModel(),
+                                    questions.get(i)));
+                } else {
+                    corrected.add(i, makePrefilledMatrixQuestion(answerModel, questions.get(i)));
+                }
             }
         }
         return corrected;
@@ -200,26 +218,22 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
 
     @Override
     public void onConfirm(ConfirmDialog dialog) {
-        /* ImmutableList<Question> questions = quiz.getQuestions();
-        HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(PARTICIPANT_ANSWERS,answers);
-        bundle.putSerializable(QUESTIONS,questions);
 
-        Intent intent = new Intent(this,QuizResultActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);*/
-        if(correction){
-            getBackHome();
+        if (correction) {
+            backHome();
+
+        } else {
+            Quiz questionsLocked = new Quiz("Correction", correctedQuestions());
+
+            Intent intent = new Intent(this, QuizActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(QUIZ_ID, questionsLocked);
+            bundle.putIntegerArrayList(GOOD_ANSWERS, correctedQuestions);
+            bundle.putSerializable(USER, user);
+            bundle.putBoolean(CORRECTION, true);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
-        Quiz questionsLocked = new Quiz("Correction", correctedQuestions());
-
-        Intent intent = new Intent(this, QuizActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(QUIZ_ID, questionsLocked);
-        bundle.putIntegerArrayList(GOOD_ANSWERS, correctedQuestions);
-        bundle.putBoolean(CORRECTION,true);
-        intent.putExtras(bundle);
-        startActivity(intent);
     }
 }

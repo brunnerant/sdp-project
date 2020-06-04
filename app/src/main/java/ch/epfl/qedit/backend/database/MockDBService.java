@@ -1,5 +1,6 @@
 package ch.epfl.qedit.backend.database;
 
+import static ch.epfl.qedit.backend.database.MockDBService.MockQuiz.updateMatrixModel;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 
 import androidx.test.espresso.IdlingResource;
@@ -23,7 +24,7 @@ import java.util.function.Function;
 public class MockDBService implements DatabaseService {
 
     /** This class simulates a quiz that is stored in Firestore */
-    private static class MockQuiz {
+    static class MockQuiz {
 
         private ImmutableList<Question> questions;
         private Map<String, StringPool> stringPools;
@@ -58,8 +59,14 @@ public class MockDBService implements DatabaseService {
             return treasureHunt;
         }
 
-        static final MatrixFormat simpleFormat =
-                MatrixFormat.singleField(MatrixFormat.Field.textField("hint1"));
+        static MatrixFormat simpleFormat =
+                MatrixFormat.singleField(MatrixFormat.Field.numericField(false, false, "hint1"));
+
+        public static void updateMatrixModel() {
+            MatrixModel solution42 = new MatrixModel(1, 1);
+            solution42.updateAnswer(0, 0, "42");
+            simpleFormat.setCorrectAnswer(solution42);
+        }
 
         static final MatrixFormat compoundFormat =
                 new MatrixFormat.Builder(2, 2)
@@ -71,9 +78,6 @@ public class MockDBService implements DatabaseService {
 
         @SuppressWarnings("SpellCheckingInspection")
         static MockQuiz createTestMockQuiz1() {
-            MatrixModel solution42 = new MatrixModel(1, 1);
-            solution42.updateAnswer(0, 0, "42");
-            simpleFormat.setCorrectAnswer(solution42);
 
             MatrixModel compoundSolution = new MatrixModel(2, 2);
             for (int i = 0; i < 2; i++) {
@@ -141,9 +145,6 @@ public class MockDBService implements DatabaseService {
 
         @SuppressWarnings("SpellCheckingInspection")
         static MockQuiz createTestMockQuiz2() {
-            MatrixModel solution42 = new MatrixModel(1, 1);
-            solution42.updateAnswer(0, 0, "42");
-            simpleFormat.setCorrectAnswer(solution42);
 
             HashMap<String, String> stringPool_en = new HashMap<>();
             stringPool_en.put(TITLE_ID, "An other Quiz");
@@ -205,6 +206,7 @@ public class MockDBService implements DatabaseService {
     public MockDBService() {
         idlingResource = new CountingIdlingResource("MockDBService");
         quizzes = new HashMap<>();
+        updateMatrixModel();
         quizzes.put("quiz0", MockQuiz.createTestMockQuiz1());
         quizzes.put("quiz1", MockQuiz.createTestMockQuiz2());
         quizzes.put("quiz2", MockQuiz.createTestMockQuiz3());
