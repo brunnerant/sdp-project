@@ -13,10 +13,11 @@
         android:id="@+id/correct_ratio"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
+
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +37,7 @@
         android:id="@+id/correction_score"
         android:layout_width="50dp"
         android:layout_height="35dp"
-        android:textSize="30sp"
+        android:textSize="20sp"
 
         android:textStyle="bold"/>
         <ImageView
@@ -47,7 +48,7 @@
             android:id="@+id/correction_success"
             android:layout_width="50dp"
             android:layout_height="35dp"
-            android:textSize="30sp"
+            android:textSize="20sp"
 
             android:textStyle="bold"/>
         <ImageView
@@ -58,7 +59,7 @@
             android:id="@+id/correction_attempts"
             android:layout_width="50dp"
             android:layout_height="35dp"
-            android:textSize="30sp"
+            android:textSize="20sp"
 
             android:textStyle="bold"
             android:text="+1"/>
