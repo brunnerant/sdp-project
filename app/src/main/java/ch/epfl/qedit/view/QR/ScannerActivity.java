@@ -144,7 +144,11 @@ public class ScannerActivity extends AppCompatActivity
         Intent intent = new Intent(ScannerActivity.this, QuizActivity.class);
         quiz.instantiateLanguage(pool);
         user.addQuiz(quizId, quiz.getTitle());
-        intent.putExtra(QUIZ_ID, quiz);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER, user);
+        bundle.putSerializable(QUIZ_ID, quizId);
+        bundle.putBoolean(CORRECTION, false);
+        intent.putExtras(bundle);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
