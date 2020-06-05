@@ -237,9 +237,9 @@ public class MockDBService implements DatabaseService {
     }
 
     /** Simply make the current thread wait 0.5 seconds, to do as if the request takes time */
-    private static void fakeWait() {
+    private static void wait(int millis) {
         try {
-            Thread.sleep(500);
+            Thread.sleep(millis);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -256,13 +256,13 @@ public class MockDBService implements DatabaseService {
 
         new Thread(
                         () -> {
-                            fakeWait();
+                            wait(500);
                             MockQuiz quiz = quizzes.get(quizId);
                             if (quiz == null) error(future, "Invalid quiz id");
                             else future.complete(f.apply(quiz));
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
     }
 
     private CompletableFuture<Void> updateUser(String userId, User user, boolean error) {
@@ -270,7 +270,7 @@ public class MockDBService implements DatabaseService {
         idlingResource.increment();
         new Thread(
                         () -> {
-                            fakeWait();
+                            wait(500);
                             if (error) error(future, "Invalid user id");
                             else {
                                 users.put(userId, user);
@@ -278,7 +278,7 @@ public class MockDBService implements DatabaseService {
                             }
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
 
         return future;
     }
@@ -318,9 +318,10 @@ public class MockDBService implements DatabaseService {
     public CompletableFuture<String> uploadQuiz(Quiz quiz, StringPool stringPool) {
         CompletableFuture<String> future = new CompletableFuture<>();
         idlingResource.increment();
+
         new Thread(
                         () -> {
-                            fakeWait();
+                            wait(500);
                             Map<String, StringPool> stringPoolMap = new HashMap<>();
                             stringPoolMap.put(stringPool.getLanguageCode(), stringPool);
                             MockQuiz mockQuiz =
@@ -333,7 +334,7 @@ public class MockDBService implements DatabaseService {
                             future.complete(quizId);
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
 
         return future;
     }
@@ -342,15 +343,16 @@ public class MockDBService implements DatabaseService {
     public CompletableFuture<User> getUser(String userId) {
         CompletableFuture<User> future = new CompletableFuture<>();
         idlingResource.increment();
+
         new Thread(
                         () -> {
-                            fakeWait();
+                            wait(500);
                             User user = users.get(userId);
                             if (user == null) error(future, "Invalid user id");
                             else future.complete(user);
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
 
         return future;
     }

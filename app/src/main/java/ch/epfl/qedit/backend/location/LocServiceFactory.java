@@ -11,13 +11,17 @@ public final class LocServiceFactory {
     /** The singleton instance of the location service */
     private static LocationService locService = null;
 
-    /** The callback used to instantiate a new instance, once the context was aquired */
+    /** The callback used to instantiate a new instance, once the context was acquired */
     private static Function<Context, LocationService> builder = null;
 
     public static LocationService getInstance(Context context) {
-        if (locService == null) {
-            if (builder == null) locService = new MockLocService(context);
-            else locService = builder.apply(context);
+        if (builder != null) {
+            // If the builder is not null, we have to replace the location service
+            locService = builder.apply(context);
+            builder = null;
+        } else if (locService == null) {
+            // If no location service exists, we create a mock by default
+            locService = new MockLocService(context);
         }
 
         return locService;
@@ -33,11 +37,5 @@ public final class LocServiceFactory {
      */
     public static void setInstance(Function<Context, LocationService> builder) {
         LocServiceFactory.builder = builder;
-    }
-
-    /** This is used to reset the factory since some tests fail otherwise */
-    public static void reset() {
-        locService = null;
-        builder = null;
     }
 }

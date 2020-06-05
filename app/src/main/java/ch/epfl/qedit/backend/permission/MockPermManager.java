@@ -128,7 +128,7 @@ public class MockPermManager implements PermissionManager {
                             callback.onPermissionResult(permissions, result);
                             idlingResource.decrement();
                         })
-                .run();
+                .start();
     }
 
     public IdlingResource getIdlingResource() {

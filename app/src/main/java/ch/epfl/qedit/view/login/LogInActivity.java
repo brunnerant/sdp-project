@@ -1,7 +1,6 @@
 package ch.epfl.qedit.view.login;
 
-import static ch.epfl.qedit.view.login.Util.USER;
-import static ch.epfl.qedit.view.login.Util.USER_ID;
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +18,7 @@ import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.function.Predicate;
@@ -137,36 +137,40 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
         email = email.trim();
 
         progressBar.setVisibility(View.VISIBLE);
+
         // Ask the authentication service for login
         auth.logIn(email, password)
                 .whenComplete(
-                        (userId, error) -> {
-                            if (error != null) onLogInFailed();
-                            else onLogInSuccessful(userId);
-                        });
+                        (userId, error) ->
+                                runOnUiThread(
+                                        () -> {
+                                            if (error != null) onLogInFailed();
+                                            else onLogInSuccessful(userId);
+                                        }));
     }
 
     private void onLogInSuccessful(String userId) {
-        Intent intent = new Intent(this, HomeActivity.class);
-        Bundle bundle = new Bundle();
-
         // We extract the complete user information from the database thanks to the user id given by
         // the authentication service
-        DatabaseService db = DatabaseFactory.getInstance();
+        DatabaseService db = DatabaseFactory.getInstance(getApplicationContext());
         db.getUser(userId)
                 .whenComplete(
-                        (user, throwable) -> {
-                            progressBar.setVisibility(View.GONE);
-                            if (throwable != null) {
-                                Util.showToast(R.string.database_error, context, resources);
-                            } else {
-                                bundle.putSerializable(USER, user);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                            }
-                        });
-        // Put the current user id in cache
-        Util.putStringInPrefs(this, USER_ID, userId);
+                        (user, throwable) ->
+                                runOnUiThread(() -> onDatabaseResult(user, throwable)));
+    }
+
+    private void onDatabaseResult(User user, Throwable throwable) {
+        progressBar.setVisibility(View.GONE);
+
+        if (throwable != null) {
+            Util.showToast(R.string.database_error, context, resources);
+        } else {
+            Intent intent = new Intent(this, HomeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(USER, user);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     private void onLogInFailed() {
@@ -176,6 +180,7 @@ public class LogInActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private void signUpInstead() {
         Intent intent = new Intent(this, SignUpActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // We want to reuse the activity
         startActivity(intent);
     }
 }

@@ -1,6 +1,6 @@
 package ch.epfl.qedit.home;
 
-import static ch.epfl.qedit.view.login.Util.USER;
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -31,7 +31,7 @@ class HomeFragmentsTestUsingDB extends RecyclerViewHelpers {
 
         MockDBService dbService = new MockDBService();
         idlingResource = dbService.getIdlingResource();
-        DatabaseFactory.setInstance(dbService);
+        DatabaseFactory.setInstance(context -> dbService);
         IdlingRegistry.getInstance().register(idlingResource);
 
         testRule.launchFragment(fragment);
