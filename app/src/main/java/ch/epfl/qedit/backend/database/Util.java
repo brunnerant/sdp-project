@@ -1,6 +1,7 @@
 package ch.epfl.qedit.backend.database;
 
 import static ch.epfl.qedit.model.answer.MatrixFormat.Field.TO_MAP_TEXT;
+import static java.lang.Math.toIntExact;
 
 import android.content.Context;
 import android.util.Pair;
@@ -133,12 +134,15 @@ public final class Util {
     }
 
     public static MatrixFormat extractMatrixFormat(Map<String, Object> doc) throws FormatException {
-        Integer rows = (Integer) doc.get(MatrixFormat.TO_MAP_NUM_ROWS);
-        Integer columns = (Integer) doc.get(MatrixFormat.TO_MAP_NUM_COLUMNS);
+        Long rowsLong = (Long) doc.get(MatrixFormat.TO_MAP_NUM_ROWS);
+        Long columnsLong = (Long) doc.get(MatrixFormat.TO_MAP_NUM_COLUMNS);
         Map<String, Object> matrix = (Map<String, Object>) doc.get(MatrixFormat.TO_MAP_FIELDS);
 
-        if (rows == null || columns == null || matrix == null)
+        if (rowsLong == null || columnsLong == null || matrix == null)
             throw new FormatException("Invalid matrix format: missing rows, columns or matrix");
+
+        int rows = toIntExact(rowsLong);
+        int columns = toIntExact(columnsLong);
 
         MatrixFormat.Builder builder = new MatrixFormat.Builder(rows, columns);
 
@@ -154,12 +158,15 @@ public final class Util {
 
     public static MatrixModel extractMatrixSolution(Map<String, Object> doc)
             throws FormatException {
-        Integer rows = (Integer) doc.get(MatrixModel.TO_MAP_NUM_ROWS);
-        Integer columns = (Integer) doc.get(MatrixModel.TO_MAP_NUM_COLUMNS);
+        Long rowsLong = (Long) doc.get(MatrixModel.TO_MAP_NUM_ROWS);
+        Long columnsLong = (Long) doc.get(MatrixModel.TO_MAP_NUM_COLUMNS);
         Map<String, String> solution = (Map<String, String>) doc.get(MatrixModel.TO_MAP_DATA);
 
-        if (rows == null || columns == null || solution == null)
-            throw new FormatException("Invalid matrix format: missing solution");
+        if (rowsLong == null || columnsLong == null || solution == null)
+            throw new FormatException("Invalid matrix format: missing rows, columns or solution");
+
+        int rows = toIntExact(rowsLong);
+        int columns = toIntExact(columnsLong);
 
         MatrixModel model = new MatrixModel(rows, columns);
         for (Map.Entry<String, String> entry : solution.entrySet()) {
@@ -321,6 +328,7 @@ public final class Util {
             CompletableFuture<Void> future = new CompletableFuture<>();
             Map<String, Object> doc = questions.get(i).toMap();
             doc.put("index", i);
+            final int i_ = i;
             questionsRef
                     .add(doc)
                     .addOnSuccessListener(ref -> future.complete(null))

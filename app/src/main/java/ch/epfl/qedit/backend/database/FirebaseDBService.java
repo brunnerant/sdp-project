@@ -97,7 +97,7 @@ public class FirebaseDBService implements DatabaseService {
 
         db.collection("quizzes")
                 .add(doc)
-                .addOnSuccessListener(DocumentReference::getId)
+                .addOnSuccessListener(ref -> future.complete(ref.getId()))
                 .addOnFailureListener(e -> error(future, e.getMessage()));
 
         return future.thenCompose(

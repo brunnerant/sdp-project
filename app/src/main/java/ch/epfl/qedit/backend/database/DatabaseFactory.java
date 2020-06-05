@@ -23,7 +23,7 @@ public final class DatabaseFactory {
             builder = null;
         } else if (dbService == null) {
             // If no database service exists, we create a mock by default
-            dbService = new MockDBService();
+            dbService = new FirebaseDBService();
         }
 
         return dbService;

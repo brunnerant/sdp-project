@@ -189,6 +189,9 @@ public class HomeQuizListFragment extends Fragment
                                 requireActivity()
                                         .runOnUiThread(
                                                 () -> {
+                                                    // Hide progress bar
+                                                    progressBar.setVisibility(GONE);
+
                                                     if (throwable != null) {
                                                         Toast.makeText(
                                                                         requireContext(),
@@ -196,8 +199,6 @@ public class HomeQuizListFragment extends Fragment
                                                                         Toast.LENGTH_SHORT)
                                                                 .show();
                                                     } else {
-                                                        // Hide progress bar
-                                                        progressBar.setVisibility(GONE);
                                                         action.accept(pair.first, pair.second);
                                                     }
                                                 }));
@@ -250,10 +251,6 @@ public class HomeQuizListFragment extends Fragment
                 handleModifyQuizResult(title);
             }
 
-            // We update the list of quizzes of the user
-            String userId = AuthenticationFactory.getInstance().getUser();
-            db.updateUserQuizList(userId, ImmutableMap.copyOf(quizzes));
-
             // When the user decides to stop the edition without saving the changes the
             // EditQuizActivity will return with RESULT_CANCELED. But we do not need to do anything
             // in this case.
@@ -264,13 +261,19 @@ public class HomeQuizListFragment extends Fragment
     private void handleNewQuizResult(Quiz quiz, StringPool stringPool, String title) {
         // Upload the new quiz and stringPool to the database
         // We should handle the case when a quiz fails to upload to the database here
-        String quizId = db.uploadQuiz(quiz, stringPool).join();
+        db.uploadQuiz(quiz, stringPool)
+                .thenAccept(
+                        quizId -> {
+                            // Extend the list of quizzes of the user
+                            listAdapter.addItem(new AbstractMap.SimpleEntry<>(quizId, title));
 
-        // Extend the list of quizzes of the user
-        listAdapter.addItem(new AbstractMap.SimpleEntry<>(quizId, title));
+                            // Add the quiz to the local user
+                            user.addQuiz(quizId, title);
 
-        // Add the quiz to the local user
-        user.addQuiz(quizId, title);
+                            // We update the list of quizzes of the user
+                            String userId = AuthenticationFactory.getInstance().getUser();
+                            db.updateUserQuizList(userId, ImmutableMap.copyOf(quizzes));
+                        });
     }
 
     /** Handles the case where the user edited an already existing quiz */
