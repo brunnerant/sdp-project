@@ -64,7 +64,6 @@ public class HomeQuizListFragment extends Fragment
     private int deleteIndex = -1;
     private int modifyIndex = -1;
 
-
     // The user and its quizzes (id and title of the quizzes)
 
     private User user;
