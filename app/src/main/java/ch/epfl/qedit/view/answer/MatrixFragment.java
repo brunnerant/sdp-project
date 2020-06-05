@@ -57,7 +57,7 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
 
         for (int i = 0; i < answerFormat.getNumRows(); i++) {
             TableRow row = new TableRow(requireActivity());
-            fieldIds.add(new ArrayList<Integer>());
+            fieldIds.add(new ArrayList<>());
 
             for (int j = 0; j < answerFormat.getNumColumns(); j++) {
                 int id = View.generateViewId();

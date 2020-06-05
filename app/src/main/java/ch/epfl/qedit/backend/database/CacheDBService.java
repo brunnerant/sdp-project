@@ -60,7 +60,7 @@ public class CacheDBService implements DatabaseService {
         return this.<List<String>, ArrayList<String>>retrieve(
                 new File(langCacheDir, quizId),
                 () -> dbService.getQuizLanguages(quizId),
-                list -> new ArrayList<>(list),
+                ArrayList::new,
                 list -> list // cannot use Function.identity() because of the type system
                 );
     }
