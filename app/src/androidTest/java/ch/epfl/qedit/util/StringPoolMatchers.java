@@ -5,6 +5,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+/** This class contains two custom matchers for StringPools */
 public class StringPoolMatchers {
     public static Matcher<StringPool> containsPair(String key, String value) {
         return new TypeSafeMatcher<StringPool>() {
