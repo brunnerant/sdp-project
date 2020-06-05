@@ -77,7 +77,6 @@ public class TreasureHuntActivityTest {
     @After
     public void cleanup() {
         testRule.finishActivity();
-        LocServiceFactory.reset();
     }
 
     @Test

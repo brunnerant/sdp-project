@@ -11,15 +11,24 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/question_details_container"
+        app:layout_constraintEnd_toStartOf="@+id/separator"
         app:layout_constraintHorizontal_weight="30"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/quiz_overview_container"
+        app:layout_constraintEnd_toStartOf="@+id/question_details_container"
+        android:background="?android:attr/listDivider" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/question_details_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toEndOf="@+id/quiz_overview_container"
+        app:layout_constraintStart_toEndOf="@+id/separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="70"/>
 

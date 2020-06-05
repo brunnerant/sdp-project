@@ -55,7 +55,7 @@
     <string name="menu_timer">Minuteur</string>
     <string name="menu_previous">Précédent</string>
     <string name="menu_next">Suivant</string>
-    <string name="menu_done">Terminer</string>
+    <string name="menu_done">Terminer et sauvegarder</string>
     <string name="menu_delete">Supprimer</string>
     <string name="menu_edit">Éditer</string>
 
@@ -95,7 +95,13 @@
     <string name="done">Ok</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
-    <string name="warning_delete">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
+    <string name="add_quiz_message">Entrez le nom de votre quiz</string>
+    <string name="edit_title">Renommer</string>
+    <string name="warning_delete_quiz">Êtes-vous sûr de vouloir supprimer ce quiz ? Cela va supprimer toutes les questions de ce quiz.</string>
+    <string name="warning_delete_question">Êtes-vous sûr de vouloir supprimer cette question ?</string>
+    <string name="warning_exit_edition">Êtes-vous sûr de vouloir annuler l\'édition du quiz ? Les changements que vous avez effectués vont être ignorés.</string>
+    <string name="warning_done_edition">Êtes-vous sûr de vouloir arrêter l\'édition du quiz et de sauvegarder les changements ?</string>
+    <string name="warning_save_empty_quiz">Vous ne pouvez pas sauvegarder un quiz vide. Ajoutez au moins une question.</string>
     <string name="add_quiz">Ajouter</string>
     <string name="empty_question_list_hint_text">Ajouter une question</string>
 
