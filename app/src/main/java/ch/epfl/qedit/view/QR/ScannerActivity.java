@@ -80,7 +80,7 @@ public class ScannerActivity extends AppCompatActivity
     }
 
     public void onRequestPermissionsResult(
-            int requestCode, String permissions[], int[] grantResults) {
+            int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_CAMERA && grantResults.length > 0) {
 
             boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
@@ -94,7 +94,7 @@ public class ScannerActivity extends AppCompatActivity
     }
 
     @Override
-    public void handleResult(Result result) {
+    public void handleResult(Result result) { // TODO remove?
         /*Log.d("QRCodeScanner", result.getText());
         Log.d("QRCodeScanner", result.getBarcodeFormat().toString());*/
         ConfirmDialog.create(result.getText(), this);

@@ -23,6 +23,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.isDisplayed;
 import static ch.epfl.qedit.util.Util.onDialog;
@@ -62,6 +63,9 @@ import ch.epfl.qedit.view.SettingsActivity;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.Collection;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -153,7 +157,38 @@ public class HomeActivityTest extends RecyclerViewHelpers {
                 allOf(
                         hasComponent(EditQuizActivity.class.getName()),
                         hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class)),
+                        hasExtra(equalTo(STRING_POOL), containsPair(TITLE_ID, "New quiz")),
+                        hasExtra(equalTo(STRING_POOL), containsLanguage("en")),
                         hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class))));
+    }
+
+    public static Matcher<StringPool> containsPair(String key, String value) {
+        return new TypeSafeMatcher<StringPool>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Check if the StringPool contains " + key + " -> " + value);
+            }
+
+            @Override
+            protected boolean matchesSafely(StringPool item) {
+                return item.get(key).equals(value);
+            }
+        };
+    }
+
+    public static Matcher<StringPool> containsLanguage(String languageCode) {
+        return new TypeSafeMatcher<StringPool>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText(
+                        "Check if the StringPool contains " + languageCode + " as language");
+            }
+
+            @Override
+            protected boolean matchesSafely(StringPool item) {
+                return item.getLanguageCode().equals(languageCode);
+            }
+        };
     }
 
     @Test // TODO check that stringPool contains right language onResult

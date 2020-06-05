@@ -198,7 +198,7 @@ public class CacheDBService implements DatabaseService {
                         fromCache -> {
                             if (fromCache != null) {
                                 // If the data is already available, we can return it immediately
-                                return CompletableFuture.<S>completedFuture(
+                                return CompletableFuture.completedFuture(
                                         deserialize.apply((T) fromCache));
                             } else {
                                 // Otherwise, we fetch it from the real database
