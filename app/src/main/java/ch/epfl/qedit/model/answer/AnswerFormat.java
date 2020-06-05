@@ -24,10 +24,11 @@ public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Seria
     /** The correct answer */
     private AnswerModel solution;
 
+    /** Getter and setter for the solution */
     public void setCorrectAnswer(AnswerModel correctAnswer) {
         this.solution = correctAnswer;
     }
-    // TODO to debug, should be removed
+
     public AnswerModel getCorrectAnswer() {
         return this.solution;
     }
