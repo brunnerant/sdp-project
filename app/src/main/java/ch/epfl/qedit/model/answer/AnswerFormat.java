@@ -27,7 +27,7 @@ public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Seria
     public void setCorrectAnswer(AnswerModel correctAnswer) {
         this.solution = correctAnswer;
     }
-    // to debug, should be removed
+    // TODO to debug, should be removed
     public AnswerModel getCorrectAnswer() {
         return this.solution;
     }
