@@ -168,6 +168,7 @@
     <!-- Settings -->
     <string name="title_activity_settings">Settings</string>
     <string name="settings">Settings</string>
+    <string name="change_language">Language of the application</string>
     <string name="save_settings">Save</string>
 
     <!-- Miscellaneous -->

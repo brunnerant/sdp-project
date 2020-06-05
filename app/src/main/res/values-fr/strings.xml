@@ -133,6 +133,7 @@
     <!-- Settings -->
     <string name="title_activity_settings">Paramètres</string>
     <string name="settings">Paramètres</string>
+    <string name="change_language">Langue de l\'application</string>
     <string name="save_settings">Enregistrer</string>
 
     <!-- Map -->

@@ -7,29 +7,51 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical"
-    android:gravity="center"
     tools:context=".view.SettingsActivity">
 
-    <TextView
-        android:id="@+id/settings"
-        android:textStyle="bold"
-        android:textAllCaps="true"
-        android:textSize="30sp"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/settings" />
+        android:layout_marginTop="@dimen/regular_padding"
+        android:orientation="horizontal">
 
-    <Spinner
-        android:id="@+id/spinner_language_selection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/languages_list"
-        android:spinnerMode="dropdown" />
+        <TextView
+            android:id="@+id/change_language_text"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_language"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+        />
+        <Spinner
+            android:id="@+id/spinner_language_selection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/languages_list"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
 
     <Button
         android:id="@+id/button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginEnd="@dimen/medium_margin"
+        android:layout_gravity="end"
+        android:background="@color/transparent"
+        android:textColor="@color/colorAccent"
         android:text="@string/save_settings"/>
 
 </LinearLayout>

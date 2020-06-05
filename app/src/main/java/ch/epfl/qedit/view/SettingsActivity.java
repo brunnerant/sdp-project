@@ -81,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void initializeViews() {
-        textViewSettings = findViewById(R.id.settings);
+        textViewSettings = findViewById(R.id.change_language_text);
         saveButton = findViewById(R.id.button_save);
     }
 
@@ -97,7 +97,7 @@ public class SettingsActivity extends AppCompatActivity
 
     /** Update activity's texts (useful when the language is changed). */
     private void updateTexts() {
-        textViewSettings.setText(resources.getString(R.string.settings));
+        textViewSettings.setText(resources.getString(R.string.change_language));
         saveButton.setText(resources.getString(R.string.save_settings));
         setTitle(resources.getString(R.string.title_activity_settings));
     }
