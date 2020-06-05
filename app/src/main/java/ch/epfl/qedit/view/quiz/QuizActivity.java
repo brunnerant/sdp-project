@@ -32,9 +32,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class QuizActivity extends AppCompatActivity implements ConfirmDialog.ConfirmationListener {
+
     public static final String PARTICIPANT_ANSWERS = "ch.epfl.qedit.quiz.PARTICIPANT_ANSWERS";
     public static final String QUESTIONS = "ch.epfl.qedit.quiz.QUESTIONS";
     public static final String GOOD_ANSWERS = "ch.epfl.qedit.quiz.GOOD_ANSWERS";
+
     public static final String CORRECTION = "ch.epfl.qedit.quiz.CORRECTION";
     private QuizViewModel model;
     private Boolean overviewActive;

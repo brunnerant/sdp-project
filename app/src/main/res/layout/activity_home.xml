@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
-    android:weightSum="5"
+    android:weightSum="7"
     tools:context=".view.home.HomeActivity">
 
     <ScrollView
@@ -15,6 +15,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:orientation="vertical">
 
             <androidx.fragment.app.FragmentContainerView
@@ -53,6 +54,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
+
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
