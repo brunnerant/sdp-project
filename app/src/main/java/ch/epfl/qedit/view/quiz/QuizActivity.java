@@ -65,14 +65,17 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
         overviewActive = false;
         handleToggleOverview();
 
+        instantiateFragments(correction);
+    }
+
+    private void instantiateFragments(Boolean correcting) {
         QuestionFragment questionFragment = new QuestionFragment();
         QuizOverviewFragment overview = new QuizOverviewFragment();
 
         Bundle bundle = new Bundle();
         bundle.putIntegerArrayList(GOOD_ANSWERS, goodAnswers);
         questionFragment.setArguments(bundle);
-
-        if (correction) {
+        if (correcting) {
             int nbOfGoodAnswers = Collections.frequency(goodAnswers, 1);
             float ratio = nbOfGoodAnswers / goodAnswers.size();
 
@@ -114,13 +117,11 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-
         switch (id) {
             case R.id.next:
             case R.id.previous:
                 handleNavigation(id == R.id.next ? 1 : -1);
                 break;
-
             case R.id.overview:
                 handleToggleOverview();
                 break;
@@ -129,20 +130,23 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
                 onBackPressed();
                 break;
             case R.id.validate:
-                if (correction) {
-                    validateDialog = ConfirmDialog.create("Quit quiz results ?", this);
-                    validateDialog.show(getSupportFragmentManager(), null);
-                } else {
-                    validateDialog =
-                            ConfirmDialog.create(
-                                    "Are you sure you want to correct this quiz ?", this);
-                    validateDialog.show(getSupportFragmentManager(), null);
-                }
+                handleValidate(correction);
 
                 break;
         }
 
         return true;
+    }
+
+    private void handleValidate(Boolean correcting) {
+        if (correcting) {
+            validateDialog = ConfirmDialog.create("Quit quiz results ?", this);
+            validateDialog.show(getSupportFragmentManager(), null);
+        } else {
+            validateDialog =
+                    ConfirmDialog.create("Are you sure you want to correct this quiz ?", this);
+            validateDialog.show(getSupportFragmentManager(), null);
+        }
     }
 
     private void backHome() {
@@ -187,29 +191,27 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
 
                 int goodAnswer = questions.get(i).getFormat().correct(answerModel) ? 1 : 0;
                 correctedQuestions.add(i, goodAnswer);
-                if (answerModel == null) {
-                    corrected.add(
-                            i,
-                            makePrefilledMatrixQuestion(
-                                    (MatrixModel)
-                                            questions.get(i).getFormat().getEmptyAnswerModel(),
-                                    questions.get(i)));
-                } else {
-                    corrected.add(i, makePrefilledMatrixQuestion(answerModel, questions.get(i)));
-                }
+
+                corrected.add(i, makePrefilledMatrixQuestion(answerModel, questions.get(i)));
             }
         }
         return corrected;
     }
+
     // make a prefilled matrix question
     private Question makePrefilledMatrixQuestion(MatrixModel answerModel, Question quizQuestion) {
+        MatrixModel model;
+        if (answerModel == null) {
+            model = (MatrixModel) quizQuestion.getFormat().getEmptyAnswerModel();
+        } else {
+            model = answerModel;
+        }
         MatrixFormat.Builder builder =
-                new MatrixFormat.Builder(answerModel.getNumRows(), answerModel.getNumCols());
+                new MatrixFormat.Builder(model.getNumRows(), model.getNumCols());
 
-        for (int x = 0; x < answerModel.getNumRows(); x++) {
-            for (int y = 0; y < answerModel.getNumCols(); y++) {
-                builder.withField(
-                        x, y, MatrixFormat.Field.preFilledField(answerModel.getAnswer(x, y)));
+        for (int x = 0; x < model.getNumRows(); x++) {
+            for (int y = 0; y < model.getNumCols(); y++) {
+                builder.withField(x, y, MatrixFormat.Field.preFilledField(model.getAnswer(x, y)));
             }
         }
 

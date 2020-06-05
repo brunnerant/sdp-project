@@ -16,6 +16,7 @@ import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.login.Util.USER;
 import static ch.epfl.qedit.view.quiz.QuestionFragment.FRAGMENT_TAG;
 import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
+import static ch.epfl.qedit.view.quiz.QuizActivity.GOOD_ANSWERS;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
@@ -34,8 +35,10 @@ import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.view.answer.MatrixFragment;
+import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -49,6 +52,7 @@ public class QuizActivityTest {
     private QuizViewModel model;
     private final Integer zero = 0;
     private final String answer1 = "1234";
+    private ArrayList<Integer> correctedQuestions;
 
     @Rule
     public final IntentsTestRule<QuizActivity> testRule =
@@ -83,6 +87,29 @@ public class QuizActivityTest {
                         });
     }
 
+    public void launchCorrection() {
+        User user = new User("François", "Ferdinand");
+        correctedQuestions = new ArrayList<>();
+        correctedQuestions.add(0, 1);
+        correctedQuestions.add(1, 0);
+
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+
+        initializeStringPoolAndQuiz();
+
+        bundle.putSerializable(QUIZ_ID, quiz);
+        bundle.putIntegerArrayList(GOOD_ANSWERS, correctedQuestions);
+        bundle.putSerializable(USER, user);
+        bundle.putBoolean(CORRECTION, true);
+        intent.putExtras(bundle);
+
+        testRule.launchActivity(intent);
+
+        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+        model.setQuiz(quiz.instantiateLanguage(stringPool));
+    }
+
     public void finishActivity() {
         testRule.finishActivity();
     }
@@ -112,6 +139,32 @@ public class QuizActivityTest {
         launchActivity();
         Integer question = model.getFocusedQuestion().getValue();
         Assert.assertNull(question);
+        finishActivity();
+    }
+
+    @Test
+    public void correctionFragmentDisplayed() {
+        launchCorrection();
+        onView(withId(R.id.correction_details_container)).check(matches(isDisplayed()));
+        finishActivity();
+    }
+
+    @Test
+    public void clickValidate() {
+        launchCorrection();
+        onView(withId(R.id.validate)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        intended(allOf(hasComponent(HomeActivity.class.getName())));
+        finishActivity();
+    }
+
+    @Test
+    public void textViewsContent() {
+        launchCorrection();
+        onView(withId(R.id.correct_ratio)).check(matches(withText("Correct answers :1/2 (50.0%)")));
+        onView(withId(R.id.correction_score)).check(matches(withText("+1")));
+        onView(withId(R.id.correction_success)).check(matches(withText("+0")));
+        onView(withId(R.id.correction_attempts)).check(matches(withText("+1")));
         finishActivity();
     }
 
