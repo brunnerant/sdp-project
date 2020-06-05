@@ -31,21 +31,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_info_container"
-            app:layout_constraintBottom_toTopOf="@+id/home_qr_container"
             app:layout_constraintVertical_weight="40"/>
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/home_qr_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:weightSum="2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
 
-
-            app:layout_constraintTop_toBottomOf="@+id/home_quiz_list_container"
-            app:layout_constraintVertical_weight="30"
-                />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

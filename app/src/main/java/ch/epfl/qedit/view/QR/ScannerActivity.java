@@ -145,6 +145,7 @@ public class ScannerActivity extends AppCompatActivity
         quiz.instantiateLanguage(pool);
         user.addQuiz(quizId, quiz.getTitle());
         intent.putExtra(QUIZ_ID, quiz);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }

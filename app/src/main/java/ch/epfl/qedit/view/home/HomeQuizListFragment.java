@@ -8,7 +8,9 @@ import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeActivity.USER;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,11 +18,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
@@ -28,13 +32,17 @@ import ch.epfl.qedit.backend.database.Util;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
-import ch.epfl.qedit.view.QR.QRGeneratorFragment;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.edit.EditQuizSettingsDialog;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -142,16 +150,39 @@ public class HomeQuizListFragment extends Fragment
     }
 
     private void generateQR(int position) {
-        FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+        final Dialog QRDialog =
+                new Dialog(requireContext(), android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+        QRDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        QRDialog.setContentView(R.layout.qr_dialog);
 
-        QRGeneratorFragment fragment = new QRGeneratorFragment();
+        Button close = (Button) QRDialog.findViewById(R.id.qr_close);
+        close.setEnabled(true);
 
-        Bundle bundle = new Bundle();
-        bundle.putString(QUIZ_ID, quizzes.get(position).getKey());
-        fragment.setArguments(bundle);
+        close.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        QRDialog.cancel();
+                    }
+                });
 
-        ft.replace(R.id.home_qr_container, fragment);
-        ft.commit();
+        ImageView qrCode = (ImageView) QRDialog.findViewById(R.id.qr_image);
+        String quizId = quizzes.get(position).getKey();
+        int qrSize = getResources().getDisplayMetrics().widthPixels;
+        qrSize -= 50;
+        if (quizId.length() > 0) {
+            MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+            try {
+                BitMatrix bitMatrix =
+                        multiFormatWriter.encode(quizId, BarcodeFormat.QR_CODE, qrSize, qrSize);
+                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                qrCode.setImageBitmap(bitmap);
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+        }
+        QRDialog.show();
     }
 
     @Override

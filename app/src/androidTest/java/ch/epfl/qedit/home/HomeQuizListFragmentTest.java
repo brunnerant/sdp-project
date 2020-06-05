@@ -148,4 +148,13 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
                         hasComponent(TreasureHuntActivity.class.getName()),
                         hasExtra(equalTo(QUIZ_ID), instanceOf(Quiz.class))));
     }
+
+    @Test
+    public void testGenerateQRCode() {
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_qr);
+
+        onView(withId(R.id.qr_image)).check(matches(isDisplayed()));
+        onView(withId(R.id.qr_close)).perform(click());
+    }
 }
