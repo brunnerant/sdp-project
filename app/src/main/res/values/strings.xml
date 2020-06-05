@@ -80,6 +80,7 @@
     <string name="score">QEDit SCORE</string>
     <string name="successes">NUMBER OF QUIZZES SUCCEEDED</string>
     <string name="attempts">TOTAL NUMBER OF ATTEMPTS</string>
+    <string name="quizzes">My quizzes</string>
 
     <!-- Menu -->
     <string name="menu_overview">Overview</string>
@@ -175,5 +176,7 @@
     <string name="exclamation_point">!</string>
     <string name="database_error">An error occurred connecting to the database</string>
     <string name="card_icon">card icon</string>
+    <string name="database_upload_failed">The quiz could not be uploaded to the database</string>
+    <string name="database_upload_successful">The quiz was successfully uploaded to the database</string>
 
 </resources>

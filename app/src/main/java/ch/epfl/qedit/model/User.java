@@ -2,7 +2,6 @@ package ch.epfl.qedit.model;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -54,37 +53,17 @@ public class User implements Serializable {
         this.attempts = attempts;
     }
 
-    public boolean canAdd(String string) {
-        return !quizzes.containsValue(string);
-    }
-
     /**
-     * add a quiz to the user's quizzes list and return true if this quiz is replacing an other,
+     * Adds a quiz to the user's quizzes list and return true if this quiz is replacing an other,
      * i.e. if the key already is in the quizzes map
      */
     public boolean addQuiz(String key, String title) {
         return quizzes.put(key, title) != null;
     }
 
-    public void removeQuizOnValue(String value) {
-        // Using iterator to avoid ConcurrentModificationException
-        Iterator<Map.Entry<String, String>> it = quizzes.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, String> entry = it.next();
-            if (entry.getValue().equals(value)) {
-                it.remove();
-            }
-        }
-    }
-
-    public void updateQuizOnValue(String oldValue, String newValue) {
-        String value = newValue.trim();
-
-        for (Map.Entry<String, String> entry : quizzes.entrySet()) {
-            if (entry.getValue().equals(oldValue)) {
-                quizzes.put(entry.getKey(), value);
-            }
-        }
+    /** Updates the title of the quiz with the given ID. */
+    public void updateQuizTitle(String id, String newTitle) {
+        quizzes.put(id, newTitle);
     }
 
     public void removeQuiz(String key) {

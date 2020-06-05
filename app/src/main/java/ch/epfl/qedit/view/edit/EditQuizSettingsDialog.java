@@ -214,9 +214,9 @@ public class EditQuizSettingsDialog extends DialogFragment
         Spinner languageSelectionSpinner = view.findViewById(R.id.edit_language_selection);
 
         // Find app's current language position in languages list
-        String currentLanguage = Locale.getDefault().getLanguage();
+        languageCode = Locale.getDefault().getLanguage();
         String[] languageList = getResources().getStringArray(R.array.languages_codes);
-        int positionInLanguageList = Arrays.asList(languageList).indexOf(currentLanguage);
+        int positionInLanguageList = Arrays.asList(languageList).indexOf(languageCode);
 
         // Set current language in spinner at startup
         languageSelectionSpinner.setSelection(positionInLanguageList, false);
