@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import ch.epfl.qedit.R;
+import ch.epfl.qedit.view.SettingsActivity;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
@@ -97,7 +98,8 @@ public class HomeActivity extends AppCompatActivity
                         .show();
                 break;
             case R.id.settings:
-                Toast.makeText(this, "Can't change settings for now", Toast.LENGTH_SHORT).show();
+                Intent intentSettings = new Intent(HomeActivity.this, SettingsActivity.class);
+                startActivity(intentSettings);
                 break;
         }
         return true;

@@ -110,7 +110,7 @@ public final class Util {
      * @param context context containing the current app's language
      * @param resources resources to get the strings from
      */
-    static void showToastChangedLanguage(int languagePos, Context context, Resources resources) {
+    public static void showToastChangedLanguage(int languagePos, Context context, Resources resources) {
         String stringToDisplay =
                 resources.getString(R.string.language_changed)
                         + " "

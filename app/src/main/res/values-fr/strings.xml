@@ -130,6 +130,11 @@
         <item>Pré-rempli</item>
     </string-array>
 
+    <!-- Settings -->
+    <string name="title_activity_settings">Paramètres</string>
+    <string name="settings">Paramètres</string>
+    <string name="save_settings">Enregistrer</string>
+
     <!-- Map -->
     <string name="title_activity_edit_maps">Carte</string>
     <string name="your_location">Votre position</string>
