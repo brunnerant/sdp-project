@@ -185,14 +185,13 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
         HashMap<Integer, AnswerModel> answers = model.getAnswers().getValue();
         List<Question> corrected = new ArrayList<Question>();
         for (int i = 0; i < questions.size(); i++) {
-            if (questions.get(i).getFormat() instanceof MatrixFormat) {
-                MatrixModel answerModel = (MatrixModel) answers.get(i);
 
-                int goodAnswer = questions.get(i).getFormat().correct(answerModel) ? 1 : 0;
-                correctedQuestions.add(i, goodAnswer);
+            MatrixModel answerModel = (MatrixModel) answers.get(i);
 
-                corrected.add(i, makePrefilledMatrixQuestion(answerModel, questions.get(i)));
-            }
+            int goodAnswer = questions.get(i).getFormat().correct(answerModel) ? 1 : 0;
+            correctedQuestions.add(i, goodAnswer);
+
+            corrected.add(i, makePrefilledMatrixQuestion(answerModel, questions.get(i)));
         }
         return corrected;
     }
