@@ -79,8 +79,8 @@ public class MatrixModel extends AnswerModel {
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put(TO_MAP_NUM_ROWS, numRows);
-        map.put(TO_MAP_NUM_COLUMNS, numCols);
+        map.put(TO_MAP_NUM_ROWS, (long) numRows);
+        map.put(TO_MAP_NUM_COLUMNS, (long) numCols);
         Map<String, Object> data = new HashMap<>();
         for (int i = 0; i < numRows; i++)
             for (int j = 0; j < numCols; j++) data.put(i + "," + j, matrix[i][j]);

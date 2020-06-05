@@ -26,16 +26,25 @@ public class HomeActivity extends AppCompatActivity
     // Key of user passed in bundle to home activity
     public static final String USER = "ch.epfl.qedit.view.login.USER";
 
+    // The left hamburger menu
     private DrawerLayout drawer;
+
+    // The user that is currently logged-in
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Get the Intent that started this activity and extract the string
-        Intent intent = getIntent();
-        User user = (User) Objects.requireNonNull(intent.getExtras()).getSerializable(USER);
+        if (savedInstanceState == null) {
+            // If the activity was just launched, retrieve the user from the intent
+            Intent intent = getIntent();
+            user = (User) Objects.requireNonNull(intent.getExtras()).getSerializable(USER);
+        } else {
+            // Otherwise, retrieve it from the saved state
+            user = (User) savedInstanceState.getSerializable(USER);
+        }
 
         // create hamburger menu
         createDrawer();
@@ -58,6 +67,12 @@ public class HomeActivity extends AppCompatActivity
 
         // Set page title to display it in the right language
         setTitle(R.string.title_activity_home);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(USER, user);
     }
 
     @Override
