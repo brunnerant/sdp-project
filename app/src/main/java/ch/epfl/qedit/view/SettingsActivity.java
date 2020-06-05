@@ -1,7 +1,6 @@
 package ch.epfl.qedit.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.StartActivity;
 import ch.epfl.qedit.util.LocaleHelper;
-import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.login.Util;
 
 public class SettingsActivity extends AppCompatActivity
@@ -78,12 +76,8 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void save() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        Bundle bundle = new Bundle();
-
-        StartActivity startActivity = new StartActivity();
-        String userId = startActivity.retrieveUserId(this);
-        startActivity.retrieveUserAndLaunchHomeActivity(this, userId);
+        String userId = StartActivity.retrieveUserId();
+        StartActivity.retrieveUserAndLaunchHomeActivity(this, userId);
     }
 
     private void initializeViews() {

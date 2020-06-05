@@ -25,7 +25,7 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String userId = retrieveUserId(this);
+        String userId = retrieveUserId();
 
         if (userId != null) {
             // If a user is already logged-in, we retrieve its information from the
@@ -35,41 +35,42 @@ public class StartActivity extends Activity {
             // No user is signed in, so we go to the login activity
             launchLoginActivity();
         }
+        finish();
     }
 
     private void launchLoginActivity() {
         Intent intent = new Intent(this, LogInActivity.class);
         startActivity(intent);
-        finish();
     }
 
-    public String retrieveUserId(Context context) {
+    public static String retrieveUserId() {
         AuthenticationService authService = AuthenticationFactory.getInstance();
         return authService.getUser();
     }
 
-    public void retrieveUserAndLaunchHomeActivity(Context context, String userId) {
-        DatabaseService dbService = DatabaseFactory.getInstance(this);
+    public static void retrieveUserAndLaunchHomeActivity(Context context, String userId) {
+        DatabaseService dbService = DatabaseFactory.getInstance(context);
         dbService
                 .getUser(userId)
                 .whenComplete(
                         (result, throwable) -> {
                             if (throwable != null) {
                                 Util.showToast(
-                                        R.string.database_error, getBaseContext(), getResources());
+                                        R.string.database_error,
+                                        context.getApplicationContext(),
+                                        context.getResources());
                             } else {
                                 // Then, we launch the home activity
-                                launchHomeActivity(this, result);
+                                launchHomeActivity(context, result);
                             }
                         });
     }
 
-    private void launchHomeActivity(Context context, User user) {
+    private static void launchHomeActivity(Context context, User user) {
         Intent intent = new Intent(context, HomeActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
-        startActivity(intent);
-        finish();
+        context.startActivity(intent);
     }
 }
