@@ -328,7 +328,6 @@ public final class Util {
             CompletableFuture<Void> future = new CompletableFuture<>();
             Map<String, Object> doc = questions.get(i).toMap();
             doc.put("index", i);
-            final int i_ = i;
             questionsRef
                     .add(doc)
                     .addOnSuccessListener(ref -> future.complete(null))
