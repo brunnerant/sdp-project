@@ -262,18 +262,34 @@ public class HomeQuizListFragment extends Fragment
         // Upload the new quiz and stringPool to the database
         // We should handle the case when a quiz fails to upload to the database here
         db.uploadQuiz(quiz, stringPool)
-                .thenAccept(
-                        quizId -> {
-                            // Extend the list of quizzes of the user
-                            listAdapter.addItem(new AbstractMap.SimpleEntry<>(quizId, title));
+                .whenComplete(
+                        (quizId, throwable) ->
+                                requireActivity()
+                                        .runOnUiThread(() -> onUpload(quizId, title, throwable)));
+    }
 
-                            // Add the quiz to the local user
-                            user.addQuiz(quizId, title);
+    // Runs when a quiz has been successfully uploaded
+    private void onUpload(String quizId, String title, Throwable throwable) {
+        if (throwable != null) {
+            // In case of an error we just inform the user
+            Toast.makeText(requireContext(), R.string.database_upload_failed, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
 
-                            // We update the list of quizzes of the user
-                            String userId = AuthenticationFactory.getInstance().getUser();
-                            db.updateUserQuizList(userId, ImmutableMap.copyOf(quizzes));
-                        });
+        // Otherwise, we inform the user that the upload was successful
+        Toast.makeText(requireContext(), R.string.database_upload_successful, Toast.LENGTH_SHORT)
+                .show();
+
+        // Extend the list of quizzes of the user
+        listAdapter.addItem(new AbstractMap.SimpleEntry<>(quizId, title));
+
+        // Add the quiz to the local user
+        user.addQuiz(quizId, title);
+
+        // And update the list of quizzes of the user
+        String userId = AuthenticationFactory.getInstance().getUser();
+        db.updateUserQuizList(userId, ImmutableMap.copyOf(quizzes));
     }
 
     /** Handles the case where the user edited an already existing quiz */
@@ -293,9 +309,10 @@ public class HomeQuizListFragment extends Fragment
         user.updateQuizTitle(quizId, title);
 
         Toast.makeText(
-                requireContext(),
-                "Updating a quiz in the database is not yet supported, so the changes will only be visible locally.",
-                Toast.LENGTH_SHORT);
+                        requireContext(),
+                        "Updating a quiz in the database is not yet supported, so the changes will only be visible locally.",
+                        Toast.LENGTH_SHORT)
+                .show();
     }
 
     // This method will be called when the user confirms the deletion by clicking on "yes"
@@ -303,15 +320,18 @@ public class HomeQuizListFragment extends Fragment
     public void onConfirm(ConfirmDialog dialog) {
         if (dialog != deleteDialog) return;
 
-        // For now the deletion only occurs locally since we didn't implement removal from
-        // the database.
+        // We remove the quiz from the list view
         listAdapter.removeItem(deleteIndex);
         deleteIndex = -1;
 
-        Toast.makeText(
-                requireContext(),
-                "Deleting a quiz from the database is not yet supported, so the changes will only be visible locally.",
-                Toast.LENGTH_SHORT);
+        // And update the list of quizzes of the user
+        String userId = AuthenticationFactory.getInstance().getUser();
+        db.updateUserQuizList(userId, ImmutableMap.copyOf(quizzes));
+
+        // As a note, the way we currently handle deletion means that the user will not see the
+        // quiz anymore, but it will persist in the database. This is satisfactory for now, since
+        // deleting the quiz from the database could create problems in case other users also
+        // downloaded the same quiz.
     }
 
     // This method will be called when the user submits the settings made in the SettingsDialog by
