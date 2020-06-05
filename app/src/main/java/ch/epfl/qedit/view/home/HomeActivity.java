@@ -15,6 +15,7 @@ import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.QR.ScannerActivity;
+import ch.epfl.qedit.view.SettingsActivity;
 import ch.epfl.qedit.view.login.LogInActivity;
 import com.google.android.material.navigation.NavigationView;
 import java.util.Objects;
@@ -97,7 +98,8 @@ public class HomeActivity extends AppCompatActivity
                         .show();
                 break;
             case R.id.settings:
-                Toast.makeText(this, "Can't change settings for now", Toast.LENGTH_SHORT).show();
+                Intent intentSettings = new Intent(HomeActivity.this, SettingsActivity.class);
+                startActivity(intentSettings);
                 break;
         }
         return true;

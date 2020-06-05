@@ -1,4 +1,4 @@
-package ch.epfl.qedit.login;
+package ch.epfl.qedit;
 
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -7,11 +7,11 @@ import static ch.epfl.qedit.backend.auth.MockAuthService.ANTHONY_IOZZIA_ID;
 import static ch.epfl.qedit.backend.database.MockDBService.createAnthony;
 import static org.hamcrest.core.AllOf.allOf;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
-import ch.epfl.qedit.StartActivity;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
@@ -60,6 +60,7 @@ public class StartActivityTest {
     @Test
     public void testLaunchesHomeActivityIfAlreadyLoggedIn() {
         init(ANTHONY_IOZZIA_ID);
+        Espresso.onIdle();
         intended(
                 allOf(
                         hasComponent(HomeActivity.class.getName()),
