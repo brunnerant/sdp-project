@@ -58,6 +58,7 @@ import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
 import ch.epfl.qedit.view.QR.ScannerActivity;
+import ch.epfl.qedit.view.SettingsActivity;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
 import ch.epfl.qedit.view.home.HomeActivity;
 import java.util.Collection;
@@ -237,6 +238,15 @@ public class HomeActivityTest extends RecyclerViewHelpers {
     }
 
     @Test
+    public void testSelectSettings() {
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.START)))
+                .perform(DrawerActions.open());
+        onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.settings));
+        intended(hasComponent(SettingsActivity.class.getName()));
+    }
+
+    @Test
     public void testSelectUnimplementedFeatures() {
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.START)))
@@ -245,7 +255,6 @@ public class HomeActivityTest extends RecyclerViewHelpers {
         onView(withId(R.id.burger_view))
                 .perform(NavigationViewActions.navigateTo(R.id.online_quizzes));
         onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.my_account));
-        onView(withId(R.id.burger_view)).perform(NavigationViewActions.navigateTo(R.id.settings));
         onView(withId(R.id.drawer_layout))
                 .check(matches(isOpen(Gravity.START)))
                 .perform(DrawerActions.close());

@@ -166,6 +166,12 @@
     <string name="title_activity_edit_maps">Map</string>
     <string name="your_location">Your location</string>
 
+    <!-- Settings -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="settings">Settings</string>
+    <string name="change_language">Language of the application</string>
+    <string name="save_settings">Save</string>
+
     <!-- Miscellaneous -->
     <string name="exclamation_point">!</string>
     <string name="database_error">An error occurred connecting to the database</string>
