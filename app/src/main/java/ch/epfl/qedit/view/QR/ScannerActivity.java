@@ -1,6 +1,7 @@
 package ch.epfl.qedit.view.QR;
 
 import static android.Manifest.permission.CAMERA;
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 
 import android.content.Intent;
@@ -18,6 +19,7 @@ import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.backend.database.Util;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import com.google.zxing.Result;
@@ -33,13 +35,14 @@ public class ScannerActivity extends AppCompatActivity
     private DatabaseService db;
     private String quizId;
     private ConfirmDialog resultDialog;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        db = DatabaseFactory.getInstance();
-
+        db = DatabaseFactory.getInstance(this);
+        user = (User) getIntent().getExtras().getSerializable(USER);
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
         int currentApiVersion = Build.VERSION.SDK_INT;
@@ -140,6 +143,7 @@ public class ScannerActivity extends AppCompatActivity
     private void launchQuizActivity(Quiz quiz, StringPool pool) {
         Intent intent = new Intent(ScannerActivity.this, QuizActivity.class);
         quiz.instantiateLanguage(pool);
+        user.addQuiz(quizId, quiz.getTitle());
         intent.putExtra(QUIZ_ID, quiz);
         startActivity(intent);
     }

@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity
 
     // Key of user passed in bundle to home activity
     public static final String USER = "ch.epfl.qedit.view.login.USER";
-
+    private User user;
     private DrawerLayout drawer;
 
     @Override
@@ -34,7 +34,7 @@ public class HomeActivity extends AppCompatActivity
 
         // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
-        User user = (User) Objects.requireNonNull(intent.getExtras()).getSerializable(USER);
+        user = (User) Objects.requireNonNull(intent.getExtras()).getSerializable(USER);
 
         // create hamburger menu
         createDrawer();
@@ -90,6 +90,9 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case R.id.qr_code_burger:
                 Intent intent = new Intent(HomeActivity.this, ScannerActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(USER, user);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case R.id.my_account:
