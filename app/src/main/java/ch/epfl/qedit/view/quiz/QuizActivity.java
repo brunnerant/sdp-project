@@ -64,40 +64,39 @@ public class QuizActivity extends AppCompatActivity implements ConfirmDialog.Con
         correctedQuestions = new ArrayList<>();
         overviewActive = false;
         handleToggleOverview();
-
-        instantiateFragments(correction);
-    }
-
-    private void instantiateFragments(Boolean correcting) {
         QuestionFragment questionFragment = new QuestionFragment();
         QuizOverviewFragment overview = new QuizOverviewFragment();
 
         Bundle bundle = new Bundle();
         bundle.putIntegerArrayList(GOOD_ANSWERS, goodAnswers);
         questionFragment.setArguments(bundle);
+        instantiateFragments(correction, questionFragment, overview);
+    }
+
+    private void instantiateFragments(
+            Boolean correcting, QuestionFragment qFragment, QuizOverviewFragment overviewFragment) {
+
         if (correcting) {
             int nbOfGoodAnswers = Collections.frequency(goodAnswers, 1);
             float ratio = nbOfGoodAnswers / goodAnswers.size();
-
             user.incrementScore(nbOfGoodAnswers);
             if (ratio >= 0.8) {
                 user.incrementSuccess();
-
             } else {
                 user.incrementAttempt();
             }
             CorrectionFragment correctionFragment = new CorrectionFragment(goodAnswers);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.question_details_container, questionFragment)
-                    .replace(R.id.quiz_overview_container, overview)
+                    .replace(R.id.question_details_container, qFragment)
+                    .replace(R.id.quiz_overview_container, overviewFragment)
                     .replace(R.id.correction_details_container, correctionFragment)
                     .commit();
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.question_details_container, questionFragment)
-                    .replace(R.id.quiz_overview_container, overview)
+                    .replace(R.id.question_details_container, qFragment)
+                    .replace(R.id.quiz_overview_container, overviewFragment)
                     .commit();
         }
     }
