@@ -1,4 +1,4 @@
-package ch.epfl.qedit.login;
+package ch.epfl.qedit;
 
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -11,7 +11,6 @@ import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
-import ch.epfl.qedit.StartActivity;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.MockAuthService;
 import ch.epfl.qedit.backend.database.DatabaseFactory;
