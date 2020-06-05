@@ -3,7 +3,6 @@ package ch.epfl.qedit.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import org.junit.Test;
 
@@ -57,7 +56,7 @@ public class QuestionTest {
 
     @Test(expected = NullPointerException.class)
     public void invalidQuestionsCannotBeBuilt4() {
-        new Question("", "", (AnswerFormat) null);
+        new Question("", "", null);
     }
 
     @Test(expected = IllegalArgumentException.class)
