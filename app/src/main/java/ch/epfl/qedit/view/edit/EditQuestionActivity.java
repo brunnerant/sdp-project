@@ -111,7 +111,6 @@ public class EditQuestionActivity extends AppCompatActivity {
             setAnswerFormat(question.getFormat());
         }
 
-        // TODO: Rename treasure hunt is needed
         Object b = bundle.getBoolean(TREASURE_HUNT);
         if (b != null) {
             isTreasureHunt = (boolean) b;

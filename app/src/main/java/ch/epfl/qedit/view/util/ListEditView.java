@@ -94,9 +94,7 @@ public class ListEditView extends RecyclerView {
 
             // When an item is clicked on, we pass the CLICK event to the listener
             itemView.setOnClickListener(
-                    v -> {
-                        adapter.notifyItem(getAdapterPosition(), ItemListener.CLICK);
-                    });
+                    v -> adapter.notifyItem(getAdapterPosition(), ItemListener.CLICK));
 
             threeDots.setOnClickListener(
                     v -> {

@@ -37,7 +37,7 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
         View view = inflater.inflate(R.layout.answer_table, container, false);
         quizViewModel = new ViewModelProvider(requireActivity()).get(QuizViewModel.class);
 
-        fillTable((TableLayout) view.findViewById(R.id.answer_table));
+        fillTable(view.findViewById(R.id.answer_table));
 
         return view;
     }
@@ -57,7 +57,7 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
 
         for (int i = 0; i < answerFormat.getNumRows(); i++) {
             TableRow row = new TableRow(requireActivity());
-            fieldIds.add(new ArrayList<Integer>());
+            fieldIds.add(new ArrayList<>());
 
             for (int j = 0; j < answerFormat.getNumColumns(); j++) {
                 int id = View.generateViewId();

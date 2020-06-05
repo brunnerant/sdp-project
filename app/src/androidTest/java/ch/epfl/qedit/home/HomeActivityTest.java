@@ -23,6 +23,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
+import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.util.Util.clickOn;
 import static ch.epfl.qedit.util.Util.isDisplayed;
 import static ch.epfl.qedit.util.Util.onDialog;
@@ -57,6 +58,7 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.RecyclerViewHelpers;
+import ch.epfl.qedit.util.StringPoolMatchers;
 import ch.epfl.qedit.view.QR.ScannerActivity;
 import ch.epfl.qedit.view.SettingsActivity;
 import ch.epfl.qedit.view.edit.EditQuizActivity;
@@ -154,11 +156,10 @@ public class HomeActivityTest extends RecyclerViewHelpers {
                         hasComponent(EditQuizActivity.class.getName()),
                         hasExtra(equalTo(STRING_POOL), instanceOf(StringPool.class)),
                         hasExtra(
-                                equalTo(QUIZ_BUILDER),
-                                instanceOf(
-                                        Quiz.Builder
-                                                .class)))); // TODO check that contains language,
-        // title
+                                equalTo(STRING_POOL),
+                                StringPoolMatchers.containsPair(TITLE_ID, "New quiz")),
+                        hasExtra(equalTo(STRING_POOL), StringPoolMatchers.containsLanguage("en")),
+                        hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class))));
     }
 
     @Test

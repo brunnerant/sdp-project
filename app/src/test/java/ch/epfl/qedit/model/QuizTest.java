@@ -10,7 +10,6 @@ import ch.epfl.qedit.model.answer.MatrixFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import org.junit.function.ThrowingRunnable;
 
 public class QuizTest {
 
@@ -39,14 +38,7 @@ public class QuizTest {
     public void getQuestionIsImmutableTest() {
         Quiz quiz = new Quiz("Title", initQuestionList());
         final List<Question> questions = quiz.getQuestions();
-        assertThrows(
-                UnsupportedOperationException.class,
-                new ThrowingRunnable() {
-                    @Override
-                    public void run() {
-                        questions.add(null);
-                    }
-                });
+        assertThrows(UnsupportedOperationException.class, () -> questions.add(null));
     }
 
     @Test
