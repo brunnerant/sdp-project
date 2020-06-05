@@ -6,11 +6,8 @@ import static android.view.View.VISIBLE;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
-
-import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
-
 import static ch.epfl.qedit.view.home.HomeActivity.USER;
-
+import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
 
 import android.content.Intent;
 import android.os.Bundle;
