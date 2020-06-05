@@ -3,6 +3,7 @@ package ch.epfl.qedit.view.QR;
 import static android.Manifest.permission.CAMERA;
 import static ch.epfl.qedit.view.home.HomeActivity.USER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
+import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
