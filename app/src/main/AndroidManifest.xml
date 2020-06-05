@@ -25,6 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".MyAccountActivity"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -39,11 +40,11 @@
 
         <activity
             android:name=".view.edit.EditMapsActivity"
-            android:launchMode="singleTop"
-            android:label="@string/title_activity_edit_maps">
-
+            android:label="@string/title_activity_edit_maps"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -99,6 +100,15 @@
             android:parentActivityName=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.HOME" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.SettingsActivity"
+            android:label="@string/title_activity_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.SETTINGS" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
