@@ -44,14 +44,29 @@ public class EditQuizActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        // Get the QuizBuilder and the StringPool from the intent
-        Intent intent = getIntent();
-        quizBuilder =
-                (Quiz.Builder)
-                        Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_BUILDER);
-        StringPool stringPool =
-                (StringPool)
-                        Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
+        // Initialize the ViewModel
+        model = new ViewModelProvider(this).get(EditionViewModel.class);
+
+        if (savedInstanceState == null) {
+            // If the activity was just launched, we retrieve the quiz builder and string pool
+            // from the arguments.
+            Intent intent = getIntent();
+            quizBuilder =
+                    (Quiz.Builder)
+                            Objects.requireNonNull(intent.getExtras())
+                                    .getSerializable(QUIZ_BUILDER);
+            StringPool stringPool =
+                    (StringPool)
+                            Objects.requireNonNull(intent.getExtras()).getSerializable(STRING_POOL);
+
+            // And we initialize the view model
+            model.setQuizBuilder(quizBuilder);
+            model.setStringPool(stringPool);
+        } else {
+            // Otherwise, the quiz builder is already part of the view model
+            quizBuilder = model.getQuizBuilder();
+        }
+
         // Show the overview
         overviewActive = true;
 
@@ -60,11 +75,6 @@ public class EditQuizActivity extends AppCompatActivity
 
         // Hide up navigation
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
-
-        // Initialize the ViewModel
-        model = new ViewModelProvider(this).get(EditionViewModel.class);
-        model.setQuizBuilder(quizBuilder);
-        model.setStringPool(stringPool);
 
         // Launch the the two fragments in this activity
         getSupportFragmentManager()

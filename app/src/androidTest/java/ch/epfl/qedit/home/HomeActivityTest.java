@@ -162,7 +162,7 @@ public class HomeActivityTest extends RecyclerViewHelpers {
                         hasExtra(equalTo(QUIZ_BUILDER), instanceOf(Quiz.Builder.class))));
     }
 
-    @Test // TODO check that stringPool contains right language onResult
+    @Test
     public void testLanguageSpinner() {
         clickOn(R.id.add, false);
 
