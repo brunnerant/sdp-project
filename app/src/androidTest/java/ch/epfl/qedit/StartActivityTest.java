@@ -7,6 +7,7 @@ import static ch.epfl.qedit.backend.auth.MockAuthService.ANTHONY_IOZZIA_ID;
 import static ch.epfl.qedit.backend.database.MockDBService.createAnthony;
 import static org.hamcrest.core.AllOf.allOf;
 
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
@@ -59,6 +60,7 @@ public class StartActivityTest {
     @Test
     public void testLaunchesHomeActivityIfAlreadyLoggedIn() {
         init(ANTHONY_IOZZIA_ID);
+        Espresso.onIdle();
         intended(
                 allOf(
                         hasComponent(HomeActivity.class.getName()),
