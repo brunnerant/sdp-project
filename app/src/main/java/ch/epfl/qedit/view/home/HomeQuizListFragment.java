@@ -170,6 +170,11 @@ public class HomeQuizListFragment extends Fragment
         String quizId = quizzes.get(position).getKey();
         int qrSize = getResources().getDisplayMetrics().widthPixels;
         qrSize -= 50;
+        createQR(qrSize, quizId, qrCode);
+        QRDialog.show();
+    }
+
+    private void createQR(int qrSize, String quizId, ImageView qrCode) {
         if (quizId.length() > 0) {
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
             try {
@@ -182,7 +187,6 @@ public class HomeQuizListFragment extends Fragment
                 e.printStackTrace();
             }
         }
-        QRDialog.show();
     }
 
     @Override
