@@ -136,6 +136,7 @@ public class TreasureHuntActivity extends AppCompatActivity
         if (currIndex == quiz.getQuestions().size() - 1) {
             // If the last question was answered, we finish the activity.
             // In the future, we have to go to the result page.
+
             finish();
         } else {
             // If there are remaining questions, we locate the next one
