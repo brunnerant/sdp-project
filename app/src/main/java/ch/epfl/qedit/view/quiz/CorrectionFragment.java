@@ -18,6 +18,8 @@ public class CorrectionFragment extends Fragment {
     private float nbOfGoodAnswers;
     private float quizSize;
 
+    public CorrectionFragment() {}
+
     public CorrectionFragment(ArrayList<Integer> goodAnswers) {
         nbOfGoodAnswers = Collections.frequency(goodAnswers, 1);
         // success is true if at least 80 percent of asnwers are good

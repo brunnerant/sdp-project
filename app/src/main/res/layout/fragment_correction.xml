@@ -13,18 +13,21 @@
         android:id="@+id/correct_ratio"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/correct_ratio"
+
         >
 
         <ImageView
-            android:layout_marginStart="100dp"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@mipmap/q_score"
@@ -32,7 +35,9 @@
     <TextView
         android:id="@+id/correction_score"
         android:layout_width="50dp"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
+        android:textSize="30sp"
+
         android:textStyle="bold"/>
         <ImageView
             android:layout_width="50dp"
@@ -41,7 +46,9 @@
         <TextView
             android:id="@+id/correction_success"
             android:layout_width="50dp"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
+            android:textSize="30sp"
+
             android:textStyle="bold"/>
         <ImageView
             android:layout_width="50dp"
@@ -50,7 +57,9 @@
         <TextView
             android:id="@+id/correction_attempts"
             android:layout_width="50dp"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
+            android:textSize="30sp"
+
             android:textStyle="bold"
             android:text="+1"/>
     </LinearLayout>
