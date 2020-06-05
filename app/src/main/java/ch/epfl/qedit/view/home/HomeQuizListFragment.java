@@ -7,6 +7,7 @@ import static ch.epfl.qedit.model.StringPool.TITLE_ID;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.NO_FILTER;
 import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeActivity.USER;
+import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class HomeQuizListFragment extends Fragment
 
     private int deleteIndex;
     private int modifyIndex = -1;
-
+    private User user;
     private List<Map.Entry<String, String>> quizzes;
 
     @Override
@@ -78,7 +79,7 @@ public class HomeQuizListFragment extends Fragment
         createTextFilter();
 
         // Get user from the bundle created by the parent activity and get his/her quizzes
-        User user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
+        user = (User) Objects.requireNonNull(getArguments()).getSerializable(USER);
         quizzes = new ArrayList<>(user.getQuizzes().entrySet().asList());
 
         // Create the list adapter and bind it to the list edit view
@@ -221,6 +222,8 @@ public class HomeQuizListFragment extends Fragment
         // We put the quiz into the bundle
         Bundle bundle = new Bundle();
         bundle.putSerializable(QUIZ_ID, quiz);
+        bundle.putBoolean(CORRECTION, false);
+        bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
 
         // And start the activity
