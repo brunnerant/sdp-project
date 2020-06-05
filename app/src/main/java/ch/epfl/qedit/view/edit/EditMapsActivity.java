@@ -68,7 +68,6 @@ public class EditMapsActivity extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // TODO in future PR: Add a new item to go back to current location
         getMenuInflater().inflate(R.menu.edit_menu, menu);
         MenuItem next = menu.findItem(R.id.next);
         MenuItem previous = menu.findItem(R.id.previous);

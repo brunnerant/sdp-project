@@ -55,14 +55,12 @@ public class ScannerActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkPermission()) {
-                checkNullScanner();
-                scannerView.setResultHandler(this);
-                scannerView.startCamera();
-            } else {
-                requestPermission();
-            }
+        if (checkPermission()) {
+            checkNullScanner();
+            scannerView.setResultHandler(this);
+            scannerView.startCamera();
+        } else {
+            requestPermission();
         }
     }
 
@@ -80,7 +78,7 @@ public class ScannerActivity extends AppCompatActivity
     }
 
     public void onRequestPermissionsResult(
-            int requestCode, String permissions[], int[] grantResults) {
+            int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_CAMERA && grantResults.length > 0) {
 
             boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
@@ -95,26 +93,9 @@ public class ScannerActivity extends AppCompatActivity
 
     @Override
     public void handleResult(Result result) {
-        /*Log.d("QRCodeScanner", result.getText());
-        Log.d("QRCodeScanner", result.getBarcodeFormat().toString());*/
         ConfirmDialog.create(result.getText(), this);
-        /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan Result");
-        builder.setPositiveButton(
-                "OK",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        scannerView.resumeCameraPreview(ScannerActivity.this);
-                    }
-                });
-        builder.setMessage(result.getText());
-        AlertDialog alert1 = builder.create();
-        alert1.show();*/
     }
 
     @Override
-    public void onConfirm(ConfirmDialog dialog) {
-        return;
-    }
+    public void onConfirm(ConfirmDialog dialog) {}
 }

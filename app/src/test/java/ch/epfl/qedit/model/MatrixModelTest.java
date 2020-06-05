@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThrows;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.function.ThrowingRunnable;
 
 public class MatrixModelTest {
     private MatrixModel matrixModel;
@@ -27,25 +26,12 @@ public class MatrixModelTest {
     @Test
     public void testUpdateAnswerThrowsException() {
         assertThrows(
-                IndexOutOfBoundsException.class,
-                new ThrowingRunnable() {
-                    @Override
-                    public void run() {
-                        matrixModel.updateAnswer(3, 3, "nothing");
-                    }
-                });
+                IndexOutOfBoundsException.class, () -> matrixModel.updateAnswer(3, 3, "nothing"));
     }
 
     @Test
     public void testGetAnswerThrowsException() {
-        assertThrows(
-                IndexOutOfBoundsException.class,
-                new ThrowingRunnable() {
-                    @Override
-                    public void run() {
-                        matrixModel.getAnswer(3, 3);
-                    }
-                });
+        assertThrows(IndexOutOfBoundsException.class, () -> matrixModel.getAnswer(3, 3));
     }
 
     @Test
