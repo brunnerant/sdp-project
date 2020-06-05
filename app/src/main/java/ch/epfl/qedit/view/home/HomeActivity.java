@@ -28,7 +28,6 @@ public class HomeActivity extends AppCompatActivity
 
     private User user;
 
-
     // The left hamburger menu
 
     private DrawerLayout drawer;
@@ -41,7 +40,6 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
         if (savedInstanceState == null) {
             // If the activity was just launched, retrieve the user from the intent
             Intent intent = getIntent();
@@ -50,7 +48,6 @@ public class HomeActivity extends AppCompatActivity
             // Otherwise, retrieve it from the saved state
             user = (User) savedInstanceState.getSerializable(USER);
         }
-
 
         // create hamburger menu
         createDrawer();

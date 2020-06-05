@@ -39,15 +39,12 @@ import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
-
+import com.google.common.collect.ImmutableMap;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
-import com.google.common.collect.ImmutableMap;
-
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
