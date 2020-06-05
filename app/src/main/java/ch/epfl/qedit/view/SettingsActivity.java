@@ -1,7 +1,5 @@
 package ch.epfl.qedit.view;
 
-import static ch.epfl.qedit.view.home.HomeActivity.USER;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -12,11 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import ch.epfl.qedit.R;
-import ch.epfl.qedit.backend.auth.AuthenticationFactory;
-import ch.epfl.qedit.backend.auth.AuthenticationService;
-import ch.epfl.qedit.backend.database.DatabaseFactory;
-import ch.epfl.qedit.backend.database.DatabaseService;
-import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.StartActivity;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.login.Util;
@@ -87,30 +81,9 @@ public class SettingsActivity extends AppCompatActivity
         Intent intent = new Intent(this, HomeActivity.class);
         Bundle bundle = new Bundle();
 
-        AuthenticationService authService = AuthenticationFactory.getInstance();
-        String userId = authService.getUser();
-
-        DatabaseService dbService = DatabaseFactory.getInstance(this);
-        dbService
-                .getUser(userId)
-                .whenComplete(
-                        (result, throwable) -> {
-                            if (throwable != null) {
-                                Util.showToast(
-                                        R.string.database_error, getBaseContext(), getResources());
-                            } else {
-                                // Then, we launch the home activity
-                                launchHomeActivity(result);
-                            }
-                        });
-    }
-
-    private void launchHomeActivity(User user) {
-        Intent intent = new Intent(this, HomeActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(USER, user);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        StartActivity startActivity = new StartActivity();
+        String userId = startActivity.retrieveUserId(this);
+        startActivity.retrieveUserAndLaunchHomeActivity(this, userId);
     }
 
     private void initializeViews() {
