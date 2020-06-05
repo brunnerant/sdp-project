@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.quiz.CorrectionFragment"
+   >
+
+
+
+    <TextView
+        android:id="@+id/correct_ratio"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/correct_ratio"
+
+        >
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/q_score"
+            />
+    <TextView
+        android:id="@+id/correction_score"
+        android:layout_width="50dp"
+        android:layout_height="35dp"
+        android:textSize="20sp"
+
+        android:textStyle="bold"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/successes"/>
+        <TextView
+            android:id="@+id/correction_success"
+            android:layout_width="50dp"
+            android:layout_height="35dp"
+            android:textSize="20sp"
+
+            android:textStyle="bold"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/attempts"/>
+        <TextView
+            android:id="@+id/correction_attempts"
+            android:layout_width="50dp"
+            android:layout_height="35dp"
+            android:textSize="20sp"
+
+            android:textStyle="bold"
+            android:text="+1"/>
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

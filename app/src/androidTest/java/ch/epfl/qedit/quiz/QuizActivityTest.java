@@ -5,16 +5,20 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static ch.epfl.qedit.view.quiz.QuestionFragment.FRAGMENT_TAG;
+import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
+import static ch.epfl.qedit.view.quiz.QuizActivity.GOOD_ANSWERS;
 import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 import android.content.Intent;
@@ -26,14 +30,16 @@ import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.StringPool;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.model.answer.AnswerModel;
 import ch.epfl.qedit.model.answer.MatrixFormat;
 import ch.epfl.qedit.model.answer.MatrixModel;
 import ch.epfl.qedit.view.answer.MatrixFragment;
+import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
+import java.util.ArrayList;
 import java.util.HashMap;
-import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,18 +52,23 @@ public class QuizActivityTest {
     private QuizViewModel model;
     private final Integer zero = 0;
     private final String answer1 = "1234";
+    private ArrayList<Integer> correctedQuestions;
 
     @Rule
     public final IntentsTestRule<QuizActivity> testRule =
             new IntentsTestRule<>(QuizActivity.class, false, false);
 
     public void launchActivity() {
+        User user = new User("Albert", "Einstein");
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
 
         initializeStringPoolAndQuiz();
 
         bundle.putSerializable(QUIZ_ID, quiz);
+        bundle.putSerializable(USER, user);
+
+        bundle.putBoolean(CORRECTION, false);
         intent.putExtras(bundle);
 
         testRule.launchActivity(intent);
@@ -74,6 +85,29 @@ public class QuizActivityTest {
                                 put(0, matrixModel);
                             }
                         });
+    }
+
+    public void launchCorrection() {
+        User user = new User("François", "Ferdinand");
+        correctedQuestions = new ArrayList<>();
+        correctedQuestions.add(0, 1);
+        correctedQuestions.add(1, 0);
+
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+
+        initializeStringPoolAndQuiz();
+
+        bundle.putSerializable(QUIZ_ID, quiz);
+        bundle.putIntegerArrayList(GOOD_ANSWERS, correctedQuestions);
+        bundle.putSerializable(USER, user);
+        bundle.putBoolean(CORRECTION, true);
+        intent.putExtras(bundle);
+
+        testRule.launchActivity(intent);
+
+        model = new ViewModelProvider(testRule.getActivity()).get(QuizViewModel.class);
+        model.setQuiz(quiz.instantiateLanguage(stringPool));
     }
 
     public void finishActivity() {
@@ -105,6 +139,32 @@ public class QuizActivityTest {
         launchActivity();
         Integer question = model.getFocusedQuestion().getValue();
         Assert.assertNull(question);
+        finishActivity();
+    }
+
+    @Test
+    public void correctionFragmentDisplayed() {
+        launchCorrection();
+        onView(withId(R.id.correction_details_container)).check(matches(isDisplayed()));
+        finishActivity();
+    }
+
+    @Test
+    public void clickValidate() {
+        launchCorrection();
+        onView(withId(R.id.validate)).perform(click());
+        onView(withId(android.R.id.button1)).perform(click());
+        intended(allOf(hasComponent(HomeActivity.class.getName())));
+        finishActivity();
+    }
+
+    @Test
+    public void textViewsContent() {
+        launchCorrection();
+        onView(withId(R.id.correct_ratio)).check(matches(withText("Correct answers :1/2 (50.0%)")));
+        onView(withId(R.id.correction_score)).check(matches(withText("+1")));
+        onView(withId(R.id.correction_success)).check(matches(withText("+0")));
+        onView(withId(R.id.correction_attempts)).check(matches(withText("+1")));
         finishActivity();
     }
 
@@ -147,19 +207,6 @@ public class QuizActivityTest {
     }
 
     @Test
-    public void testTimeIsClicked() {
-        launchActivity();
-        onView(withId(R.id.time)).perform(click());
-        onView(withText("Unimplemented Feature"))
-                .inRoot(
-                        withDecorView(
-                                Matchers.not(
-                                        is(testRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
-        finishActivity();
-    }
-
-    @Test
     public void testValidateClicked() {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
@@ -179,12 +226,7 @@ public class QuizActivityTest {
         launchActivity();
         onView(withId(R.id.validate)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withText("number of good answers = 0"))
-                .inRoot(
-                        withDecorView(
-                                Matchers.not(
-                                        is(testRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
+        intended(allOf(hasComponent(QuizActivity.class.getName())));
         finishActivity();
     }
 

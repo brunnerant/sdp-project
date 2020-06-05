@@ -260,7 +260,10 @@ public final class MatrixFormat extends AnswerFormat {
             }
         }
 
-        return b.build();
+        MatrixFormat newFormat = b.build();
+        newFormat.setCorrectAnswer(this.getCorrectAnswer());
+
+        return newFormat;
     }
 
     @Override

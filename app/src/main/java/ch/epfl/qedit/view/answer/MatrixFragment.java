@@ -115,7 +115,6 @@ public class MatrixFragment extends AnswerFragment<MatrixFormat, MatrixModel> {
         editText.setInputType(inputType);
         editText.setText(answer);
         editText.setHint(field.getText());
-
         return editText;
     }
 

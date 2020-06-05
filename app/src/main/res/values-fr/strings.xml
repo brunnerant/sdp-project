@@ -151,4 +151,5 @@
     <string name="database_upload_failed">Le quiz n\'a pas pu être téléchargé vers la base de donnée</string>
     <string name="database_upload_successful">Le quiz a été téléchargé vers la base de donnée avec succès</string>
 
+    <string name="correct_answers">Bonnes réponses :</string>
 </resources>

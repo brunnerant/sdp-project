@@ -24,8 +24,13 @@ public abstract class AnswerFormat implements MultiLanguage<AnswerFormat>, Seria
     /** The correct answer */
     private AnswerModel solution;
 
+    /** Getter and setter for the solution */
     public void setCorrectAnswer(AnswerModel correctAnswer) {
         this.solution = correctAnswer;
+    }
+
+    public AnswerModel getCorrectAnswer() {
+        return this.solution;
     }
 
     public boolean correct(AnswerModel participantAnswer) {

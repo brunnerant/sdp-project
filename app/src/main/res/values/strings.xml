@@ -179,4 +179,6 @@
     <string name="database_upload_failed">The quiz could not be uploaded to the database</string>
     <string name="database_upload_successful">The quiz was successfully uploaded to the database</string>
 
+    <string name="correct_answers">Correct answers :</string>
+
 </resources>

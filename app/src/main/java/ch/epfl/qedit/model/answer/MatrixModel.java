@@ -61,11 +61,21 @@ public class MatrixModel extends AnswerModel {
             String matrixField, MatrixModel objectMatrixModel, int row, int col) {
 
         try {
-            return matrixField.trim().toLowerCase()
-                    == objectMatrixModel.getAnswer(row, col).trim().toLowerCase();
+            return matrixField
+                    .trim()
+                    .toLowerCase()
+                    .equals(objectMatrixModel.getAnswer(row, col).trim().toLowerCase());
         } catch (IndexOutOfBoundsException e) {
             return false;
         }
+    }
+
+    public int getNumCols() {
+        return numCols;
+    }
+
+    public int getNumRows() {
+        return numRows;
     }
 
     @Override
