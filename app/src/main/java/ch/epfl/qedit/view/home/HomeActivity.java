@@ -26,8 +26,6 @@ public class HomeActivity extends AppCompatActivity
     // Key of user passed in bundle to home activity
     public static final String USER = "ch.epfl.qedit.view.login.USER";
 
-    private User user;
-
     // The left hamburger menu
 
     private DrawerLayout drawer;

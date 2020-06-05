@@ -19,8 +19,8 @@ import ch.epfl.qedit.backend.database.DatabaseFactory;
 import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.backend.database.Util;
 import ch.epfl.qedit.model.Quiz;
-import ch.epfl.qedit.model.StringPool;
 import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.home.HomeActivity;
 import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import com.google.zxing.Result;
@@ -35,7 +35,6 @@ public class ScannerActivity extends AppCompatActivity
     private ZXingScannerView scannerView;
     private DatabaseService db;
     private String quizId;
-    private ConfirmDialog resultDialog;
     private User user;
 
     @Override
@@ -44,6 +43,7 @@ public class ScannerActivity extends AppCompatActivity
 
         db = DatabaseFactory.getInstance(this);
         user = (User) getIntent().getExtras().getSerializable(USER);
+
         scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
         int currentApiVersion = Build.VERSION.SDK_INT;
@@ -136,19 +136,27 @@ public class ScannerActivity extends AppCompatActivity
                                 Toast.makeText(this, R.string.database_error, Toast.LENGTH_SHORT)
                                         .show();
                             } else {
-                                launchQuizActivity(pair.first, pair.second);
+                                launchQuizActivity(pair.first.instantiateLanguage(pair.second));
                             }
                         });
     }
 
-    private void launchQuizActivity(Quiz quiz, StringPool pool) {
-        Intent intent = new Intent(ScannerActivity.this, QuizActivity.class);
-        quiz.instantiateLanguage(pool);
-        user.addQuiz(quizId, quiz.getTitle());
+    private void launchQuizActivity(Quiz quiz) {
+        Intent intent = new Intent(this, QuizActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER, user);
-        bundle.putSerializable(QUIZ_ID, quizId);
+        bundle.putSerializable(QUIZ_ID, quiz);
         bundle.putBoolean(CORRECTION, false);
+        intent.putExtras(bundle);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER, user);
         intent.putExtras(bundle);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
