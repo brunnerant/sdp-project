@@ -267,8 +267,8 @@ public final class MatrixFormat extends AnswerFormat {
     public Map<String, Object> toMap() {
         Map<String, Object> map = super.toMap();
         map.put(TO_MAP_TYPE, TYPE);
-        map.put(TO_MAP_NUM_ROWS, numRows);
-        map.put(TO_MAP_NUM_COLUMNS, numColumns);
+        map.put(TO_MAP_NUM_ROWS, (long) numRows);
+        map.put(TO_MAP_NUM_COLUMNS, (long) numColumns);
         Map<String, Object> fieldsMap = new HashMap<>();
         for (int i = 0; i < numRows; i++)
             for (int j = 0; j < numColumns; j++)

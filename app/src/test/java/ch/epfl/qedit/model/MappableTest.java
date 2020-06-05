@@ -66,7 +66,7 @@ public class MappableTest {
         testMatrixFields((Map<String, Map<String, Object>>) fields, matrix);
     }
 
-    private void testMatrixToMap(Map<String, Object> doc, int rows, int cols) {
+    private void testMatrixToMap(Map<String, Object> doc, long rows, long cols) {
         assertEquals(rows, doc.get(MatrixFormat.TO_MAP_NUM_ROWS));
         assertEquals(cols, doc.get(MatrixFormat.TO_MAP_NUM_COLUMNS));
         assertEquals(MatrixFormat.TYPE, doc.get(MatrixFormat.TO_MAP_TYPE));

@@ -222,7 +222,8 @@ public class ListEditView extends RecyclerView {
          *
          * @param position of the item in the list that will be updated
          */
-        public void updateItem(int position) {
+        public void updateItem(int position, T newValue) {
+            items.set(position, newValue);
             notifyItemChanged(position);
         }
 
@@ -325,7 +326,6 @@ public class ListEditView extends RecyclerView {
     // are needed by every constructor
     private void init(Context context) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        super.setHasFixedSize(true);
         super.setLayoutManager(new LinearLayoutManager(context));
         super.addItemDecoration(new DividerItemDecoration(context, layoutManager.getOrientation()));
     }
