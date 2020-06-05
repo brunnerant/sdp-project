@@ -12,8 +12,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static ch.epfl.qedit.model.StringPool.TITLE_ID;
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
-import static ch.epfl.qedit.view.login.Util.USER;
 import static ch.epfl.qedit.view.quiz.QuestionFragment.FRAGMENT_TAG;
 import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
 import static ch.epfl.qedit.view.quiz.QuizActivity.GOOD_ANSWERS;

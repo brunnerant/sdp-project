@@ -1,7 +1,7 @@
 package ch.epfl.qedit.view.quiz;
 
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
-import static ch.epfl.qedit.view.login.Util.USER;
 
 import android.content.Context;
 import android.content.Intent;
