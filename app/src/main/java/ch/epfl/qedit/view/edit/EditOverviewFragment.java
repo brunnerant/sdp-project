@@ -97,8 +97,7 @@ public class EditOverviewFragment extends Fragment implements ConfirmDialog.Conf
                 // Update the already existing question
                 int position = model.getFocusedQuestion().getValue();
                 model.getQuizBuilder().update(position, question);
-                titles.set(position, extendedStringPool.get(question.getTitle()));
-                adapter.updateItem(position);
+                adapter.updateItem(position, extendedStringPool.get(question.getTitle()));
 
                 // Trigger the preview fragment to draw the updated title and text
                 model.getFocusedQuestion().postValue(position);
