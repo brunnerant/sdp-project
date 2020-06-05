@@ -1,5 +1,7 @@
 package ch.epfl.qedit.view;
 
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -8,9 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.backend.auth.AuthenticationFactory;
 import ch.epfl.qedit.backend.auth.AuthenticationService;
@@ -19,12 +19,10 @@ import ch.epfl.qedit.backend.database.DatabaseService;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.util.LocaleHelper;
 import ch.epfl.qedit.view.home.HomeActivity;
-import ch.epfl.qedit.view.login.SignUpActivity;
 import ch.epfl.qedit.view.login.Util;
 
-import static ch.epfl.qedit.view.home.HomeActivity.USER;
-
-public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class SettingsActivity extends AppCompatActivity
+        implements AdapterView.OnItemSelectedListener {
 
     private TextView textViewSettings;
     private Button saveButton;
@@ -99,9 +97,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                         (result, throwable) -> {
                             if (throwable != null) {
                                 Util.showToast(
-                                        R.string.database_error,
-                                        getBaseContext(),
-                                        getResources());
+                                        R.string.database_error, getBaseContext(), getResources());
                             } else {
                                 // Then, we launch the home activity
                                 launchHomeActivity(result);
