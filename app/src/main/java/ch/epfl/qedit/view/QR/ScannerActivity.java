@@ -74,14 +74,12 @@ public class ScannerActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkPermission()) {
-                checkNullScanner();
-                scannerView.setResultHandler(this);
-                scannerView.startCamera();
-            } else {
-                requestPermission();
-            }
+        if (checkPermission()) {
+            checkNullScanner();
+            scannerView.setResultHandler(this);
+            scannerView.startCamera();
+        } else {
+            requestPermission();
         }
     }
 
@@ -104,7 +102,7 @@ public class ScannerActivity extends AppCompatActivity
     }
 
     public void onRequestPermissionsResult(
-            int requestCode, String permissions[], int[] grantResults) {
+            int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_CAMERA && grantResults.length > 0) {
 
             boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
@@ -119,6 +117,7 @@ public class ScannerActivity extends AppCompatActivity
 
     @Override
     public void handleResult(Result result) {
+
         quizId = result.getText();
         Log.d(result.getText(), "hey");
 

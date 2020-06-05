@@ -165,10 +165,7 @@ public class QuestionLocatorActivityTest {
 
     @Test
     public void testPermissionRefused() {
-        init(
-                permManager -> {
-                    permManager.refusePermissions(permissions);
-                });
+        init(permManager -> permManager.refusePermissions(permissions));
 
         // The activity should request permissions
         checkRequest();
@@ -186,10 +183,7 @@ public class QuestionLocatorActivityTest {
 
     @Test
     public void testPermissionDenied() {
-        init(
-                permManager -> {
-                    permManager.denyPermissions(permissions);
-                });
+        init(permManager -> permManager.denyPermissions(permissions));
 
         // The activity should request permissions
         checkRequest();

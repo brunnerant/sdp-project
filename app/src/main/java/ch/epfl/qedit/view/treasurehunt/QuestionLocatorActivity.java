@@ -173,12 +173,11 @@ public class QuestionLocatorActivity extends PermissionActivity
 
         // We have to make sure to change the UI only on the UI thread
         runOnUiThread(
-                () -> {
-                    updateUI(
-                            distance,
-                            mod(targetBearing, 360),
-                            mod(targetBearing - currentBearing, 360));
-                });
+                () ->
+                        updateUI(
+                                distance,
+                                mod(targetBearing, 360),
+                                mod(targetBearing - currentBearing, 360)));
     }
 
     // This function is used to ensure that the modulo always return a positive number
