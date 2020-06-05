@@ -9,7 +9,9 @@ import static ch.epfl.qedit.view.edit.EditQuizSettingsDialog.QUIZ_BUILDER;
 import static ch.epfl.qedit.view.home.HomeActivity.USER;
 import static ch.epfl.qedit.view.quiz.QuizActivity.CORRECTION;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +19,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -36,6 +41,11 @@ import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.view.util.ListEditView;
 import com.google.common.collect.ImmutableMap;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,7 +133,10 @@ public class HomeQuizListFragment extends Fragment
     private void createAdapter(User user) {
         // Those are the items of the popup menu
         List<String> popupMenuItems =
-                Arrays.asList(getString(R.string.menu_edit), getString(R.string.menu_delete));
+                Arrays.asList(
+                        getString(R.string.menu_edit),
+                        getString(R.string.menu_delete),
+                        getString(R.string.menu_qr));
 
         // Create the list adapter
         listAdapter = new ListEditView.Adapter<>(quizzes, Map.Entry::getValue, popupMenuItems);
@@ -136,7 +149,49 @@ public class HomeQuizListFragment extends Fragment
                     editQuiz(position);
                     else if (code == 1) // delete was clicked
                     deleteConfirmation(position);
+                    else if (code == 2) // QR Code was clicked
+                    generateQR(position);
                 });
+    }
+
+    private void generateQR(int position) {
+        final Dialog QRDialog =
+                new Dialog(requireContext(), android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+        QRDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        QRDialog.setContentView(R.layout.qr_dialog);
+
+        Button close = (Button) QRDialog.findViewById(R.id.qr_close);
+        close.setEnabled(true);
+
+        close.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        QRDialog.cancel();
+                    }
+                });
+
+        ImageView qrCode = (ImageView) QRDialog.findViewById(R.id.qr_image);
+        String quizId = quizzes.get(position).getKey();
+        int qrSize = getResources().getDisplayMetrics().widthPixels;
+        qrSize -= 50;
+        createQR(qrSize, quizId, qrCode);
+        QRDialog.show();
+    }
+
+    private void createQR(int qrSize, String quizId, ImageView qrCode) {
+        if (quizId.length() > 0) {
+            MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+            try {
+                BitMatrix bitMatrix =
+                        multiFormatWriter.encode(quizId, BarcodeFormat.QR_CODE, qrSize, qrSize);
+                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                qrCode.setImageBitmap(bitmap);
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

@@ -166,6 +166,14 @@ public class HomeQuizListFragmentTest extends HomeFragmentsTestUsingDB {
     }
 
     @Test
+    public void testGenerateQRCode() {
+        itemView(0, R.id.list_item_three_dots).perform(click());
+        clickOnPopup(testRule.getActivity(), R.string.menu_qr);
+
+        onView(withId(R.id.qr_image)).check(matches(isDisplayed()));
+        onView(withId(R.id.qr_close)).perform(click());
+    }
+
     public void testOnActivityResult() {
         User user = new User("Marcel", "Doe");
         user.addQuiz("quiz0", "I am a Mock Quiz!");

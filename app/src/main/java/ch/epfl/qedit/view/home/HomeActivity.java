@@ -27,6 +27,7 @@ public class HomeActivity extends AppCompatActivity
     public static final String USER = "ch.epfl.qedit.view.login.USER";
 
     // The left hamburger menu
+
     private DrawerLayout drawer;
 
     // The user that is currently logged-in
@@ -105,8 +106,8 @@ public class HomeActivity extends AppCompatActivity
                         .show();
                 break;
             case R.id.qr_code_burger:
-                Intent intent = new Intent(HomeActivity.this, ScannerActivity.class);
-                startActivity(intent);
+                launchScannerActivity();
+
                 break;
             case R.id.my_account:
                 Toast.makeText(this, "You don't have an account page for now", Toast.LENGTH_SHORT)
@@ -118,6 +119,14 @@ public class HomeActivity extends AppCompatActivity
                 break;
         }
         return true;
+    }
+
+    private void launchScannerActivity() {
+        Intent intent = new Intent(HomeActivity.this, ScannerActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER, user);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private void createDrawer() {

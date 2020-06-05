@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class QuizActivity extends AppCompatActivity implements ConfirmDialog.ConfirmationListener {
+
     public static final String GOOD_ANSWERS = "ch.epfl.qedit.quiz.GOOD_ANSWERS";
     public static final String CORRECTION = "ch.epfl.qedit.quiz.CORRECTION";
     private QuizViewModel model;
