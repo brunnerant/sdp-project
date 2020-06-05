@@ -291,6 +291,11 @@ public class HomeQuizListFragment extends Fragment
 
         // Update the quiz list of the local user
         user.updateQuizTitle(quizId, title);
+
+        Toast.makeText(
+                requireContext(),
+                "Updating a quiz in the database is not yet supported, so the changes will only be visible locally.",
+                Toast.LENGTH_SHORT);
     }
 
     // This method will be called when the user confirms the deletion by clicking on "yes"
@@ -302,6 +307,11 @@ public class HomeQuizListFragment extends Fragment
         // the database.
         listAdapter.removeItem(deleteIndex);
         deleteIndex = -1;
+
+        Toast.makeText(
+                requireContext(),
+                "Deleting a quiz from the database is not yet supported, so the changes will only be visible locally.",
+                Toast.LENGTH_SHORT);
     }
 
     // This method will be called when the user submits the settings made in the SettingsDialog by

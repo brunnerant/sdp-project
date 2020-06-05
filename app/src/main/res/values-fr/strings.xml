@@ -49,6 +49,7 @@
     <string name="score">QEDit SCORE</string>
     <string name="successes">NOMBRE DE QUIZ RÉUSSIS</string>
     <string name="attempts">NOMBRE TOTAL D\'ESSAIS</string>
+    <string name="quizzes">Mes quizzes</string>
 
     <!-- Menu -->
     <string name="menu_overview">Aperçu</string>
@@ -61,10 +62,10 @@
 
     <!-- Burger Menu -->
     <string name="menu_home">ACCUEIL</string>
-    <string name="menu_qr">QR CODE</string>
+    <string name="menu_qr">CODE QR</string>
     <string name="menu_quiz_list">MES QUIZ</string>
     <string name="menu_person">MON COMPTE</string>
-    <string name="menu_search">QUIZ EN LIGNE</string>
+    <string name="menu_search">QUIZZES EN LIGNE</string>
     <string name="menu_settings">PARAMÈTRES</string>
 
     <!-- Quiz -->

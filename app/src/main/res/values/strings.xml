@@ -80,6 +80,7 @@
     <string name="score">QEDit SCORE</string>
     <string name="successes">NUMBER OF QUIZZES SUCCEEDED</string>
     <string name="attempts">TOTAL NUMBER OF ATTEMPTS</string>
+    <string name="quizzes">My quizzes</string>
 
     <!-- Menu -->
     <string name="menu_overview">Overview</string>

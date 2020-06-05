@@ -326,7 +326,6 @@ public class ListEditView extends RecyclerView {
     // are needed by every constructor
     private void init(Context context) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        super.setHasFixedSize(true);
         super.setLayoutManager(new LinearLayoutManager(context));
         super.addItemDecoration(new DividerItemDecoration(context, layoutManager.getOrientation()));
     }
