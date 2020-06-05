@@ -18,7 +18,6 @@ import ch.epfl.qedit.model.Quiz;
 import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.view.quiz.CorrectionUtil;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
-import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
 import java.util.Objects;
@@ -46,6 +45,7 @@ public class TreasureHuntActivity extends AppCompatActivity
     private View helperView;
     private FragmentContainerView questionView;
     private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +140,8 @@ public class TreasureHuntActivity extends AppCompatActivity
         if (currIndex == quiz.getQuestions().size() - 1) {
             // If the last question was answered, we finish the activity.
             // In the future, we have to go to the result page.
-            CorrectionUtil.startCorrection(quiz.getQuestions(),model.getAnswers().getValue(),this,user);
+            CorrectionUtil.startCorrection(
+                    quiz.getQuestions(), model.getAnswers().getValue(), this, user);
 
         } else {
             // If there are remaining questions, we locate the next one
