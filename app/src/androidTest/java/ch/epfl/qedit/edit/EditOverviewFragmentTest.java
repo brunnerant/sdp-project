@@ -29,7 +29,7 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.rule.ActivityTestRule;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
@@ -53,8 +53,8 @@ public class EditOverviewFragmentTest extends EditTest {
             FragmentTestRule.create(EditOverviewFragment.class, false, false);
 
     @Rule
-    public final IntentsTestRule<EditQuestionActivity> resultTestRule =
-            new IntentsTestRule<>(EditQuestionActivity.class, false, false);
+    public final ActivityTestRule<EditQuestionActivity> resultTestRule =
+            new ActivityTestRule<>(EditQuestionActivity.class, false, false);
 
     @Before
     public void setUp() {
@@ -139,7 +139,7 @@ public class EditOverviewFragmentTest extends EditTest {
         return titles;
     }
 
-    // TODO @Test
+    @Test
     public void testOnActivityResult() {
         StringPool stringPool = new StringPool();
         Question question =
@@ -152,13 +152,17 @@ public class EditOverviewFragmentTest extends EditTest {
         dataIntent.putExtra(QUESTION, question);
         dataIntent.putExtra(STRING_POOL, stringPool);
 
+        resultTestRule.launchActivity(dataIntent);
+
         intending(hasComponent(EditQuestionActivity.class.getName()))
                 .respondWith(new Instrumentation.ActivityResult(RESULT_OK, dataIntent));
         resultTestRule
                 .getActivity()
                 .startActivityForResult(
-                        new Intent(testRule.getFragment().getContext(), EditQuestionActivity.class),
+                        new Intent(resultTestRule.getActivity(), EditQuestionActivity.class),
                         NEW_QUESTION_REQUEST_CODE);
+
+        resultTestRule.finishActivity();
     }
 
     @Test

@@ -46,8 +46,8 @@ public class UtilTest {
             matrix.put((i / 3) + "," + (i % 3), solutions[i]);
         }
         answerFormat.put(MatrixModel.TO_MAP_DATA, matrix);
-        answerFormat.put(MatrixModel.TO_MAP_NUM_ROWS, 2);
-        answerFormat.put(MatrixModel.TO_MAP_NUM_COLUMNS, 3);
+        answerFormat.put(MatrixModel.TO_MAP_NUM_ROWS, (long) 2);
+        answerFormat.put(MatrixModel.TO_MAP_NUM_COLUMNS, (long) 3);
     }
 
     private MatrixModel createExpectedSolution() {
@@ -61,8 +61,8 @@ public class UtilTest {
     private void createAnswerFormats(boolean addSolution) {
         answerFormat = new HashMap<>();
         answerFormat.put(MatrixFormat.TO_MAP_TYPE, MatrixFormat.TYPE);
-        answerFormat.put(MatrixFormat.TO_MAP_NUM_ROWS, 2);
-        answerFormat.put(MatrixFormat.TO_MAP_NUM_COLUMNS, 3);
+        answerFormat.put(MatrixFormat.TO_MAP_NUM_ROWS, (long) 2);
+        answerFormat.put(MatrixFormat.TO_MAP_NUM_COLUMNS, (long) 3);
 
         Map<String, Object> matrix = new HashMap<>();
         for (int i = 0; i < 6; i++) {
@@ -123,8 +123,8 @@ public class UtilTest {
     private Map<String, Object> answerFormatWithout(String missing) {
         Map<String, Object> format = new HashMap<>();
         format.put(MatrixFormat.TO_MAP_TYPE, MatrixFormat.TYPE);
-        format.put(MatrixFormat.TO_MAP_NUM_ROWS, 1);
-        format.put(MatrixFormat.TO_MAP_NUM_COLUMNS, 1);
+        format.put(MatrixFormat.TO_MAP_NUM_ROWS, (long) 1);
+        format.put(MatrixFormat.TO_MAP_NUM_COLUMNS, (long) 1);
         format.put(MatrixFormat.TO_MAP_FIELDS, new HashMap<>());
         format.remove(missing);
         return format;

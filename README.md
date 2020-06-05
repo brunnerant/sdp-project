@@ -8,7 +8,7 @@ the context of a project at EPFL.
 [![Maintainability](https://api.codeclimate.com/v1/badges/97269ca5f086f0c8ed40/maintainability)](https://codeclimate.com/github/brunnerant/sdp-project/maintainability)
 
 ## Wiki
-We have a Wiki where we keep track of some of our design choices, and were we collect some useful information about android
+We have a Wiki where we keep track of some of our design choices, and where we collect some useful information about android
 programming. Check it out [here](https://github.com/brunnerant/sdp-project/wiki).
 
 ## Pull request policy
