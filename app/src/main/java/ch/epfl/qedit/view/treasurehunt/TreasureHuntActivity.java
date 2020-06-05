@@ -1,5 +1,6 @@
 package ch.epfl.qedit.view.treasurehunt;
 
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 
 import android.content.Intent;
@@ -14,6 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 import ch.epfl.qedit.R;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.User;
+import ch.epfl.qedit.view.quiz.CorrectionUtil;
 import ch.epfl.qedit.view.quiz.QuestionFragment;
 import ch.epfl.qedit.view.util.ConfirmDialog;
 import ch.epfl.qedit.viewmodel.QuizViewModel;
@@ -41,6 +44,7 @@ public class TreasureHuntActivity extends AppCompatActivity
     // to help the user, and the second is used to show the question.
     private View helperView;
     private FragmentContainerView questionView;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,7 @@ public class TreasureHuntActivity extends AppCompatActivity
         // We retrieve the quiz from the intent that started the activity
         Intent intent = getIntent();
         quiz = (Quiz) Objects.requireNonNull(intent.getExtras()).getSerializable(QUIZ_ID);
-
+        user = (User) Objects.requireNonNull(intent.getExtras().getSerializable(USER));
         // Uncomment those lines (and comments the two above lines) to test the UI on your emulator
         //        Location loc1 = new Location("");
         //        loc.setLongitude(1);
@@ -136,7 +140,9 @@ public class TreasureHuntActivity extends AppCompatActivity
         if (currIndex == quiz.getQuestions().size() - 1) {
             // If the last question was answered, we finish the activity.
             // In the future, we have to go to the result page.
-            finish();
+            CorrectionUtil.startCorrection(
+                    quiz.getQuestions(), model.getAnswers().getValue(), this, user);
+
         } else {
             // If there are remaining questions, we locate the next one
             locateQuestion(currIndex + 1);

@@ -11,12 +11,12 @@ import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ch.epfl.qedit.view.home.HomeActivity.USER;
 import static ch.epfl.qedit.view.home.HomeQuizListFragment.QUIZ_ID;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,8 +29,10 @@ import ch.epfl.qedit.backend.permission.MockPermManager;
 import ch.epfl.qedit.backend.permission.PermManagerFactory;
 import ch.epfl.qedit.model.Question;
 import ch.epfl.qedit.model.Quiz;
+import ch.epfl.qedit.model.User;
 import ch.epfl.qedit.model.answer.AnswerFormat;
 import ch.epfl.qedit.model.answer.MatrixFormat;
+import ch.epfl.qedit.view.quiz.QuizActivity;
 import ch.epfl.qedit.view.treasurehunt.QuestionLocatorActivity;
 import ch.epfl.qedit.view.treasurehunt.TreasureHuntActivity;
 import java.util.Collections;
@@ -50,7 +52,7 @@ public class TreasureHuntActivityTest {
     public void init(int numQuestions) {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-
+        User user = new User("Charles", "Magne");
         // We create a mock permission service, otherwise the UI test might fail because
         // android shows a permission popup
         PermManagerFactory.setInstance(new MockPermManager());
@@ -66,7 +68,7 @@ public class TreasureHuntActivityTest {
         AnswerFormat format = MatrixFormat.singleField(MatrixFormat.Field.textField(""));
         Question question = new Question("title", "text", format, 42, 43, 100);
         Quiz quiz = new Quiz("title", Collections.nCopies(numQuestions, question), true);
-
+        bundle.putSerializable(USER, user);
         bundle.putSerializable(QUIZ_ID, quiz);
         intent.putExtras(bundle);
 
@@ -149,10 +151,10 @@ public class TreasureHuntActivityTest {
         onView(withText(R.string.treasure_hunt_start)).perform(click());
         findQuestion();
 
-        // Clicking on "done" for the last question should finish the activity
+        // Clicking on "done" for the last question should start the correction
         assertFalse(testRule.getActivity().isFinishing());
         onView(withId(R.id.question_done)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        assertTrue(testRule.getActivity().isFinishing());
+        intended(allOf(hasComponent(QuizActivity.class.getName())));
     }
 }
